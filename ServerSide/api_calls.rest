@@ -1,0 +1,45 @@
+###
+GET http://localhost:4000/
+
+###
+GET http://localhost:4000/post
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWZlNjc0NjU0MjI2ODBkYWIxZGZiMSIsImlhdCI6MTY0NjI5NDEyOSwiZXhwIjoxNjQ2Mjk0MTU5fQ.RSVIKj3nrCPBYh0IUWfKiLQW8qkPCtcDfnS3uZcJM_o
+###
+GET http://localhost:4000/post/621f52e6c9dde976ffe6308e
+
+###
+POST http://localhost:4000/post
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWZlNjc0NjU0MjI2ODBkYWIxZGZiMSIsImlhdCI6MTY0NjI5NDM0NCwiZXhwIjoxNjQ2Mjk0Mzc0fQ.OIw5w2hwBIe9sfLIfYtjGFGD0v_Qrru-1jk0uZWfooM
+Content-Type: application/json
+
+{
+    "message": "this is my authorized new posr",
+    "sender": "Adi"
+}
+
+###
+POST http://localhost:4000/auth/register
+Content-Type: application/json
+
+{
+    "email": "a@a.com",
+    "password": "123456"
+}
+
+###
+POST http://localhost:4000/auth/login
+Content-Type: application/json
+
+{
+    "email": "a@a.com",
+    "password": "123456"
+}
+
+###
+POST http://localhost:4000/auth/logout
+Content-Type: application/json
+
+{
+    "message": "this is my new message",
+    "sender": "Adi"
+}
