@@ -7,4 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--***    don't delete colors - just add new ones     ***-->
+    <color name="TrustiesPrimaryColor">#66C2FF</color>
+    <color name="StatusBarColor">#6EA9F1</color>
+    <color name="ActionBarColor">#907CB7FF</color>
+
+    <color name="titleColor">#7CA3FF</color>
+    <color name="hintColor">#5473B9</color>
+    <color name="disabledInputFieldTextColor">#3C3434</color>
+    <color name="disabledInputField">#309A9A9A</color>
 </resources>

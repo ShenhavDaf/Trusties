@@ -3,4 +3,14 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+
+    <string name="image_text_view">Image:</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_verify_password">Verify Password</string>
+    <string name="hint_phone_number">Phone Number</string>
+    <string name="join_btn">Join</string>
+
 </resources>

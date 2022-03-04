@@ -22,4 +22,11 @@
         android:name="com.example.trusties.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.trusties.login.SignUpFragment"
+        android:label="Sign Up"
+        tools:layout="@layout/fragment_sign_up" />
+
 </navigation>
