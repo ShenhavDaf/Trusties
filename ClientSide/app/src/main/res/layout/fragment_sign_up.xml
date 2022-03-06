@@ -252,7 +252,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="202dp"
             android:layout_height="192dp"
-            android:indeterminateTint="@color/TrustiesPrimaryColor"
+            android:indeterminateTint="@color/progressBarColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"

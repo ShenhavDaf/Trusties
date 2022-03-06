@@ -17,4 +17,5 @@
     <color name="hintColor">#5473B9</color>
     <color name="disabledInputFieldTextColor">#3C3434</color>
     <color name="disabledInputField">#309A9A9A</color>
+    <color name="progressBarColor">#8CCBF4</color>
 </resources>
