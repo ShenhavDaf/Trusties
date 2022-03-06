@@ -12,5 +12,11 @@
     <string name="hint_verify_password">Verify Password</string>
     <string name="hint_phone_number">Phone Number</string>
     <string name="join_btn">Join</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="email_tv">Email</string>
+    <string name="password_tv">Password</string>
+    <string name="join_us">JOIN US</string>
 
 </resources>
