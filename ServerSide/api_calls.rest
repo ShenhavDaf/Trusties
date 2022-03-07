@@ -3,27 +3,61 @@ GET http://localhost:4000/
 
 ###
 GET http://localhost:4000/post
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWZlNjc0NjU0MjI2ODBkYWIxZGZiMSIsImlhdCI6MTY0NjI5NDEyOSwiZXhwIjoxNjQ2Mjk0MTU5fQ.RSVIKj3nrCPBYh0IUWfKiLQW8qkPCtcDfnS3uZcJM_o
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY1NTIzNSwiZXhwIjoxNjQ2NjU4ODM1fQ.1Z3Puhcd0SplvW1vqNxbbzk51nmPmmvgeLGn3GcOrkI
 ###
 GET http://localhost:4000/post/621f52e6c9dde976ffe6308e
 
+# ###
+# POST http://localhost:4000/post
+# Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjBiNzFjNTA1NmEwYTkxYTVkMGViMiIsImlhdCI6MTY0NjY0NTYzNCwiZXhwIjoxNjQ2NjQ5MjM0fQ.78_yASTpSS8-yskBMlRGb8xj22t5JpafwJ9Hh3nc8EA
+# Content-Type: application/json
+
+# {
+#      "message": "this is my authorized new posr",
+#      "sender": "Adi"
+# }
+
 ###
 POST http://localhost:4000/post
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMWZlNjc0NjU0MjI2ODBkYWIxZGZiMSIsImlhdCI6MTY0NjI5NDM0NCwiZXhwIjoxNjQ2Mjk0Mzc0fQ.OIw5w2hwBIe9sfLIfYtjGFGD0v_Qrru-1jk0uZWfooM
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY2MDMyOCwiZXhwIjoxNjQ2NjYzOTI4fQ.kfbCCBq6ObCrMOiC1jE4wBjREOihrBnUErLfET9FnBU
 Content-Type: application/json
 
 {
-    "message": "this is my authorized new posr",
-    "sender": "Adi"
+
+     "title":"Test post",
+     "message": "post message test with Sender referance without Enum"
+    //  "role":"QUES",
+    // "status":"OPEN"
+
 }
+
+
+###
+POST http://localhost:4000/post/sos
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY2MDMyOCwiZXhwIjoxNjQ2NjYzOTI4fQ.kfbCCBq6ObCrMOiC1jE4wBjREOihrBnUErLfET9FnBU
+Content-Type: application/json
+
+{
+
+     "title":"Test post",
+     "message": "post message test with Sender referance without Enum",
+     "freinds_circle": 1,
+     "area": "Rishon",
+    "address":"Nobel 3"    
+    //  "role":"QUES",
+    // "status":"OPEN"
+
+}
+
 
 ###
 POST http://localhost:4000/auth/register
 Content-Type: application/json
 
 {
-    "email": "a@a.com",
-    "password": "123456"
+    "email": "b@a.com",
+    "password": "123456",
+    "name":"test username"
 }
 
 ###
@@ -31,7 +65,7 @@ POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
-    "email": "a@a.com",
+    "email": "b@a.com",
     "password": "123456"
 }
 

@@ -99,5 +99,6 @@ router.get('/:id', authenticate, Post.getPostsById);
  */
 
 router.post('/', authenticate, Post.addPosts);
+router.post('/sos', authenticate, Post.addSos);
 
 module.exports = router
