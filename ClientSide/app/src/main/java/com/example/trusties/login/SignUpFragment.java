@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 
 import com.example.trusties.R;
 
+import java.util.Random;
+
 public class SignUpFragment extends Fragment {
 
     EditText fullName, email, password, verify, phone;
@@ -59,6 +61,18 @@ public class SignUpFragment extends Fragment {
     }
 
     private void Join(View view) {
-        Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_navigation_home);
+        progressBar.setVisibility(View.VISIBLE);
+        joinBtn.setEnabled(false);
+
+        String nameToSend = fullName.getText().toString();
+        String emailToSend = email.getText().toString();
+
+        //TODO: Code generation (5 digits) should be done on a server side
+        final int min = 10000;
+        final int max = 99999;
+        String randomCode = String.valueOf(new Random().nextInt((max - min) + 1) + min);
+        System.out.println("----------> The random code is " + randomCode);
+
+        Navigation.findNavController(view).navigate(SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(nameToSend, emailToSend, randomCode));
     }
 }
