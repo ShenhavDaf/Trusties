@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
+                android:fontFamily="@font/poppins"
                 android:hint="@string/hint_full_name"
                 android:inputType="text"
                 android:textColor="@color/disabledInputFieldTextColor"
@@ -71,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
+                android:fontFamily="@font/poppins"
                 android:hint="@string/hint_email"
                 android:inputType="text"
                 android:textColor="@color/disabledInputFieldTextColor"
@@ -103,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
+                android:fontFamily="@font/poppins"
                 android:hint="@string/hint_password"
                 android:inputType="text"
                 android:textColor="@color/disabledInputFieldTextColor"
@@ -135,6 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
+                android:fontFamily="@font/poppins"
                 android:hint="@string/hint_verify_password"
                 android:inputType="text"
                 android:textColor="@color/disabledInputFieldTextColor"
@@ -167,6 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
+                android:fontFamily="@font/poppins"
                 android:hint="@string/hint_phone_number"
                 android:inputType="text"
                 android:textColor="@color/disabledInputFieldTextColor"
@@ -192,6 +197,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="2dp"
+                android:fontFamily="@font/poppins"
                 android:text="@string/image_text_view"
                 android:textColor="@color/titleColor"
                 android:textSize="20sp"
@@ -202,7 +208,7 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/signup_user_image"
-                android:layout_width="174dp"
+                android:layout_width="164dp"
                 android:layout_height="114dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="4dp"
@@ -250,15 +256,15 @@
         <ProgressBar
             android:id="@+id/signup_progressBar"
             style="?android:attr/progressBarStyle"
-            android:layout_width="202dp"
-            android:layout_height="192dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:indeterminateTint="@color/progressBarColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.248" />
+            app:layout_constraintVertical_bias="0.273" />
 
         <Button
             android:id="@+id/signup_join_btn"
