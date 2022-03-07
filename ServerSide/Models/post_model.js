@@ -1,6 +1,7 @@
 const timespan = require('jsonwebtoken/lib/timespan');
 const mongoose = require('mongoose');
 
+
 const postSchema = new mongoose.Schema({
 
     sender: {
@@ -28,8 +29,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         enum: ['OPEN', 'CLOSE', 'WAITING'],
         default: 'OPEN'
-    },
-
+    }
 
 });
 

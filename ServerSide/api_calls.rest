@@ -7,15 +7,6 @@ Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZl
 ###
 GET http://localhost:4000/post/621f52e6c9dde976ffe6308e
 
-# ###
-# POST http://localhost:4000/post
-# Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjBiNzFjNTA1NmEwYTkxYTVkMGViMiIsImlhdCI6MTY0NjY0NTYzNCwiZXhwIjoxNjQ2NjQ5MjM0fQ.78_yASTpSS8-yskBMlRGb8xj22t5JpafwJ9Hh3nc8EA
-# Content-Type: application/json
-
-# {
-#      "message": "this is my authorized new posr",
-#      "sender": "Adi"
-# }
 
 ###
 POST http://localhost:4000/post
@@ -49,6 +40,31 @@ Content-Type: application/json
 
 }
 
+###
+POST http://localhost:4000/post/ques
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY2NTY4NCwiZXhwIjoxNjQ2NjY5Mjg0fQ.W5v3InwAMUsdQ_rOeFvoKHoWhMTbuR-zl-KPbd0GjoU
+Content-Type: application/json
+
+{
+
+     "title":"Test post",
+     "message": "post message test with Sender referance without Enum",
+     "comment":"Comment!"
+    //  "role":"QUES",
+    // "status":"OPEN"
+
+}
+
+
+###
+POST http://localhost:4000/post/62261457681cb76c1c8c1e11
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY2NTY4NCwiZXhwIjoxNjQ2NjY5Mjg0fQ.W5v3InwAMUsdQ_rOeFvoKHoWhMTbuR-zl-KPbd0GjoU
+Content-Type: application/json
+
+{
+     "message": "Comment to post Id : 62261457681cb76c1c8c1e11"
+}
+
 
 ###
 POST http://localhost:4000/auth/register
@@ -68,6 +84,7 @@ Content-Type: application/json
     "email": "b@a.com",
     "password": "123456"
 }
+
 
 ###
 POST http://localhost:4000/auth/logout

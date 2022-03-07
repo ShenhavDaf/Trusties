@@ -1,6 +1,10 @@
 
 const Post = require('../Models/post_model');
 const Sos = require('../Models/sos_model');
+const Ques = require('../Models/ques_model');
+const Comment = require('../Models/comment_model');
+
+
 
 
 const getPosts = async (req, res, next) => {
@@ -117,10 +121,90 @@ const addSos = async (req, res, next) => {
     });
 }
 
+const addQues = async (req, res, next) => {
+    console.log('add new Ques: ' + req.body.message);
+    sender = req.user.id;
+    var message = req.body.message;
+    var title = req.body.title;
+    var time = req.body.time;
+    var status = req.body.status;
+    var role = req.body.role;
+
+
+    var comment = req.body.comment;
+
+
+    const ques = Ques({
+        sender: sender,
+        title: title,
+        time: time,
+        message: message,
+        status: status,
+        role: role,
+
+        comment: comment
+    });
+
+    // const post = Post({
+    //     message: req.body.message,
+    //     sender: sender
+    // });
+
+    ques.save((error, newPost) => {
+        if (error) {
+            res.status(400).send({
+                'status': 'fail',
+                'error': error.message
+            });
+        } else {
+            res.status(200).send({
+                'status': 'OK',
+                'post': newPost
+            });
+        }
+    });
+}
+
+
+const addComment = async (req, res, next) => {
+    console.log('add new Ques: ' + req.params.id);
+    sender = req.user.id;
+    // const post_url = req.url;
+    // const post_id = String(post_url).split("/");
+
+    post = await Post.findById(req.params.id)
+
+    var message = req.body.message;
+    var time = req.body.time;
+
+
+    const comment = Comment({
+        sender: sender,
+        post: post,
+        time: time,
+        message: message,
+    });
+
+    comment.save((error, newPost) => {
+        if (error) {
+            res.status(400).send({
+                'status': 'fail',
+                'error': error.message
+            });
+        } else {
+            res.status(200).send({
+                'status': 'OK',
+                'post': newPost
+            });
+        }
+    });
+}
 
 module.exports = {
     getPosts,
     getPostsById,
     addPosts,
-    addSos
+    addSos,
+    addQues,
+    addComment
 };

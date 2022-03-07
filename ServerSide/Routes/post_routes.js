@@ -100,5 +100,9 @@ router.get('/:id', authenticate, Post.getPostsById);
 
 router.post('/', authenticate, Post.addPosts);
 router.post('/sos', authenticate, Post.addSos);
+router.post('/ques', authenticate, Post.addQues);
+router.post('/:id', authenticate, Post.addComment);
+
+
 
 module.exports = router
