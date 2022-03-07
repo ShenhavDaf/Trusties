@@ -3,62 +3,55 @@ GET http://localhost:4000/
 
 ###
 GET http://localhost:4000/post
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY1NTIzNSwiZXhwIjoxNjQ2NjU4ODM1fQ.1Z3Puhcd0SplvW1vqNxbbzk51nmPmmvgeLGn3GcOrkI
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+
+###
+GET http://localhost:4000/sos
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+
+
+# ###
+# GET http://localhost:4000/post/MyPost
+# Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+
+
 ###
 GET http://localhost:4000/post/621f52e6c9dde976ffe6308e
 
 
 ###
 POST http://localhost:4000/post
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY2MDMyOCwiZXhwIjoxNjQ2NjYzOTI4fQ.kfbCCBq6ObCrMOiC1jE4wBjREOihrBnUErLfET9FnBU
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
 Content-Type: application/json
 
 {
 
-     "title":"Test post",
+     "title":"Test post2",
      "message": "post message test with Sender referance without Enum"
-    //  "role":"QUES",
-    // "status":"OPEN"
 
 }
 
 
 ###
-POST http://localhost:4000/post/sos
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY2MDMyOCwiZXhwIjoxNjQ2NjYzOTI4fQ.kfbCCBq6ObCrMOiC1jE4wBjREOihrBnUErLfET9FnBU
+POST http://localhost:4000/sos
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
 Content-Type: application/json
 
 {
 
-     "title":"Test post",
+     "title":"Test post1",
      "message": "post message test with Sender referance without Enum",
      "freinds_circle": 1,
      "area": "Rishon",
-    "address":"Nobel 3"    
-    //  "role":"QUES",
-    // "status":"OPEN"
-
-}
-
-###
-POST http://localhost:4000/post/ques
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY2NTY4NCwiZXhwIjoxNjQ2NjY5Mjg0fQ.W5v3InwAMUsdQ_rOeFvoKHoWhMTbuR-zl-KPbd0GjoU
-Content-Type: application/json
-
-{
-
-     "title":"Test post",
-     "message": "post message test with Sender referance without Enum",
-     "comment":"Comment!"
-    //  "role":"QUES",
-    // "status":"OPEN"
+     "address":"Nobel 3"    
+   
 
 }
 
 
 ###
-POST http://localhost:4000/post/62261457681cb76c1c8c1e11
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY2NTY4NCwiZXhwIjoxNjQ2NjY5Mjg0fQ.W5v3InwAMUsdQ_rOeFvoKHoWhMTbuR-zl-KPbd0GjoU
+POST http://localhost:4000/comment/62261457681cb76c1c8c1e11
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
 Content-Type: application/json
 
 {

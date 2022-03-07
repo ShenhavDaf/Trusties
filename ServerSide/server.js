@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-if(process.env.NODE_ENV == "development") {
+if (process.env.NODE_ENV == "development") {
     const swaggerUI = require('swagger-ui-express');
     const swaggerJsDoc = require('swagger-jsdoc');
     const options = {
@@ -15,7 +15,7 @@ if(process.env.NODE_ENV == "development") {
                 version: "1.0.0",
                 description: "A simple Express Library API",
             },
-            servers: [{url: "http://localhost:" + process.env.PORT,},],
+            servers: [{ url: "http://localhost:" + process.env.PORT, },],
         },
         apis: ["./routes/*.js"],
     };
@@ -25,14 +25,14 @@ if(process.env.NODE_ENV == "development") {
 
 
 /* Connect to mongo */
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true});
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', error => console.error(error));
 db.once('open', () => console.log('Connected to mongo'));
 
 /* body parser */
 
-app.use(bodyParser.urlencoded({ extended: true, limit: '1mb'}));
+app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 app.use(bodyParser.json());
 
 const port = process.env.PORT;
@@ -40,9 +40,17 @@ const port = process.env.PORT;
 const indexRouter = require('./Routes/index');
 const postRouter = require('./Routes/post_routes');
 const authRouter = require('./Routes/auth_routes');
+const commentRouter = require('./Routes/comment_routes');
+const sosRouter = require('./Routes/sos_routes');
+
+
 
 app.use('/', indexRouter);
 app.use('/post', postRouter);
 app.use('/auth', authRouter);
+app.use('/comment', commentRouter);
+app.use('/sos', sosRouter);
+
+
 
 module.exports = app
