@@ -64,7 +64,7 @@ POST http://localhost:4000/auth/register
 Content-Type: application/json
 
 {
-    "email": "b@a.com",
+    "email": "a@a.com",
     "password": "123456",
     "name":"test username"
 }
