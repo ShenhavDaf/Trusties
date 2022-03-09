@@ -38,7 +38,7 @@ const register = async (req, res, next) => {
       name: name,
     });
 
-    //send verify email
+    //send verify email!
     randomCode = getRandomInt(1000, 9999);
     await sendEmail(user.email, "Verify Email", String(randomCode));
 
