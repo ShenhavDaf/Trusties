@@ -90,14 +90,28 @@ public class SignUpFragment extends Fragment {
         map.put("password", password.getText().toString());
 
         Call<Void> call = retrofitInterface.executeSignup(map);
+        Call<Void> call2 = retrofitInterface.verifyEmail(map);
 
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
 
                 if (response.code() == 200) {
-                    Toast.makeText(getContext(),
-                            "Signed up successfully", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getContext(),
+//                            "Signed up successfully", Toast.LENGTH_LONG).show();
+                    call2.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            Toast.makeText(getContext(),
+                                    "Email sent!", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(getContext(),
+                                    "oops.. didn't send email!", Toast.LENGTH_LONG).show();
+                        }
+                    });
                     Join(view);
 
                 } else if (response.code() == 400) {

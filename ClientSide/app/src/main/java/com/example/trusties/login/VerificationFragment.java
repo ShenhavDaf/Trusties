@@ -15,6 +15,13 @@ import android.widget.TextView;
 
 import com.example.trusties.CommonFunctions;
 import com.example.trusties.R;
+import com.example.trusties.RetrofitInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class VerificationFragment extends Fragment {
 
@@ -25,9 +32,20 @@ public class VerificationFragment extends Fragment {
 
     String nameArg, emailArg, verifyCodeFromServer;
 
+    private Retrofit retrofit;
+    private RetrofitInterface retrofitInterface;
+    private String BASE_URL = "http://10.0.2.2:4000";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        retrofitInterface = retrofit.create(RetrofitInterface.class);
 
         /*------------------------------ Arguments --------------------------------*/
 
@@ -62,7 +80,25 @@ public class VerificationFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         checkBtn.setEnabled(false);
         resendBtn.setEnabled(false);
-
+//        Call<Void> call = retrofitInterface.verifyCode(code);
+//        call.enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                if(call.request().body().equals(code))
+//                {
+//                    Navigation.findNavController(view).navigate(R.id.action_verificationFragment_to_navigation_home);
+//                }
+//                else {
+//                    String msg = "Verification code is incorrect!!\nPlease try again or resend code 😊";
+//                    new CommonFunctions().myPopup(getContext(), msg);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//
+//            }
+//        });
         if (code.equals(verifyCodeFromServer)) {
             Navigation.findNavController(view).navigate(R.id.action_verificationFragment_to_navigation_home);
         } else {
