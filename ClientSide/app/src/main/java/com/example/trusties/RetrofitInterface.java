@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface RetrofitInterface {
@@ -15,4 +16,12 @@ public interface RetrofitInterface {
 
     @POST("/auth/register")
     Call<Void> executeSignup (@Body HashMap<String, String> map);
+
+    @POST("/auth/verify")
+    Call<Void> verifyEmail (@Body HashMap<String, String> map);
+
+    @GET("/auth/verify")
+    Call<Void> verifyCode (@Body String code);
+
+
 }

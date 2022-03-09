@@ -64,9 +64,9 @@ POST http://localhost:4000/auth/register
 Content-Type: application/json
 
 {
-    "email": "a@a.com",
+    "email": "ortallik@gmail.com",
     "password": "123456",
-    "name":"test username"
+    "name":"test"
 }
 
 ###
@@ -87,3 +87,6 @@ Content-Type: application/json
     "message": "this is my new message",
     "sender": "Adi"
 }
+
+
+
