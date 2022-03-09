@@ -87,6 +87,7 @@ const logout = async (req, res, next) => {
 
 const verifyRandomCode = async (req, res, next) => {
   var verify = randomCode;
+
   //TODO!!!!!- maybe to save a the generated code in mongo( with crypto)
   // and then the client side will read the data ( with GET )
 };
