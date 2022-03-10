@@ -80,30 +80,12 @@ public class VerificationFragment extends Fragment {
 //        progressBar.setVisibility(View.VISIBLE);
         checkBtn.setEnabled(false);
         resendBtn.setEnabled(false);
-//        Call<Void> call = retrofitInterface.verifyCode(code);
-//        call.enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                if(call.request().body().equals(code))
-//                {
-//                    Navigation.findNavController(view).navigate(R.id.action_verificationFragment_to_navigation_home);
-//                }
-//                else {
-//                    String msg = "Verification code is incorrect!!\nPlease try again or resend code 😊";
-//                    new CommonFunctions().myPopup(getContext(), msg);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//
-//            }
-//        });
+
         if (code.equals(verifyCodeFromServer)) {
             Navigation.findNavController(view).navigate(R.id.action_verificationFragment_to_navigation_home);
         } else {
             String msg = "Verification code is incorrect!!\nPlease try again or resend code 😊";
-            new CommonFunctions().myPopup(this.getContext(), msg);
+            new CommonFunctions().myPopup(this.getContext(), "Error", msg);
             checkBtn.setEnabled(true);
             resendBtn.setEnabled(true);
         }

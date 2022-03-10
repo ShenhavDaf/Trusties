@@ -125,7 +125,7 @@ public class LogInFragment extends Fragment {
             loginBtn.setEnabled(true);
 
             String msg = "Username or password incorrect!!\nPlease try again 😊";
-            new CommonFunctions().myPopup(this.getContext(), msg);
+            new CommonFunctions().myPopup(this.getContext(), "Error", msg);
         }
     }
 

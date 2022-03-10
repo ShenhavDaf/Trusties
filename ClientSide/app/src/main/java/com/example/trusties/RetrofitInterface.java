@@ -1,6 +1,8 @@
 package com.example.trusties;
 
 import com.example.trusties.login.LogInFragment;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 
@@ -15,7 +17,7 @@ public interface RetrofitInterface {
     Call<Void> executeLogin(@Body HashMap<String, String> map);
 
     @POST("/auth/register")
-    Call<Void> executeSignup (@Body HashMap<String, String> map);
+    Call<JsonObject> executeSignup (@Body HashMap<String, String> map);
 
     @POST("/auth/verify")
     Call<Void> verifyEmail (@Body HashMap<String, String> map);

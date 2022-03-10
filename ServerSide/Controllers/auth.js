@@ -1,11 +1,11 @@
-const User = require("../Models/user_model");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const sendEmail = require("../Utils/sendEmail");
+const User = require('../Models/user_model');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const sendEmail = require('../Utils/sendEmail');
 
 const sendError = (res, code, msg) => {
   return res.status(code).send({
-    status: "fail",
+    status: 'fail',
     error: msg,
   });
 };
@@ -22,12 +22,12 @@ const register = async (req, res, next) => {
   const password = req.body.password;
   //Hen's Addition
   const name = req.body.name;
-  const verifyCode = req.body.verifyCode;
+  // const verifyCode = req.body.verifyCode;
 
   try {
     const exists = await User.findOne({ email: email });
 
-    if (exists != null) return sendError(res, 400, "user exist");
+    if (exists != null) return sendError(res, 400, 'user exist');
 
     const salt = await bcrypt.genSalt(10);
     const hashPwd = await bcrypt.hash(password, salt);
@@ -36,19 +36,20 @@ const register = async (req, res, next) => {
       email: email,
       password: hashPwd,
       name: name,
+      // verify: verifyCode,
     });
 
     //send verify email!!
-    await sendEmail(user.email, "Verify Email", verifyCode);
+    // await sendEmail(user.email, 'Verify Email', verifyCode);
 
-    // randomCode = getRandomInt(1000, 9999);
-    // await sendEmail(user.email, "Verify Email", String(randomCode));
+    randomCode = getRandomInt(10000, 99999);
+    await sendEmail(user.email, 'Verify Email', String(randomCode));
 
     newUser = await user.save();
-    res.status(200).send(newUser);
+    res.status(200).send({ newUser, randomCode });
   } catch (err) {
     res.status(400).send({
-      status: "fail",
+      status: 'fail',
       error: err.message,
     });
   }
@@ -59,14 +60,14 @@ const login = async (req, res, next) => {
   const password = req.body.password;
 
   if (email == null || password == null)
-    return sendError(res, 400, "Wrong email or password");
+    return sendError(res, 400, 'Wrong email or password');
 
   try {
     const user = await User.findOne({ email: email });
-    if (user == null) return sendError(res, 400, "Wrong email or password");
+    if (user == null) return sendError(res, 400, 'Wrong email or password');
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return sendError(res, 400, "Wrong email or password");
+    if (!match) return sendError(res, 400, 'Wrong email or password');
 
     const accessToken = await jwt.sign(
       { id: user._id },
@@ -82,8 +83,8 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   res.status(400).send({
-    status: "fail",
-    error: "not implemented",
+    status: 'fail',
+    error: 'not implemented',
   });
 };
 

@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.example.trusties.R;
 import com.example.trusties.RetrofitInterface;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -36,6 +38,7 @@ public class SignUpFragment extends Fragment {
     ImageButton camera, gallery;
     Button joinBtn;
     ProgressBar progressBar;
+    String randomCodeFromServer;
 
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
@@ -69,14 +72,7 @@ public class SignUpFragment extends Fragment {
 
         camera.setOnClickListener(v -> openCamera());
         gallery.setOnClickListener(v -> openGallery());
-//        joinBtn.setOnClickListener(v -> Join(view));
-        joinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                handleSignupDialog(v);
-            }
-        });
+        joinBtn.setOnClickListener(v -> handleSignupDialog(v));
 
         return view;
     }
@@ -89,47 +85,35 @@ public class SignUpFragment extends Fragment {
         map.put("email", email.getText().toString());
         map.put("password", password.getText().toString());
 
-        final int min = 10000;
-        final int max = 99999;
-        String randomCode = String.valueOf(new Random().nextInt((max - min) + 1) + min);
-        map.put("verifyCode", randomCode);
-        System.out.println("----------> The random code is " + randomCode);
+        Call<JsonObject> signUpCall = retrofitInterface.executeSignup(map);
+        Call<Void> verifyCall = retrofitInterface.verifyEmail(map);
 
-        Call<Void> call = retrofitInterface.executeSignup(map);
-        Call<Void> call2 = retrofitInterface.verifyEmail(map);
-
-        call.enqueue(new Callback<Void>() {
+        signUpCall.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-
-                if (response.code() == 200) {
-//                    Toast.makeText(getContext(),
-//                            "Signed up successfully", Toast.LENGTH_LONG).show();
-                    call2.enqueue(new Callback<Void>() {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                randomCodeFromServer = response.body().get("randomCode").toString();
+            if (response.code() == 200) {
+                    verifyCall.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            Toast.makeText(getContext(),
-                                    "Email sent!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Email sent!", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
-                            Toast.makeText(getContext(),
-                                    "oops.. didn't send email!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "oops.. didn't send email!", Toast.LENGTH_LONG).show();
                         }
                     });
-                    Join(view,randomCode);
+                    Join(view, randomCodeFromServer);
 
                 } else if (response.code() == 400) {
-                    Toast.makeText(getContext(),
-                            "Already registered", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Already registered", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getContext(), t.getMessage(),
-                        Toast.LENGTH_LONG).show();
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -143,9 +127,6 @@ public class SignUpFragment extends Fragment {
     }
 
     private void Join(View view, String randomCode) {
-//        progressBar.setVisibility(View.VISIBLE);
-//        joinBtn.setEnabled(false);
-
         String nameToSend = fullName.getText().toString();
         String emailToSend = email.getText().toString();
 

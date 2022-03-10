@@ -25,7 +25,7 @@
             android:id="@+id/login_email_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="350dp"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             app:boxCornerRadiusBottomEnd="100dp"
             app:boxCornerRadiusBottomStart="100dp"
