@@ -12,10 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.trusties.CommonFunctions;
 import com.example.trusties.R;
 import com.example.trusties.RetrofitInterface;
+import com.google.gson.JsonObject;
+
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,7 +34,7 @@ public class VerificationFragment extends Fragment {
     Button checkBtn;
     ProgressBar progressBar;
 
-    String nameArg, emailArg, verifyCodeFromServer;
+    String nameArg, emailArg, passArg, verifyCodeFromServer;
 
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
@@ -51,6 +55,7 @@ public class VerificationFragment extends Fragment {
 
         nameArg = VerificationFragmentArgs.fromBundle(getArguments()).getUserName();
         emailArg = VerificationFragmentArgs.fromBundle(getArguments()).getUserEmail();
+        passArg = VerificationFragmentArgs.fromBundle(getArguments()).getUserPassword();
         verifyCodeFromServer = VerificationFragmentArgs.fromBundle(getArguments()).getVerifyCode();
 
         /*-------------------------------- View ----------------------------------*/
@@ -71,7 +76,12 @@ public class VerificationFragment extends Fragment {
         checkBtn = view.findViewById(R.id.verification_check_btn);
         resendBtn = view.findViewById(R.id.verification_resend_btn);
         checkBtn.setOnClickListener(v -> CheckCode(view, verificationCodeEt.getText().toString()));
-        resendBtn.setOnClickListener(v -> ResendCode());
+        resendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResendCode(v);
+            }
+        });
 
         return view;
     }
@@ -91,7 +101,65 @@ public class VerificationFragment extends Fragment {
         }
     }
 
-    private void ResendCode() {
+    private void ResendCode(View view) {
         //TODO
+//        new SignUpFragment().handleSignupDialog(view, nameArg, emailArg, passArg);
+        HashMap<String, String> map = new HashMap<>();
+
+        map.put("name", nameArg);
+        map.put("email", emailArg);
+        map.put("password", passArg);
+
+        Call<Void> resendCall = retrofitInterface.resendEmail();
+        Call<Void> verifyCall = retrofitInterface.verifyEmail(map);
+
+        resendCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+                System.out.println("---------------");
+                if(response.code() == 200) {
+                    verifyCall.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            Toast.makeText(getContext(), "Email sent!", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(getContext(), "oops.. didn't send email!", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    CheckCode(view, verifyCodeFromServer);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
+//        signUpCall.enqueue(new Callback<JsonObject>() {
+//            @Override
+//            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+//                String newRandomCodeFromServer = response.body().get("randomCode").toString();
+//                if (response.code() == 200) {
+
+//                    Join(view, randomCodeFromServer);
+//                    Navigation.findNavController(view).navigate(
+//                            SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(localname, localmail, localpass, randomCodeFromServer));
+//        CheckCode(view, verifyCodeFromServer);
+//
+//                } else if (response.code() == 400) {
+//                    Toast.makeText(getContext(), "Already registered", Toast.LENGTH_LONG).show();
+//                }
+//            }
+
+//            @Override
+//            public void onFailure(Call<JsonObject> call, Throwable t) {
+//                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 }

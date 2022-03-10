@@ -17,8 +17,9 @@ function getRandomInt(min, max) {
 }
 
 var randomCode = 0;
+var email;
 const register = async (req, res, next) => {
-  const email = req.body.email;
+  email = req.body.email;
   const password = req.body.password;
   //Hen's Addition
   const name = req.body.name;
@@ -36,11 +37,7 @@ const register = async (req, res, next) => {
       email: email,
       password: hashPwd,
       name: name,
-      // verify: verifyCode,
     });
-
-    //send verify email!!
-    // await sendEmail(user.email, 'Verify Email', verifyCode);
 
     randomCode = getRandomInt(10000, 99999);
     await sendEmail(user.email, 'Verify Email', String(randomCode));
@@ -88,6 +85,10 @@ const logout = async (req, res, next) => {
   });
 };
 
+const resendEmail = async (req, res, next) => {
+  await sendEmail(email, 'Verify Email', String(randomCode));
+};
+
 // const verifyEmail = async (req, res, next) => {
 //   try {
 //     const user = await User.findOne({ email: "ortallik@gmail.com" });
@@ -120,6 +121,7 @@ module.exports = {
   login,
   register,
   logout,
+  resendEmail,
   // verifyEmail,
   // verifyRandomCode,
 };

@@ -57,6 +57,9 @@
             app:argType="string" />
         <argument android:name="userEmail" />
         <argument
+            android:name="userPassword"
+            app:argType="string" />
+        <argument
             android:name="verifyCode"
             app:argType="string" />
     </fragment>

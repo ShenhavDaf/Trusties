@@ -39,6 +39,7 @@ public class SignUpFragment extends Fragment {
     Button joinBtn;
     ProgressBar progressBar;
     String randomCodeFromServer;
+    String localname, localmail, localpass;
 
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
@@ -72,18 +73,28 @@ public class SignUpFragment extends Fragment {
 
         camera.setOnClickListener(v -> openCamera());
         gallery.setOnClickListener(v -> openGallery());
-        joinBtn.setOnClickListener(v -> handleSignupDialog(v));
 
+
+//        joinBtn.setOnClickListener(v -> handleSignupDialog(v, localname, localmail, localpass));
+joinBtn.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        localname = fullName.getText().toString();
+        localmail = email.getText().toString();
+        localpass = password.getText().toString();
+        handleSignupDialog(v, localname, localmail, localpass);
+    }
+});
         return view;
     }
 
-    private void handleSignupDialog(View view) {
+    public void handleSignupDialog(View view, String name, String mail, String pass) {
 
         HashMap<String, String> map = new HashMap<>();
 
-        map.put("name", fullName.getText().toString());
-        map.put("email", email.getText().toString());
-        map.put("password", password.getText().toString());
+        map.put("name", name);
+        map.put("email", mail);
+        map.put("password", pass);
 
         Call<JsonObject> signUpCall = retrofitInterface.executeSignup(map);
         Call<Void> verifyCall = retrofitInterface.verifyEmail(map);
@@ -92,7 +103,7 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 randomCodeFromServer = response.body().get("randomCode").toString();
-            if (response.code() == 200) {
+                if (response.code() == 200) {
                     verifyCall.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
@@ -104,7 +115,9 @@ public class SignUpFragment extends Fragment {
                             Toast.makeText(getContext(), "oops.. didn't send email!", Toast.LENGTH_LONG).show();
                         }
                     });
-                    Join(view, randomCodeFromServer);
+//                    Join(view, randomCodeFromServer);
+                    Navigation.findNavController(view).navigate(
+                            SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(localname, localmail, localpass, randomCodeFromServer));
 
                 } else if (response.code() == 400) {
                     Toast.makeText(getContext(), "Already registered", Toast.LENGTH_LONG).show();
@@ -126,10 +139,4 @@ public class SignUpFragment extends Fragment {
         //TODO
     }
 
-    private void Join(View view, String randomCode) {
-        String nameToSend = fullName.getText().toString();
-        String emailToSend = email.getText().toString();
-
-        Navigation.findNavController(view).navigate(SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(nameToSend, emailToSend, randomCode));
-    }
 }
