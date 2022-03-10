@@ -2,7 +2,6 @@ const User = require("../Models/user_model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../Utils/sendEmail");
-// const verifyRandomCode = require("../Utils/");
 
 const sendError = (res, code, msg) => {
   return res.status(code).send({
@@ -23,6 +22,7 @@ const register = async (req, res, next) => {
   const password = req.body.password;
   //Hen's Addition
   const name = req.body.name;
+  const verifyCode = req.body.verifyCode;
 
   try {
     const exists = await User.findOne({ email: email });
@@ -39,8 +39,10 @@ const register = async (req, res, next) => {
     });
 
     //send verify email!!
-    randomCode = getRandomInt(1000, 9999);
-    await sendEmail(user.email, "Verify Email", String(randomCode));
+    await sendEmail(user.email, "Verify Email", verifyCode);
+
+    // randomCode = getRandomInt(1000, 9999);
+    // await sendEmail(user.email, "Verify Email", String(randomCode));
 
     newUser = await user.save();
     res.status(200).send(newUser);
@@ -85,16 +87,38 @@ const logout = async (req, res, next) => {
   });
 };
 
-const verifyRandomCode = async (req, res, next) => {
-  var verify = randomCode;
+// const verifyEmail = async (req, res, next) => {
+//   try {
+//     const user = await User.findOne({ email: "ortallik@gmail.com" });
+//     if (!user) return res.status(400).send({ message: "Invalid link1" });
 
-  //TODO!!!!!- maybe to save a the generated code in mongo( with crypto)
-  // and then the client side will read the data ( with GET )
-};
+//     const token = await Token.findOne({
+//       userId: user._id,
+//       // token: req.params.token,
+//     });
+//     if (!token) return res.status(400).send({ message: "Invalid link2" });
+
+//     // await User.updateOne({ _id: user._id, verified: true });
+//     // await token.remove();
+
+//     res.status(200).send({ message: "Email verified successfully" });
+//   } catch (error) {
+//     console.log("inside");
+//     res.status(500).send({ message: "Internal Server Error" });
+//   }
+// };
+
+// const verifyRandomCode = async (req, res, next) => {
+//   var verify = randomCode;
+
+//   //TODO!!!!!- maybe to save a the generated code in mongo( with crypto)
+//   // and then the client side will read the data ( with GET )
+// };
 
 module.exports = {
   login,
   register,
   logout,
-  verifyRandomCode,
+  // verifyEmail,
+  // verifyRandomCode,
 };
