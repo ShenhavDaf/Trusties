@@ -77,7 +77,7 @@ public class VerificationFragment extends Fragment {
     }
 
     private void CheckCode(View view, String code) {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
         checkBtn.setEnabled(false);
         resendBtn.setEnabled(false);
 //        Call<Void> call = retrofitInterface.verifyCode(code);
@@ -104,6 +104,8 @@ public class VerificationFragment extends Fragment {
         } else {
             String msg = "Verification code is incorrect!!\nPlease try again or resend code 😊";
             new CommonFunctions().myPopup(this.getContext(), msg);
+            checkBtn.setEnabled(true);
+            resendBtn.setEnabled(true);
         }
     }
 

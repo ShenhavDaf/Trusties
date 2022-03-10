@@ -89,6 +89,12 @@ public class SignUpFragment extends Fragment {
         map.put("email", email.getText().toString());
         map.put("password", password.getText().toString());
 
+        final int min = 10000;
+        final int max = 99999;
+        String randomCode = String.valueOf(new Random().nextInt((max - min) + 1) + min);
+        map.put("verifyCode", randomCode);
+        System.out.println("----------> The random code is " + randomCode);
+
         Call<Void> call = retrofitInterface.executeSignup(map);
         Call<Void> call2 = retrofitInterface.verifyEmail(map);
 
@@ -112,7 +118,7 @@ public class SignUpFragment extends Fragment {
                                     "oops.. didn't send email!", Toast.LENGTH_LONG).show();
                         }
                     });
-                    Join(view);
+                    Join(view,randomCode);
 
                 } else if (response.code() == 400) {
                     Toast.makeText(getContext(),
@@ -136,18 +142,12 @@ public class SignUpFragment extends Fragment {
         //TODO
     }
 
-    private void Join(View view) {
-        progressBar.setVisibility(View.VISIBLE);
-        joinBtn.setEnabled(false);
+    private void Join(View view, String randomCode) {
+//        progressBar.setVisibility(View.VISIBLE);
+//        joinBtn.setEnabled(false);
 
         String nameToSend = fullName.getText().toString();
         String emailToSend = email.getText().toString();
-
-        //TODO: Code generation (5 digits) should be done on a server side
-        final int min = 10000;
-        final int max = 99999;
-        String randomCode = String.valueOf(new Random().nextInt((max - min) + 1) + min);
-        System.out.println("----------> The random code is " + randomCode);
 
         Navigation.findNavController(view).navigate(SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(nameToSend, emailToSend, randomCode));
     }
