@@ -10,9 +10,9 @@ const sendError = (res, code, msg) => {
   });
 };
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
+function getRandomInt() {
+  min = Math.ceil(10000);
+  max = Math.floor(99999);
   return Math.floor(Math.random() * (max - min) + min);
 }
 
@@ -21,9 +21,7 @@ var email;
 const register = async (req, res, next) => {
   email = req.body.email;
   const password = req.body.password;
-  //Hen's Addition
   const name = req.body.name;
-  // const verifyCode = req.body.verifyCode;
 
   try {
     const exists = await User.findOne({ email: email });
@@ -39,7 +37,7 @@ const register = async (req, res, next) => {
       name: name,
     });
 
-    randomCode = getRandomInt(10000, 99999);
+    randomCode = getRandomInt();
     await sendEmail(user.email, 'Verify Email', String(randomCode));
 
     newUser = await user.save();
@@ -86,7 +84,10 @@ const logout = async (req, res, next) => {
 };
 
 const resendEmail = async (req, res, next) => {
+  randomCode = getRandomInt();
   await sendEmail(email, 'Verify Email', String(randomCode));
+
+  res.status(200).send(String(randomCode));
 };
 
 // const verifyEmail = async (req, res, next) => {

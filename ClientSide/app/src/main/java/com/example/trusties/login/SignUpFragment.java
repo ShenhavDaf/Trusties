@@ -75,16 +75,15 @@ public class SignUpFragment extends Fragment {
         gallery.setOnClickListener(v -> openGallery());
 
 
-//        joinBtn.setOnClickListener(v -> handleSignupDialog(v, localname, localmail, localpass));
-joinBtn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        localname = fullName.getText().toString();
-        localmail = email.getText().toString();
-        localpass = password.getText().toString();
-        handleSignupDialog(v, localname, localmail, localpass);
-    }
-});
+        joinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                localname = fullName.getText().toString();
+                localmail = email.getText().toString();
+                localpass = password.getText().toString();
+                handleSignupDialog(v, localname, localmail, localpass);
+            }
+        });
         return view;
     }
 
@@ -115,7 +114,6 @@ joinBtn.setOnClickListener(new View.OnClickListener() {
                             Toast.makeText(getContext(), "oops.. didn't send email!", Toast.LENGTH_LONG).show();
                         }
                     });
-//                    Join(view, randomCodeFromServer);
                     Navigation.findNavController(view).navigate(
                             SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(localname, localmail, localpass, randomCodeFromServer));
 

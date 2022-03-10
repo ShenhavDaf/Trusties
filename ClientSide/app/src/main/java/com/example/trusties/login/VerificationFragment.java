@@ -79,7 +79,7 @@ public class VerificationFragment extends Fragment {
         resendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResendCode(v);
+                ResendCode();
             }
         });
 
@@ -87,6 +87,7 @@ public class VerificationFragment extends Fragment {
     }
 
     private void CheckCode(View view, String code) {
+        System.out.println("slkdbnakghnfj... "+ code);
 //        progressBar.setVisibility(View.VISIBLE);
         checkBtn.setEnabled(false);
         resendBtn.setEnabled(false);
@@ -101,23 +102,20 @@ public class VerificationFragment extends Fragment {
         }
     }
 
-    private void ResendCode(View view) {
-        //TODO
-//        new SignUpFragment().handleSignupDialog(view, nameArg, emailArg, passArg);
+    private void ResendCode() {
         HashMap<String, String> map = new HashMap<>();
 
         map.put("name", nameArg);
         map.put("email", emailArg);
         map.put("password", passArg);
 
-        Call<Void> resendCall = retrofitInterface.resendEmail();
+        Call<String> resendCall = retrofitInterface.resendEmail();
         Call<Void> verifyCall = retrofitInterface.verifyEmail(map);
 
-        resendCall.enqueue(new Callback<Void>() {
+        resendCall.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-
-                System.out.println("---------------");
+            public void onResponse(Call<String> call, Response<String> response) {
+                verifyCodeFromServer = response.body();
                 if(response.code() == 200) {
                     verifyCall.enqueue(new Callback<Void>() {
                         @Override
@@ -130,36 +128,13 @@ public class VerificationFragment extends Fragment {
                             Toast.makeText(getContext(), "oops.. didn't send email!", Toast.LENGTH_LONG).show();
                         }
                     });
-                    CheckCode(view, verifyCodeFromServer);
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
-//        signUpCall.enqueue(new Callback<JsonObject>() {
-//            @Override
-//            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//                String newRandomCodeFromServer = response.body().get("randomCode").toString();
-//                if (response.code() == 200) {
-
-//                    Join(view, randomCodeFromServer);
-//                    Navigation.findNavController(view).navigate(
-//                            SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(localname, localmail, localpass, randomCodeFromServer));
-//        CheckCode(view, verifyCodeFromServer);
-//
-//                } else if (response.code() == 400) {
-//                    Toast.makeText(getContext(), "Already registered", Toast.LENGTH_LONG).show();
-//                }
-//            }
-
-//            @Override
-//            public void onFailure(Call<JsonObject> call, Throwable t) {
-//                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//        });
     }
 }

@@ -23,7 +23,7 @@ public interface RetrofitInterface {
     Call<Void> verifyEmail (@Body HashMap<String, String> map);
 
     @POST("/auth/resendEmail")
-    Call<Void> resendEmail ();
+    Call<String> resendEmail ();
 
 
 }

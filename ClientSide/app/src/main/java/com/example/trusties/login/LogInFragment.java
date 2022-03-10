@@ -59,14 +59,13 @@ public class LogInFragment extends Fragment {
         loginBtn = view.findViewById(R.id.login_btn);
         joinBtn = view.findViewById(R.id.login_joinbtn_tv);
 
-//        loginBtn.setOnClickListener(v -> Login(view));
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleLoginDialog(v);
             }
         });
-//        joinBtn.setOnClickListener(v -> Join(view));
+
         joinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,39 +93,16 @@ public class LogInFragment extends Fragment {
                     Navigation.findNavController(view).navigate(R.id.action_logInFragment_to_navigation_home);
 
                 } else if (response.code() == 400) {
-                    Toast.makeText(getContext(), "Wrong Credentials",
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Wrong Credentials", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getContext(), t.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
-    }
-
-
-    private void Login(View view) {
-        progressBar.setVisibility(View.VISIBLE);
-        loginBtn.setEnabled(false);
-        joinBtn.setEnabled(false);
-
-        String localEmail = email.getText().toString().trim();
-        String LocalPassword = password.getText().toString().trim();
-
-        //TODO: email & password should come from the server side
-        if (localEmail.equals("shenhav") && LocalPassword.equals("123")) {
-            Navigation.findNavController(view).navigate(R.id.action_logInFragment_to_navigation_home);
-        } else {
-            progressBar.setVisibility(View.GONE);
-            loginBtn.setEnabled(true);
-
-            String msg = "Username or password incorrect!!\nPlease try again 😊";
-            new CommonFunctions().myPopup(this.getContext(), "Error", msg);
-        }
     }
 
     private void Join(View view) {
