@@ -1,5 +1,6 @@
 package com.example.trusties.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trusties.CommonFunctions;
+import com.example.trusties.MainActivity;
 import com.example.trusties.R;
 import com.example.trusties.RetrofitInterface;
 import com.google.gson.JsonObject;
@@ -87,13 +89,12 @@ public class VerificationFragment extends Fragment {
     }
 
     private void CheckCode(View view, String code) {
-        System.out.println("slkdbnakghnfj... "+ code);
-//        progressBar.setVisibility(View.VISIBLE);
         checkBtn.setEnabled(false);
         resendBtn.setEnabled(false);
 
         if (code.equals(verifyCodeFromServer)) {
-            Navigation.findNavController(view).navigate(R.id.action_verificationFragment_to_navigation_home);
+            startActivity(new Intent(getContext(), MainActivity.class));
+            getActivity().finish();
         } else {
             String msg = "Verification code is incorrect!!\nPlease try again or resend code 😊";
             new CommonFunctions().myPopup(this.getContext(), "Error", msg);

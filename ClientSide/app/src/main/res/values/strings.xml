@@ -2,10 +2,14 @@
 
     <string name="app_name">Trusties</string>
 
-    <!--    Bottom navigation   -->
+    <!--    Bottom navigation labels/ titles  -->
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="title_signup">Sign Up</string>
+    <string name="title_login">Log In</string>
+    <string name="title_verification">Verification</string>
 
     <!--    SignUp   -->
     <string name="image_text_view">Image:</string>
@@ -31,6 +35,5 @@
     <string name="verification_resend">Did not receive an email?\n To resend</string>
     <string name="click_here">Click here</string>
     <string name="login">Login...</string>
-
 
 </resources>
