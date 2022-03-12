@@ -1,6 +1,7 @@
 package com.example.trusties.login;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trusties.CommonFunctions;
+import com.example.trusties.MainActivity;
 import com.example.trusties.R;
 import com.example.trusties.RetrofitInterface;
 
@@ -90,7 +92,8 @@ public class LogInFragment extends Fragment {
             public void onResponse(Call<Void> call, Response<Void> response) {
 
                 if (response.code() == 200) {
-                    Navigation.findNavController(view).navigate(R.id.action_logInFragment_to_navigation_home);
+                    startActivity(new Intent(getContext(), MainActivity.class));
+                    getActivity().finish();
 
                 } else if (response.code() == 400) {
                     Toast.makeText(getContext(), "Wrong Credentials", Toast.LENGTH_LONG).show();

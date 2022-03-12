@@ -62,7 +62,7 @@
             android:id="@+id/verification_code_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="282dp"
-            android:layout_height="58dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:textAlignment="center"
             app:boxBackgroundMode="outline"
