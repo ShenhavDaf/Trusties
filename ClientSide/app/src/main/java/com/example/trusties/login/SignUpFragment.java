@@ -112,6 +112,7 @@ public class SignUpFragment extends Fragment {
         map.put("name", localName);
         map.put("email", localEmail);
         map.put("password", localPassword);
+        map.put("phone",localPhone);
 
         Model.instance.signup(map, randomCodeFromServer -> {
             Navigation.findNavController(v).navigate(

@@ -1,11 +1,15 @@
 package com.example.trusties.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.trusties.CommonFunctions;
 import com.example.trusties.MyApplication;
 import com.example.trusties.RetrofitInterface;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializer;
 
 import java.util.HashMap;
 
@@ -63,14 +67,18 @@ public class ModelServer {
         signUpCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//                String randomCodeFromServer = response.body().get("randomCode").toString();
-
                 if (response.code() == 200) {
                     String randomCodeFromServer = response.body().get("randomCode").toString();
+//                    JsonObject json = response.body().get("newUser").getAsJsonObject();
+//                    JsonElement isVerified = json.get("verified");
+//                    Log.d("TAG",isVerified.toString());
+
                     verifyCall.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             listener.onComplete(randomCodeFromServer);
+//                            isVerified.equal("true");
+//                            json.remove("verified");
 
                         }
 
