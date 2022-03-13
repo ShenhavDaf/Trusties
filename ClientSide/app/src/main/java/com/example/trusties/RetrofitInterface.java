@@ -25,7 +25,8 @@ public interface RetrofitInterface {
     @POST("/auth/resendEmail")
     Call<String> resendEmail ();
 
-
+    @POST("/auth/afterVerify")
+    Call<Void> verifiedUser(@Body HashMap<String, String> map);
 
 
 }

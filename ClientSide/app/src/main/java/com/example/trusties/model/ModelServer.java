@@ -18,6 +18,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 
 public class ModelServer {
 
@@ -96,7 +97,7 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                new CommonFunctions().myPopup(MyApplication.getContext(), "Error", t.getMessage());
+                new CommonFunctions().myPopup(context, "Error", t.getMessage());
             }
         });
     }
@@ -129,7 +130,22 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                new CommonFunctions().myPopup(MyApplication.getContext(), "Error", t.getMessage());
+                new CommonFunctions().myPopup(context, "Error", t.getMessage());
+            }
+        });
+    }
+
+    public void verifiedUser( HashMap<String, String> map,Model.verifiedUserListener listener, Context context) {
+        Call<Void> afterVerify = retrofitInterface.verifiedUser(map);
+        afterVerify.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete("true");
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
             }
         });
     }

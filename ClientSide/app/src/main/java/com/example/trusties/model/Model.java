@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import retrofit2.http.Body;
+
 public class Model {
 
     public static final Model instance = new Model();
@@ -47,6 +49,13 @@ public class Model {
 
     public void resendEmail(HashMap<String, String> map, resendEmailListener listener,Context context) {
         modelServer.resendEmail(map, listener,context);
+    }
+
+    public interface  verifiedUserListener{
+        void onComplete(String str);
+    }
+    public void verifiedUser(@Body HashMap<String, String> map, verifiedUserListener listener, Context context) {
+        modelServer.verifiedUser(map,listener,context);
     }
 
 }

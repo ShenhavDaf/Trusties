@@ -68,7 +68,14 @@ public class VerificationFragment extends Fragment {
         checkBtn.setEnabled(false);
         resendBtn.setEnabled(false);
 
+        HashMap<String, String> map = new HashMap<>();
+        map.put("name", nameArg);
+        map.put("email", emailArg);
+
         if (code.equals(verifyCodeFromServer)) {
+            Model.instance.verifiedUser(map,isVerified -> {
+                //do nothing
+            },getContext());
             startActivity(new Intent(getContext(), MainActivity.class));
             getActivity().finish();
         } else {
