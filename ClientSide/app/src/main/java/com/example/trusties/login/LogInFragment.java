@@ -1,13 +1,12 @@
 package com.example.trusties.login;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.trusties.CommonFunctions;
 import com.example.trusties.MainActivity;
 import com.example.trusties.R;
-import com.example.trusties.RetrofitInterface;
-
-import java.util.HashMap;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import com.example.trusties.model.Model;
 
 public class LogInFragment extends Fragment {
 
@@ -36,22 +26,12 @@ public class LogInFragment extends Fragment {
     TextView joinBtn;
     Button loginBtn;
     ProgressBar progressBar;
-    private Retrofit retrofit;
-    private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://10.0.2.2:4000";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_log_in, container, false);
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        retrofitInterface = retrofit.create(RetrofitInterface.class);
 
         email = view.findViewById(R.id.login_email_et);
         password = view.findViewById(R.id.login_password_et);
@@ -61,51 +41,47 @@ public class LogInFragment extends Fragment {
         loginBtn = view.findViewById(R.id.login_btn);
         joinBtn = view.findViewById(R.id.login_joinbtn_tv);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleLoginDialog(v);
-            }
-        });
-
-        joinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Join(v);
-            }
-        });
+        loginBtn.setOnClickListener(v -> Login());
+        joinBtn.setOnClickListener(v -> Join(v));
 
         return view;
     }
 
-    private void handleLoginDialog(View view) {
+    private void Login() {
+        progressBar.setVisibility(View.VISIBLE);
+        loginBtn.setEnabled(false);
 
-        HashMap<String, String> map = new HashMap<>();
+        String localEmail = email.getText().toString();
+        String localPassword = password.getText().toString();
 
-        map.put("email", email.getText().toString());
-        map.put("password", password.getText().toString());
+//        if (!Patterns.EMAIL_ADDRESS.matcher(localEmail).matches()) {
+//            email.setError("Please provide valid email");
+//            email.requestFocus();
+//
+//            return;
+//        }
+//        if (localEmail.isEmpty()) {
+//            email.setError("Please enter your Email");
+//            email.requestFocus();
+//            return;
+//        }
+//
+//        if (localPassword.length() < 6) {
+//            password.setError("Password length should be at least 6 characters");
+//            password.requestFocus();
+//            return;
+//        }
 
-        Call<Void> call = retrofitInterface.executeLogin(map);
-
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-
-                if (response.code() == 200) {
-                    startActivity(new Intent(getContext(), MainActivity.class));
-                    getActivity().finish();
-
-                } else if (response.code() == 400) {
-                    Toast.makeText(getContext(), "Wrong Credentials", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+        Model.instance.login(localEmail, localPassword, statusCode -> {
+            if (statusCode == 200) {
+                startActivity(new Intent(getContext(), MainActivity.class));
+                getActivity().finish();
+            } else if (statusCode == 400) {
+                new CommonFunctions().myPopup(getContext(), "Error", "Incorrect email or password");
+                progressBar.setVisibility(View.GONE);
+                loginBtn.setEnabled(true);
             }
         });
-
     }
 
     private void Join(View view) {
