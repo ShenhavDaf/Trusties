@@ -27,7 +27,7 @@
     <string name="join_us">JOIN US</string>
 
     <!--    Verification   -->
-    <string name="verification_text">Hi\nYour details have been saved in the system succesfully.\n\nA verification code sending to your email account -</string>
+    <string name="verification_text">Hi\nYour details have been saved in the system successfully.\n\nA verification code sending to your email account -</string>
     <string name="hint_verification_fullname">User Full Name</string>
     <string name="hint_verification_email">User Email</string>
     <string name="hint_verification_code">Enter your verification code</string>

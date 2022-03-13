@@ -1,5 +1,6 @@
 package com.example.trusties.model;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -24,8 +25,8 @@ public class Model {
         void onComplete(Integer statusCode);
     }
 
-    public void login(String email, String password, loginListener listener) {
-        modelServer.handleLoginDialog(email, password, listener);
+    public void login(String email, String password, loginListener listener, Context context) {
+        modelServer.handleLoginDialog(email, password, listener,context);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -34,8 +35,8 @@ public class Model {
         void onComplete(String randomCodeFromServer);
     }
 
-    public void signup(HashMap<String, String> map, signupListener listener) {
-        modelServer.handleSignupDialog(map, listener);
+    public void signup(HashMap<String, String> map, signupListener listener, Context context) {
+        modelServer.handleSignupDialog(map, listener, context);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -44,8 +45,8 @@ public class Model {
         void onComplete(String randomCodeFromServer);
     }
 
-    public void resendEmail(HashMap<String, String> map, resendEmailListener listener) {
-        modelServer.resendEmail(map, listener);
+    public void resendEmail(HashMap<String, String> map, resendEmailListener listener,Context context) {
+        modelServer.resendEmail(map, listener,context);
     }
 
 }

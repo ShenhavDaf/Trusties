@@ -88,6 +88,6 @@ public class VerificationFragment extends Fragment {
         Model.instance.resendEmail(map, randomCodeFromServer -> {
             new CommonFunctions().myPopup(getContext(), "Email resend", "Please check your inbox");
             verifyCodeFromServer = randomCodeFromServer;
-        });
+        },getContext());
     }
 }

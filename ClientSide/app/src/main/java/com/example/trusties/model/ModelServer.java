@@ -1,5 +1,7 @@
 package com.example.trusties.model;
 
+import android.content.Context;
+
 import com.example.trusties.CommonFunctions;
 import com.example.trusties.MyApplication;
 import com.example.trusties.RetrofitInterface;
@@ -30,7 +32,7 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void handleLoginDialog(String email, String password, Model.loginListener listener) {
+    public void handleLoginDialog(String email, String password, Model.loginListener listener, Context context) {
 
         HashMap<String, String> map = new HashMap<>();
         map.put("email", email);
@@ -46,14 +48,14 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                new CommonFunctions().myPopup(MyApplication.getContext(), "Error", t.getMessage());
+                new CommonFunctions().myPopup(context, "Error", t.getMessage());
             }
         });
     }
 
     /* ------------------------------------------------------------------------- */
 
-    public void handleSignupDialog(HashMap<String, String> map, Model.signupListener listener) {
+    public void handleSignupDialog(HashMap<String, String> map, Model.signupListener listener, Context context) {
 
         Call<JsonObject> signUpCall = retrofitInterface.executeSignup(map);
         Call<Void> verifyCall = retrofitInterface.verifyEmail(map);
@@ -61,23 +63,25 @@ public class ModelServer {
         signUpCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                String randomCodeFromServer = response.body().get("randomCode").toString();
+//                String randomCodeFromServer = response.body().get("randomCode").toString();
 
                 if (response.code() == 200) {
+                    String randomCodeFromServer = response.body().get("randomCode").toString();
                     verifyCall.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             listener.onComplete(randomCodeFromServer);
+
                         }
 
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
-                            new CommonFunctions().myPopup(MyApplication.getContext(), "oops..", "didn't send email!");
+                            new CommonFunctions().myPopup(context ,"oops..", "didn't send email!");
                         }
                     });
                 } else if (response.code() == 400) {
                     String msg = "The email address is already in use by another user";
-                    new CommonFunctions().myPopup(MyApplication.getContext(), "Error", msg);
+                    new CommonFunctions().myPopup(context, "Error", msg);
                     System.out.println("---------------------" +msg);
                 }
             }
@@ -91,7 +95,7 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void resendEmail(HashMap<String, String> map, Model.resendEmailListener listener) {
+    public void resendEmail(HashMap<String, String> map, Model.resendEmailListener listener,Context context) {
 
         Call<String> resendCall = retrofitInterface.resendEmail();
         Call<Void> verifyCall = retrofitInterface.verifyEmail(map);
@@ -109,7 +113,7 @@ public class ModelServer {
 
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
-                            new CommonFunctions().myPopup(MyApplication.getContext(), "oops..", "didn't send email!");
+                            new CommonFunctions().myPopup(context, "oops..", "didn't send email!");
                         }
                     });
                 }

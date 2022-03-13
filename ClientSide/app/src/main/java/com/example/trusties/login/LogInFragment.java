@@ -81,7 +81,7 @@ public class LogInFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 loginBtn.setEnabled(true);
             }
-        });
+        },getContext());
     }
 
     private void Join(View view) {

@@ -105,8 +105,8 @@ public class SignUpFragment extends Fragment {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
-        joinBtn.setEnabled(false);
+//        progressBar.setVisibility(View.VISIBLE);
+//        joinBtn.setEnabled(false);
 
         HashMap<String, String> map = new HashMap<>();
         map.put("name", localName);
@@ -117,7 +117,7 @@ public class SignUpFragment extends Fragment {
             Navigation.findNavController(v).navigate(
                     SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(localName, localEmail, randomCodeFromServer));
 
-        });
+        },getContext());
     }
 
     private void openCamera() {
