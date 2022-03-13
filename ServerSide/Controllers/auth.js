@@ -93,39 +93,27 @@ const resendEmail = async (req, res, next) => {
   res.status(200).send(String(randomCode));
 };
 
-// const verifyEmail = async (req, res, next) => {
-//   try {
-//     const user = await User.findOne({ email: "ortallik@gmail.com" });
-//     if (!user) return res.status(400).send({ message: "Invalid link1" });
-
-//     const token = await Token.findOne({
-//       userId: user._id,
-//       // token: req.params.token,
-//     });
-//     if (!token) return res.status(400).send({ message: "Invalid link2" });
-
-//     // await User.updateOne({ _id: user._id, verified: true });
-//     // await token.remove();
-
-//     res.status(200).send({ message: "Email verified successfully" });
-//   } catch (error) {
-//     console.log("inside");
-//     res.status(500).send({ message: "Internal Server Error" });
-//   }
-// };
-
-// const verifyRandomCode = async (req, res, next) => {
-//   var verify = randomCode;
-
-//   //TODO!!!!!- maybe to save a the generated code in mongo( with crypto)
-//   // and then the client side will read the data ( with GET )
-// };
+const verifiedUser = async (req, res, next) => {
+  try {
+    const exists = await User.updateOne(
+      { email: email },
+      {
+        verified: true,
+      }
+    );
+    if (exists == null) return sendError(res, 400, "user does not exist");
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
 
 module.exports = {
   login,
   register,
   logout,
   resendEmail,
-  // verifyEmail,
-  // verifyRandomCode,
+  verifiedUser,
 };
