@@ -17,13 +17,13 @@ public interface RetrofitInterface {
     Call<Void> executeLogin(@Body HashMap<String, String> map);
 
     @POST("/auth/register")
-    Call<JsonObject> executeSignup (@Body HashMap<String, String> map);
+    Call<JsonObject> executeSignup(@Body HashMap<String, String> map);
 
     @POST("/auth/verify")
-    Call<Void> verifyEmail (@Body HashMap<String, String> map);
+    Call<Void> verifyEmail(@Body HashMap<String, String> map);
 
     @POST("/auth/resendEmail")
-    Call<String> resendEmail ();
+    Call<String> resendEmail();
 
     @POST("/auth/afterVerify")
     Call<Void> verifiedUser(@Body HashMap<String, String> map);

@@ -19,4 +19,8 @@
     <color name="disabledInputField">#309A9A9A</color>
     <color name="progressBarColor">#8CCBF4</color>
     <color name="hyperlinkColor">#002EA5</color>
+
+    <color name="ratingBarPrimary">#E9FFD700</color>
+    <color name="ratingBarSecondary">#FFF000</color>
+    <color name="ratingBarBackground">#AF0202</color>
 </resources>
