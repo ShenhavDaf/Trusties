@@ -65,45 +65,45 @@ public class SignUpFragment extends Fragment {
         String localVerify = verify.getText().toString();
         String localPhone = phone.getText().toString();
 
-//        if (localName.isEmpty()) {
-//            fullName.setError("Please enter your full name");
-//            fullName.requestFocus();
-//            return;
-//        }
-//
-//        if (!Patterns.EMAIL_ADDRESS.matcher(localEmail).matches()) {
-//            email.setError("Please provide valid email");
-//            email.requestFocus();
-//            return;
-//        }
-//        if (localEmail.isEmpty()) {
-//            email.setError("Please enter your Email");
-//            email.requestFocus();
-//            return;
-//        }
-//
-//        if (localPassword.length() < 6) {
-//            password.setError("Password length should be at least 6 characters");
-//            password.requestFocus();
-//            return;
-//        }
-//
-//        if (!localVerify.equals(localPassword)) {
-//            verify.setError("Wrong password");
-//            verify.requestFocus();
-//            return;
-//        }
-//
-//        if (!Patterns.PHONE.matcher(localPhone).matches()) {
-//            phone.setError("Please provide valid phone number");
-//            phone.requestFocus();
-//            return;
-//        }
-//        if (localPhone.isEmpty()) {
-//            phone.setError("Please enter your phone number");
-//            phone.requestFocus();
-//            return;
-//        }
+        if (localName.isEmpty()) {
+            fullName.setError("Please enter your full name");
+            fullName.requestFocus();
+            return;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(localEmail).matches()) {
+            email.setError("Please provide valid email");
+            email.requestFocus();
+            return;
+        }
+        if (localEmail.isEmpty()) {
+            email.setError("Please enter your Email");
+            email.requestFocus();
+            return;
+        }
+
+        if (localPassword.length() < 6) {
+            password.setError("Password length should be at least 6 characters");
+            password.requestFocus();
+            return;
+        }
+
+        if (!localVerify.equals(localPassword)) {
+            verify.setError("Wrong password");
+            verify.requestFocus();
+            return;
+        }
+
+        if (!Patterns.PHONE.matcher(localPhone).matches()) {
+            phone.setError("Please provide valid phone number");
+            phone.requestFocus();
+            return;
+        }
+        if (localPhone.isEmpty()) {
+            phone.setError("Please enter your phone number");
+            phone.requestFocus();
+            return;
+        }
 
 //        progressBar.setVisibility(View.VISIBLE);
 //        joinBtn.setEnabled(false);
@@ -113,6 +113,7 @@ public class SignUpFragment extends Fragment {
         map.put("email", localEmail);
         map.put("password", localPassword);
         map.put("phone",localPhone);
+        map.put("fragment", "SignUpFragment");
 
         Model.instance.signup(map, randomCodeFromServer -> {
             Navigation.findNavController(v).navigate(

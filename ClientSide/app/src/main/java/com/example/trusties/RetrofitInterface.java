@@ -14,7 +14,7 @@ import retrofit2.http.POST;
 public interface RetrofitInterface {
 
     @POST("/auth/login")
-    Call<Void> executeLogin(@Body HashMap<String, String> map);
+    Call<JsonObject> executeLogin(@Body HashMap<String, String> map);
 
     @POST("/auth/register")
     Call<JsonObject> executeSignup(@Body HashMap<String, String> map);

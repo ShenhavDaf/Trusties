@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_logInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_logInFragment_to_verificationFragment"
+            app:destination="@id/verificationFragment" />
     </fragment>
     <fragment
         android:id="@+id/verificationFragment"
@@ -31,7 +34,8 @@
         <argument
             android:name="userName"
             app:argType="string" />
-        <argument android:name="userEmail" />
+        <argument android:name="userEmail"
+            app:argType="string" />
         <argument
             android:name="verifyCode"
             app:argType="string" />

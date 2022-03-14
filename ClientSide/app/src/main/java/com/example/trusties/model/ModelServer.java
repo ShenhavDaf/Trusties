@@ -3,9 +3,12 @@ package com.example.trusties.model;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.navigation.Navigation;
+
 import com.example.trusties.CommonFunctions;
 import com.example.trusties.MyApplication;
 import com.example.trusties.RetrofitInterface;
+import com.example.trusties.login.SignUpFragmentDirections;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -43,16 +46,24 @@ public class ModelServer {
         map.put("email", email);
         map.put("password", password);
 
-        Call<Void> call = retrofitInterface.executeLogin(map);
 
-        call.enqueue(new Callback<Void>() {
+        Call<JsonObject> call = retrofitInterface.executeLogin(map);
+
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                listener.onComplete(response.code());
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject user = null;
+                if(response.code() == 200)
+                    user = response.body().get("user").getAsJsonObject();
+                Log.d("TAG", String.valueOf(response.code()));
+
+                    listener.onComplete(response.code(), user);
+
+
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
                 new CommonFunctions().myPopup(context, "Error", t.getMessage());
             }
         });
@@ -70,16 +81,11 @@ public class ModelServer {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.code() == 200) {
                     String randomCodeFromServer = response.body().get("randomCode").toString();
-//                    JsonObject json = response.body().get("newUser").getAsJsonObject();
-//                    JsonElement isVerified = json.get("verified");
-//                    Log.d("TAG",isVerified.toString());
 
                     verifyCall.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             listener.onComplete(randomCodeFromServer);
-//                            isVerified.equal("true");
-//                            json.remove("verified");
 
                         }
 
@@ -93,6 +99,7 @@ public class ModelServer {
                     new CommonFunctions().myPopup(context, "Error", msg);
                     System.out.println("---------------------" +msg);
                 }
+
             }
 
             @Override

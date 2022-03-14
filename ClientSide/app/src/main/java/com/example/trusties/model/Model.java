@@ -6,6 +6,8 @@ import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
 
+import com.google.gson.JsonObject;
+
 import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -24,7 +26,7 @@ public class Model {
     /* ---------------------------------------------------------------------------- */
 
     public interface loginListener {
-        void onComplete(Integer statusCode);
+        void onComplete(Integer statusCode, JsonObject user);
     }
 
     public void login(String email, String password, loginListener listener, Context context) {

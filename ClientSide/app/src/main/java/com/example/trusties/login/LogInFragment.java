@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.example.trusties.CommonFunctions;
 import com.example.trusties.MainActivity;
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
+
+import java.util.HashMap;
 
 public class LogInFragment extends Fragment {
 
@@ -41,43 +44,67 @@ public class LogInFragment extends Fragment {
         loginBtn = view.findViewById(R.id.login_btn);
         joinBtn = view.findViewById(R.id.login_joinbtn_tv);
 
-        loginBtn.setOnClickListener(v -> Login());
+        loginBtn.setOnClickListener(v -> Login(v));
         joinBtn.setOnClickListener(v -> Join(v));
 
         return view;
     }
 
-    private void Login() {
-        progressBar.setVisibility(View.VISIBLE);
-        loginBtn.setEnabled(false);
+    private void Login(View view) {
+//        progressBar.setVisibility(View.VISIBLE);
+//        loginBtn.setEnabled(false);
 
         String localEmail = email.getText().toString();
         String localPassword = password.getText().toString();
 
-//        if (!Patterns.EMAIL_ADDRESS.matcher(localEmail).matches()) {
-//            email.setError("Please provide valid email");
-//            email.requestFocus();
-//
-//            return;
-//        }
-//        if (localEmail.isEmpty()) {
-//            email.setError("Please enter your Email");
-//            email.requestFocus();
-//            return;
-//        }
-//
-//        if (localPassword.length() < 6) {
-//            password.setError("Password length should be at least 6 characters");
-//            password.requestFocus();
-//            return;
-//        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(localEmail).matches()) {
+            email.setError("Please provide valid email");
+            email.requestFocus();
 
-        Model.instance.login(localEmail, localPassword, statusCode -> {
+            return;
+        }
+        if (localEmail.isEmpty()) {
+            email.setError("Please enter your Email");
+            email.requestFocus();
+            return;
+        }
+
+        if (localPassword.length() < 6) {
+            password.setError("Password length should be at least 6 characters");
+            password.requestFocus();
+            return;
+        }
+
+        Model.instance.login(localEmail, localPassword, (statusCode,user) -> {
             if (statusCode == 200) {
-                startActivity(new Intent(getContext(), MainActivity.class));
-                getActivity().finish();
-            } else if (statusCode == 400) {
-                new CommonFunctions().myPopup(getContext(), "Error", "Incorrect email or password");
+                String localName = user.get("name").toString();
+                String localPhone = user.get("phone").toString();
+                if(user.get("verified").toString().equals("false"))
+                {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("name", localName);
+                    map.put("email", localEmail);
+                    map.put("password", localPassword);
+                    map.put("phone",localPhone);
+                    map.put("fragment", "LoginFragment");
+                    Model.instance.signup(map, randomCodeFromServer -> {
+                        Navigation.findNavController(view).navigate(
+                                LogInFragmentDirections.actionLogInFragmentToVerificationFragment(localName, localEmail, randomCodeFromServer));
+
+
+                    },getContext());
+                }
+                else {
+                    startActivity(new Intent(getContext(), MainActivity.class));
+                    getActivity().finish();
+                }
+            }
+            else if (statusCode == 400) {
+                if( user == null) {
+                    new CommonFunctions().myPopup(getContext(), "Error", "Please register first");
+                }
+                else
+                    new CommonFunctions().myPopup(getContext(), "Error", "Incorrect email or password");
                 progressBar.setVisibility(View.GONE);
                 loginBtn.setEnabled(true);
             }
