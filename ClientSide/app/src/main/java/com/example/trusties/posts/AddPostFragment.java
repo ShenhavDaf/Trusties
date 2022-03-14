@@ -21,7 +21,7 @@ public class AddPostFragment extends Fragment {
     EditText postTitle, description;
     Spinner tags;
     ImageView image;
-    ImageButton cameraBtn, galleryBtn;
+    ImageButton cameraBtn, galleryBtn, carBtn, deliveryBtn, toolsBtn, houseBtn;
     Button firstCircleBtn, secondCircleBtn, thirdCircleBtn, postBtn, sosBtn;
     ProgressBar progressBar;
     //TODO: location
@@ -56,6 +56,13 @@ public class AddPostFragment extends Fragment {
         thirdCircleBtn.setOnClickListener(v -> FindThirdCircle());
         postBtn.setOnClickListener(v -> PostQuestion());
         sosBtn.setOnClickListener(v -> PostSOS());
+
+        /*--------------------------categories---------------------------*/
+        carBtn = view.findViewById(R.id.newpost_car_btn);
+        deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
+        toolsBtn = view.findViewById(R.id.newpost_tools_btn);
+        houseBtn = view.findViewById(R.id.newpost_house_damage_btn);
+
 
         return view;
     }
