@@ -6,6 +6,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_new_post">New Post</string>
 
     <string name="title_signup">Sign Up</string>
     <string name="title_login">Log In</string>
@@ -35,5 +36,18 @@
     <string name="verification_resend">Did not receive an email?\n To resend</string>
     <string name="click_here">Click here</string>
     <string name="login">Login...</string>
+
+    <!--    List row   -->
+    <string name="hint_post_text">Lorem ipsum dolor sit amet. Quo voluptatem velit quo perferendis tempora est iste fugit! At sunt doloribus id exercitationem quia sit esse deserunt qui odit quos vel modi delectus?</string>
+    <string name="hint_date">01/01/2022  00:00</string>
+
+    <!--    Add new post   -->
+    <string name="hint_post_title">Title:</string>
+    <string name="hint_post_description">Description:</string>
+    <string name="tags_text_view">Tags:</string>
+    <string name="post_btn">POST</string>
+    <string name="circle_text_view">Friends circle:</string>
+    <string name="location_text_view">Location:</string>
+    <string name="sos_btn">SOS CALL</string>
 
 </resources>

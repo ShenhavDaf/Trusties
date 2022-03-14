@@ -54,23 +54,23 @@ public class LogInFragment extends Fragment {
         String localEmail = email.getText().toString();
         String localPassword = password.getText().toString();
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(localEmail).matches()) {
-            email.setError("Please provide valid email");
-            email.requestFocus();
-
-            return;
-        }
-        if (localEmail.isEmpty()) {
-            email.setError("Please enter your Email");
-            email.requestFocus();
-            return;
-        }
-
-        if (localPassword.length() < 6) {
-            password.setError("Password length should be at least 6 characters");
-            password.requestFocus();
-            return;
-        }
+//        if (!Patterns.EMAIL_ADDRESS.matcher(localEmail).matches()) {
+//            email.setError("Please provide valid email");
+//            email.requestFocus();
+//
+//            return;
+//        }
+//        if (localEmail.isEmpty()) {
+//            email.setError("Please enter your Email");
+//            email.requestFocus();
+//            return;
+//        }
+//
+//        if (localPassword.length() < 6) {
+//            password.setError("Password length should be at least 6 characters");
+//            password.requestFocus();
+//            return;
+//        }
 
         Model.instance.login(localEmail, localPassword, statusCode -> {
             if (statusCode == 200) {
