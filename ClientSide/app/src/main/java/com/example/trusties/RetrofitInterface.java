@@ -1,7 +1,5 @@
 package com.example.trusties;
 
-import com.example.trusties.login.LogInFragment;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -10,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface RetrofitInterface {
 
@@ -28,5 +27,6 @@ public interface RetrofitInterface {
     @POST("/auth/afterVerify")
     Call<Void> verifiedUser(@Body HashMap<String, String> map);
 
-
+    @GET("/auth/forgotPassword")
+    Call<Void> forgotPassword(@Query("emailAddress") String emailAddress);
 }

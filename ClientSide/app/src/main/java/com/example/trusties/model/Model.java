@@ -53,11 +53,22 @@ public class Model {
         modelServer.resendEmail(map, listener,context);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
     public interface  verifiedUserListener{
         void onComplete(String str);
     }
     public void verifiedUser(@Body HashMap<String, String> map, verifiedUserListener listener, Context context) {
         modelServer.verifiedUser(map,listener,context);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface  forgotPasswordListener{
+        void onComplete();
+    }
+    public void forgotPassword(String email, forgotPasswordListener listener) {
+        modelServer.forgotPassword(email,listener);
     }
 
 }

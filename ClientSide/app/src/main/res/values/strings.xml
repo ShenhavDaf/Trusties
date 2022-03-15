@@ -49,5 +49,6 @@
     <string name="circle_text_view">Friends circle:</string>
     <string name="location_text_view">Location:</string>
     <string name="sos_btn">SOS CALL</string>
+    <string name="forgot_password">Forgot password?</string>
 
 </resources>

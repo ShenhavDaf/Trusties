@@ -10,6 +10,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/login_forgotPassword_tv"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:ellipsize="middle"
+            android:focusable="true"
+            android:longClickable="true"
+            android:text="@string/forgot_password"
+            android:textColor="@color/titleColor"
+            android:textColorHighlight="@color/TrustiesPrimaryColor"
+            android:textColorLink="@color/TrustiesPrimaryColor"
+            android:textSize="20sp"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.88"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_password_layout" />
+
         <ImageView
             android:id="@+id/login_logo"
             android:layout_width="350dp"
@@ -90,7 +112,7 @@
             android:id="@+id/login_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:backgroundTint="@color/TrustiesPrimaryColor"
             android:fontFamily="@font/poppins"
             android:text="Login"
