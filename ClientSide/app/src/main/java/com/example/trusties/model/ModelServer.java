@@ -1,27 +1,18 @@
 package com.example.trusties.model;
 
 import android.content.Context;
-import android.util.Log;
-
-import androidx.navigation.Navigation;
-
 import com.example.trusties.CommonFunctions;
-import com.example.trusties.MyApplication;
 import com.example.trusties.RetrofitInterface;
-import com.example.trusties.login.SignUpFragmentDirections;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializer;
-
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.IOException;
 import java.util.HashMap;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Body;
 
 public class ModelServer {
 
@@ -52,14 +43,24 @@ public class ModelServer {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                JsonObject user = null;
-                if(response.code() == 200)
+                JsonObject user = new JsonObject();
+                String resMessage = "";
+
+                if (response.code() == 200) {
                     user = response.body().get("user").getAsJsonObject();
-                Log.d("TAG", String.valueOf(response.code()));
+                    resMessage = "user exists";
+                } else if (response.code() == 400) {
+                    JSONObject jObjError = null;
+                    try {
+                        jObjError = new JSONObject(response.errorBody().string());
+                        resMessage = jObjError.get("error").toString();
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-                    listener.onComplete(response.code(), user);
-
-
+                user.addProperty("message", resMessage);
+                listener.onComplete(response.code(), user);
             }
 
             @Override
@@ -91,15 +92,13 @@ public class ModelServer {
 
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
-                            new CommonFunctions().myPopup(context ,"oops..", "didn't send email!");
+                            new CommonFunctions().myPopup(context, "oops..", "didn't send email!");
                         }
                     });
                 } else if (response.code() == 400) {
                     String msg = "The email address is already in use by another user";
                     new CommonFunctions().myPopup(context, "Error", msg);
-                    System.out.println("---------------------" +msg);
                 }
-
             }
 
             @Override
@@ -111,7 +110,7 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void resendEmail(HashMap<String, String> map, Model.resendEmailListener listener,Context context) {
+    public void resendEmail(HashMap<String, String> map, Model.resendEmailListener listener, Context context) {
 
         Call<String> resendCall = retrofitInterface.resendEmail();
         Call<Void> verifyCall = retrofitInterface.verifyEmail(map);
@@ -142,7 +141,7 @@ public class ModelServer {
         });
     }
 
-    public void verifiedUser( HashMap<String, String> map,Model.verifiedUserListener listener, Context context) {
+    public void verifiedUser(HashMap<String, String> map, Model.verifiedUserListener listener, Context context) {
         Call<Void> afterVerify = retrofitInterface.verifiedUser(map);
         afterVerify.enqueue(new Callback<Void>() {
             @Override
@@ -155,6 +154,32 @@ public class ModelServer {
 
             }
         });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void forgotPassword(String email, Model.forgotPasswordListener listener) {
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("email", email);
+
+        Call<Void> forgotPassword = retrofitInterface.forgotPassword(email);
+        //TODO: don't know if we need "verifyCall"
+//        Call<Void> verifyCall = retrofitInterface.verifyEmail(map);
+
+        forgotPassword.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                System.out.println(t.getMessage());
+            }
+        });
+
+
     }
 
     /* ------------------------------------------------------------------------- */
