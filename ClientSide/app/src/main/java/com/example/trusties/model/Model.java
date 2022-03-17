@@ -70,5 +70,14 @@ public class Model {
     public void forgotPassword(String email, forgotPasswordListener listener) {
         modelServer.forgotPassword(email,listener);
     }
+    
+    public interface addPostListener{
+        void onComplete();
+    }
+    
+    public void addPost(HashMap<String, String> map, addPostListener listener)
+    {
+        modelServer.addPost(map,listener);
+    }
 
 }

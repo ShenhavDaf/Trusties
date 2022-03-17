@@ -3,6 +3,7 @@ package com.example.trusties.posts;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,12 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.example.trusties.R;
+import com.example.trusties.model.Model;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 public class AddPostFragment extends Fragment {
 
@@ -54,7 +61,7 @@ public class AddPostFragment extends Fragment {
         firstCircleBtn.setOnClickListener(v -> FindFirstCircle());
         secondCircleBtn.setOnClickListener(v -> FindSecondCircle());
         thirdCircleBtn.setOnClickListener(v -> FindThirdCircle());
-        postBtn.setOnClickListener(v -> PostQuestion());
+        postBtn.setOnClickListener(v -> PostQuestion(v));
         sosBtn.setOnClickListener(v -> PostSOS());
 
         /*--------------------------categories---------------------------*/
@@ -89,9 +96,26 @@ public class AddPostFragment extends Fragment {
         //TODO
     }
 
-    private void PostQuestion() {
+    private void PostQuestion(View view) {
         // navigation - back to home
         //TODO
+        String title = postTitle.getText().toString();
+        String message = description.getText().toString();
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("title", title);
+        map.put("description", message);
+
+
+        Model.instance.addPost(map, new Model.addPostListener() {
+            @Override
+            public void onComplete() {
+                System.out.println("inside");
+                Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionAddPostFragmentToNavigationHome());
+            }
+        });
+
+
     }
 
     private void PostSOS() {

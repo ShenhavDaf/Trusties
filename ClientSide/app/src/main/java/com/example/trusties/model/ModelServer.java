@@ -182,6 +182,27 @@ public class ModelServer {
 
     }
 
+    public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
+
+        Call<Void> add = retrofitInterface.addPost(map);
+
+        add.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
+
+
     /* ------------------------------------------------------------------------- */
 
 }

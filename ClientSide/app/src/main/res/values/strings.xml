@@ -50,5 +50,7 @@
     <string name="location_text_view">Location:</string>
     <string name="sos_btn">SOS CALL</string>
     <string name="forgot_password">Forgot password?</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
 
 </resources>

@@ -29,4 +29,10 @@ public interface RetrofitInterface {
 
     @GET("/auth/forgotPassword")
     Call<Void> forgotPassword(@Query("emailAddress") String emailAddress);
+
+    @POST("/post/add")
+    Call<Void> addPost(@Body HashMap<String, String> map);
+
+    @GET("/post/")
+    Call<Void> getAllPosts();
 }

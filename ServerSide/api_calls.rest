@@ -20,14 +20,27 @@ GET http://localhost:4000/post/621f52e6c9dde976ffe6308e
 
 
 ###
-POST http://localhost:4000/post
+POST http://localhost:4000/post/add
 Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
 Content-Type: application/json
 
 {
 
      "title":"Test post2",
-     "message": "post message test with Sender referance without Enum"
+     "description": "post message test with Sender referance without Enum"
+
+}
+
+###
+
+POST http://localhost:4000/post/edit/6233068b875cdeee8be1bf29
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+Content-Type: application/json
+
+{
+     
+      "title":"Test post2",
+     "description": "post message test with Sender referance without Enum"
 
 }
 

@@ -26,5 +26,9 @@
         android:id="@+id/addPostFragment"
         android:name="com.example.trusties.posts.AddPostFragment"
         android:label="fragment_add_post"
-        tools:layout="@layout/fragment_add_post" />
+        tools:layout="@layout/fragment_add_post" >
+        <action
+            android:id="@+id/action_addPostFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 </navigation>

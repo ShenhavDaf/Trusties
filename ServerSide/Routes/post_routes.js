@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const Post = require('../Controllers/posts');
-const authenticate = require('../Common/auth_middleware');
+const Post = require("../Controllers/posts");
+const authenticate = require("../Common/auth_middleware");
 
 /**
  * @swagger
@@ -69,7 +69,7 @@ const authenticate = require('../Common/auth_middleware');
  *
  */
 
-router.get('/', authenticate, Post.getPosts);
+router.get("/", authenticate, Post.getPosts);
 
 /**
  * @swagger
@@ -94,7 +94,7 @@ router.get('/', authenticate, Post.getPosts);
  *
  */
 
-router.get('/:id', authenticate, Post.getPostsById);
+router.get("/:id", authenticate, Post.getPostsById);
 
 /**
  * @swagger
@@ -118,7 +118,9 @@ router.get('/:id', authenticate, Post.getPostsById);
  *
  */
 
-router.post('/', authenticate, Post.addPosts);
-router.post('/MyPost', authenticate, Post.getMyPosts);
+router.post("/add", Post.addPosts);
+router.post("/edit/:id", Post.editPost);
+router.post("/delete", Post.deletePost);
+router.post("/MyPost", authenticate, Post.getMyPosts);
 
 module.exports = router;
