@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.example.trusties.R;
+import com.example.trusties.User;
 import com.example.trusties.model.Model;
+import com.example.trusties.ui.home.HomeFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -101,17 +104,17 @@ public class AddPostFragment extends Fragment {
         //TODO
         String title = postTitle.getText().toString();
         String message = description.getText().toString();
-
+        User user = HomeFragment.connectedUser;
+        String email= user.getEmail().replace("\"", "");
         HashMap<String, String> map = new HashMap<>();
         map.put("title", title);
         map.put("description", message);
-
+        map.put("email", email);
 
         Model.instance.addPost(map, new Model.addPostListener() {
             @Override
             public void onComplete() {
-                System.out.println("inside");
-                Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionAddPostFragmentToNavigationHome());
+                 Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionAddPostFragmentToNavigationHome());
             }
         });
 

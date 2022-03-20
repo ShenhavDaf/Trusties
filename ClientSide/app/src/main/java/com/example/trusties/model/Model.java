@@ -6,6 +6,7 @@ import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
 
+import com.example.trusties.User;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -69,6 +70,13 @@ public class Model {
     }
     public void forgotPassword(String email, forgotPasswordListener listener) {
         modelServer.forgotPassword(email,listener);
+    }
+
+    public interface findUserByEmailListener{
+        void onComplete(JsonObject user);
+    }
+    public void findUserByEmail(String email, findUserByEmailListener listener){
+        modelServer.findUserByEmail(email,listener);
     }
     
     public interface addPostListener{

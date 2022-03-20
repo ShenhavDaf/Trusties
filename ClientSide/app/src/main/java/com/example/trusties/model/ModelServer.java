@@ -1,8 +1,11 @@
 package com.example.trusties.model;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.example.trusties.CommonFunctions;
 import com.example.trusties.RetrofitInterface;
+import com.example.trusties.User;
 import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -179,6 +182,30 @@ public class ModelServer {
             }
         });
 
+
+    }
+
+
+    public void findUserByEmail(String email, Model.findUserByEmailListener listener) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("email", email);
+
+        Call<JsonObject> findUser = retrofitInterface.findUserByEmail(email);
+
+            findUser.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.d("TAG",response.body().get("name").toString());
+                listener.onComplete(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                System.out.println(t.getMessage());
+            }
+
+        });
 
     }
 

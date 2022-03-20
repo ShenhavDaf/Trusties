@@ -1,9 +1,13 @@
 package com.example.trusties;
 
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.trusties.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -19,10 +23,16 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     AppBarConfiguration appBarConfiguration;
+    public static String usersEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /*********************/
+        Intent myIntent = getIntent(); // gets the previously created intent
+        usersEmail = myIntent.getStringExtra("email");
+       /*****************/
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
 

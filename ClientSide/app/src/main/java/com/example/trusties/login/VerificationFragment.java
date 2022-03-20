@@ -76,7 +76,9 @@ public class VerificationFragment extends Fragment {
             Model.instance.verifiedUser(map,isVerified -> {
                 //do nothing
             },getContext());
-            startActivity(new Intent(getContext(), MainActivity.class));
+            Intent myIntent = new Intent(getContext(), MainActivity.class);
+            myIntent.putExtra("email",emailArg);
+            startActivity(myIntent);
             getActivity().finish();
         } else {
             String msg = "Verification code is incorrect!!\nPlease try again or resend code 😊";

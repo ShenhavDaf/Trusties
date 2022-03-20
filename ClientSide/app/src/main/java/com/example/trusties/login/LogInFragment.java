@@ -96,10 +96,12 @@ public class LogInFragment extends Fragment {
                     map.put("fragment", "LoginFragment");
                     Model.instance.signup(map, randomCodeFromServer -> {
                         Navigation.findNavController(view).navigate(
-                                LogInFragmentDirections.actionLogInFragmentToVerificationFragment(localName, localEmail, randomCodeFromServer));
+                                LogInFragmentDirections.actionLogInFragmentToVerificationFragment(localName.replace("\"", ""), localEmail.replace("\"", ""), randomCodeFromServer));
                     }, getContext());
                 } else {
-                    startActivity(new Intent(getContext(), MainActivity.class));
+                    Intent myIntent = new Intent(getContext(), MainActivity.class);
+                    myIntent.putExtra("email",localEmail);
+                    startActivity(myIntent);
                     getActivity().finish();
                 }
             } else if (statusCode == 400) {
