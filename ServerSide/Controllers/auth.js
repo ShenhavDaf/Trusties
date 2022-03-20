@@ -1,12 +1,12 @@
-const User = require('../Models/user_model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const sendEmail = require('../Utils/sendEmail');
-const { send } = require('express/lib/response');
+const User = require("../Models/user_model");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const sendEmail = require("../Utils/sendEmail");
+const { send } = require("express/lib/response");
 
 const sendError = (res, code, msg) => {
   return res.status(code).send({
-    status: 'fail',
+    status: "fail",
     error: msg,
   });
 };
@@ -18,10 +18,10 @@ function getRandomInt() {
 }
 
 function getRandomPassword() {
-  let password = '';
+  let password = "";
 
   const chars =
-    '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; //!@#$%^&*()
+    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; //!@#$%^&*()
 
   for (let i = 0; i < 10; i++) {
     const randIndex = Math.floor(Math.random() * chars.length);
@@ -42,11 +42,11 @@ const register = async (req, res, next) => {
     const exists = await User.findOne({ email: email });
 
     if (exists != null && exists.verified == true)
-      return sendError(res, 400, 'user exist');
+      return sendError(res, 400, "user exist");
     else if (exists != null && exists.verified == false) {
-      if (req.body.fragment == 'SignUpFragment') {
-        return sendError(res, 400, 'already registered');
-      } else if (req.body.fragment == 'LoginFragment') {
+      if (req.body.fragment == "SignUpFragment") {
+        return sendError(res, 400, "already registered");
+      } else if (req.body.fragment == "LoginFragment") {
         const salt = await bcrypt.genSalt(10);
         const hashPwd = await bcrypt.hash(password, salt);
 
@@ -57,7 +57,7 @@ const register = async (req, res, next) => {
           phone: phone,
         });
         randomCode = getRandomInt();
-        await sendEmail(user.email, 'Verify Email', String(randomCode));
+        await sendEmail(user.email, "Verify Email", String(randomCode));
         res.status(200).send({ user, randomCode });
       }
     } else if (exists == null) {
@@ -72,14 +72,14 @@ const register = async (req, res, next) => {
       });
 
       randomCode = getRandomInt();
-      await sendEmail(user.email, 'Verify Email', String(randomCode));
+      await sendEmail(user.email, "Verify Email", String(randomCode));
       newUser = await user.save();
       res.status(200).send({ newUser, randomCode });
     }
   } catch (err) {
     console.log(err.message);
     res.status(400).send({
-      status: 'fail',
+      status: "fail",
       error: err.message,
     });
   }
@@ -90,15 +90,15 @@ const login = async (req, res, next) => {
   const password = req.body.password;
 
   if (email == null || password == null)
-    return sendError(res, 400, 'Wrong email or password');
+    return sendError(res, 400, "Wrong email or password");
 
   try {
     const user = await User.findOne({ email: email });
 
-    if (user == null) return sendError(res, 400, 'Please register first');
+    if (user == null) return sendError(res, 400, "Please register first");
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return sendError(res, 400, 'Incorrect password');
+    if (!match) return sendError(res, 400, "Incorrect password");
 
     const accessToken = await jwt.sign(
       { id: user._id },
@@ -114,14 +114,14 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   res.status(400).send({
-    status: 'fail',
-    error: 'not implemented',
+    status: "fail",
+    error: "not implemented",
   });
 };
 
 const resendEmail = async (req, res, next) => {
   randomCode = getRandomInt();
-  await sendEmail(email, 'Verify Email', String(randomCode));
+  await sendEmail(email, "Verify Email", String(randomCode));
 
   res.status(200).send(String(randomCode));
 };
@@ -134,10 +134,29 @@ const verifiedUser = async (req, res, next) => {
         verified: true,
       }
     );
-    if (exists == null) return sendError(res, 400, 'user does not exist');
+    if (exists == null) return sendError(res, 400, "user does not exist");
   } catch (err) {
     res.status(400).send({
-      status: 'fail',
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
+
+//Find user by email
+const findUserByEmail = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.query.emailAddress });
+    if (user == null) return sendError(res, 400, "user does not exist");
+    res.status(200).send({
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      raiting: user.raiting,
+    });
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
       error: err.message,
     });
   }
@@ -147,12 +166,12 @@ const verifiedUser = async (req, res, next) => {
 const forgotPassword = async (req, res) => {
   try {
     console.log(
-      '--------- user email from adnroid --> ' + req.query.emailAddress
+      "--------- user email from adnroid --> " + req.query.emailAddress
     );
     const currUser = await User.findOne({ email: req.query.emailAddress });
     if (currUser) {
       const randomPass = getRandomPassword();
-      console.log('--------- new password --> ' + randomPass);
+      console.log("--------- new password --> " + randomPass);
 
       const salt = await bcrypt.genSalt(10);
       const hashPwd = await bcrypt.hash(randomPass, salt);
@@ -160,16 +179,16 @@ const forgotPassword = async (req, res) => {
       currUser.password = hashPwd;
       newUser = await currUser.save();
 
-      sendEmail(req.query.emailAddress, 'Password reset', randomPass);
+      sendEmail(req.query.emailAddress, "Password reset", randomPass);
     }
     // currUser == null
     else {
       // TODO
-      console.log('-------- not a regiser user');
+      console.log("-------- not a regiser user");
     }
   } catch (err) {
     res.status(400).send({
-      status: 'fail',
+      status: "fail",
       error: error.message,
     });
   }
@@ -182,4 +201,5 @@ module.exports = {
   resendEmail,
   verifiedUser,
   forgotPassword,
+  findUserByEmail,
 };
