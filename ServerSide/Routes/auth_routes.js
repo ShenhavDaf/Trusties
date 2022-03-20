@@ -9,5 +9,6 @@ router.post("/logout", Auth.logout);
 router.post("/resendEmail", Auth.resendEmail);
 router.post("/afterVerify", Auth.verifiedUser);
 router.get("/forgotPassword", Auth.forgotPassword);
+router.get("/find", Auth.findUserByEmail);
 
 module.exports = router;

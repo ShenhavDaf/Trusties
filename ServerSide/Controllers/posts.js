@@ -1,4 +1,5 @@
 const Post = require("../Models/post_model");
+const User = require("../Models/user_model");
 const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 
@@ -25,17 +26,14 @@ const getPostsById = async (req, res, next) => {
 };
 
 const addPosts = async (req, res, next) => {
-  // console.log("add new post: " + req.body.message);
-  sender = req.user; //._id;
-  var user = req.body.sender;
-  console.log(user);
+  var email = req.body.email;
+  const user = await User.findOne({ email: email });
   var description = req.body.description;
   var title = req.body.title;
   var time = req.body.time;
-
   var role = req.body.role;
 
-  const post = Post({
+  const post = await Post({
     sender: user,
     title: title,
     time: time,
@@ -57,7 +55,7 @@ const addPosts = async (req, res, next) => {
       });
       console.log(error.message);
     } else {
-      console.log("ok");
+      console.log("post added!");
       res.status(200).send({
         status: "OK",
         post: newPost,
