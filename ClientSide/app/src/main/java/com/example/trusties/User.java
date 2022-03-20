@@ -4,6 +4,21 @@ public class User {
 
     String fullName="";
     String email="";
+    String phone="";
+
+    public User(String fullName, String email, String phone) {
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getFullName() {
         return fullName;

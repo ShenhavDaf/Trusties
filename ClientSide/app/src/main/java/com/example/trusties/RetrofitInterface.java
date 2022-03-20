@@ -33,6 +33,6 @@ public interface RetrofitInterface {
     @POST("/post/add")
     Call<Void> addPost(@Body HashMap<String, String> map);
 
-    @GET("/post/")
-    Call<Void> getAllPosts();
+    @GET("/auth/find")
+    Call<JsonObject> findUserByEmail(@Query("emailAddress")String emailAddress);
 }
