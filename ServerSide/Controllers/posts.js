@@ -5,17 +5,15 @@ const Comment = require("../Models/comment_model");
 
 const getPosts = async (req, res, next) => {
   Post.find({ role: "QUESTION" }, function (err, docs) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.status(200).send(docs);
-    }
+    if (err) console.log(err);
+    else res.status(200).send(docs);
   });
 };
 
 const getPostsById = async (req, res, next) => {
   try {
-    posts = await Post.findById(req.params.id);
+    const posts = await Post.findById(req.params.id);
+    console.log(posts);
     res.status(200).send(posts);
   } catch (err) {
     res.status(400).send({
@@ -74,6 +72,13 @@ const editPost = async (req, res, next) => {
       }
     );
     if (exists == null) return sendError(res, 400, "post does not exist");
+    else {
+      console.log("post edited!");
+      res.status(200).send({
+        status: "OK",
+        post: newPost,
+      });
+    }
   } catch (err) {
     res.status(400).send({
       status: "fail",
@@ -84,8 +89,15 @@ const editPost = async (req, res, next) => {
 
 const deletePost = async (req, res, next) => {
   try {
-    const exists = await Post.deleteOne({ _id: req.body.id });
+    const exists = await Post.deleteOne({ _id: req.params.id });
     if (exists == null) return sendError(res, 400, "post does not exist");
+    else {
+      console.log("post deleted!");
+      res.status(200).send({
+        status: "OK",
+        post: newPost,
+      });
+    }
   } catch (err) {
     res.status(400).send({
       status: "fail",

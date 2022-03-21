@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.example.trusties.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_detailsPostFragment"
+            app:destination="@id/detailsPostFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -30,5 +34,14 @@
         <action
             android:id="@+id/action_addPostFragment_to_navigation_home"
             app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsPostFragment"
+        android:name="com.example.trusties.posts.DetailsPostFragment"
+        android:label="fragment_details_post"
+        tools:layout="@layout/fragment_details_post" >
+        <argument
+            android:name="postId"
+            app:argType="string" />
     </fragment>
 </navigation>

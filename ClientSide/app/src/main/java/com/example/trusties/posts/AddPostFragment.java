@@ -1,11 +1,8 @@
 package com.example.trusties.posts;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +12,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-
 import com.example.trusties.R;
-import com.example.trusties.User;
 import com.example.trusties.model.Model;
+import com.example.trusties.model.User;
 import com.example.trusties.ui.home.HomeFragment;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 public class AddPostFragment extends Fragment {

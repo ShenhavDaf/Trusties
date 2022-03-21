@@ -5,12 +5,19 @@ import android.util.Log;
 
 import com.example.trusties.CommonFunctions;
 import com.example.trusties.RetrofitInterface;
-import com.example.trusties.User;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -181,10 +188,9 @@ public class ModelServer {
                 System.out.println(t.getMessage());
             }
         });
-
-
     }
 
+    /* ------------------------------------------------------------------------- */
 
     public void findUserByEmail(String email, Model.findUserByEmailListener listener) {
         HashMap<String, String> map = new HashMap<>();
@@ -192,22 +198,21 @@ public class ModelServer {
 
         Call<JsonObject> findUser = retrofitInterface.findUserByEmail(email);
 
-            findUser.enqueue(new Callback<JsonObject>() {
+        findUser.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.d("TAG",response.body().get("name").toString());
+                Log.d("TAG", response.body().get("name").toString());
                 listener.onComplete(response.body());
-
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 System.out.println(t.getMessage());
             }
-
         });
-
     }
+
+    /* ------------------------------------------------------------------------- */
 
     public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
 
@@ -221,15 +226,66 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+            }
+        });
+    }
+    /* ------------------------------------------------------------------------- */
+
+    public void getAllPosts(Model.allPostsListener listener) {
+
+        retrofitInterface.getAllPosts().enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                List<Post> list = new ArrayList<>();
+                for (JsonElement element : response.body()) {
+                    list.add(Post.create(element.getAsJsonObject()));
+                }
+
+                Collections.reverse(list);
+                listener.onComplete(list);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void getPostById(String postId, Model.getPostByIdListener listener) {
+
+        Call<JsonObject> postDetails = retrofitInterface.getPostById(postId);
+        postDetails.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
 
             }
         });
 
-
     }
-
-
 
     /* ------------------------------------------------------------------------- */
 
+    public void deletePost(String postId, Model.deletePostListener listener) {
+        Call<Void> deletePost = retrofitInterface.deletePost(postId);
+
+        deletePost.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
 }

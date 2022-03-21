@@ -6,10 +6,10 @@ import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
 
-import com.example.trusties.User;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -31,7 +31,7 @@ public class Model {
     }
 
     public void login(String email, String password, loginListener listener, Context context) {
-        modelServer.handleLoginDialog(email, password, listener,context);
+        modelServer.handleLoginDialog(email, password, listener, context);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -50,42 +50,79 @@ public class Model {
         void onComplete(String randomCodeFromServer);
     }
 
-    public void resendEmail(HashMap<String, String> map, resendEmailListener listener,Context context) {
-        modelServer.resendEmail(map, listener,context);
+    public void resendEmail(HashMap<String, String> map, resendEmailListener listener, Context context) {
+        modelServer.resendEmail(map, listener, context);
     }
 
     /* ---------------------------------------------------------------------------- */
 
-    public interface  verifiedUserListener{
+    public interface verifiedUserListener {
         void onComplete(String str);
     }
+
     public void verifiedUser(@Body HashMap<String, String> map, verifiedUserListener listener, Context context) {
-        modelServer.verifiedUser(map,listener,context);
+        modelServer.verifiedUser(map, listener, context);
     }
 
     /* ---------------------------------------------------------------------------- */
 
-    public interface  forgotPasswordListener{
+    public interface forgotPasswordListener {
         void onComplete();
-    }
-    public void forgotPassword(String email, forgotPasswordListener listener) {
-        modelServer.forgotPassword(email,listener);
     }
 
-    public interface findUserByEmailListener{
+    public void forgotPassword(String email, forgotPasswordListener listener) {
+        modelServer.forgotPassword(email, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface findUserByEmailListener {
         void onComplete(JsonObject user);
     }
-    public void findUserByEmail(String email, findUserByEmailListener listener){
-        modelServer.findUserByEmail(email,listener);
+
+    public void findUserByEmail(String email, findUserByEmailListener listener) {
+        modelServer.findUserByEmail(email, listener);
     }
-    
-    public interface addPostListener{
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface addPostListener {
         void onComplete();
     }
-    
-    public void addPost(HashMap<String, String> map, addPostListener listener)
-    {
-        modelServer.addPost(map,listener);
+
+    public void addPost(HashMap<String, String> map, addPostListener listener) {
+        modelServer.addPost(map, listener);
     }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface allPostsListener {
+        void onComplete(List<Post> postsList);
+    }
+
+    public void getAllPosts(allPostsListener listener) {
+        modelServer.getAllPosts(listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface getPostByIdListener {
+        void onComplete(JsonObject post);
+    }
+
+    public void getPostById(String id, getPostByIdListener listener) {
+        modelServer.getPostById(id,listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface deletePostListener {
+        void onComplete();
+    }
+
+    public void deletePost(String id, deletePostListener listener) {
+        modelServer.deletePost(id,listener);
+    }
+
 
 }

@@ -1,19 +1,23 @@
 package com.example.trusties.ui.home;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.trusties.model.Model;
+import com.example.trusties.model.Post;
+
+import java.util.List;
 
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    List<Post> data;
 
     public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        Model.instance.getAllPosts(postsList -> {
+            this.data = postsList;
+        });
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public List<Post> getData() {
+        return data;
     }
 }

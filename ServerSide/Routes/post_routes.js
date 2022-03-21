@@ -69,7 +69,7 @@ const authenticate = require("../Common/auth_middleware");
  *
  */
 
-router.get("/", authenticate, Post.getPosts);
+router.get("/allPosts", /*authenticate,*/ Post.getPosts);
 
 /**
  * @swagger
@@ -94,7 +94,7 @@ router.get("/", authenticate, Post.getPosts);
  *
  */
 
-router.get("/:id", authenticate, Post.getPostsById);
+router.get("/:id", /*authenticate,*/ Post.getPostsById);
 
 /**
  * @swagger
@@ -120,7 +120,7 @@ router.get("/:id", authenticate, Post.getPostsById);
 
 router.post("/add", Post.addPosts);
 router.post("/edit/:id", Post.editPost);
-router.post("/delete", Post.deletePost);
+router.post("/delete/:id", Post.deletePost);
 router.post("/MyPost", authenticate, Post.getMyPosts);
 
 module.exports = router;
