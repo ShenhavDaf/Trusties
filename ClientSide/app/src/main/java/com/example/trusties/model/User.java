@@ -1,4 +1,4 @@
-package com.example.trusties;
+package com.example.trusties.model;
 
 public class User {
 

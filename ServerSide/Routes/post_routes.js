@@ -69,7 +69,7 @@ const authenticate = require("../Common/auth_middleware");
  *
  */
 
-router.get("/", authenticate, Post.getPosts);
+router.get("/allPosts", /*authenticate,*/ Post.getPosts);
 
 /**
  * @swagger

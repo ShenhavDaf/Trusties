@@ -1,5 +1,6 @@
 package com.example.trusties;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface RetrofitInterface {
+
+    /*------------------------------------------Authentication----------------------------------------*/
 
     @POST("/auth/login")
     Call<JsonObject> executeLogin(@Body HashMap<String, String> map);
@@ -30,9 +33,15 @@ public interface RetrofitInterface {
     @GET("/auth/forgotPassword")
     Call<Void> forgotPassword(@Query("emailAddress") String emailAddress);
 
+    @GET("/auth/find")
+    Call<JsonObject> findUserByEmail(@Query("emailAddress")String emailAddress);
+
+    /*------------------------------------------Posts----------------------------------------*/
+
     @POST("/post/add")
     Call<Void> addPost(@Body HashMap<String, String> map);
 
-    @GET("/auth/find")
-    Call<JsonObject> findUserByEmail(@Query("emailAddress")String emailAddress);
+    @GET("/post/allPosts")
+    Call<JsonArray> getAllPosts();
+
 }

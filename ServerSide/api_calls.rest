@@ -2,17 +2,17 @@
 GET http://localhost:4000/
 
 ###
-GET http://localhost:4000/post
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+GET http://localhost:4000/post/allPosts
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFmZjA5ZDZiZWZiNDJjNGE1NDY4MCIsImlhdCI6MTY0NzgyMzgwMCwiZXhwIjoxNjQ3ODI3NDAwfQ.KBukqZzoK90ww1ptC92hUz2_XvbfCLLZDkX78EH1reI
 
 ###
 GET http://localhost:4000/sos
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFmZjA5ZDZiZWZiNDJjNGE1NDY4MCIsImlhdCI6MTY0NzgyMzgwMCwiZXhwIjoxNjQ3ODI3NDAwfQ.KBukqZzoK90ww1ptC92hUz2_XvbfCLLZDkX78EH1reI
 
 
 # ###
 # GET http://localhost:4000/post/MyPost
-# Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+# Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFmZjA5ZDZiZWZiNDJjNGE1NDY4MCIsImlhdCI6MTY0NzgyMzgwMCwiZXhwIjoxNjQ3ODI3NDAwfQ.KBukqZzoK90ww1ptC92hUz2_XvbfCLLZDkX78EH1reI
 
 
 ###
@@ -21,7 +21,7 @@ GET http://localhost:4000/post/621f52e6c9dde976ffe6308e
 
 ###
 POST http://localhost:4000/post/add
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFmZjA5ZDZiZWZiNDJjNGE1NDY4MCIsImlhdCI6MTY0NzgyMzgwMCwiZXhwIjoxNjQ3ODI3NDAwfQ.KBukqZzoK90ww1ptC92hUz2_XvbfCLLZDkX78EH1reI
 Content-Type: application/json
 
 {
@@ -34,7 +34,7 @@ Content-Type: application/json
 ###
 
 POST http://localhost:4000/post/edit/6233068b875cdeee8be1bf29
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFmZjA5ZDZiZWZiNDJjNGE1NDY4MCIsImlhdCI6MTY0NzgyMzgwMCwiZXhwIjoxNjQ3ODI3NDAwfQ.KBukqZzoK90ww1ptC92hUz2_XvbfCLLZDkX78EH1reI
 Content-Type: application/json
 
 {
@@ -47,7 +47,7 @@ Content-Type: application/json
 
 ###
 POST http://localhost:4000/sos
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFmZjA5ZDZiZWZiNDJjNGE1NDY4MCIsImlhdCI6MTY0NzgyMzgwMCwiZXhwIjoxNjQ3ODI3NDAwfQ.KBukqZzoK90ww1ptC92hUz2_XvbfCLLZDkX78EH1reI
 Content-Type: application/json
 
 {
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 ###
 POST http://localhost:4000/comment/62261457681cb76c1c8c1e11
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjVkOTBjZGZlMjJlMTYxMDAxNjhlNCIsImlhdCI6MTY0NjY3MTE1NiwiZXhwIjoxNjQ2Njc0NzU2fQ.Rk-flBHqD3sxkTIRJbTRW3KDsKgeQeC503fjmMLh6CI
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFmZjA5ZDZiZWZiNDJjNGE1NDY4MCIsImlhdCI6MTY0NzgyMzgwMCwiZXhwIjoxNjQ3ODI3NDAwfQ.KBukqZzoK90ww1ptC92hUz2_XvbfCLLZDkX78EH1reI
 Content-Type: application/json
 
 {
@@ -87,8 +87,8 @@ POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
-    "email": "b@a.com",
-    "password": "123456"
+    "email": "shenhav.dafadi@gmail.com",
+    "password": "123123"
 }
 
 

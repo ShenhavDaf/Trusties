@@ -5,11 +5,8 @@ const Comment = require("../Models/comment_model");
 
 const getPosts = async (req, res, next) => {
   Post.find({ role: "QUESTION" }, function (err, docs) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.status(200).send(docs);
-    }
+    if (err) console.log(err);
+    else res.status(200).send(docs);
   });
 };
 
