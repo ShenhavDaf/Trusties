@@ -214,6 +214,27 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
+    public void findUserById(String id, Model.findUserByIdListener listener) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", id);
+
+        Call<JsonObject> findUser = retrofitInterface.findUserById(id);
+
+        findUser.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                System.out.println(t.getMessage());
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
     public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
 
         Call<Void> add = retrofitInterface.addPost(map);
@@ -288,4 +309,24 @@ public class ModelServer {
             }
         });
     }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void editPost(HashMap<String,String> map,String postId, Model.editPostListener listener) {
+        Call<Void> editPost = retrofitInterface.editPost(map,postId);
+
+        editPost.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+
 }

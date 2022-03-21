@@ -85,6 +85,14 @@ public class Model {
     }
 
     /* ---------------------------------------------------------------------------- */
+    public interface findUserByIdListener {
+        void onComplete(JsonObject user);
+    }
+
+    public void findUserById(String id, findUserByIdListener listener) {
+        modelServer.findUserById(id, listener);
+    }
+    /* ---------------------------------------------------------------------------- */
 
     public interface addPostListener {
         void onComplete();
@@ -122,6 +130,16 @@ public class Model {
 
     public void deletePost(String id, deletePostListener listener) {
         modelServer.deletePost(id,listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface editPostListener {
+        void onComplete();
+    }
+
+    public void editPost(HashMap<String, String> map,String id, editPostListener listener) {
+        modelServer.editPost(map,id,listener);
     }
 
 

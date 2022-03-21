@@ -28,6 +28,10 @@ const postSchema = new mongoose.Schema({
     enum: ["OPEN", "CLOSE", "WAITING"],
     default: "OPEN",
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Post", postSchema);
