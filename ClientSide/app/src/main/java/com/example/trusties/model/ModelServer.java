@@ -252,4 +252,40 @@ public class ModelServer {
         });
     }
 
+    /* ------------------------------------------------------------------------- */
+
+    public void getPostById(String postId, Model.getPostByIdListener listener) {
+
+        Call<JsonObject> postDetails = retrofitInterface.getPostById(postId);
+        postDetails.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void deletePost(String postId, Model.deletePostListener listener) {
+        Call<Void> deletePost = retrofitInterface.deletePost(postId);
+
+        deletePost.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
 }

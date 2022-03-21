@@ -104,4 +104,25 @@ public class Model {
         modelServer.getAllPosts(listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
+    public interface getPostByIdListener {
+        void onComplete(JsonObject post);
+    }
+
+    public void getPostById(String id, getPostByIdListener listener) {
+        modelServer.getPostById(id,listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface deletePostListener {
+        void onComplete();
+    }
+
+    public void deletePost(String id, deletePostListener listener) {
+        modelServer.deletePost(id,listener);
+    }
+
+
 }
