@@ -34,8 +34,11 @@ public interface RetrofitInterface {
     @GET("/auth/forgotPassword")
     Call<Void> forgotPassword(@Query("emailAddress") String emailAddress);
 
-    @GET("/auth/find")
+    @GET("/auth/findByEmail")
     Call<JsonObject> findUserByEmail(@Query("emailAddress")String emailAddress);
+
+    @GET("/auth/findById")
+    Call<JsonObject> findUserById(@Query("id")String userId);
 
     /*------------------------------------------Posts----------------------------------------*/
 
@@ -50,6 +53,9 @@ public interface RetrofitInterface {
 
     @POST("/post/delete/{id}")
     Call<Void> deletePost(@Path("id") String id);
+
+    @POST("/post/edit/{id}")
+    Call<Void> editPost(@Body HashMap<String,String> map,@Path("id") String id);
 
 
 }

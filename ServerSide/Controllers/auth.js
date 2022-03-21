@@ -162,6 +162,26 @@ const findUserByEmail = async (req, res, next) => {
   }
 };
 
+//Find user by id
+const findUserById = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: req.query.id });
+    console.log(user);
+    if (user == null) return sendError(res, 400, "user does not exist");
+    res.status(200).send({
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      raiting: user.raiting,
+    });
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
+
 //GET function
 const forgotPassword = async (req, res) => {
   try {
@@ -202,4 +222,5 @@ module.exports = {
   verifiedUser,
   forgotPassword,
   findUserByEmail,
+  findUserById,
 };

@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const Sos = require('../Controllers/soss');
-const authenticate = require('../Common/auth_middleware');
+const Sos = require("../Controllers/soss");
+const authenticate = require("../Common/auth_middleware");
 
 /**
  * @swagger
@@ -56,7 +56,7 @@ const authenticate = require('../Common/auth_middleware');
  *          address: 'herzl 20'
  */
 
-router.get('/', authenticate, Sos.getSoss);
-router.post('/', authenticate, Sos.addSos);
+router.get("/", authenticate, Sos.getSoss);
+router.post("/", authenticate, Sos.addSos);
 
 module.exports = router;

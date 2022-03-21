@@ -102,7 +102,7 @@ public class DetailsPostFragment extends Fragment {
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: ADD FUNCTIONALITY
+                Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToEditPostFragment(postId));
             }
         });
 
@@ -111,26 +111,30 @@ public class DetailsPostFragment extends Fragment {
 
     public void displayPost(String title, String description, String time,String senderId, String status, String role)
     {
+        Model.instance.findUserById(senderId, new Model.findUserByIdListener() {
+            @Override
+            public void onComplete(JsonObject user) {
+                titleEt.setText(title);
+                descriptionEt.setText(description);
+                timeEt.setText(time.substring(0,10));
+                authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
+                statusEt.setText(status);
+                roleEt.setText(role);
+        //        if(!post.getPhoto().contentEquals("")) {
+        //            Picasso.get()
+        //                    .load(post.getPhoto())
+        //                    .into(postImg);
+        //        }
+                titleEt.setVisibility(View.VISIBLE);
+                timeEt.setVisibility(View.VISIBLE);
+                authorEt.setVisibility(View.VISIBLE);
+                descriptionEt.setVisibility(View.VISIBLE);
+                roleEt.setVisibility(View.VISIBLE);
+                statusEt.setVisibility(View.VISIBLE);
+                line.setVisibility(View.VISIBLE);
+                postImg.setVisibility(View.VISIBLE);
+            }
+        });
 
-        Log.d("TAG", title);
-        titleEt.setText(title);
-        descriptionEt.setText(description);
-        timeEt.setText(time.substring(0,10));
-        authorEt.setText(senderId); //TODO: find user by ID
-        statusEt.setText(status);
-        roleEt.setText(role);
-//        if(!post.getPhoto().contentEquals("")) {
-//            Picasso.get()
-//                    .load(post.getPhoto())
-//                    .into(postImg);
-//        }
-        titleEt.setVisibility(View.VISIBLE);
-        timeEt.setVisibility(View.VISIBLE);
-        authorEt.setVisibility(View.VISIBLE);
-        descriptionEt.setVisibility(View.VISIBLE);
-        roleEt.setVisibility(View.VISIBLE);
-        statusEt.setVisibility(View.VISIBLE);
-        line.setVisibility(View.VISIBLE);
-        postImg.setVisibility(View.VISIBLE);
     }
 }
