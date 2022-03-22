@@ -96,7 +96,8 @@ public class AddPostFragment extends Fragment {
         //TODO
         String title = postTitle.getText().toString();
         String message = description.getText().toString();
-        User user = HomeFragment.connectedUser;
+//        User user = HomeFragment.connectedUser;
+        User user = Model.instance.getCurrentUserModel();
         String email= user.getEmail().replace("\"", "");
         HashMap<String, String> map = new HashMap<>();
         map.put("title", title);

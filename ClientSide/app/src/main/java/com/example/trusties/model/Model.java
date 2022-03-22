@@ -19,10 +19,21 @@ public class Model {
 
     public static final Model instance = new Model();
     ModelServer modelServer = new ModelServer();
-//    User connectedUser;
 
     public Executor executor = Executors.newFixedThreadPool(1);
     public Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
+
+
+    /* ---------------------------------------------------------------------------- */
+    User currentUserModel;
+
+    public User getCurrentUserModel() {
+        return currentUserModel;
+    }
+
+    public void setCurrentUserModel(User currentUserModel) {
+        this.currentUserModel = currentUserModel;
+    }
 
     /* ---------------------------------------------------------------------------- */
 

@@ -27,8 +27,8 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
-    String usersEmail;
-    public static User connectedUser;
+//    String usersEmail;
+//    public static User connectedUser;
 
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
@@ -45,15 +45,17 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         /***********************************/
-        usersEmail = MainActivity.usersEmail;
+//        usersEmail = MainActivity.usersEmail;
         TextView userName = root.findViewById(R.id.home_userName_tv);
-        Model.instance.findUserByEmail(usersEmail, new Model.findUserByEmailListener() {
-            @Override
-            public void onComplete(JsonObject user) {
-                connectedUser = new User(user.get("name").toString(), user.get("email").toString(), user.get("phone").toString());
-                userName.setText(connectedUser.getFullName().replace("\"", ""));
-            }
-        });
+        userName.setText(Model.instance.getCurrentUserModel().getFullName());
+
+//        Model.instance.findUserByEmail(usersEmail, new Model.findUserByEmailListener() {
+//            @Override
+//            public void onComplete(JsonObject user) {
+//                connectedUser = new User(user.get("name").toString(), user.get("email").toString(), user.get("phone").toString());
+//                userName.setText(connectedUser.getFullName().replace("\"", ""));
+//            }
+//        });
         /************************************/
 
         swipeRefresh = root.findViewById(R.id.home_swiperefresh);
@@ -66,7 +68,6 @@ public class HomeFragment extends Fragment {
         list.setAdapter(adapter);
 
         Model.instance.getAllPosts(postsList -> {
-
         });
 
         adapter.setOnItemClickListener((v, position) -> {

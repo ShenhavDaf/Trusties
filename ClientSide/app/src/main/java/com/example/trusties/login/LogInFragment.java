@@ -23,6 +23,8 @@ import com.example.trusties.CommonFunctions;
 import com.example.trusties.MainActivity;
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
+import com.example.trusties.model.User;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 
@@ -95,12 +97,14 @@ public class LogInFragment extends Fragment {
                     map.put("phone", localPhone);
                     map.put("fragment", "LoginFragment");
                     Model.instance.signup(map, randomCodeFromServer -> {
+                        setConnectedUser(localEmail);
                         Navigation.findNavController(view).navigate(
                                 LogInFragmentDirections.actionLogInFragmentToVerificationFragment(localName.replace("\"", ""), localEmail.replace("\"", ""), randomCodeFromServer));
                     }, getContext());
                 } else {
+                    setConnectedUser(localEmail);
                     Intent myIntent = new Intent(getContext(), MainActivity.class);
-                    myIntent.putExtra("email",localEmail);
+//                    myIntent.putExtra("email",localEmail);
                     startActivity(myIntent);
                     getActivity().finish();
                 }
@@ -145,6 +149,15 @@ public class LogInFragment extends Fragment {
         alert.setTitle(title);
         alert.setMessage("\n" + msg + "\n");
         alert.show();
+
+    }
+    void setConnectedUser(String localEmail){
+        Model.instance.findUserByEmail(localEmail, new Model.findUserByEmailListener() {
+            @Override
+            public void onComplete(JsonObject user) {
+                Model.instance.setCurrentUserModel(new User(user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", "")));
+            }
+        });
 
     }
 }
