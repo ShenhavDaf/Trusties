@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
+import com.example.trusties.model.User;
+import com.google.gson.JsonObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -116,6 +118,7 @@ public class SignUpFragment extends Fragment {
         map.put("fragment", "SignUpFragment");
 
         Model.instance.signup(map, randomCodeFromServer -> {
+            setConnectedUser(localEmail);
             Navigation.findNavController(v).navigate(
                     SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(localName, localEmail, randomCodeFromServer));
 
@@ -128,6 +131,16 @@ public class SignUpFragment extends Fragment {
 
     private void openGallery() {
         //TODO
+    }
+
+    void setConnectedUser(String localEmail){
+        Model.instance.findUserByEmail(localEmail, new Model.findUserByEmailListener() {
+            @Override
+            public void onComplete(JsonObject user) {
+                Model.instance.setCurrentUserModel(new User(user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", "")));
+            }
+        });
+
     }
 
 }

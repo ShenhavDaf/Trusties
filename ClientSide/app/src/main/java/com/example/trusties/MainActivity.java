@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.trusties.model.Model;
+import com.example.trusties.model.User;
 import com.example.trusties.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -18,6 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.trusties.databinding.ActivityMainBinding;
+import com.google.gson.JsonObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,8 +33,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         /*********************/
-        Intent myIntent = getIntent(); // gets the previously created intent
-        usersEmail = myIntent.getStringExtra("email");
+//        Intent myIntent = getIntent(); // gets the previously created intent
+//        usersEmail = myIntent.getStringExtra("email");
+//        Model.instance.findUserByEmail(usersEmail, new Model.findUserByEmailListener() {
+//            @Override
+//            public void onComplete(JsonObject user) {
+//                Log.d("TAG",user.toString());
+//                Model.instance.setCurrentUserModel(new User(user.get("name").toString(), user.get("email").toString(), user.get("phone").toString()));
+//            }
+//        });
        /*****************/
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
