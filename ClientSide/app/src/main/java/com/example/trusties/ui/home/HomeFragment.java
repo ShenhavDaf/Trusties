@@ -80,8 +80,10 @@ public class HomeFragment extends Fragment {
             Navigation.findNavController(v).navigate(HomeFragmentDirections.actionNavigationHomeToDetailsPostFragment(postId));
         });
 
+
         refresh();
         return root;
+
     }
 
     @Override
