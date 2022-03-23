@@ -260,7 +260,8 @@ public class ModelServer {
 
                 List<Post> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
-                    list.add(Post.create(element.getAsJsonObject()));
+                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+                        list.add(Post.create(element.getAsJsonObject()));
                 }
 
                 Collections.reverse(list);
@@ -312,8 +313,8 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void editPost(HashMap<String,String> map,String postId, Model.editPostListener listener) {
-        Call<Void> editPost = retrofitInterface.editPost(map,postId);
+    public void editPost(HashMap<String, String> map, String postId, Model.editPostListener listener) {
+        Call<Void> editPost = retrofitInterface.editPost(map, postId);
 
         editPost.enqueue(new Callback<Void>() {
             @Override

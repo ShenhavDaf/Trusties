@@ -3,6 +3,13 @@ const User = require("../Models/user_model");
 const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 
+const getAllPosts = async (req, res, next) => {
+  Post.find({}, function (err, docs) {
+    if (err) console.log(err);
+    else res.status(200).send(docs);
+  });
+};
+
 const getPosts = async (req, res, next) => {
   Post.find({ role: "QUESTION" }, function (err, docs) {
     if (err) console.log(err);
@@ -131,6 +138,7 @@ const getMyPosts = async (req, res, next) => {
 };
 
 module.exports = {
+  getAllPosts,
   getPosts,
   getPostsById,
   addPosts,

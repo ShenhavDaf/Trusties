@@ -11,19 +11,27 @@ public class Post {
     final public static String LAST_UPDATE = "PostsLastUpdateDate";
 
     String postID;
+    String author; //TODO: ID / email / name?
     String title;
     String description;
-    Boolean display;
+    String time;
+    String role;
+    String status;
+    Boolean isDeleted;
     //    Long updateDate = new Long(0);
 
 
     /* ****************************** Constructors ****************************** */
 
-    public Post(String id, String title, String description, Boolean display) {
+    public Post(String id, String author, String title, String description, String time, String role, String status, Boolean isDeleted) {
         this.postID = id;
+        this.author = author;
         this.title = title;
         this.description = description;
-        this.display = display;
+        this.time = time;
+        this.role = role;
+        this.status = status;
+        this.isDeleted = isDeleted;
     }
 
     /* ****************************** Getters & Setters ****************************** */
@@ -57,12 +65,42 @@ public class Post {
 
     /*------------------------------------------------------*/
 
-    public Boolean getDisplay() {
-        return display;
+    public String getTime() {
+        return time;
     }
 
-    public void setDisplay(Boolean display) {
-        this.display = display;
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    /*------------------------------------------------------*/
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /*------------------------------------------------------*/
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    /*------------------------------------------------------*/
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
 
@@ -71,12 +109,15 @@ public class Post {
     public static Post create(JsonObject json) {
 
         String id = json.get("_id").getAsString();
+        String author = json.get("sender").getAsString();
         String title = json.get("title").getAsString();
         String description = json.get("description").getAsString();
-//TODO:        Boolean display = json.get("display").getAsBoolean();
-        Boolean display = true;
+        String time = json.get("time").getAsString();
+        String role = json.get("role").getAsString();
+        String status = json.get("status").getAsString();
+        Boolean isDeleted = json.get("isDeleted").getAsBoolean();
 
-        Post post = new Post(id, title, description, display);
+        Post post = new Post( id,  author,  title,  description,  time,  role,  status,  isDeleted);
 
         return post;
     }
@@ -87,9 +128,13 @@ public class Post {
 
         JsonObject json = new JsonObject();
         json.addProperty("_id", postID);
+        json.addProperty("sender", author);
         json.addProperty("title", title);
         json.addProperty("description", description);
-        json.addProperty("display", true);
+        json.addProperty("time", time);
+        json.addProperty("role", role);
+        json.addProperty("status", "OPEN");
+        json.addProperty("isDeleted", true);
 
         return json;
     }
