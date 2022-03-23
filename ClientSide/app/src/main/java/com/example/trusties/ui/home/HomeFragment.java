@@ -1,6 +1,8 @@
 package com.example.trusties.ui.home;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -15,13 +18,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.trusties.MainActivity;
 import com.example.trusties.R;
 import com.example.trusties.model.Post;
-import com.example.trusties.model.User;
 import com.example.trusties.databinding.FragmentHomeBinding;
 import com.example.trusties.model.Model;
-import com.google.gson.JsonObject;
+import com.google.android.material.card.MaterialCardView;
+
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class HomeFragment extends Fragment {
 
@@ -67,8 +73,6 @@ public class HomeFragment extends Fragment {
         adapter = new MyAdapter();
         list.setAdapter(adapter);
 
-        Model.instance.getAllPosts(postsList -> {
-        });
 
         adapter.setOnItemClickListener((v, position) -> {
             String postId = homeViewModel.getData().get(position).getId();
@@ -88,20 +92,23 @@ public class HomeFragment extends Fragment {
 
 
     private void refresh() {
+        Model.instance.getAllPosts(postsList -> {
+            homeViewModel.data = postsList;
+        });
         adapter.notifyDataSetChanged();
         swipeRefresh.setRefreshing(false);
     }
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, description;
+        TextView title, description, time;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
             title = itemView.findViewById(R.id.listrow_username_tv);
+            time = itemView.findViewById(R.id.listrow_date_tv);
             description = itemView.findViewById(R.id.listrow_post_text_tv);
-
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -109,11 +116,21 @@ public class HomeFragment extends Fragment {
             });
         }
 
+
+        @SuppressLint("SimpleDateFormat")
+        @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Post post) {
 
+            if (post.getRole().toLowerCase().equals("sos")) {
+                //TODO: if role == sos change to "sos layout"
+//                getLayoutInflater().inflate(R.layout.sos_list_row, (ViewGroup) itemView,true); // double
+                MaterialCardView card = (MaterialCardView) itemView;
+                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
+            }
             title.setText(post.getTitle());
             description.setText(post.getDescription());
-
+            String newTime = post.getTime().substring(0, 16).replace("T","  ").replace("-","/");
+            time.setText(newTime);
         }
     }
 

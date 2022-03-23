@@ -29,5 +29,6 @@
     <color name="ratingBarPrimary">#E9FFD700</color>
     <color name="ratingBarSecondary">#FFF000</color>
     <color name="ratingBarBackground">#AF0202</color>
+    <color name="sosCardBackground">#70FF0000</color>
 
 </resources>
