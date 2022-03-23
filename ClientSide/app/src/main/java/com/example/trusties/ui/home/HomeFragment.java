@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
             Navigation.findNavController(v).navigate(HomeFragmentDirections.actionNavigationHomeToDetailsPostFragment(postId));
         });
 
-
+        refresh();
         return root;
     }
 
@@ -94,8 +94,9 @@ public class HomeFragment extends Fragment {
     private void refresh() {
         Model.instance.getAllPosts(postsList -> {
             homeViewModel.data = postsList;
+            adapter.notifyDataSetChanged();
         });
-        adapter.notifyDataSetChanged();
+
         swipeRefresh.setRefreshing(false);
     }
     /* *************************************** Holder *************************************** */
@@ -129,7 +130,7 @@ public class HomeFragment extends Fragment {
             }
             title.setText(post.getTitle());
             description.setText(post.getDescription());
-            String newTime = post.getTime().substring(0, 16).replace("T","  ").replace("-","/");
+            String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
         }
     }
