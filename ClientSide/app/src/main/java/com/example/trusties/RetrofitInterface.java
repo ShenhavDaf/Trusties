@@ -57,5 +57,9 @@ public interface RetrofitInterface {
     @POST("/post/edit/{id}")
     Call<Void> editPost(@Body HashMap<String,String> map,@Path("id") String id);
 
+    /*------------------------------------------Posts----------------------------------------*/
+
+    @POST("/comment/add")
+    Call<Void> addComment(@Body HashMap<String, String> map);
 
 }

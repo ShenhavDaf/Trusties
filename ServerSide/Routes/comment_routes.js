@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const Comment = require('../Controllers/comments');
-const authenticate = require('../Common/auth_middleware');
+const Comment = require("../Controllers/comments");
+const authenticate = require("../Common/auth_middleware");
 
 /**
  * @swagger
@@ -42,8 +42,10 @@ const authenticate = require('../Common/auth_middleware');
  *          isCorrect: 'true'
  */
 
-router.post('/:id', authenticate, Comment.addComment);
+router.get("/:id", authenticate, Comment.getAllComments_Post);
 
-router.get('/:id', authenticate, Comment.getAllComments_Post);
+router.post("/add", /*authenticate,*/ Comment.addComment);
+router.post("/edit/:id", authenticate, Comment.editComment);
+router.post("/delete/:id", authenticate, Comment.deleteComment);
 
 module.exports = router;
