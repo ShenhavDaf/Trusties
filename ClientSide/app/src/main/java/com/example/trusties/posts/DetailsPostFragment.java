@@ -76,7 +76,8 @@ public class DetailsPostFragment extends Fragment {
 
                 String title = post.get("title").toString().replace("\"", "");
                 String description = post.get("description").toString().replace("\"", "");
-                String time = post.get("time").toString().replace("\"", "");
+//                String time = post.get("time").toString().replace("\"", "");
+                String time = post.get("time").getAsString().substring(0, 16).replace("T", "  ").replace("-", "/");
                 String senderId = post.get("sender").toString().replace("\"", "");
                 String status = post.get("status").toString().replace("\"", "");
                 String role = post.get("role").toString().replace("\"", "");
@@ -116,7 +117,7 @@ public class DetailsPostFragment extends Fragment {
             public void onComplete(JsonObject user) {
                 titleEt.setText(title);
                 descriptionEt.setText(description);
-                timeEt.setText(time.substring(0,10));
+                timeEt.setText(time);
                 authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
                 statusEt.setText(status);
                 roleEt.setText(role);

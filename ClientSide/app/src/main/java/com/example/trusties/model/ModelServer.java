@@ -329,5 +329,22 @@ public class ModelServer {
         });
     }
 
+    /* ------------------------------------------------------------------------- */
 
+    public void addComment(HashMap<String, String> map, Model.addCommentListener listener) {
+
+        Call<Void> add = retrofitInterface.addComment(map);
+
+        add.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
+        });
+
+    }
 }

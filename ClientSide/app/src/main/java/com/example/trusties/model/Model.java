@@ -153,5 +153,13 @@ public class Model {
         modelServer.editPost(map,id,listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
 
+    public interface addCommentListener {
+        void onComplete();
+    }
+
+    public void addComment(HashMap<String, String> map, addCommentListener listener) {
+        modelServer.addComment(map, listener);
+    }
 }
