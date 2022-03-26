@@ -37,6 +37,21 @@ const postSchema = new mongoose.Schema({
     ref: "Comment",
     default: [],
   },
+  freinds_circle: {
+    type: Number,
+    required: false,
+    default: 2,
+  },
+  area: {
+      type: String,
+      required: false,
+      default: "",
+  },
+  address: {
+      type: String,
+      required: false,
+      default: "",
+  }
 });
 
 module.exports = mongoose.model("Post", postSchema);
