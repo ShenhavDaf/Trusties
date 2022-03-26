@@ -3,6 +3,8 @@ package com.example.trusties.posts;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,14 +59,13 @@ public class AddPostFragment extends Fragment {
         secondCircleBtn.setOnClickListener(v -> FindSecondCircle());
         thirdCircleBtn.setOnClickListener(v -> FindThirdCircle());
         postBtn.setOnClickListener(v -> PostQuestion(v));
-        sosBtn.setOnClickListener(v -> PostSOS());
+        sosBtn.setOnClickListener(v -> postSOSCall(v));
 
         /*--------------------------categories---------------------------*/
         carBtn = view.findViewById(R.id.newpost_car_btn);
         deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
         toolsBtn = view.findViewById(R.id.newpost_tools_btn);
         houseBtn = view.findViewById(R.id.newpost_house_damage_btn);
-
 
         return view;
     }
@@ -92,30 +93,29 @@ public class AddPostFragment extends Fragment {
     }
 
     private void PostQuestion(View view) {
-        // navigation - back to home
-        //TODO
+        createPost(view, "QUESTION");
+    }
+
+    private void postSOSCall(View view) {
+        createPost(view, "SOS");
+
+        // TODO: Check if all relevant details of SOS call are exist
+    }
+
+    private void createPost(View view, String type) {
         String title = postTitle.getText().toString();
         String message = description.getText().toString();
 //        User user = HomeFragment.connectedUser;
         User user = Model.instance.getCurrentUserModel();
         String email= user.getEmail().replace("\"", "");
+
         HashMap<String, String> map = new HashMap<>();
         map.put("title", title);
         map.put("description", message);
         map.put("email", email);
+        map.put("role", type);
 
-        Model.instance.addPost(map, new Model.addPostListener() {
-            @Override
-            public void onComplete() {
-                 Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionAddPostFragmentToNavigationHome());
-            }
-        });
-
-
+        Model.instance.addPost(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionAddPostFragmentToNavigationHome()));
     }
 
-    private void PostSOS() {
-        // navigation - back to home
-        //TODO
-    }
 }

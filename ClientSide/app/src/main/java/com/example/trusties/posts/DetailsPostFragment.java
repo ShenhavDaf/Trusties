@@ -31,6 +31,7 @@ public class DetailsPostFragment extends Fragment {
     TextView descriptionEt;
     TextView statusEt;
     TextView roleEt;
+    // TODO: Add location (SOS Call)
     Button editBtn;
     Button deleteBtn;
     String postId;
@@ -112,28 +113,29 @@ public class DetailsPostFragment extends Fragment {
 
     public void displayPost(String title, String description, String time,String senderId, String status, String role)
     {
-        Model.instance.findUserById(senderId, new Model.findUserByIdListener() {
-            @Override
-            public void onComplete(JsonObject user) {
-                titleEt.setText(title);
-                descriptionEt.setText(description);
-                timeEt.setText(time);
-                authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
-                statusEt.setText(status);
-                roleEt.setText(role);
-        //        if(!post.getPhoto().contentEquals("")) {
-        //            Picasso.get()
-        //                    .load(post.getPhoto())
-        //                    .into(postImg);
-        //        }
-                titleEt.setVisibility(View.VISIBLE);
-                timeEt.setVisibility(View.VISIBLE);
-                authorEt.setVisibility(View.VISIBLE);
-                descriptionEt.setVisibility(View.VISIBLE);
-                roleEt.setVisibility(View.VISIBLE);
-                statusEt.setVisibility(View.VISIBLE);
-                line.setVisibility(View.VISIBLE);
-                postImg.setVisibility(View.VISIBLE);
+        Model.instance.findUserById(senderId, user -> {
+            titleEt.setText(title);
+            descriptionEt.setText(description);
+            timeEt.setText(time);
+            authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
+            statusEt.setText(status);
+            roleEt.setText(role);
+    //        if(!post.getPhoto().contentEquals("")) {
+    //            Picasso.get()
+    //                    .load(post.getPhoto())
+    //                    .into(postImg);
+    //        }
+            titleEt.setVisibility(View.VISIBLE);
+            timeEt.setVisibility(View.VISIBLE);
+            authorEt.setVisibility(View.VISIBLE);
+            descriptionEt.setVisibility(View.VISIBLE);
+            roleEt.setVisibility(View.VISIBLE);
+            statusEt.setVisibility(View.VISIBLE);
+            line.setVisibility(View.VISIBLE);
+            postImg.setVisibility(View.VISIBLE);
+
+            if(role == "SOS") {
+                // TODO: Display specific details of SOS call
             }
         });
 
