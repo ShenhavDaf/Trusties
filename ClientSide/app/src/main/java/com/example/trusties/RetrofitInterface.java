@@ -47,20 +47,20 @@ public interface RetrofitInterface {
     Call<JsonArray> getAllPosts(@Header("authorization") String accessToken);
 
     @POST("/post/add")
-    Call<Void> addPost(@Header("authorization") String accessTokenת, @Body HashMap<String, String> map);
+    Call<Void> addPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
     @GET("/post/{id}")
-    Call<JsonObject> getPostById(@Header("authorization") String accessTokenת, @Path("id") String id);
+    Call<JsonObject> getPostById(@Header("authorization") String accessToken, @Path("id") String id);
 
     @POST("/post/delete/{id}")
-    Call<Void> deletePost(@Header("authorization") String accessTokenת, @Path("id") String id);
+    Call<Void> deletePost(@Header("authorization") String accessToken, @Path("id") String id);
 
     @POST("/post/edit/{id}")
-    Call<Void> editPost(@Header("authorization") String accessTokenת, @Body HashMap<String, String> map, @Path("id") String id);
+    Call<Void> editPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map, @Path("id") String id);
 
-    /*------------------------------------------Posts----------------------------------------*/
+    /*------------------------------------------Comments----------------------------------------*/
 
     @POST("/comment/add")
-    Call<Void> addComment(@Header("authorization") String accessTokenת, @Body HashMap<String, String> map);
+    Call<Void> addComment(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
 }
