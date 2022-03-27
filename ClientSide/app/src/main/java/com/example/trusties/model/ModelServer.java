@@ -29,6 +29,8 @@ public class ModelServer {
     private final RetrofitInterface retrofitInterface;
     final private static String BASE_URL = "http://10.0.2.2:4000";
 
+    private String accessToken;
+
     public ModelServer() {
         Retrofit retrofit = new Retrofit
                 .Builder()
@@ -53,10 +55,12 @@ public class ModelServer {
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
                 JsonObject user = new JsonObject();
                 String resMessage = "";
 
                 if (response.code() == 200) {
+                    accessToken = "JWT " + response.body().get("accessToken").getAsString();
                     user = response.body().get("user").getAsJsonObject();
                     resMessage = "user exists";
                 } else if (response.code() == 400) {
@@ -92,6 +96,7 @@ public class ModelServer {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.code() == 200) {
                     String randomCodeFromServer = response.body().get("randomCode").toString();
+                    System.out.println(randomCodeFromServer);
 
                     verifyCall.enqueue(new Callback<Void>() {
                         @Override
@@ -236,13 +241,14 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
     public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
-        Call<Void> add = retrofitInterface.addPost(map);
+        Call<Void> add = retrofitInterface.addPost(accessToken, map);
 
         add.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 listener.onComplete();
             }
+
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
             }
@@ -252,7 +258,7 @@ public class ModelServer {
 
     public void getAllPosts(Model.allPostsListener listener) {
 
-        retrofitInterface.getAllPosts().enqueue(new Callback<JsonArray>() {
+        retrofitInterface.getAllPosts(accessToken).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
 
@@ -276,7 +282,7 @@ public class ModelServer {
 
     public void getPostById(String postId, Model.getPostByIdListener listener) {
 
-        Call<JsonObject> postDetails = retrofitInterface.getPostById(postId);
+        Call<JsonObject> postDetails = retrofitInterface.getPostById(accessToken,postId);
         postDetails.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -294,7 +300,7 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
     public void deletePost(String postId, Model.deletePostListener listener) {
-        Call<Void> deletePost = retrofitInterface.deletePost(postId);
+        Call<Void> deletePost = retrofitInterface.deletePost(accessToken, postId);
 
         deletePost.enqueue(new Callback<Void>() {
             @Override
@@ -312,7 +318,7 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
     public void editPost(HashMap<String, String> map, String postId, Model.editPostListener listener) {
-        Call<Void> editPost = retrofitInterface.editPost(map, postId);
+        Call<Void> editPost = retrofitInterface.editPost(accessToken, map, postId);
 
         editPost.enqueue(new Callback<Void>() {
             @Override
@@ -331,7 +337,7 @@ public class ModelServer {
 
     public void addComment(HashMap<String, String> map, Model.addCommentListener listener) {
 
-        Call<Void> add = retrofitInterface.addComment(map);
+        Call<Void> add = retrofitInterface.addComment(accessToken, map);
 
         add.enqueue(new Callback<Void>() {
             @Override

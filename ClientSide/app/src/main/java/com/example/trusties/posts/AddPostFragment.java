@@ -1,6 +1,12 @@
 package com.example.trusties.posts;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -14,10 +20,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
 import com.example.trusties.ui.home.HomeFragment;
+import com.google.android.material.button.MaterialButton;
+
 import java.util.HashMap;
 
 public class AddPostFragment extends Fragment {
@@ -79,16 +88,34 @@ public class AddPostFragment extends Fragment {
     }
 
     private void FindFirstCircle() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            firstCircleBtn.setBackgroundColor(firstCircleBtn.getContext().getColor(R.color.titleColor));
+            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.lightGray));
+            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
+        }
+
         //TODO
     }
 
     private void FindSecondCircle() {
         // first + second
+
+        FindFirstCircle();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.titleColor));
+            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
+        }
+
         //TODO
     }
 
     private void FindThirdCircle() {
         // second (Inside there is also the first) + third
+        FindSecondCircle();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.titleColor));
+        }
         //TODO
     }
 
@@ -107,7 +134,7 @@ public class AddPostFragment extends Fragment {
         String message = description.getText().toString();
 //        User user = HomeFragment.connectedUser;
         User user = Model.instance.getCurrentUserModel();
-        String email= user.getEmail().replace("\"", "");
+        String email = user.getEmail().replace("\"", "");
 
         HashMap<String, String> map = new HashMap<>();
         map.put("title", title);
@@ -115,7 +142,7 @@ public class AddPostFragment extends Fragment {
         map.put("email", email);
         map.put("role", type);
 
-        Model.instance.addPost(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionAddPostFragmentToNavigationHome()));
+        Model.instance.addPost(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
     }
 
 }
