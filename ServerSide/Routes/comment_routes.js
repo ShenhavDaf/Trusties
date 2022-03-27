@@ -44,7 +44,7 @@ const authenticate = require("../Common/auth_middleware");
 
 router.get("/:id", authenticate, Comment.getAllComments_Post);
 
-router.post("/add", /*authenticate,*/ Comment.addComment);
+router.post("/add", authenticate, Comment.addComment);
 router.post("/edit/:id", authenticate, Comment.editComment);
 router.post("/delete/:id", authenticate, Comment.deleteComment);
 

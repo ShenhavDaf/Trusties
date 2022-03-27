@@ -58,7 +58,7 @@ const authenticate = require("../Common/auth_middleware");
  * /post:
  *   get:
  *      summary: get all posts
- *      tags: [Post Api]
+ *      tags: [Post API]
  *      responses:
  *          200:
  *              description: The posts list
@@ -69,14 +69,14 @@ const authenticate = require("../Common/auth_middleware");
  *
  */
 
-router.get("/allPosts", /*authenticate,*/ Post.getAllPosts);
+router.get("/allPosts", authenticate, Post.getAllPosts);
 
 /**
  * @swagger
  * /post/{id}:
  *   get:
- *      summary: get all posts
- *      tags: [Post Api]
+ *      summary: get post by id
+ *      tags: [Post API]
  *      parameters:
  *          - in: path
  *            name: id
@@ -94,11 +94,11 @@ router.get("/allPosts", /*authenticate,*/ Post.getAllPosts);
  *
  */
 
-router.get("/:id", /*authenticate,*/ Post.getPostsById);
+router.get("/:id", authenticate, Post.getPostsById);
 
 /**
  * @swagger
- * /post:
+ * /post/add:
  *   post:
  *      summary: add new post
  *      tags: [Post API]
@@ -115,12 +115,49 @@ router.get("/:id", /*authenticate,*/ Post.getPostsById);
  *                  application/json:
  *                      schema:
  *                          $ref: '#/components/schemas/Post'
- *
  */
 
-router.post("/add", Post.addPosts);
-router.post("/edit/:id", Post.editPost);
-router.post("/delete/:id", Post.deletePost);
+router.post("/add", authenticate, Post.addPosts);
+
+/**
+ * @swagger
+ * /post/edit/{id}:
+ *   post:
+ *      summary: edit post by id
+ *      tags: [Post API]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: The post id
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Post'
+ *      responses:
+ *          200:
+ *              description: The new post
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Post'
+ */
+
+router.post("/edit/:id", authenticate, Post.editPost);
+
+/**
+ * @swagger
+ * /post/delete/{id}:
+ *   post:
+ *      summary: delete post by id
+ *      tags: [Post API]
+ */
+router.post("/delete/:id", authenticate, Post.deletePost);
+
 router.post("/MyPost", authenticate, Post.getMyPosts);
 
 module.exports = router;
