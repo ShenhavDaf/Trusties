@@ -32,6 +32,7 @@ function getRandomPassword() {
 
 var randomCode = 0;
 var email;
+
 const register = async (req, res, next) => {
   email = req.body.email;
   const password = req.body.password;
@@ -56,9 +57,17 @@ const register = async (req, res, next) => {
           name: name,
           phone: phone,
         });
+
         randomCode = getRandomInt();
         await sendEmail(user.email, "Verify Email", String(randomCode));
-        res.status(200).send({ user, randomCode });
+
+        const accessToken = await jwt.sign(
+          { id: user._id },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
+        );
+
+        res.status(200).send({ accessToken, user, randomCode });
       }
     } else if (exists == null) {
       const salt = await bcrypt.genSalt(10);
@@ -74,7 +83,14 @@ const register = async (req, res, next) => {
       randomCode = getRandomInt();
       await sendEmail(user.email, "Verify Email", String(randomCode));
       newUser = await user.save();
-      res.status(200).send({ newUser, randomCode });
+
+      const accessToken = await jwt.sign(
+        { id: user._id },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
+      );
+
+      res.status(200).send({ accessToken, newUser, randomCode });
     }
   } catch (err) {
     console.log(err.message);
@@ -106,7 +122,22 @@ const login = async (req, res, next) => {
       { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
     );
 
-    res.status(200).send({ accessToken: accessToken, user });
+    // const refreshToken = await jwt.sign(
+    //   { id: user._id },
+    //   process.env.REFRESH_TOKEN_SECRET
+    // );
+
+    // if (user.tokens == null) user.tokens = [refreshToken];
+    // else user.tokens.push(refreshToken);
+    // await user.save();
+
+    // console.log(user.tokens);
+
+    res.status(200).send({
+      accessToken: accessToken,
+      // refreshToken: refreshToken,
+      user,
+    });
   } catch (err) {
     return sendError(res, 400, err.message);
   }
@@ -117,7 +148,85 @@ const logout = async (req, res, next) => {
     status: "fail",
     error: "not implemented",
   });
+
+  // const authHeader = req.headers["authorization"];
+  // const token = authHeader && authHeader.split(" ")[1];
+  // if (token == null) return res.sendStatus(401);
+
+  // jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, userInfo) => {
+  //   if (err) return res.status(403).send(err.message);
+  //   const userID = userInfo._id;
+  //   try {
+  //     const user = await User.findById(userID);
+
+  //     if (user == null) return res.status(403).send("invalid request");
+
+  //     if (!user.tokens.includes(token)) {
+  //       user.tokens = [];
+  //       await user.save();
+  //       return res.status(403).send("invalid request");
+  //     }
+
+  //     user.tokens.splice(user.tokens.indexOf(token), 1);
+  //     await user.save();
+  //     res.status(200).send();
+  //   } catch (error) {
+  //     res.status(403).send(error.message);
+  //   }
+  // });
 };
+
+const refreshToken = async (req, res) => {
+  console.log("refreshToken");
+
+  res.status(400).send({
+    status: "fail",
+    message: "not implemented",
+  });
+
+  //   const authHeader = req.headers["authorization"];
+  //   const token = authHeader && authHeader.split(" ")[1];
+  //   if (token == null) return res.sendStatus(401);
+
+  //   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, userInfo) => {
+  //     if (err) return res.status(403).send(err.message);
+  //     const userID = userInfo._id;
+  //     try {
+  //       const user = await User.findById(userID);
+
+  //       if (user == null) return res.status(403).send("invalid request");
+
+  //       if (!user.tokens.includes(token)) {
+  //         user.tokens = [];
+  //         await user.save();
+  //         return res.status(403).send("invalid request");
+  //       }
+
+  //       const accessToken = await jwt.sign(
+  //         { id: user._id },
+  //         process.env.ACCESS_TOKEN_SECRET,
+  //         { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
+  //       );
+
+  //       const refreshToken = await jwt.sign(
+  //         { id: user._id },
+  //         process.env.REFRESH_TOKEN_SECRET
+  //       );
+
+  //       user.tokens[user.tokens.indexOf(token)] = refreshToken;
+  //       await user.save();
+  //       res.status(200).send({
+  //         accessToken: accessToken,
+  //         refreshToken: refreshToken,
+  //       });
+  //     } catch (error) {
+  //       res.status(403).send(error.message);
+  //     }
+  //   });
+};
+/* ----------------------------------------------------------- */
+/* ----------------------------------------------------------- */
+/* ----------------------------------------------------------- */
 
 const resendEmail = async (req, res, next) => {
   randomCode = getRandomInt();
@@ -166,7 +275,7 @@ const findUserByEmail = async (req, res, next) => {
 const findUserById = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.query.id });
-    console.log(user);
+    // console.log(user);
     if (user == null) return sendError(res, 400, "user does not exist");
     res.status(200).send({
       name: user.name,
@@ -218,6 +327,8 @@ module.exports = {
   login,
   register,
   logout,
+  refreshToken,
+
   resendEmail,
   verifiedUser,
   forgotPassword,

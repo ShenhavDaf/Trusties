@@ -9,10 +9,13 @@
         android:id="@+id/navigation_home"
         android:name="com.example.trusties.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home">
+        tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_navigation_home_to_detailsPostFragment"
             app:destination="@id/detailsPostFragment" />
+        <argument
+            android:name="userName"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -29,16 +32,12 @@
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.example.trusties.posts.AddPostFragment"
-        android:label="fragment_add_post"
-        tools:layout="@layout/fragment_add_post">
-        <action
-            android:id="@+id/action_addPostFragment_to_navigation_home"
-            app:destination="@id/navigation_home" />
-    </fragment>
+        android:label="New post"
+        tools:layout="@layout/fragment_add_post"/>
     <fragment
         android:id="@+id/detailsPostFragment"
         android:name="com.example.trusties.posts.DetailsPostFragment"
-        android:label="fragment_details_post"
+        android:label="Details"
         tools:layout="@layout/fragment_details_post">
         <argument
             android:name="postId"
@@ -50,10 +49,14 @@
     <fragment
         android:id="@+id/editPostFragment"
         android:name="com.example.trusties.posts.EditPostFragment"
-        android:label="fragment_edit_post"
+        android:label="Edit post"
         tools:layout="@layout/fragment_edit_post">
         <argument
             android:name="postId"
             app:argType="string" />
     </fragment>
+    <action android:id="@+id/action_global_navigation_home" app:destination="@id/navigation_home" />
+    <action android:id="@+id/action_global_navigation_dashboard" app:destination="@id/navigation_dashboard" />
+    <action android:id="@+id/action_global_navigation_notifications" app:destination="@id/navigation_notifications" />
+    <action android:id="@+id/action_global_addPostFragment" app:destination="@id/addPostFragment" />
 </navigation>

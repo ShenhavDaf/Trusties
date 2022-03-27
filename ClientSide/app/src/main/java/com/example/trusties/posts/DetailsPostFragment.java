@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
+import com.example.trusties.model.Post;
+import com.example.trusties.model.User;
 import com.google.gson.JsonObject;
 
 
@@ -27,6 +31,7 @@ public class DetailsPostFragment extends Fragment {
     TextView descriptionEt;
     TextView statusEt;
     TextView roleEt;
+    // TODO: Add location (SOS Call)
     Button editBtn;
     Button deleteBtn;
     String postId;
@@ -45,7 +50,7 @@ public class DetailsPostFragment extends Fragment {
         titleEt = view.findViewById(R.id.postdetails_title_tv);
         timeEt = view.findViewById(R.id.postdetails_time_tv);
         authorEt = view.findViewById(R.id.postdetails_author_tv);
-        descriptionEt = view.findViewById(R.id.postdetails_description_tv);
+        descriptionEt=view.findViewById(R.id.postdetails_description_tv);
         roleEt = view.findViewById(R.id.postdetails_role_tv);
         statusEt = view.findViewById(R.id.postdetails_status_tv);
         editBtn = view.findViewById(R.id.postdetails_edit_btn);
@@ -72,11 +77,12 @@ public class DetailsPostFragment extends Fragment {
 
                 String title = post.get("title").toString().replace("\"", "");
                 String description = post.get("description").toString().replace("\"", "");
-                String time = post.get("time").toString().replace("\"", "");
+//                String time = post.get("time").toString().replace("\"", "");
+                String time = post.get("time").getAsString().substring(0, 16).replace("T", "  ").replace("-", "/");
                 String senderId = post.get("sender").toString().replace("\"", "");
                 String status = post.get("status").toString().replace("\"", "");
                 String role = post.get("role").toString().replace("\"", "");
-                displayPost(title, description, time, senderId, status, role);
+                displayPost(title, description, time,senderId, status, role);
                 progressBar.setVisibility(View.GONE);
             }
         });
@@ -105,29 +111,31 @@ public class DetailsPostFragment extends Fragment {
         return view;
     }
 
-    public void displayPost(String title, String description, String time, String senderId, String status, String role) {
-        Model.instance.findUserById(senderId, new Model.findUserByIdListener() {
-            @Override
-            public void onComplete(JsonObject user) {
-                titleEt.setText(title);
-                descriptionEt.setText(description);
-                timeEt.setText(time.substring(0, 10));
-                authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
-                statusEt.setText(status);
-                roleEt.setText(role);
-                //        if(!post.getPhoto().contentEquals("")) {
-                //            Picasso.get()
-                //                    .load(post.getPhoto())
-                //                    .into(postImg);
-                //        }
-                titleEt.setVisibility(View.VISIBLE);
-                timeEt.setVisibility(View.VISIBLE);
-                authorEt.setVisibility(View.VISIBLE);
-                descriptionEt.setVisibility(View.VISIBLE);
-                roleEt.setVisibility(View.VISIBLE);
-                statusEt.setVisibility(View.VISIBLE);
-                line.setVisibility(View.VISIBLE);
-                postImg.setVisibility(View.VISIBLE);
+    public void displayPost(String title, String description, String time,String senderId, String status, String role)
+    {
+        Model.instance.findUserById(senderId, user -> {
+            titleEt.setText(title);
+            descriptionEt.setText(description);
+            timeEt.setText(time);
+            authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
+            statusEt.setText(status);
+            roleEt.setText(role);
+    //        if(!post.getPhoto().contentEquals("")) {
+    //            Picasso.get()
+    //                    .load(post.getPhoto())
+    //                    .into(postImg);
+    //        }
+            titleEt.setVisibility(View.VISIBLE);
+            timeEt.setVisibility(View.VISIBLE);
+            authorEt.setVisibility(View.VISIBLE);
+            descriptionEt.setVisibility(View.VISIBLE);
+            roleEt.setVisibility(View.VISIBLE);
+            statusEt.setVisibility(View.VISIBLE);
+            line.setVisibility(View.VISIBLE);
+            postImg.setVisibility(View.VISIBLE);
+
+            if(role == "SOS") {
+                // TODO: Display specific details of SOS call
             }
         });
 

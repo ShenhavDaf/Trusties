@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,12 @@ import com.example.trusties.model.Post;
 import com.example.trusties.databinding.FragmentHomeBinding;
 import com.example.trusties.model.Model;
 import com.google.android.material.card.MaterialCardView;
+
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
 
@@ -100,6 +107,7 @@ public class HomeFragment extends Fragment {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title, description, time;
+        Button comment;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -107,6 +115,7 @@ public class HomeFragment extends Fragment {
             title = itemView.findViewById(R.id.listrow_username_tv);
             time = itemView.findViewById(R.id.listrow_date_tv);
             description = itemView.findViewById(R.id.listrow_post_text_tv);
+            comment = itemView.findViewById(R.id.listrow_comment_btn);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -129,6 +138,18 @@ public class HomeFragment extends Fragment {
             description.setText(post.getDescription());
             String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
+
+            comment.setOnClickListener(v -> {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("email", "shenhav.dafadi@gmail.com");
+                map.put("postID", post.getId());
+                map.put("time", "123");
+                map.put("message", "new comment");
+
+                Model.instance.addComment(map, () -> {
+                    System.out.println("----------------------- blablka");
+                });
+            });
         }
     }
 
@@ -155,6 +176,7 @@ public class HomeFragment extends Fragment {
             return holder;
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Post post = homeViewModel.getData().get(position);

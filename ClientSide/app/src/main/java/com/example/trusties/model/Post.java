@@ -18,12 +18,14 @@ public class Post {
     String role;
     String status;
     Boolean isDeleted;
+    String area;
+    String address;
     //    Long updateDate = new Long(0);
 
 
     /* ****************************** Constructors ****************************** */
 
-    public Post(String id, String author, String title, String description, String time, String role, String status, Boolean isDeleted) {
+    public Post(String id, String author, String title, String description, String time, String role, String status, Boolean isDeleted, String area, String address) {
         this.postID = id;
         this.author = author;
         this.title = title;
@@ -32,6 +34,8 @@ public class Post {
         this.role = role;
         this.status = status;
         this.isDeleted = isDeleted;
+        this.area = area;
+        this.address = address;
     }
 
     /* ****************************** Getters & Setters ****************************** */
@@ -116,8 +120,10 @@ public class Post {
         String role = json.get("role").getAsString();
         String status = json.get("status").getAsString();
         Boolean isDeleted = json.get("isDeleted").getAsBoolean();
+        String area = json.get("area").getAsString();
+        String address = json.get("address").getAsString();
 
-        Post post = new Post(id, author, title, description, time, role, status, isDeleted);
+        Post post = new Post( id,  author,  title,  description,  time,  role,  status,  isDeleted, area, address);
 
         return post;
     }
@@ -135,6 +141,8 @@ public class Post {
         json.addProperty("role", role);
         json.addProperty("status", "OPEN");
         json.addProperty("isDeleted", true);
+        json.addProperty("area", area);
+        json.addProperty("address", address);
 
         return json;
     }

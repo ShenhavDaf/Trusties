@@ -8,6 +8,7 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -42,20 +43,24 @@ public interface RetrofitInterface {
 
     /*------------------------------------------Posts----------------------------------------*/
 
-    @POST("/post/add")
-    Call<Void> addPost(@Body HashMap<String, String> map);
-
     @GET("/post/allPosts")
-    Call<JsonArray> getAllPosts();
+    Call<JsonArray> getAllPosts(@Header("authorization") String accessToken);
+
+    @POST("/post/add")
+    Call<Void> addPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
     @GET("/post/{id}")
-    Call<JsonObject> getPostById(@Path("id") String id);
+    Call<JsonObject> getPostById(@Header("authorization") String accessToken, @Path("id") String id);
 
     @POST("/post/delete/{id}")
-    Call<Void> deletePost(@Path("id") String id);
+    Call<Void> deletePost(@Header("authorization") String accessToken, @Path("id") String id);
 
     @POST("/post/edit/{id}")
-    Call<Void> editPost(@Body HashMap<String, String> map, @Path("id") String id);
+    Call<Void> editPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map, @Path("id") String id);
 
+    /*------------------------------------------Comments----------------------------------------*/
+
+    @POST("/comment/add")
+    Call<Void> addComment(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
 }

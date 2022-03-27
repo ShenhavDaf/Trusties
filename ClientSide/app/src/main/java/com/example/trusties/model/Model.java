@@ -3,6 +3,7 @@ package com.example.trusties.model;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 
@@ -153,5 +154,13 @@ public class Model {
         modelServer.editPost(map, id, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
 
+    public interface addCommentListener {
+        void onComplete();
+    }
+
+    public void addComment(HashMap<String, String> map, addCommentListener listener) {
+        modelServer.addComment(map, listener);
+    }
 }

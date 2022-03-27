@@ -10,136 +10,153 @@
     tools:context=".posts.DetailsPostFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/postDetails_swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".post.PostDetailsFragment">
-
-        <TextView
-            android:id="@+id/postdetails_time_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/rounded_corners"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_status_tv"
-            app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/postdetails_title_tv"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="100dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/hint_post_title"
+            android:textColor="@color/titleColor"
             android:textSize="38sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.037"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_author_tv" />
 
         <View
             android:id="@+id/postdetails_line"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="64dp"
             android:layout_marginEnd="12dp"
             android:background="#808080"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_status_tv" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/postdetails_description_tv"
+            android:layout_width="0dp"
+            android:layout_height="79dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/hint_post_text"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_title_tv" />
+
+        <Button
+            android:id="@+id/postdetails_edit_btn"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="56dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="100dp"
+            android:backgroundTint="#7b9abe"
+            android:text="@string/edit_text_view"
+            android:textSize="16sp"
+            app:icon="@drawable/edit_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/postdetails_delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="40dp"
+            android:backgroundTint="#7b9abe"
+            android:text="@string/delete_text_view"
+            android:textSize="16sp"
+            app:icon="@drawable/delete_icon"
+            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_edit_btn"
+            app:layout_constraintEnd_toStartOf="@+id/postdetails_edit_btn"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/postdetails_author_tv"
+            android:layout_width="147dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:hint="@string/hint_author_name"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.058"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_line" />
 
         <TextView
             android:id="@+id/postdetails_status_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="3dp"
             android:background="@drawable/rounded_corners"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_title_tv" />
-
-        <TextView
-            android:id="@+id/postdetails_description_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginEnd="12dp"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_status_tv" />
-
-        <Button
-            android:id="@+id/postdetails_edit_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="12dp"
-            android:backgroundTint="#7b9abe"
-            android:text="EDIT"
-            android:textSize="16sp"
-            app:icon="@drawable/edit_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_description_tv" />
-
-        <Button
-            android:id="@+id/postdetails_delete_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginEnd="10dp"
-            android:backgroundTint="#7b9abe"
-            android:text="DELETE"
-            android:textSize="16sp"
-            app:icon="@drawable/delete_icon"
-            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_edit_btn"
-            app:layout_constraintEnd_toStartOf="@+id/postdetails_edit_btn" />
-
-        <TextView
-            android:id="@+id/postdetails_author_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="13dp"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_time_tv"
+            app:layout_constraintEnd_toStartOf="@+id/postdetails_role_tv"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/postdetails_role_tv"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="8dp"
             android:background="@drawable/rounded_corners"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_status_tv"
+            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_time_tv"
+            app:layout_constraintEnd_toStartOf="@+id/postdetails_time_tv"
             app:layout_constraintStart_toEndOf="@+id/postdetails_status_tv" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/postDetails_post_img"
-            android:layout_width="0dp"
+            android:layout_width="389dp"
             android:layout_height="174dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginTop="28dp"
             android:scaleType="centerCrop"
             android:src="@drawable/bmw"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_description_tv"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8Percent" />
+
+        <TextView
+            android:id="@+id/postdetails_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#00D56868"
+            android:hint="@string/hint_date"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/postdetails_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.772" />
 
         <ProgressBar
             android:id="@+id/postdetails_progressBar"
@@ -149,8 +166,10 @@
             android:layout_gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.282" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
