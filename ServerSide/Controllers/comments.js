@@ -6,10 +6,10 @@ const Comment = require("../Models/comment_model");
 const addComment = async (req, res, next) => {
   console.log("add new comment ");
 
-  const user = await User.findOne({ email: req.body.email });
-  const post = await Post.findOne({ _id: req.body.postID });
-  const message = req.body.message;
-  const time = req.body.time;
+  const user = await User.findOne({ email: req.body.sender });
+  const post = await Post.findOne({ _id: req.body.postId });
+  const message = req.body.content;
+  const time = req.body.currentTime;
 
   const comment = Comment({
     sender: user,
