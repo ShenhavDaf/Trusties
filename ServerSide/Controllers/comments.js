@@ -18,13 +18,17 @@ const addComment = async (req, res, next) => {
     time: time,
   });
 
-  comment.save((error, comment) => {
+  comment.save(async (error, comment) => {
     if (error) {
       res.status(400).send({
         status: "fail",
         error: error.message,
       });
     } else {
+      await Post.updateOne(
+        { _id: req.body.postID },
+        { $push: { comments: comment._id } }
+      );
       res.status(200).send({
         status: "OK",
         comment: comment,
