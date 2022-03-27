@@ -1,18 +1,10 @@
 package com.example.trusties;
 
-import android.app.FragmentManager;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 
-import com.example.trusties.model.Model;
-import com.example.trusties.model.User;
-import com.example.trusties.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -20,7 +12,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.trusties.databinding.ActivityMainBinding;
-import com.google.gson.JsonObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 //                Model.instance.setCurrentUserModel(new User(user.get("name").toString(), user.get("email").toString(), user.get("phone").toString()));
 //            }
 //        });
-       /*****************/
+        /*****************/
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
 

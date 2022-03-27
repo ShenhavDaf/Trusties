@@ -131,7 +131,7 @@ public class Model {
     }
 
     public void getPostById(String id, getPostByIdListener listener) {
-        modelServer.getPostById(id,listener);
+        modelServer.getPostById(id, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -141,7 +141,7 @@ public class Model {
     }
 
     public void deletePost(String id, deletePostListener listener) {
-        modelServer.deletePost(id,listener);
+        modelServer.deletePost(id, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -150,8 +150,8 @@ public class Model {
         void onComplete();
     }
 
-    public void editPost(HashMap<String, String> map,String id, editPostListener listener) {
-        modelServer.editPost(map,id,listener);
+    public void editPost(HashMap<String, String> map, String id, editPostListener listener) {
+        modelServer.editPost(map, id, listener);
     }
 
     /* ---------------------------------------------------------------------------- */

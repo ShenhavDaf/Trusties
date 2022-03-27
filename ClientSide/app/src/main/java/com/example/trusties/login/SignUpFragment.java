@@ -20,7 +20,6 @@ import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
 import com.google.gson.JsonObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class SignUpFragment extends Fragment {
@@ -114,7 +113,7 @@ public class SignUpFragment extends Fragment {
         map.put("name", localName);
         map.put("email", localEmail);
         map.put("password", localPassword);
-        map.put("phone",localPhone);
+        map.put("phone", localPhone);
         map.put("fragment", "SignUpFragment");
 
         Model.instance.signup(map, randomCodeFromServer -> {
@@ -122,7 +121,7 @@ public class SignUpFragment extends Fragment {
             Navigation.findNavController(v).navigate(
                     SignUpFragmentDirections.actionSignUpFragmentToVerificationFragment(localName, localEmail, randomCodeFromServer));
 
-        },getContext());
+        }, getContext());
     }
 
     private void openCamera() {
@@ -133,7 +132,7 @@ public class SignUpFragment extends Fragment {
         //TODO
     }
 
-    void setConnectedUser(String localEmail){
+    void setConnectedUser(String localEmail) {
         Model.instance.findUserByEmail(localEmail, new Model.findUserByEmailListener() {
             @Override
             public void onComplete(JsonObject user) {

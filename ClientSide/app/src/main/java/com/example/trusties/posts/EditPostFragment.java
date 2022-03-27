@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +36,7 @@ public class EditPostFragment extends Fragment {
     ImageButton cameraBtn;
     ImageButton galleryBtn;
     String postId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class EditPostFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
 
         titleEt = view.findViewById(R.id.editpost_title_show);
-        descriptionEt=view.findViewById(R.id.editpost_description_show);
+        descriptionEt = view.findViewById(R.id.editpost_description_show);
         dropdown = view.findViewById(R.id.editpost_dropdown);
         saveBtn = view.findViewById(R.id.editpost_save_btn);
         cancelBtn = view.findViewById(R.id.editpost_cancel_btn);
@@ -58,13 +58,13 @@ public class EditPostFragment extends Fragment {
         tagsTv = view.findViewById(R.id.editpost_tags_tv);
         picturesTv = view.findViewById(R.id.editpost_pictures_tv);
         updateUI(View.INVISIBLE);
-        
+
         postId = DetailsPostFragmentArgs.fromBundle(getArguments()).getPostId();
         //get post by ID
         Model.instance.getPostById(postId, new Model.getPostByIdListener() {
             @Override
             public void onComplete(JsonObject post) {
-                
+
                 String title = post.get("title").toString().replace("\"", "");
                 String description = post.get("description").toString().replace("\"", "");
                 displayPost(title, description); //TODO: add tags, image etc..
@@ -81,7 +81,7 @@ public class EditPostFragment extends Fragment {
                 Model.instance.getPostById(postId, new Model.getPostByIdListener() {
                     @Override
                     public void onComplete(JsonObject post) {
-                        savePost(view,titleEt.getText().toString(), descriptionEt.getText().toString(),postId);
+                        savePost(view, titleEt.getText().toString(), descriptionEt.getText().toString(), postId);
                     }
 
                 });
@@ -98,11 +98,11 @@ public class EditPostFragment extends Fragment {
         return view;
     }
 
-    private void savePost(View view,String title, String description,String postId) {
-        HashMap<String,String> map = new HashMap<>();
-        map.put("title",title);
-        map.put("description",description);
-        Model.instance.editPost(map,postId, new Model.editPostListener() {
+    private void savePost(View view, String title, String description, String postId) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("title", title);
+        map.put("description", description);
+        Model.instance.editPost(map, postId, new Model.editPostListener() {
             @Override
             public void onComplete() {
                 Navigation.findNavController(view).navigateUp();

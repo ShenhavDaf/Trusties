@@ -9,7 +9,7 @@
         android:id="@+id/signUpFragment"
         android:name="com.example.trusties.login.SignUpFragment"
         android:label="@string/title_signup"
-        tools:layout="@layout/fragment_sign_up" >
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_verificationFragment"
             app:destination="@id/verificationFragment" />
@@ -34,7 +34,8 @@
         <argument
             android:name="userName"
             app:argType="string" />
-        <argument android:name="userEmail"
+        <argument
+            android:name="userEmail"
             app:argType="string" />
         <argument
             android:name="verifyCode"

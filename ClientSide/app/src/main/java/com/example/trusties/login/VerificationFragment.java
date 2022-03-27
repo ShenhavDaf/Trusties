@@ -73,11 +73,11 @@ public class VerificationFragment extends Fragment {
         map.put("email", emailArg);
 
         if (code.equals(verifyCodeFromServer)) {
-            Model.instance.verifiedUser(map,isVerified -> {
+            Model.instance.verifiedUser(map, isVerified -> {
                 //do nothing
-            },getContext());
+            }, getContext());
             Intent myIntent = new Intent(getContext(), MainActivity.class);
-            myIntent.putExtra("email",emailArg);
+            myIntent.putExtra("email", emailArg);
             startActivity(myIntent);
             getActivity().finish();
         } else {
@@ -97,6 +97,6 @@ public class VerificationFragment extends Fragment {
         Model.instance.resendEmail(map, randomCodeFromServer -> {
             new CommonFunctions().myPopup(getContext(), "Email resend", "Please check your inbox");
             verifyCodeFromServer = randomCodeFromServer;
-        },getContext());
+        }, getContext());
     }
 }
