@@ -16,7 +16,8 @@
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.4",
-    "nodemailer": "^6.7.2"
+    "nodemailer": "^6.7.2",
+    "npm-check-updates": "^12.5.4"
   },
   "devDependencies": {
     "copy-node-modules": "^1.1.1",
