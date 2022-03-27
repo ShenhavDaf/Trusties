@@ -95,6 +95,7 @@ public class ModelServer {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.code() == 200) {
+                    accessToken = "JWT " + response.body().get("accessToken").getAsString();
                     String randomCodeFromServer = response.body().get("randomCode").toString();
                     System.out.println(randomCodeFromServer);
 

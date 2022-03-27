@@ -57,9 +57,17 @@ const register = async (req, res, next) => {
           name: name,
           phone: phone,
         });
+
         randomCode = getRandomInt();
         await sendEmail(user.email, "Verify Email", String(randomCode));
-        res.status(200).send({ user, randomCode });
+
+        const accessToken = await jwt.sign(
+          { id: user._id },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
+        );
+
+        res.status(200).send({ accessToken, user, randomCode });
       }
     } else if (exists == null) {
       const salt = await bcrypt.genSalt(10);
@@ -75,7 +83,14 @@ const register = async (req, res, next) => {
       randomCode = getRandomInt();
       await sendEmail(user.email, "Verify Email", String(randomCode));
       newUser = await user.save();
-      res.status(200).send({ newUser, randomCode });
+
+      const accessToken = await jwt.sign(
+        { id: user._id },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
+      );
+
+      res.status(200).send({ accessToken, newUser, randomCode });
     }
   } catch (err) {
     console.log(err.message);
