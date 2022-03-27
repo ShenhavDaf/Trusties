@@ -117,7 +117,7 @@ public class Post {
         String status = json.get("status").getAsString();
         Boolean isDeleted = json.get("isDeleted").getAsBoolean();
 
-        Post post = new Post( id,  author,  title,  description,  time,  role,  status,  isDeleted);
+        Post post = new Post(id, author, title, description, time, role, status, isDeleted);
 
         return post;
     }

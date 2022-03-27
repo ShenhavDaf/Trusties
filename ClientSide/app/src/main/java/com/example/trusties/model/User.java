@@ -2,9 +2,9 @@ package com.example.trusties.model;
 
 public class User {
 
-    String fullName="";
-    String email="";
-    String phone="";
+    String fullName = "";
+    String email = "";
+    String phone = "";
 
     public User(String fullName, String email, String phone) {
         this.fullName = fullName;

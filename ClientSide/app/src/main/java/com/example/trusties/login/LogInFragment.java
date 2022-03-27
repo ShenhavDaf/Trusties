@@ -151,7 +151,8 @@ public class LogInFragment extends Fragment {
         alert.show();
 
     }
-    void setConnectedUser(String localEmail){
+
+    void setConnectedUser(String localEmail) {
         Model.instance.findUserByEmail(localEmail, new Model.findUserByEmailListener() {
             @Override
             public void onComplete(JsonObject user) {

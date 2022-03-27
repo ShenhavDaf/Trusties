@@ -1,8 +1,10 @@
 package com.example.trusties.posts;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
-import com.example.trusties.ui.home.HomeFragment;
+
 import java.util.HashMap;
 
 public class AddPostFragment extends Fragment {
@@ -98,7 +101,7 @@ public class AddPostFragment extends Fragment {
         String message = description.getText().toString();
 //        User user = HomeFragment.connectedUser;
         User user = Model.instance.getCurrentUserModel();
-        String email= user.getEmail().replace("\"", "");
+        String email = user.getEmail().replace("\"", "");
         HashMap<String, String> map = new HashMap<>();
         map.put("title", title);
         map.put("description", message);
@@ -107,7 +110,7 @@ public class AddPostFragment extends Fragment {
         Model.instance.addPost(map, new Model.addPostListener() {
             @Override
             public void onComplete() {
-                 Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionAddPostFragmentToNavigationHome());
+                Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionAddPostFragmentToNavigationHome());
             }
         });
 

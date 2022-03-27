@@ -24,11 +24,6 @@ import com.example.trusties.databinding.FragmentHomeBinding;
 import com.example.trusties.model.Model;
 import com.google.android.material.card.MaterialCardView;
 
-import java.sql.Time;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
