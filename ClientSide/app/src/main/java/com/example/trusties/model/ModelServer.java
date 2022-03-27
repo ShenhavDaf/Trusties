@@ -337,7 +337,7 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
     public void addComment(HashMap<String, String> map, Model.addCommentListener listener) {
-
+        Log.d("TAG", map.get("content"));
         Call<Void> add = retrofitInterface.addComment(accessToken, map);
 
         add.enqueue(new Callback<Void>() {

@@ -61,7 +61,7 @@
             android:id="@+id/postdetails_edit_btn"
             android:layout_width="120dp"
             android:layout_height="48dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="180dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="100dp"
             android:backgroundTint="#7b9abe"
@@ -170,6 +170,51 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.282" />
+
+        <ImageView
+            android:id="@+id/postdetails_imgUser_img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img" />
+
+        <EditText
+            android:id="@+id/postdetails_comment_et"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/rounded_corner"
+            android:ems="10"
+            android:hint="Write comment"
+            android:inputType="textPersonName"
+            android:padding="5dp"
+            android:paddingStart="11dp"
+            app:layout_constraintStart_toEndOf="@+id/postdetails_imgUser_img"
+            app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img" />
+
+        <ImageButton
+            android:id="@+id/postdetails_sendComment_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/send_icon"
+            app:layout_constraintStart_toEndOf="@+id/postdetails_comment_et"
+            app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/postdetails_delete_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_comment_et" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

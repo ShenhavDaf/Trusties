@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
+
 
 public class DetailsPostFragment extends Fragment {
 
@@ -31,12 +34,15 @@ public class DetailsPostFragment extends Fragment {
     TextView descriptionEt;
     TextView statusEt;
     TextView roleEt;
+    EditText comment;
     // TODO: Add location (SOS Call)
     Button editBtn;
     Button deleteBtn;
     String postId;
     ProgressBar progressBar;
     ImageView postImg;
+    ImageView imgUser;
+    ImageView sendCommentBtn;
     View line;
 
     @Override
@@ -58,15 +64,11 @@ public class DetailsPostFragment extends Fragment {
         postImg = view.findViewById(R.id.postDetails_post_img);
         postImg.setVisibility(View.GONE);
         line = view.findViewById(R.id.postdetails_line);
+        comment = view.findViewById(R.id.postdetails_comment_et);
+        sendCommentBtn = view.findViewById(R.id.postdetails_sendComment_btn);
+        imgUser = view.findViewById(R.id.postdetails_imgUser_img);
 
-        titleEt.setVisibility(View.INVISIBLE);
-        timeEt.setVisibility(View.INVISIBLE);
-        authorEt.setVisibility(View.INVISIBLE);
-        descriptionEt.setVisibility(View.INVISIBLE);
-        roleEt.setVisibility(View.INVISIBLE);
-        statusEt.setVisibility(View.INVISIBLE);
-        line.setVisibility(View.INVISIBLE);
-        postImg.setVisibility(View.INVISIBLE);
+        updateUI(View.INVISIBLE);
 
         postId = DetailsPostFragmentArgs.fromBundle(getArguments()).getPostId();
 
@@ -87,25 +89,28 @@ public class DetailsPostFragment extends Fragment {
             }
         });
 
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Model.instance.deletePost(postId, new Model.deletePostListener() {
-                    @Override
-                    public void onComplete() {
+        deleteBtn.setOnClickListener(v -> Model.instance.deletePost(postId, () -> {
 //                        Model.instance.refresh;//TODO: ADD REFRESH
-                        Log.d("TAG", "delete");
-                        Navigation.findNavController(v).navigateUp();
-                    }
-                });
-            }
-        });
+            Log.d("TAG", "delete");
+            Navigation.findNavController(v).navigateUp();
+        }));
 
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToEditPostFragment(postId));
-            }
+        editBtn.setOnClickListener(v -> Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToEditPostFragment(postId)));
+
+        sendCommentBtn.setOnClickListener(v -> {
+            String content = comment.getText().toString();
+            User user = Model.instance.getCurrentUserModel();
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("postId", postId);
+            map.put("sender", user.getEmail());
+            map.put("content", content);
+            map.put("currentTime", (new Long(0)).toString());
+
+            Model.instance.addComment(map, () -> {
+                // TODO: Add comment to local DB ??
+                // TODO: Refresh recycle view
+            });
         });
 
         return view;
@@ -120,24 +125,31 @@ public class DetailsPostFragment extends Fragment {
             authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
             statusEt.setText(status);
             roleEt.setText(role);
-    //        if(!post.getPhoto().contentEquals("")) {
-    //            Picasso.get()
-    //                    .load(post.getPhoto())
-    //                    .into(postImg);
-    //        }
-            titleEt.setVisibility(View.VISIBLE);
-            timeEt.setVisibility(View.VISIBLE);
-            authorEt.setVisibility(View.VISIBLE);
-            descriptionEt.setVisibility(View.VISIBLE);
-            roleEt.setVisibility(View.VISIBLE);
-            statusEt.setVisibility(View.VISIBLE);
-            line.setVisibility(View.VISIBLE);
-            postImg.setVisibility(View.VISIBLE);
+            //        if(!post.getPhoto().contentEquals("")) {
+            //            Picasso.get()
+            //                    .load(post.getPhoto())
+            //                    .into(postImg);
+            //        }
+
+            updateUI(View.VISIBLE);
 
             if(role == "SOS") {
                 // TODO: Display specific details of SOS call
             }
         });
 
+    }
+
+    public void updateUI(int type) {
+        titleEt.setVisibility(type);
+        timeEt.setVisibility(type);
+        authorEt.setVisibility(type);
+        descriptionEt.setVisibility(type);
+        roleEt.setVisibility(type);
+        statusEt.setVisibility(type);
+        line.setVisibility(type);
+        postImg.setVisibility(type);
+        sendCommentBtn.setVisibility(type);
+        imgUser.setVisibility(type);
     }
 }
