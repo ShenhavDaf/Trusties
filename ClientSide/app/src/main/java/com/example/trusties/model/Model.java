@@ -161,6 +161,7 @@ public class Model {
     }
 
     public void addComment(HashMap<String, String> map, addCommentListener listener) {
+        Log.d("TAG", "2222");
         modelServer.addComment(map, listener);
     }
 }
