@@ -206,15 +206,30 @@
             app:layout_constraintStart_toEndOf="@+id/postdetails_comment_et"
             app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/comment_swiperefresh"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toTopOf="@+id/postdetails_delete_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_comment_et" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_comment_et">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/postdetails_rv_comment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/postdetails_delete_btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postdetails_comment_et" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

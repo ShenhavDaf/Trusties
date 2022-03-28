@@ -164,4 +164,14 @@ public class Model {
         Log.d("TAG", "2222");
         modelServer.addComment(map, listener);
     }
+
+    /* ---------------------------------------------------------------------------- */
+    public interface allCommentsListener {
+        void onComplete(List<Comment> commentsList);
+    }
+
+    public void getAllComments(allCommentsListener listener) {
+        modelServer.getAllComments(listener);
+    }
+
 }

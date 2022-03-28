@@ -139,17 +139,17 @@ public class HomeFragment extends Fragment {
             String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
 
-            comment.setOnClickListener(v -> {
-                HashMap<String,String> map = new HashMap<>();
-                map.put("email", "shenhav.dafadi@gmail.com");
-                map.put("postID", post.getId());
-                map.put("time", "123");
-                map.put("message", "new comment");
-
-                Model.instance.addComment(map, () -> {
-                    System.out.println("----------------------- blablka");
-                });
-            });
+//            comment.setOnClickListener(v -> {
+//                HashMap<String,String> map = new HashMap<>();
+//                map.put("email", "shenhav.dafadi@gmail.com");
+//                map.put("postID", post.getId());
+//                map.put("time", "123");
+//                map.put("message", "new comment");
+//
+//                Model.instance.addComment(map, () -> {
+//                    System.out.println("----------------------- blablka");
+//                });
+//            });
         }
     }
 
