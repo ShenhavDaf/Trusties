@@ -63,4 +63,13 @@ public interface RetrofitInterface {
     @POST("/comment/add")
     Call<Void> addComment(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
+    @GET("/comment/allComments")
+    Call<JsonArray> getAllComments(@Header("authorization") String accessToken);
+
+    @GET("/comment/{id}/allComments")
+    Call<JsonArray> getPostComments(@Header("authorization") String accessToken);
+
+    @GET("/comment/{id}")
+    Call<Void> getCommentById(@Header("authorization") String accessToken);
+
 }

@@ -352,4 +352,28 @@ public class ModelServer {
         });
 
     }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void getAllComments(Model.allCommentsListener listener) {
+
+        retrofitInterface.getAllComments(accessToken).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                List<Comment> list = new ArrayList<>();
+                for (JsonElement element : response.body()) {
+//                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+                        list.add(Comment.create(element.getAsJsonObject()));
+                }
+
+                Collections.reverse(list);
+                listener.onComplete(list);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+    }
 }

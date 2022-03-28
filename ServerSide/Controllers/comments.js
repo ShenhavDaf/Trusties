@@ -3,6 +3,33 @@ const Post = require("../Models/post_model");
 const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 
+const getAllComments = async (req, res, next) => {
+  Comment.find({}, function (err, docs) {
+    if (err) console.log(err);
+    else res.status(200).send(docs);
+  });
+};
+
+const getPostComments = async (req, res, next) => {
+  const post = await Post.findOne({ _id: req.params.id });
+  if (err) console.log(err);
+  const commentsArr = post.comments;
+  res.status(200).send(commentsArr);
+  // sends commentsId array
+  // client side needs to use getCommentById from server side to get the actual data
+};
+
+const getCommentById = async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    res.status(200).send(comment);
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
 const addComment = async (req, res, next) => {
   console.log("add new comment ");
 
@@ -99,8 +126,11 @@ const deleteComment = async (req, res, next) => {
 };
 
 module.exports = {
+  getAllComments,
+  getPostComments,
+  getCommentById,
   addComment,
   editComment,
   deleteComment,
-  getAllComments_Post,
+  // getAllComments_Post,
 };

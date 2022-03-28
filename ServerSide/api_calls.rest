@@ -100,3 +100,9 @@ Content-Type: application/json
     "message": "this is my new message",
     "sender": "Adi"
 }
+
+###
+GET http://localhost:4000/comment/6241984af2302ba19ebefc53
+# Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzFmZjA5ZDZiZWZiNDJjNGE1NDY4MCIsImlhdCI6MTY0NzgyMzgwMCwiZXhwIjoxNjQ3ODI3NDAwfQ.KBukqZzoK90ww1ptC92hUz2_XvbfCLLZDkX78EH1reI
+
+
