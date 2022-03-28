@@ -26,7 +26,7 @@ const addComment = async (req, res, next) => {
       });
     } else {
       await Post.updateOne(
-        { _id: req.body.postID },
+        { _id: req.body.postId },
         { $push: { comments: comment._id } }
       );
       res.status(200).send({
