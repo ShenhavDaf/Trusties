@@ -10,12 +10,21 @@ const getAllPosts = async (req, res, next) => {
   });
 };
 
-const getPosts = async (req, res, next) => {
-  Post.find({ role: "QUESTION" }, function (err, docs) {
-    if (err) console.log(err);
-    else res.status(200).send(docs);
-  });
-};
+/* ********************************************************** */
+
+// const getQuestions = async (req, res, next) => {
+//   Post.find({ role: "QUESTION" }, function (err, docs) {
+//     if (err) console.log(err);
+//     else res.status(200).send(docs);
+//   });
+// };
+
+// const getSOSs = async (req, res, next) => {
+//   Post.find({ role: "SOS" }, function (err, docs) {
+//     if (err) console.log(err);
+//     else res.status(200).send(docs);
+//   });
+// };
 
 const getPostsById = async (req, res, next) => {
   try {
@@ -29,6 +38,8 @@ const getPostsById = async (req, res, next) => {
     });
   }
 };
+
+/* ********************************************************** */
 
 const addPosts = async (req, res, next) => {
   var email = req.body.email;
@@ -69,6 +80,8 @@ const addPosts = async (req, res, next) => {
   });
 };
 
+/* ********************************************************** */
+
 const editPost = async (req, res, next) => {
   try {
     const exists = await Post.updateOne(
@@ -78,12 +91,13 @@ const editPost = async (req, res, next) => {
         description: req.body.description,
       }
     );
+    const updatePost = await Post.findById(req.params.id);
     if (exists == null) return sendError(res, 400, "post does not exist");
     else {
       console.log("post edited!");
       res.status(200).send({
         status: "OK",
-        post: newPost,
+        post: updatePost,
       });
     }
   } catch (err) {
@@ -94,21 +108,23 @@ const editPost = async (req, res, next) => {
   }
 };
 
+/* ********************************************************** */
+
 const deletePost = async (req, res, next) => {
   try {
     // const exists = await Post.deleteOne({ _id: req.params.id });
     const exists = await Post.updateOne(
       { _id: req.params.id },
-      {
-        isDeleted: true,
-      }
+      { isDeleted: true }
     );
+    const updatePost = await Post.findById(req.params.id);
     if (exists == null) return sendError(res, 400, "post does not exist");
     else {
       console.log("post deleted!");
+
       res.status(200).send({
         status: "OK",
-        post: newPost,
+        post: updatePost,
       });
     }
   } catch (err) {
@@ -118,6 +134,8 @@ const deletePost = async (req, res, next) => {
     });
   }
 };
+
+/* ********************************************************** */
 
 const getMyPosts = async (req, res, next) => {
   // User.find({ id: req.user.id }, function (err, docs) {
@@ -139,7 +157,8 @@ const getMyPosts = async (req, res, next) => {
 
 module.exports = {
   getAllPosts,
-  getPosts,
+  // getQuestions,
+  // getSOSs,
   getPostsById,
   addPosts,
   getMyPosts,
