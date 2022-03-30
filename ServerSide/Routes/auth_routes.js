@@ -24,7 +24,7 @@ const Auth = require("../Controllers/auth");
  * @swagger
  * components:
  *   schemas:
- *       User Authentication:
+ *       User:
  *           type: object
  *           required:
  *               - email

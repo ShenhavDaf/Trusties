@@ -11,30 +11,14 @@ const phone = "test phone (from unittest)";
 
 beforeAll((done) => {
   User.deleteOne({ email: email }, (err) => {
-    Post.deleteOne(
-      {
-        title: "after edit - test post title (from unittest)",
-        description: "after edit - this is my test post (from unittest)",
-      },
-      (err) => {
-        done();
-      }
-    );
+    done();
   });
 });
 
 afterAll((done) => {
   User.deleteOne({ email: email }, (err) => {
-    Post.deleteOne(
-      {
-        title: "after edit - test post title (from unittest)",
-        description: "after edit - this is my test post (from unittest)",
-      },
-      (err) => {
-        mongoose.connection.close();
-        done();
-      }
-    );
+    mongoose.connection.close();
+    done();
   });
 });
 
@@ -82,16 +66,16 @@ describe("Testing Post API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  test("test - get post by id", async () => {
-    const response = await request(app)
-      .get("/post/" + postID)
-      .set({ authorization: "JWT " + accessToken });
-    expect(response.statusCode).toEqual(200);
-    const post = response.body;
-    expect(post.title).toEqual(postTitle);
-    expect(post.description).toEqual(postMessage);
-    // expect(post2.sender).toEqual(sender);
-  });
+  // test("test - get post by id", async () => {
+  //   const response = await request(app)
+  //     .get("/post/" + postID)
+  //     .set({ authorization: "JWT " + accessToken });
+  //   expect(response.statusCode).toEqual(200);
+  //   const post = response.body;
+  //   expect(post.title).toEqual(postTitle);
+  //   expect(post.description).toEqual(postMessage);
+  //   // expect(post2.sender).toEqual(sender);
+  // });
 
   /* ******************************************** */
   /* ******************************************** */
@@ -102,7 +86,7 @@ describe("Testing Post API", () => {
       .set({ authorization: "JWT " + accessToken })
       .send({
         message: postMessage,
-        // sender: new ObjectId("623f7e3cd4f056a7695c47d6"),
+        email: email,
         title: postTitle,
         description: postMessage,
       });
