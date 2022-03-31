@@ -43,14 +43,14 @@ const postSchema = new mongoose.Schema({
     default: 2,
   },
   area: {
-      type: String,
-      required: false,
-      default: "",
+    type: String,
+    required: false,
+    default: "",
   },
   address: {
-      type: String,
-      required: false,
-      default: "",
+    type: String,
+    required: false,
+    default: "",
   }
 });
 

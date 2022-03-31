@@ -11,12 +11,13 @@ const getAllComments = async (req, res, next) => {
 };
 
 const getPostComments = async (req, res, next) => {
-  const post = await Post.findOne({ _id: req.params.id });
-  if (err) console.log(err);
-  const commentsArr = post.comments;
-  res.status(200).send(commentsArr);
-  // sends commentsId array
-  // client side needs to use getCommentById from server side to get the actual data
+  Post.findById(req.params.id)
+    .populate({ path: 'comments' })
+    .exec((err, postIncludeComments) => {
+      console.log("Comments" + postIncludeComments.comments.length);
+      res.status(200).send(postIncludeComments.comments);
+    });
+
 };
 
 const getCommentById = async (req, res, next) => {
@@ -42,8 +43,9 @@ const addComment = async (req, res, next) => {
     sender: user,
     post: post,
     message: message,
-    time: time,
+    time: Date.now(),
   });
+
 
   comment.save(async (error, comment) => {
     if (error) {
@@ -54,8 +56,12 @@ const addComment = async (req, res, next) => {
     } else {
       await Post.updateOne(
         { _id: req.body.postId },
-        { $push: { comments: comment._id } }
+        {
+          $push: { comments: comment._id }
+        }
       );
+
+      console.log("Comment Saved");
       res.status(200).send({
         status: "OK",
         comment: comment,

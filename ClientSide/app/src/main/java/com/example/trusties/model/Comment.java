@@ -2,22 +2,24 @@ package com.example.trusties.model;
 
 import com.google.gson.JsonObject;
 
+import java.util.Date;
+
 public class Comment {
 
     String postId;
     String sender;
     String content;
-    Long currentTime;
+    String time;
 
     public Comment() {
 
     }
 
-    public Comment(String postId, String sender, String content, Long currentTime) {
+    public Comment(String postId, String sender, String content, String currentTime) {
         this.postId = postId;
         this.sender = sender;
         this.content = content;
-        this.currentTime = currentTime;
+        this.time = currentTime;
     }
 
     public String getPostId() {
@@ -44,21 +46,21 @@ public class Comment {
         this.content = content;
     }
 
-    public Long getCurrentTime() {
-        return currentTime;
+    public String getCurrentTime() {
+        return time;
     }
 
-    public void setCurrentTime(Long currentTime) {
-        this.currentTime = currentTime;
+    public void setCurrentTime(String currentTime) {
+        this.time = currentTime;
     }
 
     public static Comment create(JsonObject json) {
-        String postId = json.get("postId").getAsString();
+        String postId = json.get("post").getAsString();
         String sender = json.get("sender").getAsString();
-        String content = json.get("content").getAsString();
-        Long currentTime = json.get("currentTime").getAsLong();
+        String content = json.get("message").getAsString();
+        String time = json.get("time").getAsString();
 
-        Comment comment = new Comment(postId, sender, content, currentTime);
+        Comment comment = new Comment(postId, sender, content, time);
 
         return comment;
     }
@@ -67,10 +69,10 @@ public class Comment {
 
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("postId", postId);
+        json.addProperty("post", postId);
         json.addProperty("sender", sender);
-        json.addProperty("content", content);
-        json.addProperty("currentTime", currentTime);
+        json.addProperty("message", content);
+        json.addProperty("time", time);
 
         return json;
     }

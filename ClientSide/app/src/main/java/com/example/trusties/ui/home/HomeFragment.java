@@ -106,7 +106,7 @@ public class HomeFragment extends Fragment {
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, description, time;
+        TextView title, description, time,commentNumber ;
         Button comment;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
@@ -116,6 +116,8 @@ public class HomeFragment extends Fragment {
             time = itemView.findViewById(R.id.listrow_date_tv);
             description = itemView.findViewById(R.id.listrow_post_text_tv);
             comment = itemView.findViewById(R.id.listrow_comment_btn);
+
+            commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -138,6 +140,13 @@ public class HomeFragment extends Fragment {
             description.setText(post.getDescription());
             String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
+
+            Model.instance.getPostComments(post.getId(),commentsList -> {
+
+                commentNumber.setText("Comments "+commentsList.size());
+
+            });
+
 
 //            comment.setOnClickListener(v -> {
 //                HashMap<String,String> map = new HashMap<>();

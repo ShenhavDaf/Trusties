@@ -174,4 +174,14 @@ public class Model {
         modelServer.getAllComments(listener);
     }
 
+
+    /* ---------------------------------------------------------------------------- */
+    public interface getPostComments {
+        void onComplete(List<Comment> commentsList);
+    }
+
+    public void getPostComments(String postId,allCommentsListener listener) {
+        modelServer.getPostComments(postId,listener);
+    }
+
 }
