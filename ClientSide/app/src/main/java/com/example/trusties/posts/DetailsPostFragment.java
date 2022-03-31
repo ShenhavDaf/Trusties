@@ -1,9 +1,18 @@
 package com.example.trusties.posts;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +25,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.trusties.R;
+import com.example.trusties.databinding.FragmentDetailsPostBinding;
+import com.example.trusties.databinding.FragmentHomeBinding;
+import com.example.trusties.model.Comment;
 import com.example.trusties.model.Model;
+import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
+import com.example.trusties.ui.home.HomeFragment;
+import com.example.trusties.ui.home.HomeFragmentDirections;
+import com.example.trusties.ui.home.HomeViewModel;
+import com.google.android.material.card.MaterialCardView;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -42,11 +59,27 @@ public class DetailsPostFragment extends Fragment {
     ImageView sendCommentBtn;
     View line;
 
+    private DetailsPostViewModel postViewModel;
+    private FragmentDetailsPostBinding binding;
+
+    MyAdapter adapter;
+    SwipeRefreshLayout swipeRefresh;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        postId = DetailsPostFragmentArgs.fromBundle(getArguments()).getPostId();
+        postViewModel = new ViewModelProvider(this, new MyViewModelFactory(postId)).get(DetailsPostViewModel.class);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_details_post, container, false);
+//        View view = inflater.inflate(R.layout.fragment_details_post, container, false);
+        binding = FragmentDetailsPostBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
         progressBar = view.findViewById(R.id.postdetails_progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -67,9 +100,6 @@ public class DetailsPostFragment extends Fragment {
 
         updateUI(View.INVISIBLE);
 
-        postId = DetailsPostFragmentArgs.fromBundle(getArguments()).getPostId();
-
-        // get post by ID
         Model.instance.getPostById(postId, new Model.getPostByIdListener() {
             @Override
             public void onComplete(JsonObject post) {
@@ -94,13 +124,6 @@ public class DetailsPostFragment extends Fragment {
 
         editBtn.setOnClickListener(v -> Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToEditPostFragment(postId)));
 
-
-//        adapter.setOnItemClickListener((v, position) -> {
-//            String commentId = commentViewModel.getData().get(position).getId();
-//            System.out.println("the postID is:  " + postId);
-//            Navigation.findNavController(v).navigate(HomeFragmentDirections.actionNavigationHomeToDetailsPostFragment(postId));
-//        });
-
         sendCommentBtn.setOnClickListener(v -> {
             String content = comment.getText().toString();
             User user = Model.instance.getCurrentUserModel();
@@ -117,8 +140,35 @@ public class DetailsPostFragment extends Fragment {
             });
         });
 
+        swipeRefresh = view.findViewById(R.id.comment_swiperefresh);
+        swipeRefresh.setOnRefreshListener(() -> refresh());
+
+        RecyclerView list = view.findViewById(R.id.postdetails_rv_comment);
+        list.setHasFixedSize(true);
+        list.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new DetailsPostFragment.MyAdapter();
+        list.setAdapter(adapter);
+
+        adapter.setOnItemClickListener((v, position) -> {
+            String postId = postViewModel.getData().get(position).getPostId();
+            System.out.println("the postID is:  " + postId);
+        });
+
+
+        refresh();
         return view;
     }
+
+    private void refresh() {
+        Model.instance.getPostComments(postId,commentsList -> {
+            System.out.println("Comments" + commentsList.size());
+            postViewModel.data = commentsList;
+            adapter.notifyDataSetChanged();
+
+        });
+        swipeRefresh.setRefreshing(false);
+    }
+
 
     public void displayPost(String title, String description, String time,String senderId, String status, String role)
     {
@@ -156,5 +206,88 @@ public class DetailsPostFragment extends Fragment {
         sendCommentBtn.setVisibility(type);
         imgUser.setVisibility(type);
     }
+
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView username,content, time;
+
+        public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
+            super(itemView);
+
+            username = itemView.findViewById(R.id.coomentListRow_userName_tv);
+            time = itemView.findViewById(R.id.coomentListRow_time_tv);
+            content = itemView.findViewById(R.id.coomentListRow_content_tv);
+
+            itemView.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                listener.onItemClick(v, pos);
+            });
+        }
+
+
+        @SuppressLint("SimpleDateFormat")
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        public void bind(Comment comment) {
+            System.out.println("Comment bind");
+            System.out.println(comment);
+
+            Model.instance.findUserById(comment.getSender(), new Model.findUserByIdListener() {
+
+                //Get Usr By Id.
+                @Override
+                public void onComplete(JsonObject user) {
+                    Model.instance.setCurrentUserModel(new User(user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", "")));
+
+                    username.setText(user.get("name").toString().replace("\"", ""));
+
+                }
+            });
+
+            content.setText(comment.getContent());
+            String newTime = comment.getCurrentTime().substring(0, 16).replace("T", "  ").replace("-", "/");
+            time.setText(newTime);
+
+        }
+    }
+
+    interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+
+    class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
+
+      OnItemClickListener listener;
+
+        public void setOnItemClickListener(OnItemClickListener listener) {
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+            View view = getLayoutInflater().inflate(R.layout.comment_list_row, parent, false);
+            DetailsPostFragment.MyViewHolder holder = new DetailsPostFragment.MyViewHolder(view, listener);
+            return holder;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+            Comment comment = postViewModel.getData().get(position);
+            System.out.println("Comment onBindViewHolder");
+            System.out.println(comment);
+            holder.bind(comment);
+        }
+
+        @Override
+        public int getItemCount() {
+            if (postViewModel.getData() == null) {
+                return 0;
+            }
+            return postViewModel.getData().size();
+        }
+    }
+
 
 }
