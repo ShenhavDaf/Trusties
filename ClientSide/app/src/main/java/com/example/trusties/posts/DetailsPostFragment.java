@@ -136,7 +136,8 @@ public class DetailsPostFragment extends Fragment {
 
             Model.instance.addComment(map, () -> {
                 // TODO: Add comment to local DB ??
-                // TODO: Refresh recycle view
+                comment.setText("");
+                refresh();
             });
         });
 
@@ -256,7 +257,7 @@ public class DetailsPostFragment extends Fragment {
 
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
 
-      OnItemClickListener listener;
+        OnItemClickListener listener;
 
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
