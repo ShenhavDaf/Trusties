@@ -20,22 +20,23 @@
             android:id="@+id/postdetails_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="sans-serif-medium"
             android:hint="@string/hint_post_title"
             android:textColor="@color/titleColor"
-            android:textSize="38sp"
+            android:textSize="30dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.037"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_author_tv" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/postdetails_line"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="145dp"
             android:layout_marginEnd="12dp"
             android:background="#808080"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,14 +49,14 @@
             android:layout_width="0dp"
             android:layout_height="79dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/hint_post_text"
-            android:textSize="20sp"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.493"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_title_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_line" />
 
         <Button
             android:id="@+id/postdetails_edit_btn"
@@ -90,19 +91,20 @@
         <TextView
             android:id="@+id/postdetails_author_tv"
             android:layout_width="147dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="12dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="7dp"
             android:clickable="true"
             android:focusable="true"
+            android:fontFamily="sans-serif-light"
             android:hint="@string/hint_author_name"
             android:minHeight="48dp"
-            android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textColor="@color/gray"
+            android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.058"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_line" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_title_tv" />
 
         <TextView
             android:id="@+id/postdetails_status_tv"
@@ -112,7 +114,7 @@
             android:layout_marginEnd="3dp"
             android:background="@drawable/rounded_corners"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_time_tv"
             app:layout_constraintEnd_toStartOf="@+id/postdetails_role_tv"
@@ -125,7 +127,7 @@
             android:layout_marginStart="8dp"
             android:background="@drawable/rounded_corners"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_time_tv"
             app:layout_constraintEnd_toStartOf="@+id/postdetails_time_tv"
@@ -135,7 +137,7 @@
             android:id="@+id/postDetails_post_img"
             android:layout_width="389dp"
             android:layout_height="174dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
             android:scaleType="centerCrop"
             android:src="@drawable/bmw"
             app:layout_constraintEnd_toEndOf="parent"
@@ -147,15 +149,17 @@
             android:id="@+id/postdetails_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="15dp"
             android:backgroundTint="#00D56868"
             android:hint="@string/hint_date"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="17dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/postdetails_line"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_author_tv"
             app:layout_constraintVertical_bias="0.772" />
 
         <ProgressBar

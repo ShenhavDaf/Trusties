@@ -390,8 +390,6 @@ public class ModelServer {
 //                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
                     list.add(Comment.create(element.getAsJsonObject()));
                 }
-
-                Collections.reverse(list);
                 listener.onComplete(list);
             }
 
