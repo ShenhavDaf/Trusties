@@ -55,7 +55,11 @@ public class HomeFragment extends Fragment {
         /***********************************/
 //        usersEmail = MainActivity.usersEmail;
         TextView userName = root.findViewById(R.id.home_userName_tv);
-        userName.setText(Model.instance.getCurrentUserModel().getFullName());
+        if(Model.instance.getCurrentUserModel() != null)
+            userName.setText(Model.instance.getCurrentUserModel().getFullName());
+        else
+            userName.setText("Guest");
+
 
 //        Model.instance.findUserByEmail(usersEmail, new Model.findUserByEmailListener() {
 //            @Override
