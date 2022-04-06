@@ -81,6 +81,8 @@ public class HomeFragment extends Fragment {
 
 
         adapter.setOnItemClickListener((v, position) -> {
+            System.out.println("the POSITION is:  " + position);
+
             String postId = homeViewModel.getData().get(position).getId();
             System.out.println("the postID is:  " + postId);
             Navigation.findNavController(v).navigate(HomeFragmentDirections.actionNavigationHomeToDetailsPostFragment(postId));

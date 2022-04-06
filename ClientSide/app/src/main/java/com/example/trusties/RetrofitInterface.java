@@ -72,4 +72,10 @@ public interface RetrofitInterface {
     @GET("/comment/{id}")
     Call<Void> getCommentById(@Header("authorization") String accessToken);
 
+    @POST("/comment/edit/{id}")
+    Call<Void> editComment(@Header("authorization") String accessToken, @Body HashMap<String, String> map,@Path("id") String id);
+
+    @POST("/comment/delete/{id}")
+    Call<Void> deleteComment(@Header("authorization") String accessToken, @Path("id") String id);
+
 }

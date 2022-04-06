@@ -363,7 +363,7 @@ public class ModelServer {
 
                 List<Comment> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
-//                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
                         list.add(Comment.create(element.getAsJsonObject()));
                 }
 
@@ -387,7 +387,7 @@ public class ModelServer {
 
                 List<Comment> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
-//                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
                     list.add(Comment.create(element.getAsJsonObject()));
                 }
                 listener.onComplete(list);
@@ -395,6 +395,43 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+    }
+
+
+    //Chnage to MAP instead of String.
+    public void editComment(HashMap<String, String> map, String id, Model.editCommentListener listener) {
+
+        Call<Void> editComment = retrofitInterface.editComment(accessToken, map,id);
+
+
+        editComment.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void deleteComment(String id, Model.deleteCommentListener listener) {
+
+        Call<Void> deleteComment = retrofitInterface.deleteComment(accessToken, id);
+
+        deleteComment.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
             }
         });
     }
