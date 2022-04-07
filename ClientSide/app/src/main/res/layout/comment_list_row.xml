@@ -30,20 +30,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/coomentListRow_content_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="10dp"
-        android:background="#D8D6D6"
-        android:text="TextView"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/coomentListRow_userImg_img"
-        app:layout_constraintTop_toBottomOf="@+id/coomentListRow_userName_tv" />
-
-    <TextView
         android:id="@+id/coomentListRow_time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,6 +39,22 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/coomentListRow_saveEditBtn"
+        android:layout_width="40dp"
+        android:layout_height="33dp"
+        android:padding="2dp"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:paddingRight="2dp"
+        android:paddingBottom="2dp"
+        android:text="Save"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/coomentListRow_deleteBtn" />
 
     <Button
         android:id="@+id/coomentListRow_editBtn"
@@ -74,12 +76,30 @@
         android:id="@+id/coomentListRow_deleteBtn"
         android:layout_width="55dp"
         android:layout_height="33dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:padding="2dp"
         android:text="Delete"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/coomentListRow_editBtn" />
+
+    <EditText
+        android:id="@+id/coomentListRow_content_ev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:editable="true"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/coomentListRow_deleteBtn"
+        app:layout_constraintHorizontal_bias="0.104"
+        app:layout_constraintStart_toEndOf="@+id/coomentListRow_userImg_img"
+        app:layout_constraintTop_toBottomOf="@+id/coomentListRow_userName_tv"
+        app:layout_constraintVertical_bias="0.666" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,15 +26,9 @@ import android.widget.TextView;
 
 import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentDetailsPostBinding;
-import com.example.trusties.databinding.FragmentHomeBinding;
 import com.example.trusties.model.Comment;
 import com.example.trusties.model.Model;
-import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
-import com.example.trusties.ui.home.HomeFragment;
-import com.example.trusties.ui.home.HomeFragmentDirections;
-import com.example.trusties.ui.home.HomeViewModel;
-import com.google.android.material.card.MaterialCardView;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -76,7 +70,6 @@ public class DetailsPostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        View view = inflater.inflate(R.layout.fragment_details_post, container, false);
         binding = FragmentDetailsPostBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
@@ -99,7 +92,6 @@ public class DetailsPostFragment extends Fragment {
         imgUser = view.findViewById(R.id.postdetails_imgUser_img);
 
         updateUI(View.INVISIBLE);
-
         Model.instance.getPostById(postId, new Model.getPostByIdListener() {
             @Override
             public void onComplete(JsonObject post) {
@@ -113,6 +105,23 @@ public class DetailsPostFragment extends Fragment {
                 String role = post.get("role").toString().replace("\"", "");
                 displayPost(title, description, time,senderId, status, role);
                 progressBar.setVisibility(View.GONE);
+
+                //Checking if the Current user is the sender of the post for enabling the - EditBtn and DeleteBtn-
+                Model.instance.findUserById(post.get("sender").toString().replace("\"", ""), new Model.findUserByIdListener() {
+                    @Override
+                    public void onComplete(JsonObject user) {
+                        if(user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail())==0){
+                            deleteBtn.setEnabled(true);
+                            deleteBtn.setEnabled(true);
+                        }
+                        else{
+                            deleteBtn.setEnabled(false);
+                            editBtn.setEnabled(false);
+                        }
+
+                    }
+                });
+
             }
         });
 
@@ -121,9 +130,7 @@ public class DetailsPostFragment extends Fragment {
             Log.d("TAG", "delete");
             Navigation.findNavController(v).navigateUp();
         }));
-
         editBtn.setOnClickListener(v -> Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToEditPostFragment(postId)));
-
         sendCommentBtn.setOnClickListener(v -> {
             String content = comment.getText().toString();
             User user = Model.instance.getCurrentUserModel();
@@ -150,11 +157,10 @@ public class DetailsPostFragment extends Fragment {
         adapter = new DetailsPostFragment.MyAdapter();
         list.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((v, position) -> {
-            String postId = postViewModel.getData().get(position).getPostId();
-            System.out.println("the postID is:  " + postId);
-        });
-
+//        adapter.setOnItemClickListener((v, position) -> {
+//            String postId = postViewModel.getData().get(position).toString();
+//            System.out.println("Comments:  " + postId);
+//        });
 
         refresh();
         return view;
@@ -210,14 +216,62 @@ public class DetailsPostFragment extends Fragment {
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView username,content, time;
+        TextView username,time;
+        EditText content;
+        Button delete,edit,editsave;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
             username = itemView.findViewById(R.id.coomentListRow_userName_tv);
             time = itemView.findViewById(R.id.coomentListRow_time_tv);
-            content = itemView.findViewById(R.id.coomentListRow_content_tv);
+            content = itemView.findViewById(R.id.coomentListRow_content_ev);
+
+            delete=itemView.findViewById(R.id.coomentListRow_deleteBtn);
+            edit=itemView.findViewById(R.id.coomentListRow_editBtn);
+            editsave=itemView.findViewById(R.id.coomentListRow_saveEditBtn);
+
+
+
+            edit.setOnClickListener(v -> {
+                //TODO: ADD REFRESH
+                content.setEnabled(true);
+                edit.setVisibility(View.GONE);
+                editsave.setVisibility(View.VISIBLE);
+            });
+
+            editsave.setOnClickListener(v->{
+               int pos=getAdapterPosition();
+               Comment comment=postViewModel.getData().get(pos);
+
+               HashMap<String, String> map = new HashMap<>();
+               map.put("content", content.getText().toString());
+               String id=comment.getCommentId().toString();
+
+                Model.instance.editComment(map,id, () -> {
+                    System.out.println("Save on DB");
+                    // TODO: Add comment to local DB ??
+                    content.setEnabled(false);
+                    edit.setVisibility(View.VISIBLE);
+                    editsave.setVisibility(View.GONE);
+                    refresh();
+                });
+
+            });
+            //Need to change to delete comment in server side.
+
+            delete.setOnClickListener(v -> {
+                        //TODO: ADD REFRESH
+                        int pos = getAdapterPosition();
+                        Comment comment = postViewModel.getData().get(pos);
+
+                        String id = comment.getCommentId().toString();
+
+                        Model.instance.deleteComment(id, () -> {
+
+                            refresh();
+                        });
+                    });
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -225,21 +279,24 @@ public class DetailsPostFragment extends Fragment {
             });
         }
 
-
         @SuppressLint("SimpleDateFormat")
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Comment comment) {
-            System.out.println("Comment bind");
-            System.out.println(comment);
-
             Model.instance.findUserById(comment.getSender(), new Model.findUserByIdListener() {
 
-                //Get Usr By Id.
                 @Override
                 public void onComplete(JsonObject user) {
-                    Model.instance.setCurrentUserModel(new User(user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", "")));
-
                     username.setText(user.get("name").toString().replace("\"", ""));
+
+                    //Checking if the Current user is the sender of the post for enabling the - Editand Delete comments-
+                     if(user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail())==0){
+                         delete.setVisibility(View.VISIBLE);
+                         edit.setVisibility(View.VISIBLE);
+                     }
+                     else{
+                         delete.setVisibility(View.GONE);
+                         edit.setVisibility(View.GONE);
+                     }
 
                 }
             });
@@ -261,6 +318,7 @@ public class DetailsPostFragment extends Fragment {
 
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
+
         }
 
         @NonNull
@@ -279,6 +337,7 @@ public class DetailsPostFragment extends Fragment {
             System.out.println("Comment onBindViewHolder");
             System.out.println(comment);
             holder.bind(comment);
+
         }
 
         @Override

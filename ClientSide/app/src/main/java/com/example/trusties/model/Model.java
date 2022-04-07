@@ -3,6 +3,7 @@ package com.example.trusties.model;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
 import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
@@ -182,6 +183,25 @@ public class Model {
 
     public void getPostComments(String postId,allCommentsListener listener) {
         modelServer.getPostComments(postId,listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+    public interface editCommentListener {
+        void onComplete();
+    }
+
+    public void editComment(HashMap<String, String> map, String id, editCommentListener listener) {
+        modelServer.editComment(map, id, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface deleteCommentListener {
+        void onComplete();
+    }
+
+    public void deleteComment(String id, deleteCommentListener listener) {
+        modelServer.deleteComment(id, listener);
     }
 
 }

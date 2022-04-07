@@ -14,7 +14,6 @@ const getPostComments = async (req, res, next) => {
   Post.findById(req.params.id)
     .populate({ path: 'comments' })
     .exec((err, postIncludeComments) => {
-      console.log("Comments" + postIncludeComments.comments.length);
       res.status(200).send(postIncludeComments.comments);
     });
 
@@ -70,25 +69,20 @@ const addComment = async (req, res, next) => {
   });
 };
 
-const getAllComments_Post = async (req, res, next) => {
-  // try {
-  //     posts = await Post.where(p => p.role == "QUES").find()
-  //     res.status(200).send(posts);
-  // } catch (err) {
-  //     res.status(400).send({
-  //         'status': 'fail',
-  //         'error': error.message
-  //     });
-  // }
-};
 
 const editComment = async (req, res, next) => {
-  // console.log('add new comment ');
+  console.log('Edit Comment');
+  console.log('req.params.id');
+  console.log(req.params.id);
+  console.log('req.params.comtent');
+  console.log(req.body.content);
+
+
   try {
     const exists = await Comment.updateOne(
       { _id: req.params.id },
       {
-        message: req.body.message,
+        message: req.body.content,
       }
     );
     if (exists == null) return sendError(res, 400, "comment does not exist");
@@ -118,6 +112,7 @@ const deleteComment = async (req, res, next) => {
     if (exists == null) return sendError(res, 400, "comment does not exist");
     else {
       console.log("comment deleted!");
+      console.log(req.params.id);
       res.status(200).send({
         status: "OK",
         post: newPost,
@@ -138,5 +133,4 @@ module.exports = {
   addComment,
   editComment,
   deleteComment,
-  // getAllComments_Post,
 };
