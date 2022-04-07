@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment {
             title = itemView.findViewById(R.id.listrow_username_tv);
             time = itemView.findViewById(R.id.listrow_date_tv);
             description = itemView.findViewById(R.id.listrow_post_text_tv);
-            comment = itemView.findViewById(R.id.listrow_comment_btn);
+//            comment = itemView.findViewById(R.id.listrow_comment_btn);
 
             commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
 
@@ -149,7 +149,7 @@ public class HomeFragment extends Fragment {
 
             Model.instance.getPostComments(post.getId(),commentsList -> {
 
-                commentNumber.setText("Comments "+commentsList.size());
+                commentNumber.setText(commentsList.size() + " Comments ");
 
             });
 

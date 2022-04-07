@@ -42,45 +42,51 @@
 
     <Button
         android:id="@+id/coomentListRow_saveEditBtn"
-        android:layout_width="40dp"
+        android:layout_width="33dp"
         android:layout_height="33dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#AEA8A8"
         android:padding="2dp"
         android:paddingLeft="2dp"
         android:paddingTop="2dp"
         android:paddingRight="2dp"
         android:paddingBottom="2dp"
-        android:text="Save"
         android:textSize="12sp"
         android:visibility="gone"
+        app:icon="@drawable/save_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/coomentListRow_deleteBtn" />
+        app:layout_constraintStart_toEndOf="@+id/coomentListRow_content_ev"
+        tools:visibility="gone" />
 
     <Button
         android:id="@+id/coomentListRow_editBtn"
-        android:layout_width="40dp"
+        android:layout_width="33dp"
         android:layout_height="33dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:backgroundTint="#AEA8A8"
         android:padding="2dp"
         android:paddingLeft="2dp"
         android:paddingTop="2dp"
         android:paddingRight="2dp"
         android:paddingBottom="2dp"
-        android:text="Edit"
         android:textSize="12sp"
+        app:icon="@drawable/edit_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/coomentListRow_deleteBtn"
-        android:layout_width="55dp"
+        android:layout_width="33dp"
         android:layout_height="33dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
+        android:backgroundTint="#AEA8A8"
         android:padding="2dp"
-        android:text="Delete"
         android:textSize="12sp"
+        app:icon="@drawable/delete_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/coomentListRow_editBtn" />
 
