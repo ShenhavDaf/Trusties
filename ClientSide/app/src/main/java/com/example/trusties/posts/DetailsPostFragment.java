@@ -237,6 +237,7 @@ public class DetailsPostFragment extends Fragment {
                 //TODO: ADD REFRESH
                 content.setEnabled(true);
                 edit.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
                 editsave.setVisibility(View.VISIBLE);
             });
 
@@ -254,6 +255,7 @@ public class DetailsPostFragment extends Fragment {
                     content.setEnabled(false);
                     edit.setVisibility(View.VISIBLE);
                     editsave.setVisibility(View.GONE);
+                    delete.setVisibility(View.VISIBLE);
                     refresh();
                 });
 
@@ -275,7 +277,8 @@ public class DetailsPostFragment extends Fragment {
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
-                listener.onItemClick(v, pos);
+
+//                listener.onItemClick(v, pos);
             });
         }
 

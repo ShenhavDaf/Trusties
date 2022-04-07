@@ -63,20 +63,6 @@
             app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imv"
             app:layout_constraintTop_toBottomOf="@+id/listrow_username_tv" />
 
-        <TextView
-            android:id="@+id/listrow_post_text_tv"
-            android:layout_width="258dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:hint="@string/hint_post_text"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imv"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_date_tv" />
-
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/listrow_post_img"
             android:layout_width="595dp"
@@ -95,35 +81,31 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"
             app:srcCompat="@drawable/image_place" />
 
-        <Button
-            android:id="@+id/listrow_comment_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="#00000000"
-            android:text="Add new comment"
-            android:textColor="@color/black"
-            app:icon="@drawable/ic_add_black_24dp"
-            app:iconSize="24dp"
-            app:iconTint="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_post_img"
-            app:layout_constraintVertical_bias="1.0" />
-
         <TextView
             android:id="@+id/listrow_comment_num_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
             android:layout_marginTop="21dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="10dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.508"
-            app:layout_constraintStart_toEndOf="@+id/listrow_comment_btn"
             app:layout_constraintTop_toBottomOf="@+id/listrow_post_img"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/listrow_post_text_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="TextView"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imv"
+            app:layout_constraintTop_toBottomOf="@+id/listrow_date_tv" />
 
         <!--        <RatingBar-->
         <!--            android:id="@+id/listrow_ratingBar"-->
