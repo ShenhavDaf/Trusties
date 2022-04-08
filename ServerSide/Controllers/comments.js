@@ -12,11 +12,10 @@ const getAllComments = async (req, res, next) => {
 
 const getPostComments = async (req, res, next) => {
   Post.findById(req.params.id)
-    .populate({ path: 'comments' })
+    .populate({ path: "comments" })
     .exec((err, postIncludeComments) => {
       res.status(200).send(postIncludeComments.comments);
     });
-
 };
 
 const getCommentById = async (req, res, next) => {
@@ -45,7 +44,6 @@ const addComment = async (req, res, next) => {
     time: Date.now(),
   });
 
-
   comment.save(async (error, comment) => {
     if (error) {
       res.status(400).send({
@@ -56,7 +54,7 @@ const addComment = async (req, res, next) => {
       await Post.updateOne(
         { _id: req.body.postId },
         {
-          $push: { comments: comment._id }
+          $push: { comments: comment._id },
         }
       );
 
@@ -69,14 +67,12 @@ const addComment = async (req, res, next) => {
   });
 };
 
-
 const editComment = async (req, res, next) => {
-  console.log('Edit Comment');
-  console.log('req.params.id');
+  console.log("Edit Comment");
+  console.log("req.params.id");
   console.log(req.params.id);
-  console.log('req.params.comtent');
+  console.log("req.params.comtent");
   console.log(req.body.content);
-
 
   try {
     const exists = await Comment.updateOne(
@@ -111,8 +107,18 @@ const deleteComment = async (req, res, next) => {
     );
     if (exists == null) return sendError(res, 400, "comment does not exist");
     else {
-      console.log("comment deleted!");
-      console.log(req.params.id);
+      const currComment = await Comment.findById(req.params.id);
+      const currPost = await Post.findById(currComment.post);
+
+      Post.updateOne(
+        { _id: currPost.id },
+        { $pull: { comments: req.params.id } },
+        (err) => {
+          if (err) console.log(err);
+          else console.log("comment deleted!");
+        }
+      );
+
       res.status(200).send({
         status: "OK",
         post: newPost,
