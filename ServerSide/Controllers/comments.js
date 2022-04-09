@@ -68,11 +68,11 @@ const addComment = async (req, res, next) => {
 };
 
 const editComment = async (req, res, next) => {
-  console.log("Edit Comment");
-  console.log("req.params.id");
-  console.log(req.params.id);
-  console.log("req.params.comtent");
-  console.log(req.body.content);
+  // console.log("Edit Comment");
+  // console.log("req.params.id");
+  // console.log(req.params.id);
+  // console.log("req.params.comtent");
+  // console.log(req.body.content);
 
   try {
     const exists = await Comment.updateOne(
@@ -81,12 +81,13 @@ const editComment = async (req, res, next) => {
         message: req.body.content,
       }
     );
+    const updateComment = await Comment.findById(req.params.id);
     if (exists == null) return sendError(res, 400, "comment does not exist");
     else {
       console.log("comment edited!");
       res.status(200).send({
         status: "OK",
-        post: newPost,
+        comment: updateComment,
       });
     }
   } catch (err) {
@@ -121,7 +122,7 @@ const deleteComment = async (req, res, next) => {
 
       res.status(200).send({
         status: "OK",
-        post: newPost,
+        comment: currComment,
       });
     }
   } catch (err) {
