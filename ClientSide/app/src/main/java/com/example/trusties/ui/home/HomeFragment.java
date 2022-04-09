@@ -112,17 +112,14 @@ public class HomeFragment extends Fragment {
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, description, time,commentNumber ;
-        Button comment;
+        TextView userName, description, time,commentNumber ;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.listrow_username_tv);
+            userName = itemView.findViewById(R.id.listrow_username_tv);
             time = itemView.findViewById(R.id.listrow_date_tv);
             description = itemView.findViewById(R.id.listrow_post_text_tv);
-//            comment = itemView.findViewById(R.id.listrow_comment_btn);
-
             commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
 
             itemView.setOnClickListener(v -> {
@@ -142,15 +139,14 @@ public class HomeFragment extends Fragment {
                 MaterialCardView card = (MaterialCardView) itemView;
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
             }
-            title.setText(post.getTitle());
+            //TODO: change userName from post title to author name
+            userName.setText(post.getTitle());
             description.setText(post.getDescription());
             String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
 
             Model.instance.getPostComments(post.getId(),commentsList -> {
-
                 commentNumber.setText(commentsList.size() + " Comments ");
-
             });
 
 
