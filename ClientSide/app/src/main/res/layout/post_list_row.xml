@@ -35,11 +35,11 @@
 
         <TextView
             android:id="@+id/listrow_username_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="80dp"
+            android:layout_marginEnd="8dp"
             android:hint="@string/hint_full_name"
             android:textColor="@color/hyperlinkColor"
             android:textSize="20sp"
@@ -96,11 +96,11 @@
 
         <TextView
             android:id="@+id/listrow_post_text_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="20dp"
             android:text="TextView"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"

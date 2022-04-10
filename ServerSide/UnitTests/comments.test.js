@@ -3,7 +3,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const User = require("../Models/user_model");
 
-const email = "test@test.com";
+const email = "ortallik@gmail.com";
 const pwd = "123456";
 const name = "test username (from unittest)";
 const phone = "test phone (from unittest)";
