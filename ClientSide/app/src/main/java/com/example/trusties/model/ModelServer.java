@@ -62,6 +62,7 @@ public class ModelServer {
                 if (response.code() == 200) {
                     accessToken = "JWT " + response.body().get("accessToken").getAsString();
                     user = response.body().get("user").getAsJsonObject();
+                    User.create(user);
                     resMessage = "user exists";
                 } else if (response.code() == 400) {
                     JSONObject jObjError = null;
@@ -431,6 +432,32 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void getMyPosts(String id, Model.getMyPostsListener listener) {
+
+        Call<JsonArray> getMyPosts = retrofitInterface.getMyPosts(accessToken, id);
+
+        getMyPosts.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                List<Post> list = new ArrayList<>();
+                for (JsonElement element : response.body()) {
+                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+                        list.add(Post.create(element.getAsJsonObject()));
+                }
+
+                Collections.reverse(list);
+                listener.onComplete(list);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
 
             }
         });

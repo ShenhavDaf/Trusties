@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.text.InputType;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -156,7 +157,7 @@ public class LogInFragment extends Fragment {
         Model.instance.findUserByEmail(localEmail, new Model.findUserByEmailListener() {
             @Override
             public void onComplete(JsonObject user) {
-                Model.instance.setCurrentUserModel(new User(user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", "")));
+                Model.instance.setCurrentUserModel(new User(user.get("_id").toString().replace("\"", ""),user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", "")));
             }
         });
 

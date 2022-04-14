@@ -4,16 +4,23 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.trusties.model.Model;
+import com.example.trusties.model.Post;
+
+import java.util.List;
+
 public class DashboardViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    List<Post> data;
 
     public DashboardViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        Model.instance.getAllPosts(postsList -> {
+            this.data = postsList;
+        });
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public List<Post> getData() {
+        return data;
     }
+
 }

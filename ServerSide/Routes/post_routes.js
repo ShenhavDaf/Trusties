@@ -158,6 +158,6 @@ router.post("/edit/:id", authenticate, Post.editPost);
  */
 router.post("/delete/:id", authenticate, Post.deletePost);
 
-router.post("/MyPost", authenticate, Post.getMyPosts);
+router.get("/MyPosts/:id", authenticate, Post.getMyPosts);
 
 module.exports = router;

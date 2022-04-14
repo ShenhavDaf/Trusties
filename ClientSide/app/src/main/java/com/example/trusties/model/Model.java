@@ -204,4 +204,14 @@ public class Model {
         modelServer.deleteComment(id, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
+    public interface getMyPostsListener {
+        void onComplete(List<Post> postsList);
+    }
+
+    public void getMyPosts(String id, getMyPostsListener listener) {
+        modelServer.getMyPosts(id, listener);
+    }
+
 }

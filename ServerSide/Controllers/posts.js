@@ -137,24 +137,32 @@ const deletePost = async (req, res, next) => {
 
 /* ********************************************************** */
 
-const getMyPosts = async (req, res, next) => {
-  // User.find({ id: req.user.id }, function (err, docs) {
-  //     if (err) {
-  //         console.log(err);
-  //     }
-  //     else {
-  //         Post.find({ sender: docs }, function (err, docs_post) {
-  //             if (err) {
-  //                 console.log(err);
-  //             }
-  //             else {
-  //                 res.status(200).send(docs_post);
-  //             }
-  //         });
-  //     }
-  // });
-};
+// const getMyPosts = async (req, res, next) => {
+//   // User.find({ id: req.user.id }, function (err, docs) {
+//   //     if (err) {
+//   //         console.log(err);
+//   //     }
+//   //     else {
+//   //         Post.find({ sender: docs }, function (err, docs_post) {
+//   //             if (err) {
+//   //                 console.log(err);
+//   //             }
+//   //             else {
+//   //                 res.status(200).send(docs_post);
+//   //             }
+//   //         });
+//   //     }
+//   // });
+// };
 
+const getMyPosts = async (req, res, next) => {
+  var sender = req.params.id;
+  console.log(sender);
+  Post.find({ sender: sender }, function (err, docs) {
+    if (err) console.log(err);
+    else res.status(200).send(docs);
+  });
+};
 
 module.exports = {
   getAllPosts,

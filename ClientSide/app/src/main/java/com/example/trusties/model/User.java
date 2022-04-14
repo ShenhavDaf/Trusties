@@ -1,15 +1,29 @@
 package com.example.trusties.model;
 
+import androidx.annotation.NonNull;
+
+import com.google.gson.JsonObject;
+
 public class User {
 
     String fullName = "";
     String email = "";
     String phone = "";
+    String userID;
 
-    public User(String fullName, String email, String phone) {
+    public User(String id, String fullName, String email, String phone) {
+        this.userID = id;
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
+    }
+
+    public String getId() {
+        return userID;
+    }
+
+    public void setId(@NonNull String id) {
+        this.userID = id;
     }
 
     public String getPhone() {
@@ -36,5 +50,16 @@ public class User {
         this.email = email;
     }
 
+    public static User create(JsonObject json) {
+
+        String id = json.get("_id").getAsString();
+        String email = json.get("email").getAsString();
+        String name = json.get("name").getAsString();
+        String phone = json.get("phone").getAsString();
+
+        User user = new User( id,  name,  email,  phone);
+
+        return user;
+    }
 
 }

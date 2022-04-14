@@ -258,6 +258,7 @@ const findUserByEmail = async (req, res, next) => {
     const user = await User.findOne({ email: req.query.emailAddress });
     if (user == null) return sendError(res, 400, "user does not exist");
     res.status(200).send({
+      _id: user._id,
       name: user.name,
       email: user.email,
       phone: user.phone,
