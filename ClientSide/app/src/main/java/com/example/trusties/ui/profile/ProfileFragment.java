@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.example.trusties.model.Model;
 import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.JsonObject;
 
 public class ProfileFragment extends Fragment {
 
@@ -35,6 +37,7 @@ public class ProfileFragment extends Fragment {
     TextView connections;
     SwipeRefreshLayout swipeRefresh;
     User currUser;
+    Button edit;
 
 
     @Override
@@ -52,19 +55,33 @@ public class ProfileFragment extends Fragment {
         /**********************************/
 
         userName = root.findViewById(R.id.profile_name);
-        if (Model.instance.getCurrentUserModel() != null) {
-            userName.setText(Model.instance.getCurrentUserModel().getFullName());
-            currUser = Model.instance.getCurrentUserModel();
-            Log.d("TAG",currUser.toString());
-        }
-        else
-            userName.setText("Guest");
+                    currUser = Model.instance.getCurrentUserModel();
+        Model.instance.findUserById(Model.instance.getCurrentUserModel().getId(), new Model.findUserByIdListener() {
+            @Override
+            public void onComplete(JsonObject user) {
+                userName.setText(user.get("name").toString().replace("\"", ""));
+            }
+        });
+//        if (Model.instance.getCurrentUserModel() != null) {
+//            userName.setText(Model.instance.getCurrentUserModel().getFullName());
+//            currUser = Model.instance.getCurrentUserModel();
+//            Log.d("TAG",currUser.toString());
+//        }
+//        else
+//            userName.setText("Guest");
 
         connections = root.findViewById(R.id.profile_connections);
         connections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToConnectionsFragment());
+            }
+        });
+        edit = root.findViewById(R.id.profile_edit_btn);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToEditProfileFragment(currUser.getId()));
             }
         });
 

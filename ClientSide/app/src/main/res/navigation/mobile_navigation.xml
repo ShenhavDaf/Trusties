@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_connectionsFragment"
             app:destination="@id/connectionsFragment" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
 
     <fragment
@@ -71,4 +74,13 @@
         android:name="com.example.trusties.ui.profile.ConnectionsFragment"
         android:label="My Connections"
         tools:layout="@layout/fragment_connections" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.trusties.ui.profile.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
 </navigation>

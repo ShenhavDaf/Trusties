@@ -462,4 +462,22 @@ public class ModelServer {
             }
         });
     }
+
+    public void editUser(HashMap<String, String> map, String id, Model.editUserListener listener) {
+        String userId = Model.instance.getCurrentUserModel().userID;
+        Call<Void> editUser = retrofitInterface.editUser(accessToken, map, userId);
+
+        editUser.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
+    }
 }

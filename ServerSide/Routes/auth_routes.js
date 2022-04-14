@@ -148,5 +148,6 @@ router.post("/afterVerify", Auth.verifiedUser);
 router.get("/forgotPassword", Auth.forgotPassword);
 router.get("/findByEmail", Auth.findUserByEmail);
 router.get("/findById", Auth.findUserById);
+router.post("/editUser/:id", Auth.editUser);
 
 module.exports = router;
