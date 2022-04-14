@@ -41,6 +41,9 @@ public interface RetrofitInterface {
     @GET("/auth/findById")
     Call<JsonObject> findUserById(@Query("id") String userId);
 
+    @POST("/auth/editUser/{id}")
+    Call<Void> editUser(@Header("authorization") String accessToken, @Body HashMap<String, String> map, @Path("id") String id);
+
     /*------------------------------------------Posts----------------------------------------*/
 
     @GET("/post/allPosts")

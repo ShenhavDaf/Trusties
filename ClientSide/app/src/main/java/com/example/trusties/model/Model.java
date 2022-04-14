@@ -214,4 +214,15 @@ public class Model {
         modelServer.getMyPosts(id, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
+    public interface editUserListener{
+        void onComplete();
+    }
+
+    public void editUser(HashMap<String, String> map, String id, editUserListener listener) {
+        modelServer.editUser(map, id, listener);
+    }
+
+
 }

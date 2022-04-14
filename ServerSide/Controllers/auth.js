@@ -324,6 +324,33 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+//TODO: add edit password!
+const editUser = async (req, res, next) => {
+  try {
+    const exists = await User.updateOne(
+      { _id: req.params.id },
+      {
+        name: req.body.name,
+        phone: req.body.phone,
+      }
+    );
+    const updateUser = await User.findById(req.params.id);
+    if (exists == null) return sendError(res, 400, "post does not exist");
+    else {
+      console.log("user edited!");
+      res.status(200).send({
+        status: "OK",
+        user: updateUser,
+      });
+    }
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   login,
   register,
@@ -335,4 +362,6 @@ module.exports = {
   forgotPassword,
   findUserByEmail,
   findUserById,
+
+  editUser,
 };
