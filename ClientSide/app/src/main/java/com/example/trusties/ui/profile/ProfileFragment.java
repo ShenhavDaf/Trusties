@@ -32,6 +32,7 @@ public class ProfileFragment extends Fragment {
     private FragmentDashboardBinding binding;
     TextView userName;
     MyAdapter adapter;
+    TextView connections;
     SwipeRefreshLayout swipeRefresh;
     User currUser;
 
@@ -58,6 +59,14 @@ public class ProfileFragment extends Fragment {
         }
         else
             userName.setText("Guest");
+
+        connections = root.findViewById(R.id.profile_connections);
+        connections.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToConnectionsFragment());
+            }
+        });
 
         /**********************************/
         swipeRefresh = root.findViewById(R.id.profile_swiperefresh);
