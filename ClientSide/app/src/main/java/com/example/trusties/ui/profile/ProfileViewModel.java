@@ -1,7 +1,5 @@
-package com.example.trusties.ui.dashboard;
+package com.example.trusties.ui.profile;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.trusties.model.Model;
@@ -9,11 +7,11 @@ import com.example.trusties.model.Post;
 
 import java.util.List;
 
-public class DashboardViewModel extends ViewModel {
+public class ProfileViewModel extends ViewModel {
 
     List<Post> data;
 
-    public DashboardViewModel() {
+    public ProfileViewModel() {
         Model.instance.getAllPosts(postsList -> {
             this.data = postsList;
         });

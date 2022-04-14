@@ -1,4 +1,4 @@
-package com.example.trusties.ui.dashboard;
+package com.example.trusties.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,10 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,14 +24,11 @@ import com.example.trusties.databinding.FragmentDashboardBinding;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
-import com.example.trusties.ui.home.HomeFragment;
-import com.example.trusties.ui.home.HomeFragmentDirections;
-import com.example.trusties.ui.home.HomeViewModel;
 import com.google.android.material.card.MaterialCardView;
 
-public class DashboardFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private ProfileViewModel profileViewModel;
     private FragmentDashboardBinding binding;
     TextView userName;
     MyAdapter adapter;
@@ -44,7 +39,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -78,9 +73,9 @@ public class DashboardFragment extends Fragment {
         adapter.setOnItemClickListener((v, position) -> {
             System.out.println("the POSITION is:  " + position);
 
-            String postId = dashboardViewModel.getData().get(position).getId();
+            String postId = profileViewModel.getData().get(position).getId();
             System.out.println("the postID is:  " + postId);
-            Navigation.findNavController(v).navigate(DashboardFragmentDirections.actionNavigationDashboardToDetailsPostFragment(postId));
+            Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToDetailsPostFragment(postId));
         });
 
 
@@ -96,7 +91,7 @@ public class DashboardFragment extends Fragment {
 
     private void refresh() {
         Model.instance.getMyPosts(currUser.getId(),postsList -> {
-            dashboardViewModel.data = postsList;
+            profileViewModel.data = postsList;
             adapter.notifyDataSetChanged();
         });
 
@@ -113,7 +108,7 @@ public class DashboardFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, description, time, commentNumber;
 
-        public MyViewHolder(@NonNull View itemView, DashboardFragment.OnItemClickListener listener) {
+        public MyViewHolder(@NonNull View itemView, ProfileFragment.OnItemClickListener listener) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.listrow_username_tv);
@@ -158,36 +153,36 @@ public class DashboardFragment extends Fragment {
         void onItemClick(View v, int position);
     }
 
-    class MyAdapter extends RecyclerView.Adapter<DashboardFragment.MyViewHolder> {
+    class MyAdapter extends RecyclerView.Adapter<ProfileFragment.MyViewHolder> {
 
-        DashboardFragment.OnItemClickListener listener;
+        ProfileFragment.OnItemClickListener listener;
 
-        public void setOnItemClickListener(DashboardFragment.OnItemClickListener listener) {
+        public void setOnItemClickListener(ProfileFragment.OnItemClickListener listener) {
             this.listener = listener;
         }
 
         @NonNull
         @Override
-        public DashboardFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public ProfileFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
             View view = getLayoutInflater().inflate(R.layout.post_list_row, parent, false);
-            DashboardFragment.MyViewHolder holder = new DashboardFragment.MyViewHolder(view, listener);
+            ProfileFragment.MyViewHolder holder = new ProfileFragment.MyViewHolder(view, listener);
             return holder;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
-        public void onBindViewHolder(@NonNull DashboardFragment.MyViewHolder holder, int position) {
-            Post post = dashboardViewModel.getData().get(position);
+        public void onBindViewHolder(@NonNull ProfileFragment.MyViewHolder holder, int position) {
+            Post post = profileViewModel.getData().get(position);
             holder.bind(post);
         }
 
         @Override
         public int getItemCount() {
-            if (dashboardViewModel.getData() == null) {
+            if (profileViewModel.getData() == null) {
                 return 0;
             }
-            return dashboardViewModel.getData().size();
+            return profileViewModel.getData().size();
         }
     }
 }
