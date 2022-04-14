@@ -223,7 +223,7 @@ public class DetailsPostFragment extends Fragment {
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
-            username = itemView.findViewById(R.id.coomentListRow_userName_tv);
+            username = itemView.findViewById(R.id.connectionListRow_userName_tv);
             time = itemView.findViewById(R.id.coomentListRow_time_tv);
             content = itemView.findViewById(R.id.coomentListRow_content_ev);
 
