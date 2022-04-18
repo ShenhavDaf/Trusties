@@ -157,6 +157,7 @@ public class DetailsPostFragment extends Fragment {
         adapter = new DetailsPostFragment.MyAdapter();
         list.setAdapter(adapter);
 
+
 //        adapter.setOnItemClickListener((v, position) -> {
 //            String postId = postViewModel.getData().get(position).toString();
 //            System.out.println("Comments:  " + postId);
