@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -9,6 +10,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tokens: {
+    type: [String],
+  },
   name: {
     type: String,
     required: true,
@@ -17,17 +21,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   rating: {
     type: Number,
     required: false,
     default: 0,
   },
-  verified: {
-    type: Boolean,
-    default: false,
-  },
-  tokens: {
-    type: [String],
+  friends: {
+    type: [mongoose.Schema.Types.ObjectId],
   },
 });
 

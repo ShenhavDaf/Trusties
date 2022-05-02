@@ -39,6 +39,8 @@ public class AddPostFragment extends Fragment {
     ProgressBar progressBar;
     //TODO: location
 
+    Integer circle;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,34 +91,31 @@ public class AddPostFragment extends Fragment {
 
     private void FindFirstCircle() {
 
+        circle = 1;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             firstCircleBtn.setBackgroundColor(firstCircleBtn.getContext().getColor(R.color.titleColor));
             secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.lightGray));
             thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
         }
-
-        //TODO
     }
 
     private void FindSecondCircle() {
-        // first + second
-
         FindFirstCircle();
+        circle = 2;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.titleColor));
             thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
         }
-
-        //TODO
     }
 
     private void FindThirdCircle() {
-        // second (Inside there is also the first) + third
         FindSecondCircle();
+        circle = 3;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.titleColor));
         }
-        //TODO
     }
 
     private void PostQuestion(View view) {
@@ -130,6 +129,13 @@ public class AddPostFragment extends Fragment {
     }
 
     private void createPost(View view, String type) {
+
+        String currUserID = Model.instance.getCurrentUserModel().getId();
+
+        Model.instance.getFriendsList(currUserID, circle, friendsList -> {
+            System.out.println(circle + "--> " + friendsList);
+        });
+
         String title = postTitle.getText().toString();
         String message = description.getText().toString();
 //        User user = HomeFragment.connectedUser;

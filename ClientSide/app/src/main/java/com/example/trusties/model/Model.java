@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -105,6 +106,16 @@ public class Model {
     public void findUserById(String id, findUserByIdListener listener) {
         modelServer.findUserById(id, listener);
     }
+
+    /* ---------------------------------------------------------------------------- */
+    public interface friendsListListener {
+        void onComplete(JsonArray friendsList);
+    }
+
+    public void getFriendsList(String userID, Integer circle, friendsListListener listener) {
+        modelServer.getFriendsList(userID, circle, listener);
+    }
+
     /* ---------------------------------------------------------------------------- */
 
     public interface addPostListener {
@@ -181,8 +192,8 @@ public class Model {
         void onComplete(List<Comment> commentsList);
     }
 
-    public void getPostComments(String postId,allCommentsListener listener) {
-        modelServer.getPostComments(postId,listener);
+    public void getPostComments(String postId, allCommentsListener listener) {
+        modelServer.getPostComments(postId, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -216,7 +227,7 @@ public class Model {
 
     /* ---------------------------------------------------------------------------- */
 
-    public interface editUserListener{
+    public interface editUserListener {
         void onComplete();
     }
 
