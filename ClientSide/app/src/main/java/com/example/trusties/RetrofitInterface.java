@@ -43,6 +43,10 @@ public interface RetrofitInterface {
 
     @POST("/auth/editUser/{id}")
     Call<Void> editUser(@Header("authorization") String accessToken, @Body HashMap<String, String> map, @Path("id") String id);
+    /*------------------------------------------Users----------------------------------------*/
+
+    @GET("/user/getFriendsList")
+    Call<JsonArray> getFriendsList(@Query("id") String userID, @Query("circle") Integer circleNumber);
 
     /*------------------------------------------Posts----------------------------------------*/
 

@@ -28,7 +28,7 @@ public class ModelServer {
 
     private final RetrofitInterface retrofitInterface;
     final private static String BASE_URL = "http://10.0.2.2:4000";
-//final private static String BASE_URL = "http://193.106.55.119:4000";
+    //final private static String BASE_URL = "http://193.106.55.119:4000";
     private String accessToken;
 
     public ModelServer() {
@@ -241,6 +241,21 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
+    public void getFriendsList(String userID, Integer circle, Model.friendsListListener listener) {
+        retrofitInterface.getFriendsList(userID, circle).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
 
     public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
         Call<Void> add = retrofitInterface.addPost(accessToken, map);
@@ -284,7 +299,7 @@ public class ModelServer {
 
     public void getPostById(String postId, Model.getPostByIdListener listener) {
 
-        Call<JsonObject> postDetails = retrofitInterface.getPostById(accessToken,postId);
+        Call<JsonObject> postDetails = retrofitInterface.getPostById(accessToken, postId);
         postDetails.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -380,16 +395,16 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void getPostComments(String postId,Model.allCommentsListener listener) {
+    public void getPostComments(String postId, Model.allCommentsListener listener) {
 
-        retrofitInterface.getPostComments(accessToken,postId).enqueue(new Callback<JsonArray>() {
+        retrofitInterface.getPostComments(accessToken, postId).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
 
                 List<Comment> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
                     if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
-                    list.add(Comment.create(element.getAsJsonObject()));
+                        list.add(Comment.create(element.getAsJsonObject()));
                 }
                 listener.onComplete(list);
             }
@@ -404,7 +419,7 @@ public class ModelServer {
     //Chnage to MAP instead of String.
     public void editComment(HashMap<String, String> map, String id, Model.editCommentListener listener) {
 
-        Call<Void> editComment = retrofitInterface.editComment(accessToken, map,id);
+        Call<Void> editComment = retrofitInterface.editComment(accessToken, map, id);
 
 
         editComment.enqueue(new Callback<Void>() {
