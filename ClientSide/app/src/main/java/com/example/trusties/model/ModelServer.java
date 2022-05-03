@@ -495,4 +495,25 @@ public class ModelServer {
         });
 
     }
+
+    public void getAllUsers(Model.allUsersListener listener) {
+
+        retrofitInterface.getAllUsers(accessToken).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                List<User> list = new ArrayList<>();
+                for (JsonElement element : response.body()) {
+                    if (element.getAsJsonObject().get("verified").getAsBoolean())
+                        list.add(User.create(element.getAsJsonObject()));
+                }
+
+                listener.onComplete(list);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+    }
 }

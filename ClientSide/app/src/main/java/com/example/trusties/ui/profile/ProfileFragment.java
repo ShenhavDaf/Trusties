@@ -55,13 +55,14 @@ public class ProfileFragment extends Fragment {
         /**********************************/
 
         userName = root.findViewById(R.id.profile_name);
-                    currUser = Model.instance.getCurrentUserModel();
+        currUser = Model.instance.getCurrentUserModel();
         Model.instance.findUserById(Model.instance.getCurrentUserModel().getId(), new Model.findUserByIdListener() {
             @Override
             public void onComplete(JsonObject user) {
                 userName.setText(user.get("name").toString().replace("\"", ""));
             }
         });
+
 //        if (Model.instance.getCurrentUserModel() != null) {
 //            userName.setText(Model.instance.getCurrentUserModel().getFullName());
 //            currUser = Model.instance.getCurrentUserModel();
@@ -71,6 +72,9 @@ public class ProfileFragment extends Fragment {
 //            userName.setText("Guest");
 
         connections = root.findViewById(R.id.profile_connections);
+        Model.instance.getFriendsList(currUser.getId(), 1, friendsList -> {
+            connections.setText( friendsList.size() + " connections");
+        });
         connections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
