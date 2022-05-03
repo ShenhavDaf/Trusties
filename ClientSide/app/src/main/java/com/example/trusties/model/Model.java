@@ -236,4 +236,16 @@ public class Model {
     }
 
 
+    /* ---------------------------------------------------------------------------- */
+
+    public interface allUsersListener {
+        void onComplete(List<User> usersList);
+    }
+
+    public void getAllUsers(allUsersListener listener) {
+        modelServer.getAllUsers(listener);
+    }
+
+
+
 }
