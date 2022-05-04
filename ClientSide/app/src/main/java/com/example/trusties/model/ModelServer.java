@@ -478,6 +478,8 @@ public class ModelServer {
         });
     }
 
+    /* ------------------------------------------------------------------------- */
+
     public void editUser(HashMap<String, String> map, String id, Model.editUserListener listener) {
         String userId = Model.instance.getCurrentUserModel().userID;
         Call<Void> editUser = retrofitInterface.editUser(accessToken, map, userId);
@@ -495,6 +497,8 @@ public class ModelServer {
         });
 
     }
+
+    /* ------------------------------------------------------------------------- */
 
     public void getAllUsers(Model.allUsersListener listener) {
 
@@ -517,6 +521,8 @@ public class ModelServer {
         });
     }
 
+    /* ------------------------------------------------------------------------- */
+
     public void getSecondCircle(String userID, Model.secondCircleListener listener) {
         retrofitInterface.getSecondCircle(userID).enqueue(new Callback<JsonArray>() {
             @Override
@@ -531,6 +537,8 @@ public class ModelServer {
         });
     }
 
+    /* ------------------------------------------------------------------------- */
+
     public void getThirdCircle(String userID, Model.thirdCircleListener listener) {
         retrofitInterface.getThirdCircle(userID).enqueue(new Callback<JsonArray>() {
             @Override
@@ -541,6 +549,23 @@ public class ModelServer {
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 System.out.println("--- failed\n" + t.getMessage());
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void addFriendToMyContacts(String myID, String hisID, Model.addFriendListener listener) {
+
+        retrofitInterface.addFriend(myID,hisID).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
             }
         });
     }

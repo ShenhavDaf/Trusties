@@ -246,6 +246,7 @@ public class Model {
         modelServer.getAllUsers(listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
 
     public interface secondCircleListener {
         void onComplete(JsonArray friendsList);
@@ -255,12 +256,24 @@ public class Model {
         modelServer.getSecondCircle(userID, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
     public interface thirdCircleListener {
         void onComplete(JsonArray friendsList);
     }
 
     public void getThirdCircle(String userID ,thirdCircleListener listener) {
         modelServer.getThirdCircle(userID, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface addFriendListener {
+        void onComplete();
+    }
+
+    public void addFriendToMyContacts(String myID,String hisID,addFriendListener listener) {
+        modelServer.addFriendToMyContacts(myID,hisID, listener);
     }
 
 }

@@ -37,9 +37,10 @@ public class OthersProfileFragment extends Fragment {
     MyAdapter adapter;
     TextView connections;
     SwipeRefreshLayout swipeRefresh;
-    JsonObject currUser;
-    Button edit;
+    JsonObject profileUser;
+    Button add;
     String userId;
+    User currUser;
 
 
     @Override
@@ -62,10 +63,10 @@ public class OthersProfileFragment extends Fragment {
             @Override
             public void onComplete(JsonObject user) {
                 userName.setText(user.get("name").toString().replace("\"", ""));
-                currUser = user;
+                profileUser = user;
             }
         });
-//        currUser = Model.instance.getCurrentUserModel();
+        currUser = Model.instance.getCurrentUserModel();
 //        Model.instance.findUserById(Model.instance.getCurrentUserModel().getId(), new Model.findUserByIdListener() {
 //            @Override
 //            public void onComplete(JsonObject user) {
@@ -78,11 +79,16 @@ public class OthersProfileFragment extends Fragment {
             connections.setText( friendsList.size() + " connections");
         });
 
-        edit = root.findViewById(R.id.Othersprofile_add_btn);
-        edit.setOnClickListener(new View.OnClickListener() {
+        add = root.findViewById(R.id.Othersprofile_add_btn);
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToEditProfileFragment(currUser.getId()));
+//                Model.instance.addFriendToMyContacts(currUser.getId(),userId, new Model.addFriendListener() {
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
             }
         });
 
