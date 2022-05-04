@@ -51,6 +51,12 @@ public interface RetrofitInterface {
     @GET("/user/getFriendsList")
     Call<JsonArray> getFriendsList(@Query("id") String userID, @Query("circle") Integer circleNumber);
 
+    @GET("/user/second/{id}")
+    Call<JsonArray> getSecondCircle(@Query("id") String userID);
+
+    @GET("/user/third/{id}")
+    Call<JsonArray> getThirdCircle(@Query("id") String userID);
+
     /*------------------------------------------Posts----------------------------------------*/
 
     @GET("/post/allPosts")

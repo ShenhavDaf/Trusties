@@ -55,6 +55,7 @@ public class ConnectionsFragment extends Fragment {
         connectionsViewModel = new ViewModelProvider(this).get(ConnectionsViewModel.class);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,35 +82,88 @@ public class ConnectionsFragment extends Fragment {
 
             String userId = connectionsViewModel.getData().get(position).get("id").toString().replace("\"", "");
             System.out.println("the userID is:  " + userId);
-           // Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToDetailsPostFragment(postId));
+            // Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToDetailsPostFragment(postId));
+        });
+
+        firstCircle = root.findViewById(R.id.connections_firstcircle_btn);
+        firstCircle.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+                firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.titleColor));
+                secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.lightGray));
+                thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.lightGray));
+                refreshFirstCircle(1);
+            }
         });
 
         secondCircle = root.findViewById(R.id.connections_secondcircle_btn);
         secondCircle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshFirstCircle(2);
+                adapter.notifyDataSetChanged();
+                firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.lightGray));
+                secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.titleColor));
+                thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.lightGray));
+                Model.instance.getSecondCircle(currUser.getId(), new Model.secondCircleListener() {
+                    @Override
+                    public void onComplete(JsonArray friendsList) {
+                        List<JsonObject> userId = new LinkedList<>();
+                        for (JsonElement elem : friendsList) {
+                            Model.instance.findUserById(elem.toString().replace("\"", ""), new Model.findUserByIdListener() {
+                                @Override
+                                public void onComplete(JsonObject user) {
+//                                    Log.d("TAG", " complete " + user);
+                                    adapter.notifyDataSetChanged();
+                                    userId.add(user);
+                                }
+                            });
+                        }
+                        connectionsViewModel.data = userId;
+                    }
+                });
+//                adapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+//                refreshFirstCircle(2);
             }
+
         });
 
-        firstCircle =  root.findViewById(R.id.connections_firstcircle_btn);
-        firstCircle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshFirstCircle(1);
-            }
-        });
-
-        thirdCircle =  root.findViewById(R.id.connections_thirdcircle_btn);
+        thirdCircle = root.findViewById(R.id.connections_thirdcircle_btn);
         thirdCircle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                refreshFirstCircle(3);
+                firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.lightGray));
+                secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.lightGray));
+                thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.titleColor));
+                Model.instance.getThirdCircle(currUser.getId(), new Model.thirdCircleListener() {
+                    @Override
+                    public void onComplete(JsonArray friendsList) {
+                        List<JsonObject> userId = new LinkedList<>();
+                        for (JsonElement elem : friendsList) {
+                            Model.instance.findUserById(elem.toString().replace("\"", ""), new Model.findUserByIdListener() {
+                                @Override
+                                public void onComplete(JsonObject user) {
+//                                    Log.d("TAG", " complete " + user);
+                                    userId.add(user);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                        connectionsViewModel.data = userId;
+                    }
+                });
+//                adapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
             }
-        });
 
-//
-//        refreshFirstCircle(1);
+        });
+        firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.titleColor));
+        secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.lightGray));
+        thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.lightGray));
+
+        refreshFirstCircle(1);
         return root;
     }
 
@@ -118,28 +172,21 @@ public class ConnectionsFragment extends Fragment {
         Model.instance.getFriendsList(currUser.getId(), circle, new Model.friendsListListener() {
             @Override
             public void onComplete(JsonArray friendsList) {
-//              connectionsViewModel.data = friendsList;
-                for (JsonElement elem:friendsList){
-//                    Log.d("TAG", " elem " + elem.toString().replace("\"", ""));
+                for (JsonElement elem : friendsList) {
                     Model.instance.findUserById(elem.toString().replace("\"", ""), new Model.findUserByIdListener() {
                         @Override
                         public void onComplete(JsonObject user) {
-                            Log.d("TAG", " complete " + user);
+//                            Log.d("TAG", " complete " + user);
                             userId.add(user);
+                            adapter.notifyDataSetChanged();
                         }
                     });
-
                 }
                 connectionsViewModel.data = userId;
-//                adapter.notifyDataSetChanged();
             }
         });
+//
 //        adapter.notifyDataSetChanged();
-//        Model.instance.getAllUsers(usersList -> {
-//            connectionsViewModel.data = usersList;
-            adapter.notifyDataSetChanged();
-//        });
-
         swipeRefresh.setRefreshing(false);
     }
 
@@ -170,7 +217,19 @@ public class ConnectionsFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(JsonObject user) {
             userName.setText(user.get("name").toString().replace("\"", ""));
-            numberConnections.setText("100 connections");
+            Model.instance.findUserByEmail(user.get("email").toString().replace("\"", ""), new Model.findUserByEmailListener() {
+                @Override
+                public void onComplete(JsonObject user) {
+                    Model.instance.getFriendsList(user.get("_id").toString().replace("\"", ""), 1, new Model.friendsListListener() {
+                        @Override
+                        public void onComplete(JsonArray friendsList) {
+                            numberConnections.setText(friendsList.size() + " connections");
+                        }
+                    });
+                }
+            });
+//            Log.d("TAG",user.toString());
+
         }
     }
 
@@ -203,7 +262,7 @@ public class ConnectionsFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ConnectionsFragment.MyViewHolder holder, int position) {
             JsonObject user = connectionsViewModel.getData().get(position);
-            Log.d("TAG","user - " + user);
+            Log.d("TAG", "user - " + user);
             holder.bind(user);
         }
 

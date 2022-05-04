@@ -247,5 +247,20 @@ public class Model {
     }
 
 
+    public interface secondCircleListener {
+        void onComplete(JsonArray friendsList);
+    }
+
+    public void getSecondCircle(String userID ,secondCircleListener listener) {
+        modelServer.getSecondCircle(userID, listener);
+    }
+
+    public interface thirdCircleListener {
+        void onComplete(JsonArray friendsList);
+    }
+
+    public void getThirdCircle(String userID ,thirdCircleListener listener) {
+        modelServer.getThirdCircle(userID, listener);
+    }
 
 }
