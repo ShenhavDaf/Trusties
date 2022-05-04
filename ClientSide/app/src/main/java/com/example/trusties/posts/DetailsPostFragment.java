@@ -52,6 +52,7 @@ public class DetailsPostFragment extends Fragment {
     ImageView imgUser;
     ImageView sendCommentBtn;
     View line;
+    String senderId;
 
     private DetailsPostViewModel postViewModel;
     private FragmentDetailsPostBinding binding;
@@ -100,7 +101,7 @@ public class DetailsPostFragment extends Fragment {
                 String description = post.get("description").toString().replace("\"", "");
 //                String time = post.get("time").toString().replace("\"", "");
                 String time = post.get("time").getAsString().substring(0, 16).replace("T", "  ").replace("-", "/");
-                String senderId = post.get("sender").toString().replace("\"", "");
+                senderId = post.get("sender").toString().replace("\"", "");
                 String status = post.get("status").toString().replace("\"", "");
                 String role = post.get("role").toString().replace("\"", "");
                 displayPost(title, description, time,senderId, status, role);
@@ -156,6 +157,13 @@ public class DetailsPostFragment extends Fragment {
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new DetailsPostFragment.MyAdapter();
         list.setAdapter(adapter);
+
+        authorEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToOthersProfileFragment(senderId));
+            }
+        });
 
 
 //        adapter.setOnItemClickListener((v, position) -> {

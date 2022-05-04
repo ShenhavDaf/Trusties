@@ -48,6 +48,7 @@ public class ConnectionsFragment extends Fragment {
     Button secondCircle;
     Button firstCircle;
     Button thirdCircle;
+    String userId;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -80,9 +81,15 @@ public class ConnectionsFragment extends Fragment {
         adapter.setOnItemClickListener((v, position) -> {
             System.out.println("the POSITION is:  " + position);
 
-            String userId = connectionsViewModel.getData().get(position).get("id").toString().replace("\"", "");
-            System.out.println("the userID is:  " + userId);
-            // Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToDetailsPostFragment(postId));
+            Model.instance.findUserByEmail(connectionsViewModel.getData().get(position).get("email").toString().replace("\"", ""), new Model.findUserByEmailListener() {
+                @Override
+                public void onComplete(JsonObject user) {
+                    userId = user.get("_id").toString().replace("\"", "");
+                    System.out.println("the userID is:  " + userId);
+                    Navigation.findNavController(v).navigate(ConnectionsFragmentDirections.actionConnectionsFragmentToOthersProfileFragment(userId));
+                }
+            });
+
         });
 
         firstCircle = root.findViewById(R.id.connections_firstcircle_btn);
