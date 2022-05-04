@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_detailsPostFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_detailsPostFragment_to_othersProfileFragment"
+            app:destination="@id/othersProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/editPostFragment"
@@ -73,7 +76,11 @@
         android:id="@+id/connectionsFragment"
         android:name="com.example.trusties.ui.profile.ConnectionsFragment"
         android:label="My Connections"
-        tools:layout="@layout/fragment_connections" />
+        tools:layout="@layout/fragment_connections" >
+        <action
+            android:id="@+id/action_connectionsFragment_to_othersProfileFragment"
+            app:destination="@id/othersProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.trusties.ui.profile.EditProfileFragment"
@@ -82,5 +89,17 @@
         <argument
             android:name="userId"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/othersProfileFragment"
+        android:name="com.example.trusties.ui.profile.OthersProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_others_profile">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_othersProfileFragment_to_detailsPostFragment"
+            app:destination="@id/detailsPostFragment" />
     </fragment>
 </navigation>
