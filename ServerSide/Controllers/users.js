@@ -125,6 +125,49 @@ const getThirdCircleOnly = async (req, res) => {
   }
 };
 
+//NOT WORKING PROPERLY - TODO
+const addFriendToMyContacts = async (req, res, next) => {
+  console.log("add new friend ");
+
+  const me = await User.findOne({ _id: req.query.myId });
+  const otherUser = await User.findOne({ _id: req.query.hisId });
+  const time = req.body.currentTime;
+
+  me.save(async (error) => {
+    if (error) {
+      res.status(400).send({
+        status: "fail",
+        error: error.message,
+      });
+    } else {
+      await User.updateOne(
+        { _id: req.query.myId },
+        {
+          $push: { friends: otherUser },
+        }
+      );
+    }
+  });
+  otherUser.save(async (error) => {
+    if (error) {
+      res.status(400).send({
+        status: "fail",
+        error: error.message,
+      });
+    } else {
+      await User.updateOne(
+        { _id: req.query.otherUser },
+        {
+          $push: { friends: me },
+        }
+      );
+    }
+  });
+  res.status(200).send({
+    status: "OK",
+  });
+};
+
 module.exports = {
   // findUserByEmail,
   // findUserById,
@@ -132,4 +175,5 @@ module.exports = {
   getFriendsList,
   getSecondCircleOnly,
   getThirdCircleOnly,
+  addFriendToMyContacts,
 };

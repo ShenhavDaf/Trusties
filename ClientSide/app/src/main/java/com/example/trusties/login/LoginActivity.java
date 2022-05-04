@@ -23,7 +23,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder().build();
+//        mAppBarConfiguration = new AppBarConfiguration.Builder().build();
+        /*HIDES THE TOP ACTION BAR*/
+        getSupportActionBar().hide();
         NavHost navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.login_navhost);
         navCtl = navHost.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navCtl);
