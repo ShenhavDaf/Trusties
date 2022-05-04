@@ -52,9 +52,84 @@ async function findFriends(list, currID) {
   return unique;
 }
 
+const getSecondCircleOnly = async (req, res) => {
+  try {
+    const user = await User.findById(req.query.id);
+    const currID = req.query.id;
+    const firstList = user.friends;
+    const temp = new Array();
+
+    for (let i = 0; i < firstList.length; i++) {
+      const friend = await User.findById(firstList[i]);
+      for (let j = 0; j < friend.friends.length; j++) {
+        if (friend.friends[j] != currID) temp.push(friend.friends[j]);
+      }
+    }
+
+    // Remove duplicates
+    const unique = temp.filter(
+      (value, index, self) =>
+        index === self.findIndex((t) => String(t) === String(value))
+    );
+
+    res.status(200).send(temp);
+
+    //
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
+
+const getThirdCircleOnly = async (req, res) => {
+  try {
+    const user = await User.findById(req.query.id);
+    const currID = req.query.id;
+    const firstList = user.friends;
+    const temp = new Array();
+    const list = new Array();
+    for (let i = 0; i < firstList.length; i++) {
+      const friend = await User.findById(firstList[i]);
+      for (let j = 0; j < friend.friends.length; j++) {
+        if (friend.friends[j] != currID) temp.push(friend.friends[j]);
+      }
+    }
+    console.log(temp);
+    console.log("&&&&");
+    for (let i = 0; i < temp.length; i++) {
+      const friend = await User.findById(temp[i]);
+      console.log(temp.length);
+      for (let j = 0; j < friend.friends.length; j++) {
+        console.log(friend.friends.length);
+        if (friend.friends[j] != currID) list.push(friend.friends[j]);
+      }
+    }
+    console.log(list);
+
+    // Remove duplicates
+    const unique = list.filter(
+      (value, index, self) =>
+        index === self.findIndex((t) => String(t) === String(value))
+    );
+
+    res.status(200).send(list);
+
+    //
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   // findUserByEmail,
   // findUserById,
   // editUser,
   getFriendsList,
+  getSecondCircleOnly,
+  getThirdCircleOnly,
 };

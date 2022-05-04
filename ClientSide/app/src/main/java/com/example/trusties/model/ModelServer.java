@@ -516,4 +516,32 @@ public class ModelServer {
             }
         });
     }
+
+    public void getSecondCircle(String userID, Model.secondCircleListener listener) {
+        retrofitInterface.getSecondCircle(userID).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
+            }
+        });
+    }
+
+    public void getThirdCircle(String userID, Model.thirdCircleListener listener) {
+        retrofitInterface.getThirdCircle(userID).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
+            }
+        });
+    }
 }

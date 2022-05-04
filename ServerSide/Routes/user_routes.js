@@ -5,5 +5,7 @@ const User = require("../Controllers/users");
 const authenticate = require("../Common/auth_middleware");
 
 router.get("/:id", /*authenticate,*/ User.getFriendsList);
+router.get("/second/:id", /*authenticate,*/ User.getSecondCircleOnly);
+router.get("/third/:id", /*authenticate,*/ User.getThirdCircleOnly);
 
 module.exports = router;
