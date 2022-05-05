@@ -1,3 +1,4 @@
+const { status } = require("express/lib/response");
 const User = require("../Models/user_model");
 
 const getFriendsList = async (req, res) => {
@@ -65,14 +66,16 @@ const getSecondCircleOnly = async (req, res) => {
         if (friend.friends[j] != currID) temp.push(friend.friends[j]);
       }
     }
-
     // Remove duplicates
     const unique = temp.filter(
       (value, index, self) =>
         index === self.findIndex((t) => String(t) === String(value))
     );
+    // uniqueArray = a.filter(function(item, pos, self) {
+    // return self.indexOf(item) == pos;
+    // })
 
-    res.status(200).send(temp);
+    res.status(200).send(unique);
 
     //
   } catch (err) {
@@ -96,17 +99,14 @@ const getThirdCircleOnly = async (req, res) => {
         if (friend.friends[j] != currID) temp.push(friend.friends[j]);
       }
     }
-    console.log(temp);
-    console.log("&&&&");
     for (let i = 0; i < temp.length; i++) {
       const friend = await User.findById(temp[i]);
-      console.log(temp.length);
       for (let j = 0; j < friend.friends.length; j++) {
-        console.log(friend.friends.length);
         if (friend.friends[j] != currID) list.push(friend.friends[j]);
       }
     }
-    console.log(list);
+    // console.log(list);
+    let count = 0;
 
     // Remove duplicates
     const unique = list.filter(
@@ -114,9 +114,30 @@ const getThirdCircleOnly = async (req, res) => {
         index === self.findIndex((t) => String(t) === String(value))
     );
 
-    res.status(200).send(list);
+    // const found = unique.forEach((r) => {
+    //   console.log(String(r));
+    //   if (firstList.includes(String(r))) {
+    //     console.log(unique.indexOf(r));
+    //     unique.splice(unique.indexOf(r), 1);
+    //     console.log("Rere");
+    //     console.log(unique);
 
-    //
+    //     count--;
+    //   }
+    //   count++;
+    // });
+
+    //Check if theres a loop(third circle contains first circle)
+    for (let i = 0; i < unique.length; i++) {
+      if (firstList.includes(unique.at(i))) {
+        unique.splice(unique.indexOf(unique.at(i)), 1);
+        i--;
+      }
+    }
+    console.log(unique);
+    console.log("sent");
+    res.status(200).send(unique);
+    console.log("sewwnt");
   } catch (err) {
     res.status(400).send({
       status: "fail",
@@ -125,46 +146,50 @@ const getThirdCircleOnly = async (req, res) => {
   }
 };
 
-//NOT WORKING PROPERLY - TODO
 const addFriendToMyContacts = async (req, res, next) => {
   console.log("add new friend ");
 
   const me = await User.findOne({ _id: req.query.myId });
   const otherUser = await User.findOne({ _id: req.query.hisId });
-  const time = req.body.currentTime;
 
-  me.save(async (error) => {
-    if (error) {
-      res.status(400).send({
-        status: "fail",
-        error: error.message,
-      });
-    } else {
-      await User.updateOne(
-        { _id: req.query.myId },
-        {
-          $push: { friends: otherUser },
-        }
-      );
-    }
+  const myPromise = new Promise((resolve, reject) => {
+    me.save(async (error) => {
+      if (error) {
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+        });
+      } else {
+        await User.updateOne(
+          { _id: me._id },
+          {
+            $push: { friends: otherUser._id },
+          }
+        );
+        resolve("done");
+      }
+    });
+
+    otherUser.save(async (error) => {
+      if (error) {
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+        });
+      } else {
+        await User.updateOne(
+          { _id: otherUser._id },
+          {
+            $push: { friends: me._id },
+          }
+        );
+      }
+      resolve("done");
+    });
   });
-  otherUser.save(async (error) => {
-    if (error) {
-      res.status(400).send({
-        status: "fail",
-        error: error.message,
-      });
-    } else {
-      await User.updateOne(
-        { _id: req.query.otherUser },
-        {
-          $push: { friends: me },
-        }
-      );
-    }
-  });
-  res.status(200).send({
-    status: "OK",
+  myPromise.then((alert) => {
+    res.status(200).send(me);
+    console.log(alert);
   });
 };
 

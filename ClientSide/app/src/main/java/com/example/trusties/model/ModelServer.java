@@ -557,7 +557,7 @@ public class ModelServer {
 
     public void addFriendToMyContacts(String myID, String hisID, Model.addFriendListener listener) {
 
-        retrofitInterface.addFriend(myID,hisID).enqueue(new Callback<Void>() {
+        retrofitInterface.addFriendToMyContacts(myID,hisID).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 listener.onComplete();
@@ -569,4 +569,6 @@ public class ModelServer {
             }
         });
     }
+
+
 }
