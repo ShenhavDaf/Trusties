@@ -53,6 +53,7 @@ public class DetailsPostFragment extends Fragment {
     ImageView sendCommentBtn;
     View line;
     String senderId;
+    User currUser;
 
     private DetailsPostViewModel postViewModel;
     private FragmentDetailsPostBinding binding;
@@ -80,7 +81,7 @@ public class DetailsPostFragment extends Fragment {
         titleEt = view.findViewById(R.id.postdetails_title_tv);
         timeEt = view.findViewById(R.id.postdetails_time_tv);
         authorEt = view.findViewById(R.id.postdetails_author_tv);
-        descriptionEt=view.findViewById(R.id.postdetails_description_tv);
+        descriptionEt = view.findViewById(R.id.postdetails_description_tv);
         roleEt = view.findViewById(R.id.postdetails_role_tv);
         statusEt = view.findViewById(R.id.postdetails_status_tv);
         editBtn = view.findViewById(R.id.postdetails_edit_btn);
@@ -104,18 +105,17 @@ public class DetailsPostFragment extends Fragment {
                 senderId = post.get("sender").toString().replace("\"", "");
                 String status = post.get("status").toString().replace("\"", "");
                 String role = post.get("role").toString().replace("\"", "");
-                displayPost(title, description, time,senderId, status, role);
+                displayPost(title, description, time, senderId, status, role);
                 progressBar.setVisibility(View.GONE);
 
                 //Checking if the Current user is the sender of the post for enabling the - EditBtn and DeleteBtn-
                 Model.instance.findUserById(post.get("sender").toString().replace("\"", ""), new Model.findUserByIdListener() {
                     @Override
                     public void onComplete(JsonObject user) {
-                        if(user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail())==0){
+                        if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
                             deleteBtn.setEnabled(true);
                             deleteBtn.setEnabled(true);
-                        }
-                        else{
+                        } else {
                             deleteBtn.setEnabled(false);
                             editBtn.setEnabled(false);
                         }
@@ -157,11 +157,15 @@ public class DetailsPostFragment extends Fragment {
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new DetailsPostFragment.MyAdapter();
         list.setAdapter(adapter);
+        currUser = Model.instance.getCurrentUserModel();
 
         authorEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToOthersProfileFragment(senderId));
+                if (senderId.equals(currUser.getId()))
+                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToNavigationDashboard());
+                else
+                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToOthersProfileFragment(senderId));
             }
         });
 
@@ -176,7 +180,7 @@ public class DetailsPostFragment extends Fragment {
     }
 
     private void refresh() {
-        Model.instance.getPostComments(postId,commentsList -> {
+        Model.instance.getPostComments(postId, commentsList -> {
             System.out.println("Comments" + commentsList.size());
             postViewModel.data = commentsList;
             adapter.notifyDataSetChanged();
@@ -186,8 +190,7 @@ public class DetailsPostFragment extends Fragment {
     }
 
 
-    public void displayPost(String title, String description, String time,String senderId, String status, String role)
-    {
+    public void displayPost(String title, String description, String time, String senderId, String status, String role) {
         Model.instance.findUserById(senderId, user -> {
             titleEt.setText(title);
             descriptionEt.setText(description);
@@ -203,7 +206,7 @@ public class DetailsPostFragment extends Fragment {
 
             updateUI(View.VISIBLE);
 
-            if(role == "SOS") {
+            if (role == "SOS") {
                 // TODO: Display specific details of SOS call
             }
         });
@@ -225,9 +228,9 @@ public class DetailsPostFragment extends Fragment {
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView username,time;
+        TextView username, time;
         EditText content;
-        Button delete,edit,editsave;
+        Button delete, edit, editsave;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -236,10 +239,9 @@ public class DetailsPostFragment extends Fragment {
             time = itemView.findViewById(R.id.coomentListRow_time_tv);
             content = itemView.findViewById(R.id.coomentListRow_content_ev);
 
-            delete=itemView.findViewById(R.id.coomentListRow_deleteBtn);
-            edit=itemView.findViewById(R.id.coomentListRow_editBtn);
-            editsave=itemView.findViewById(R.id.coomentListRow_saveEditBtn);
-
+            delete = itemView.findViewById(R.id.coomentListRow_deleteBtn);
+            edit = itemView.findViewById(R.id.coomentListRow_editBtn);
+            editsave = itemView.findViewById(R.id.coomentListRow_saveEditBtn);
 
 
             edit.setOnClickListener(v -> {
@@ -250,15 +252,15 @@ public class DetailsPostFragment extends Fragment {
                 editsave.setVisibility(View.VISIBLE);
             });
 
-            editsave.setOnClickListener(v->{
-               int pos=getAdapterPosition();
-               Comment comment=postViewModel.getData().get(pos);
+            editsave.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                Comment comment = postViewModel.getData().get(pos);
 
-               HashMap<String, String> map = new HashMap<>();
-               map.put("content", content.getText().toString());
-               String id=comment.getCommentId().toString();
+                HashMap<String, String> map = new HashMap<>();
+                map.put("content", content.getText().toString());
+                String id = comment.getCommentId().toString();
 
-                Model.instance.editComment(map,id, () -> {
+                Model.instance.editComment(map, id, () -> {
                     System.out.println("Save on DB");
                     // TODO: Add comment to local DB ??
                     content.setEnabled(false);
@@ -272,17 +274,17 @@ public class DetailsPostFragment extends Fragment {
             //Need to change to delete comment in server side.
 
             delete.setOnClickListener(v -> {
-                        //TODO: ADD REFRESH
-                        int pos = getAdapterPosition();
-                        Comment comment = postViewModel.getData().get(pos);
+                //TODO: ADD REFRESH
+                int pos = getAdapterPosition();
+                Comment comment = postViewModel.getData().get(pos);
 
-                        String id = comment.getCommentId().toString();
+                String id = comment.getCommentId().toString();
 
-                        Model.instance.deleteComment(id, () -> {
+                Model.instance.deleteComment(id, () -> {
 
-                            refresh();
-                        });
-                    });
+                    refresh();
+                });
+            });
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -301,14 +303,13 @@ public class DetailsPostFragment extends Fragment {
                     username.setText(user.get("name").toString().replace("\"", ""));
 
                     //Checking if the Current user is the sender of the post for enabling the - Editand Delete comments-
-                     if(user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail())==0){
-                         delete.setVisibility(View.VISIBLE);
-                         edit.setVisibility(View.VISIBLE);
-                     }
-                     else{
-                         delete.setVisibility(View.GONE);
-                         edit.setVisibility(View.GONE);
-                     }
+                    if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
+                        delete.setVisibility(View.VISIBLE);
+                        edit.setVisibility(View.VISIBLE);
+                    } else {
+                        delete.setVisibility(View.GONE);
+                        edit.setVisibility(View.GONE);
+                    }
 
                 }
             });
@@ -324,7 +325,7 @@ public class DetailsPostFragment extends Fragment {
         void onItemClick(View v, int position);
     }
 
-    class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
+    class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         OnItemClickListener listener;
 

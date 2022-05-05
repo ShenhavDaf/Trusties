@@ -8,7 +8,7 @@ router.get("/:id", /*authenticate,*/ User.getFriendsList);
 router.get("/second/:id", /*authenticate,*/ User.getSecondCircleOnly);
 router.get("/third/:id", /*authenticate,*/ User.getThirdCircleOnly);
 router.get(
-  "/addFriend/:myId/:hisId",
+  "/addFriendToMyContacts/:myId/:hisId",
   /*authenticate,*/ User.addFriendToMyContacts
 );
 

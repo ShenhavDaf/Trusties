@@ -147,7 +147,9 @@ public class ConnectionsFragment extends Fragment {
                 Model.instance.getThirdCircle(currUser.getId(), new Model.thirdCircleListener() {
                     @Override
                     public void onComplete(JsonArray friendsList) {
+                        Log.d("TAG","ininininin");
                         List<JsonObject> userId = new LinkedList<>();
+                        Log.d("TAG","size-"+ friendsList.size());
                         for (JsonElement elem : friendsList) {
                             Model.instance.findUserById(elem.toString().replace("\"", ""), new Model.findUserByIdListener() {
                                 @Override
@@ -161,7 +163,7 @@ public class ConnectionsFragment extends Fragment {
                         connectionsViewModel.data = userId;
                     }
                 });
-//                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
                 swipeRefresh.setRefreshing(false);
             }
 

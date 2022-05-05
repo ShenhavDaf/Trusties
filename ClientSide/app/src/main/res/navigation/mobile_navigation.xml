@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_detailsPostFragment_to_othersProfileFragment"
             app:destination="@id/othersProfileFragment" />
+        <action
+            android:id="@+id/action_detailsPostFragment_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
     </fragment>
     <fragment
         android:id="@+id/editPostFragment"

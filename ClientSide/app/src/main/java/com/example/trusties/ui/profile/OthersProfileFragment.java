@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.example.trusties.model.Model;
 import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 
@@ -41,6 +43,7 @@ public class OthersProfileFragment extends Fragment {
     Button add;
     String userId;
     User currUser;
+    Button alreadyFriends;
 
 
     @Override
@@ -67,28 +70,35 @@ public class OthersProfileFragment extends Fragment {
             }
         });
         currUser = Model.instance.getCurrentUserModel();
-//        Model.instance.findUserById(Model.instance.getCurrentUserModel().getId(), new Model.findUserByIdListener() {
-//            @Override
-//            public void onComplete(JsonObject user) {
-//                userName.setText(user.get("name").toString().replace("\"", ""));
-//            }
-//        });
 
         connections = root.findViewById(R.id.Othersprofile_connections);
         Model.instance.getFriendsList(userId, 1, friendsList -> {
-            connections.setText( friendsList.size() + " connections");
+            connections.setText(friendsList.size() + " connections");
+            for(int i=0; i<friendsList.size();i++)
+            {
+                if(friendsList.get(i).toString().replace("\"", "").equals(currUser.getId()))
+                {
+                    Log.d("TAG", friendsList.get(i).toString());
+                    alreadyFriends.setVisibility(View.VISIBLE);
+                    alreadyFriends.setClickable(false);
+                    add.setVisibility(View.GONE);
+                }
+            }
         });
+        alreadyFriends = root.findViewById(R.id.othersProfile_alreadyFriends_btn);
 
         add = root.findViewById(R.id.Othersprofile_add_btn);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Model.instance.addFriendToMyContacts(currUser.getId(),userId, new Model.addFriendListener() {
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
+                Model.instance.addFriendToMyContacts(currUser.getId(), userId, new Model.addFriendListener() {
+                    @Override
+                    public void onComplete() {
+                        alreadyFriends.setVisibility(View.VISIBLE);
+                        add.setVisibility(View.GONE);
+                        refresh();
+                    }
+                });
             }
         });
 
@@ -123,7 +133,10 @@ public class OthersProfileFragment extends Fragment {
     }
 
     private void refresh() {
-        Model.instance.getMyPosts(userId,postsList -> {
+        Model.instance.getFriendsList(userId, 1, friendsList -> {
+            connections.setText(friendsList.size() + " connections");
+        });
+        Model.instance.getMyPosts(userId, postsList -> {
             profileViewModel.data = postsList;
             adapter.notifyDataSetChanged();
         });

@@ -276,4 +276,5 @@ public class Model {
         modelServer.addFriendToMyContacts(myID,hisID, listener);
     }
 
+
 }
