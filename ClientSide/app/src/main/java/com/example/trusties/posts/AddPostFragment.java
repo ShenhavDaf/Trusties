@@ -1,15 +1,23 @@
 package com.example.trusties.posts;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +35,8 @@ import com.example.trusties.model.User;
 import com.example.trusties.ui.home.HomeFragment;
 import com.google.android.material.button.MaterialButton;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class AddPostFragment extends Fragment {
@@ -38,6 +48,10 @@ public class AddPostFragment extends Fragment {
     Button firstCircleBtn, secondCircleBtn, thirdCircleBtn, postBtn, sosBtn;
     ProgressBar progressBar;
     //TODO: location
+
+    Bitmap imageBitmap;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_GALLERY = 2;
 
     Integer circle;
 
@@ -83,10 +97,37 @@ public class AddPostFragment extends Fragment {
 
     private void OpenCamera() {
         //TODO
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     private void OpenGallery() {
         //TODO
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+
+            }
+        } else if (requestCode == REQUEST_IMAGE_GALLERY) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                    imageBitmap = BitmapFactory.decodeStream(imageStream);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void FindFirstCircle() {
@@ -147,6 +188,16 @@ public class AddPostFragment extends Fragment {
         map.put("description", message);
         map.put("email", email);
         map.put("role", type);
+        if (imageBitmap != null) {
+
+            Log.d("TAG", imageBitmap.toString());
+            Model.instance.saveUserImage(imageBitmap, "postPhoto", new Model.SaveImageListener() {
+                @Override
+                public void onComplete(String url) {
+
+                }
+            });
+        }
 
         Model.instance.addPost(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
     }
