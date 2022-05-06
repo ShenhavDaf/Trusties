@@ -1,6 +1,7 @@
 package com.example.trusties.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -274,6 +275,14 @@ public class Model {
 
     public void addFriendToMyContacts(String myID,String hisID,addFriendListener listener) {
         modelServer.addFriendToMyContacts(myID,hisID, listener);
+    }
+
+    public interface SaveImageListener{
+        void onComplete(String url);
+    }
+    public void saveUserImage(Bitmap imageBitmap, String imageName, SaveImageListener listener) {
+
+        modelServer.saveUserImage(imageBitmap,imageName,listener);
     }
 
 

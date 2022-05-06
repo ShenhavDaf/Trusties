@@ -1,6 +1,8 @@
 package com.example.trusties.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.trusties.CommonFunctions;
@@ -12,6 +14,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -571,4 +574,8 @@ public class ModelServer {
     }
 
 
+    public void saveUserImage(Bitmap imageBitmap, String imageName, Model.SaveImageListener listener) {
+       //TODO: add server functionality + how to save the Bitmap ?
+
+    }
 }
