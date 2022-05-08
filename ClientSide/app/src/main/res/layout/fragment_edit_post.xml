@@ -100,6 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
+
             android:src="@android:drawable/ic_menu_camera"
             app:layout_constraintStart_toEndOf="@+id/editpost_pictures_tv"
             app:layout_constraintTop_toBottomOf="@+id/editpost_tags_tv" />
@@ -125,6 +126,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="12dp"
             android:backgroundTint="#7b9abe"
+            app:cornerRadius="15dp"
             android:text="SAVE"
             android:textSize="16sp"
             app:icon="@drawable/save_icon"
@@ -137,6 +139,7 @@
             android:layout_height="45dp"
             android:layout_marginEnd="10dp"
             android:backgroundTint="#7b9abe"
+            app:cornerRadius="15dp"
             android:text="CANCEL"
             android:textSize="16sp"
             app:icon="@drawable/cancel_icon"

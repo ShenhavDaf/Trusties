@@ -181,9 +181,13 @@ public class DetailsPostFragment extends Fragment {
 
     private void refresh() {
         Model.instance.getPostComments(postId, commentsList -> {
-            System.out.println("Comments" + commentsList.size());
-            postViewModel.data = commentsList;
-            adapter.notifyDataSetChanged();
+            if(commentsList.size() ==0)
+                swipeRefresh.setVisibility(View.GONE);
+            else {
+                System.out.println("Comments" + commentsList.size());
+                postViewModel.data = commentsList;
+                adapter.notifyDataSetChanged();
+            }
 
         });
         swipeRefresh.setRefreshing(false);

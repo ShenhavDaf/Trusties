@@ -20,28 +20,25 @@
 
     <TextView
         android:id="@+id/home_hello_tv"
-        android:layout_width="52dp"
-        android:layout_height="29dp"
-        android:text="Hello,"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:text="Hello"
         android:textColor="@color/TrustiesPrimaryColor"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.632"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+        android:textSize="19sp"
+        app:layout_constraintBottom_toTopOf="@+id/home_swiperefresh"
+        app:layout_constraintEnd_toStartOf="@+id/home_userName_tv"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/home_userName_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
         android:text="@string/hint_verification_fullname"
-        android:textSize="20sp"
+        android:textSize="19sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/home_hello_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.054"
-        app:layout_constraintStart_toEndOf="@+id/home_hello_tv" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/home_swiperefresh"
