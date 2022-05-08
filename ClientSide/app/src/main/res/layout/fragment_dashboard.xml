@@ -114,6 +114,7 @@
         android:layout_marginTop="23dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="#7393B3"
+        app:cornerRadius="15dp"
         app:icon="@drawable/edit_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

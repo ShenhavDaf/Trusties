@@ -27,7 +27,6 @@ import com.example.trusties.model.Model;
 import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
 import com.google.android.material.card.MaterialCardView;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 
@@ -152,14 +151,15 @@ public class OthersProfileFragment extends Fragment {
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView userName, description, time, commentNumber;
+        TextView userName,title, description, time, commentNumber;
 
         public MyViewHolder(@NonNull View itemView, OthersProfileFragment.OnItemClickListener listener) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.listrow_username_tv);
             time = itemView.findViewById(R.id.listrow_date_tv);
-            description = itemView.findViewById(R.id.listrow_post_text_tv);
+            title = itemView.findViewById(R.id.listrow_post_title_tv);
+            description = itemView.findViewById(R.id.listrow_post_description_tv);
             commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
 
             itemView.setOnClickListener(v -> {
@@ -180,12 +180,17 @@ public class OthersProfileFragment extends Fragment {
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
             }
             //TODO: change userName from post title to author name
-            userName.setText(post.getTitle());
-            description.setText(post.getDescription());
+            userName.setText(Model.instance.getCurrentUserModel().getFullName());
+            title.setText(post.getTitle());
+            if(post.getDescription().length()>150)
+                description.setText(post.getDescription().substring(0,150)+"...");
+            else
+                description.setText(post.getDescription());
+
             String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
 
-            Model.instance.getPostComments(post.getId(), commentsList -> {
+            Model.instance.getPostComments(post.getId(),commentsList -> {
                 commentNumber.setText(commentsList.size() + " Comments ");
             });
         }
