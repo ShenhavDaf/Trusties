@@ -160,4 +160,6 @@ router.post("/delete/:id", authenticate, Post.deletePost);
 
 router.get("/MyPosts/:id", authenticate, Post.getMyPosts);
 
+router.get("/allPostsFiltered/:id", Post.allPostsFiltered);
+
 module.exports = router;

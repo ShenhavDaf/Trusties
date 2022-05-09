@@ -106,7 +106,7 @@ Content-Type: application/json
 {
      "title":"Test add sos post (from api_calls)",
      "message": "post message test with Sender referance without Enum",
-     "freinds_circle": 1,
+     "friends_circle": 1,
      "area": "Rishon",
      "address":"Nobel 3"    
 }

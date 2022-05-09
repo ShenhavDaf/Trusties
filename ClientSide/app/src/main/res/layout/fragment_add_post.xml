@@ -216,12 +216,12 @@
             android:layout_width="400dp"
             android:layout_height="140dp"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newpost_tags_layout">
+            app:layout_constraintTop_toBottomOf="@+id/newpost_details_tv">
 
             <TextView
                 android:id="@+id/newpost_location_tv"
@@ -265,7 +265,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newpost_location_layout">
+            app:layout_constraintTop_toBottomOf="@+id/newpost_tags_layout">
 
             <TextView
                 android:id="@+id/newpost_image_tv"
@@ -340,7 +340,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newpost_image_layout">
+            app:layout_constraintTop_toBottomOf="@+id/newpost_location_layout">
 
             <TextView
                 android:id="@+id/newpost_circle_tv"
@@ -449,6 +449,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.273" />
+
+        <TextView
+            android:id="@+id/newpost_details_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/complete_the_following_details"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newpost_image_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

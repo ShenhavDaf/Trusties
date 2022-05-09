@@ -37,10 +37,10 @@ const postSchema = new mongoose.Schema({
     ref: "Comment",
     default: [],
   },
-  freinds_circle: {
+  friends_circle: {
     type: Number,
     required: false,
-    default: 2,
+    default: 1,
   },
   area: {
     type: String,
@@ -51,7 +51,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: false,
     default: "",
-  }
+  },
 });
 
 module.exports = mongoose.model("Post", postSchema);

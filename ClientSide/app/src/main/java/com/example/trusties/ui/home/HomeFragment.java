@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment {
         /***********************************/
 //        usersEmail = MainActivity.usersEmail;
         TextView userName = root.findViewById(R.id.home_userName_tv);
-        if(Model.instance.getCurrentUserModel() != null)
+        if (Model.instance.getCurrentUserModel() != null)
             userName.setText(Model.instance.getCurrentUserModel().getFullName());
         else
             userName.setText("Guest");
@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment {
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView userName,title, description, time,commentNumber ;
+        TextView userName, title, description, time, commentNumber;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -134,17 +134,20 @@ public class HomeFragment extends Fragment {
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
             }
             //TODO: change userName from post title to author name
-            userName.setText(Model.instance.getCurrentUserModel().getFullName());
+            Model.instance.findUserById(post.getAuthorID(), user ->
+                    userName.setText(user.get("name").getAsString())
+            );
+
             title.setText(post.getTitle());
-            if(post.getDescription().length()>150)
-                description.setText(post.getDescription().substring(0,150)+"...");
+            if (post.getDescription().length() > 150)
+                description.setText(post.getDescription().substring(0, 150) + "...");
             else
                 description.setText(post.getDescription());
 
             String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
 
-            Model.instance.getPostComments(post.getId(),commentsList -> {
+            Model.instance.getPostComments(post.getId(), commentsList -> {
                 commentNumber.setText(commentsList.size() + " Comments ");
             });
 
