@@ -105,27 +105,11 @@ const getThirdCircleOnly = async (req, res) => {
         if (friend.friends[j] != currID) list.push(friend.friends[j]);
       }
     }
-    // console.log(list);
-    let count = 0;
-
     // Remove duplicates
     const unique = list.filter(
       (value, index, self) =>
         index === self.findIndex((t) => String(t) === String(value))
     );
-
-    // const found = unique.forEach((r) => {
-    //   console.log(String(r));
-    //   if (firstList.includes(String(r))) {
-    //     console.log(unique.indexOf(r));
-    //     unique.splice(unique.indexOf(r), 1);
-    //     console.log("Rere");
-    //     console.log(unique);
-
-    //     count--;
-    //   }
-    //   count++;
-    // });
 
     //Check if theres a loop(third circle contains first circle)
     for (let i = 0; i < unique.length; i++) {
@@ -134,10 +118,7 @@ const getThirdCircleOnly = async (req, res) => {
         i--;
       }
     }
-    console.log(unique);
-    console.log("sent");
     res.status(200).send(unique);
-    console.log("sewwnt");
   } catch (err) {
     res.status(400).send({
       status: "fail",
