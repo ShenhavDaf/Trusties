@@ -164,7 +164,9 @@ public class ProfileFragment extends Fragment {
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
             }
             //TODO: change userName from post title to author name
-            userName.setText(Model.instance.getCurrentUserModel().getFullName());
+            Model.instance.findUserById(post.getAuthorID(), user ->
+                    userName.setText(user.get("name").getAsString())
+            );
             title.setText(post.getTitle());
             if(post.getDescription().length()>150)
                 description.setText(post.getDescription().substring(0,150)+"...");

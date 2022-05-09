@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -281,6 +282,9 @@ public class ModelServer {
 
     public void getAllPosts(Model.allPostsListener listener) {
 
+        String currentUserModel = Model.instance.getCurrentUserModel().userID;
+        List<Post> filteredList = new ArrayList<>();
+
         retrofitInterface.getAllPosts(accessToken).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -288,22 +292,28 @@ public class ModelServer {
                 List<Post> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
                     if (!element.getAsJsonObject().get("isDeleted").getAsBoolean()) {
-
-                        String sender = element.getAsJsonObject().get("sender").getAsString().replace("\"", "");
-                        Integer circle = element.getAsJsonObject().get("friends_circle").getAsInt();
-
-                        Model.instance.getFriendsList(sender, circle, friendsList -> {
-                            System.out.println("friendsList = "+friendsList);
-                        });
-
-
                         list.add(Post.create(element.getAsJsonObject()));
                     }
                 }
+                for (Post post : list) {
+                    if (post.getAuthorID().equals(currentUserModel))
+                        filteredList.add(post);
+                    else {
+                        getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
+                            for (JsonElement friend : friendsList) {
+                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+                                    filteredList.add(post);
+                                }
+                            }
+                        });
+                    }
+
+                }
+                List<Post> finalList = filteredList;
 
                 System.out.println("++++++++++++++++++++ end");
-                Collections.reverse(list);
-                listener.onComplete(list);
+                Collections.reverse(finalList);
+                listener.onComplete(finalList);
             }
 
             @Override
@@ -510,6 +520,7 @@ public class ModelServer {
                         list.add(Post.create(element.getAsJsonObject()));
                 }
 
+
                 Collections.reverse(list);
                 listener.onComplete(list);
             }
@@ -520,6 +531,45 @@ public class ModelServer {
             }
         });
     }
+
+    /* ------------------------------------------------------------------------- */
+
+//    public void getAllPostsInHomePage(Model.getAllPostsInHomePageListener listener) {
+//
+//        String currentUserModel = Model.instance.getCurrentUserModel().userID;
+//        List<Post> filteredList = new ArrayList<>();
+//        Call<JsonArray> getAllPosts = retrofitInterface.getAllPosts(accessToken);
+//        getAllPosts.enqueue(new Callback<JsonArray>() {
+//            @Override
+//            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+//                List<Post> list = new ArrayList<>();
+//                for (JsonElement element : response.body()) {
+//                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+//                        list.add(Post.create(element.getAsJsonObject()));
+//                }
+//                for (Post post : list) {
+//                    if (post.getAuthorID().equals(currentUserModel))
+//                        filteredList.add(post);
+//
+//                    getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
+//                        for (JsonElement friend : friendsList) {
+//                            if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+//                                filteredList.add(post);
+//                            }
+//                        }
+//                    });
+//
+//                }
+//                Collections.reverse(filteredList);
+//                listener.onComplete(filteredList);
+//            }
+//            @Override
+//            public void onFailure(Call<JsonArray> call, Throwable t) {
+//                System.out.println("--- failed\n" + t.getMessage());
+//
+//            }
+//        });
+//    }
 
     /* ------------------------------------------------------------------------- */
 
@@ -535,6 +585,7 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
 
             }
         });

@@ -329,6 +329,17 @@ public class Model {
         modelServer.addFriendToMyContacts(myID, hisID, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
+//    public interface getAllPostsInHomePageListener {
+//        void onComplete(List<Post> postsList);
+//    }
+//
+//    public void getAllPostsInHomePage(getAllPostsInHomePageListener listener) {
+//        modelServer.getAllPostsInHomePage(listener);
+//    }
+
+
     public interface SaveImageListener {
         void onComplete(String url);
     }
