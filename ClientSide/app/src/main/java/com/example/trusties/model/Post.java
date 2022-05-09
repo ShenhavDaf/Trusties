@@ -11,7 +11,7 @@ public class Post {
     final public static String LAST_UPDATE = "PostsLastUpdateDate";
 
     String postID;
-    String author; //TODO: ID / email / name?
+    String authorID; //TODO: ID / email / name?
     String title;
     String description;
     String time;
@@ -20,14 +20,15 @@ public class Post {
     Boolean isDeleted;
     String area;
     String address;
+    Integer circle;
     //    Long updateDate = new Long(0);
 
 
     /* ****************************** Constructors ****************************** */
 
-    public Post(String id, String author, String title, String description, String time, String role, String status, Boolean isDeleted, String area, String address) {
+    public Post(String id, String authorID, String title, String description, String time, String role, String status, Boolean isDeleted, String area, String address,Integer circle) {
         this.postID = id;
-        this.author = author;
+        this.authorID = authorID;
         this.title = title;
         this.description = description;
         this.time = time;
@@ -36,6 +37,7 @@ public class Post {
         this.isDeleted = isDeleted;
         this.area = area;
         this.address = address;
+        this.circle = 1;
     }
 
     /* ****************************** Getters & Setters ****************************** */
@@ -45,6 +47,12 @@ public class Post {
 
     public void setId(@NonNull String id) {
         this.postID = id;
+    }
+
+    /*------------------------------------------------------*/
+
+    public String getAuthorID() {
+        return authorID;
     }
 
     /*------------------------------------------------------*/
@@ -107,6 +115,15 @@ public class Post {
         this.isDeleted = isDeleted;
     }
 
+    /*------------------------------------------------------*/
+
+    public Integer getCircle() {
+        return circle;
+    }
+
+    public void setCircle(Integer circle) {
+        this.circle = circle;
+    }
 
     /* ****************************** Functions ****************************** */
 
@@ -122,8 +139,10 @@ public class Post {
         Boolean isDeleted = json.get("isDeleted").getAsBoolean();
         String area = json.get("area").getAsString();
         String address = json.get("address").getAsString();
+        Integer circle = json.get("friends_circle").getAsInt();
 
-        Post post = new Post( id,  author,  title,  description,  time,  role,  status,  isDeleted, area, address);
+
+        Post post = new Post( id,  author,  title,  description,  time,  role,  status,  isDeleted, area, address,circle);
 
         return post;
     }
@@ -134,7 +153,7 @@ public class Post {
 
         JsonObject json = new JsonObject();
         json.addProperty("_id", postID);
-        json.addProperty("sender", author);
+        json.addProperty("sender", authorID);
         json.addProperty("title", title);
         json.addProperty("description", description);
         json.addProperty("time", time);
@@ -143,6 +162,7 @@ public class Post {
         json.addProperty("isDeleted", true);
         json.addProperty("area", area);
         json.addProperty("address", address);
+        json.addProperty("friends_circle", circle);
 
         return json;
     }

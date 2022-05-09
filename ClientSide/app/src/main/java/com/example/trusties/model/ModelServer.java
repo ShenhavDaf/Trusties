@@ -261,6 +261,7 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
     public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
+
         Call<Void> add = retrofitInterface.addPost(accessToken, map);
 
         add.enqueue(new Callback<Void>() {
@@ -274,7 +275,9 @@ public class ModelServer {
             }
         });
     }
+
     /* ------------------------------------------------------------------------- */
+
 
     public void getAllPosts(Model.allPostsListener listener) {
 
@@ -284,10 +287,21 @@ public class ModelServer {
 
                 List<Post> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
-                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean()) {
+
+                        String sender = element.getAsJsonObject().get("sender").getAsString().replace("\"", "");
+                        Integer circle = element.getAsJsonObject().get("friends_circle").getAsInt();
+
+                        Model.instance.getFriendsList(sender, circle, friendsList -> {
+                            System.out.println("friendsList = "+friendsList);
+                        });
+
+
                         list.add(Post.create(element.getAsJsonObject()));
+                    }
                 }
 
+                System.out.println("++++++++++++++++++++ end");
                 Collections.reverse(list);
                 listener.onComplete(list);
             }
@@ -296,7 +310,33 @@ public class ModelServer {
             public void onFailure(Call<JsonArray> call, Throwable t) {
             }
         });
+
     }
+
+//    private List<Post> func(List<Post> list) {
+//        List<Post> filteredList = new ArrayList<>();
+//
+//        String currentUserModel = Model.instance.getCurrentUserModel().getId();
+//
+//        for (Post post : list) {
+//            if (post.getAuthorID().equals(currentUserModel))
+//                filteredList.add(post);
+//            else {
+//                this.getFriendsList(post.getAuthorID(), /*post.getCircle()*/1, friendsList -> {
+//                    System.out.println("friendsList = " + friendsList);
+//                    for (JsonElement friend : friendsList) {
+//                        System.out.println("inside for");
+//                        if (friend.toString().equals(currentUserModel)) {
+//                            filteredList.add(post);
+//                        }
+//                    }
+//                });
+//            }
+//        }
+//
+//        System.out.println("after = " + filteredList);
+//        return filteredList;
+//    }
 
     /* ------------------------------------------------------------------------- */
 
@@ -560,7 +600,7 @@ public class ModelServer {
 
     public void addFriendToMyContacts(String myID, String hisID, Model.addFriendListener listener) {
 
-        retrofitInterface.addFriendToMyContacts(myID,hisID).enqueue(new Callback<Void>() {
+        retrofitInterface.addFriendToMyContacts(myID, hisID).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 listener.onComplete();
@@ -575,7 +615,7 @@ public class ModelServer {
 
 
     public void saveUserImage(Bitmap imageBitmap, String imageName, Model.SaveImageListener listener) {
-       //TODO: add server functionality + how to save the Bitmap ?
+        //TODO: add server functionality + how to save the Bitmap ?
 
     }
 }

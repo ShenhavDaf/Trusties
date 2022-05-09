@@ -14,10 +14,12 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +30,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.example.trusties.CommonFunctions;
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
@@ -42,12 +46,14 @@ import java.util.HashMap;
 public class AddPostFragment extends Fragment {
 
     EditText postTitle, description;
+    TextView detailsTV;
     Spinner tags;
     ImageView image;
     ImageButton cameraBtn, galleryBtn, carBtn, deliveryBtn, toolsBtn, houseBtn;
     Button firstCircleBtn, secondCircleBtn, thirdCircleBtn, postBtn, sosBtn;
     ProgressBar progressBar;
     //TODO: location
+    ConstraintLayout location_layout, circle_layout;
 
     Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -70,6 +76,16 @@ public class AddPostFragment extends Fragment {
         progressBar = view.findViewById(R.id.newpost_progressBar);
         progressBar.setVisibility(View.GONE);
 
+        location_layout = view.findViewById(R.id.newpost_location_layout);
+        location_layout.setVisibility(View.GONE);
+
+        circle_layout = view.findViewById(R.id.newpost_circle_layout);
+        circle_layout.setVisibility(View.GONE);
+
+        detailsTV = view.findViewById(R.id.newpost_details_tv);
+        detailsTV.setVisibility(View.GONE);
+
+
         cameraBtn = view.findViewById(R.id.newpost_camera_btn);
         galleryBtn = view.findViewById(R.id.newpost_gallery_btn);
         firstCircleBtn = view.findViewById(R.id.newpost_firstcircle_btn);
@@ -78,11 +94,14 @@ public class AddPostFragment extends Fragment {
         postBtn = view.findViewById(R.id.newpost_post_btn);
         sosBtn = view.findViewById(R.id.newpost_sos_btn);
 
+
         cameraBtn.setOnClickListener(v -> OpenCamera());
         galleryBtn.setOnClickListener(v -> OpenGallery());
         firstCircleBtn.setOnClickListener(v -> FindFirstCircle());
         secondCircleBtn.setOnClickListener(v -> FindSecondCircle());
         thirdCircleBtn.setOnClickListener(v -> FindThirdCircle());
+
+
         postBtn.setOnClickListener(v -> PostQuestion(v));
         sosBtn.setOnClickListener(v -> postSOSCall(v));
 
@@ -164,7 +183,21 @@ public class AddPostFragment extends Fragment {
     }
 
     private void postSOSCall(View view) {
-        createPost(view, "SOS");
+
+        detailsTV.setVisibility(View.VISIBLE);
+        location_layout.setVisibility(View.VISIBLE);
+        circle_layout.setVisibility(View.VISIBLE);
+        postBtn.setEnabled(false);
+        sosBtn.setOnClickListener(v -> {
+            if (circle != null)
+                createPost(v, "SOS");
+            else {
+                String msg = "You need to select a circle of friends to which you want to share your SOS call";
+                new CommonFunctions().myPopup(getContext(), "Error", msg);
+                postSOSCall(view);
+            }
+        });
+//        createPost(view, "SOS");
 
         // TODO: Check if all relevant details of SOS call are exist
     }
@@ -188,6 +221,9 @@ public class AddPostFragment extends Fragment {
         map.put("description", message);
         map.put("email", email);
         map.put("role", type);
+        if (type.equals("SOS"))
+            map.put("circle", circle.toString());
+
         if (imageBitmap != null) {
 
             Log.d("TAG", imageBitmap.toString());

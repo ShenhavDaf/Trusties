@@ -10,8 +10,11 @@ import android.util.Log;
 import androidx.core.os.HandlerCompat;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -137,6 +140,55 @@ public class Model {
         modelServer.getAllPosts(listener);
     }
 
+//    MutableLiveData<List<Post>> allPostsList = new MutableLiveData<List<Post>>();
+//
+//    public LiveData<List<Post>> getAllPosts() {
+//        if (allPostsList.getValue() == null) {
+//            refreshPostsList();
+//        }
+//        return allPostsList;
+//    }
+//
+//    public void refreshPostsList() {
+//
+//        /*---------- firebase - get all updates since localUpdateDate ----------*/
+//        modelServer.getAllPosts(new ModelServer.GetAllPostsListener() {
+//
+//            @Override
+//            public void onComplete(List<Post> list) {
+//
+//                executor.execute(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        List<Post> filteredList = new ArrayList<>();
+//
+//                        /*---------- add all records to local db ----------*/
+//
+//                        for (Post post : list) {
+//                            if (post.getAuthorID().equals(currentUserModel.getId()))
+//                                filteredList.add(post);
+//                            else {
+//                                modelServer.getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
+//                                    for (JsonElement friend : friendsList) {
+//                                        if(friend.toString().equals(currentUserModel.getId())){
+//                                            filteredList.add(post);
+//                                        }
+//                                    }
+//                                });
+//                            }
+//                        }
+//
+//                        allPostsList.postValue(filteredList);
+//
+//                    }
+//                });
+//
+//            }
+//        });
+//
+//    }
+
     /* ---------------------------------------------------------------------------- */
 
     public interface getPostByIdListener {
@@ -253,7 +305,7 @@ public class Model {
         void onComplete(JsonArray friendsList);
     }
 
-    public void getSecondCircle(String userID ,secondCircleListener listener) {
+    public void getSecondCircle(String userID, secondCircleListener listener) {
         modelServer.getSecondCircle(userID, listener);
     }
 
@@ -263,7 +315,7 @@ public class Model {
         void onComplete(JsonArray friendsList);
     }
 
-    public void getThirdCircle(String userID ,thirdCircleListener listener) {
+    public void getThirdCircle(String userID, thirdCircleListener listener) {
         modelServer.getThirdCircle(userID, listener);
     }
 
@@ -273,16 +325,17 @@ public class Model {
         void onComplete();
     }
 
-    public void addFriendToMyContacts(String myID,String hisID,addFriendListener listener) {
-        modelServer.addFriendToMyContacts(myID,hisID, listener);
+    public void addFriendToMyContacts(String myID, String hisID, addFriendListener listener) {
+        modelServer.addFriendToMyContacts(myID, hisID, listener);
     }
 
-    public interface SaveImageListener{
+    public interface SaveImageListener {
         void onComplete(String url);
     }
+
     public void saveUserImage(Bitmap imageBitmap, String imageName, SaveImageListener listener) {
 
-        modelServer.saveUserImage(imageBitmap,imageName,listener);
+        modelServer.saveUserImage(imageBitmap, imageName, listener);
     }
 
 
