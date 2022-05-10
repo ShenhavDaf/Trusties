@@ -85,7 +85,6 @@ public class HomeFragment extends Fragment {
             homeViewModel.data = postsList;
             adapter.notifyDataSetChanged();
         });
-
 //        refresh();
         return root;
     }
