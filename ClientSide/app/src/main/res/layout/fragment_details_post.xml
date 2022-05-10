@@ -16,12 +16,56 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
+        <ImageButton
+            android:id="@+id/postdetails_close_btn"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="#007B9ABE"
+            android:scaleType="centerCrop"
+            android:src="@drawable/done_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_time_tv" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/postdetails_edit_delete_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/postdetails_edit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#7b9abe"
+                android:src="@drawable/edit_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/postdetails_delete_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/postdetails_delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#7b9abe"
+                android:src="@drawable/delete_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/postdetails_edit_btn"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/postdetails_title_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="sans-serif-medium"
             android:hint="@string/hint_post_title"
@@ -32,138 +76,96 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_time_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_line" />
 
         <Button
             android:id="@+id/postdetails_view_requests_btn"
-            android:layout_width="154dp"
-            android:layout_height="47dp"
+            android:layout_width="85dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="8dp"
             android:backgroundTint="@color/white"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
             android:text="requests"
             android:textColor="@color/TrustiesPrimaryColor"
             android:textSize="14sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/postdetails_title_tv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/postdetails_time_tv"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.121" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/postdetails_role_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_corners"
+            android:hint="sos"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_status_tv"
+            app:layout_constraintEnd_toStartOf="@+id/postdetails_status_tv" />
+
+        <TextView
+            android:id="@+id/postdetails_status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="110dp"
+            android:background="@drawable/rounded_corners"
+            android:hint="open"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/postdetails_line"
-            android:layout_width="0dp"
+            android:layout_width="387dp"
             android:layout_height="1dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginTop="30dp"
             android:background="#808080"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_author_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_role_tv" />
 
         <TextView
             android:id="@+id/postdetails_description_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="16dp"
             android:hint="hint_post_text"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_line" />
-
-        <Button
-            android:id="@+id/postdetails_edit_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="90dp"
-            android:backgroundTint="#7b9abe"
-            android:text="@string/edit_text_view"
-            android:textSize="16sp"
-            app:icon="@drawable/edit_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/postdetails_delete_btn"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <Button
-            android:id="@+id/postdetails_delete_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="#7b9abe"
-            android:text="@string/delete_text_view"
-            android:textSize="16sp"
-            app:icon="@drawable/delete_icon"
-            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_edit_btn"
-            app:layout_constraintEnd_toStartOf="@+id/postdetails_edit_btn"
-            app:layout_constraintHorizontal_bias="0.986"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/postdetails_close_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="88dp"
-            android:backgroundTint="#7b9abe"
-
-            android:text="@string/close_btn"
-            android:textSize="16sp"
-            android:visibility="gone"
-            app:icon="@drawable/delete_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/postdetails_delete_btn"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img" />
 
         <TextView
             android:id="@+id/postdetails_author_tv"
-            android:layout_width="105dp"
+            android:layout_width="0dp"
             android:layout_height="23dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="sans-serif-light"
             android:hint="@string/hint_author_name"
             android:minHeight="48dp"
             android:textColor="@color/gray"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img" />
-
-        <TextView
-            android:id="@+id/postdetails_status_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/rounded_corners"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/postdetails_edit_delete_layout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postDetails_post_img" />
-
-        <TextView
-            android:id="@+id/postdetails_role_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/rounded_corners"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_status_tv"
-            app:layout_constraintStart_toEndOf="@+id/postdetails_status_tv" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/postDetails_post_img"
@@ -188,9 +190,9 @@
             android:layout_marginTop="4dp"
             android:backgroundTint="#00D56868"
             android:hint="@string/hint_date"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_author_tv" />
 
         <ProgressBar
             android:id="@+id/postdetails_progressBar"
@@ -252,12 +254,10 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/postdetails_close_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_comment_et"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_comment_et">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/postdetails_rv_comment"

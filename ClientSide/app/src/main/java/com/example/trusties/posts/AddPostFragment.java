@@ -253,6 +253,8 @@ public class AddPostFragment extends Fragment {
 
         String currUserID = Model.instance.getCurrentUserModel().getId();
 
+        if(circle == null) circle = 1;
+
         Model.instance.getFriendsList(currUserID, circle, friendsList -> {
             System.out.println(circle + "--> " + friendsList);
         });

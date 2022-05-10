@@ -83,7 +83,8 @@ public class HomeFragment extends Fragment {
         });
         Model.instance.getAllPosts(postsList -> {
             homeViewModel.data = postsList;
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
+            refresh();
         });
 //        refresh();
         return root;
@@ -97,10 +98,6 @@ public class HomeFragment extends Fragment {
 
 
     private void refresh() {
-//        Model.instance.getAllPostsInHomePage( postsList->{
-//            homeViewModel.data = postsList;
-//            adapter.notifyDataSetChanged();
-//        });
 //        Model.instance.getAllPosts(postsList -> {
 //            homeViewModel.data = postsList;
 //
