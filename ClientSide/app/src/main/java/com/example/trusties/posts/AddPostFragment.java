@@ -289,6 +289,20 @@ public class AddPostFragment extends Fragment {
 
         }
         Model.instance.addPost(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
+
+//        /* ------ Add Notification ------ */
+//        HashMap<String, String> notification = new HashMap<>();
+//        notification.put("sender", user.getEmail());
+//        notification.put("post", postId);
+//        notification.put("time", (new Long(0)).toString());
+//        notification.put("type", "post");
+//
+//        Model.instance.addNotification(notification, () -> {
+//
+//        });
+//        String token = Model.getToken();
+//        Model.instance.sendNotification(notification, token, () -> {
+//        });
     }
 
 }

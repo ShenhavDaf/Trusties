@@ -7,8 +7,12 @@ import android.os.Looper;
 import android.text.Editable;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,11 +29,22 @@ import retrofit2.http.Body;
 public class Model {
 
     public static final Model instance = new Model();
+    private static String token;
     ModelServer modelServer = new ModelServer();
 
     public Executor executor = Executors.newFixedThreadPool(1);
     public Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
 
+    public Model() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            token = task.getResult();
+            Log.d("tag token", token);
+        });
+    }
+
+    public static String getToken() {
+        return token;
+    }
 
     /* ---------------------------------------------------------------------------- */
     User currentUserModel;
@@ -394,6 +409,15 @@ public class Model {
     public void getAllNotifications(allNotificationsListener listener) {
         Log.d("TAG", "Model --> getAllNotifications");
         modelServer.getAllNotifications(listener);
+    }
+
+    public interface sendNotificationListener {
+        void onComplete();
+    }
+
+    public void sendNotification(HashMap<String, String> map, String token, sendNotificationListener listener) {
+        Log.d("TAG", "Model --> send notifications");
+        modelServer.sendNotification(map, token, listener);
     }
 
 }

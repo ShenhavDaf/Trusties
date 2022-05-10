@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "644163845723",
+    "project_id": "trusties",
+    "storage_bucket": "trusties.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644163845723:android:428b8b0d7c3e6ff143497e",
+        "android_client_info": {
+          "package_name": "com.example.trusties"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644163845723-rhv4ealaot1ttj7kac0ur0fpllv5jsve.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJgcw8oxN-3gNXkDHsY7iqbl7oTEJ8n_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644163845723-rhv4ealaot1ttj7kac0ur0fpllv5jsve.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
