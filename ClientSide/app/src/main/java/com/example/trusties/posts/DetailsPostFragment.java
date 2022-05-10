@@ -21,6 +21,7 @@ import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,27 +38,16 @@ import java.util.HashMap;
 
 public class DetailsPostFragment extends Fragment {
 
-    TextView titleEt;
-    TextView timeEt;
-    TextView authorEt;
-    TextView descriptionEt;
-    TextView statusEt;
-    TextView roleEt;
+    TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt;
     EditText comment;
     // TODO: Add location (SOS Call)
-    Button editBtn;
-    Button deleteBtn;
+    ImageButton editBtn, deleteBtn, closeBtn;
     Button requestsBtn;
-    Button closeBtn;
-    String postId;
-
     ProgressBar progressBar;
-    ImageView postImg;
-    ImageView imgUser;
-    ImageView sendCommentBtn;
-
+    ImageView postImg, imgUser, sendCommentBtn;
     View line;
-    String senderId;
+
+    String postId, senderId;
     User currUser;
 
     private DetailsPostViewModel postViewModel;
@@ -97,8 +87,8 @@ public class DetailsPostFragment extends Fragment {
         comment = view.findViewById(R.id.postdetails_comment_et);
         sendCommentBtn = view.findViewById(R.id.postdetails_sendComment_btn);
         imgUser = view.findViewById(R.id.postdetails_imgUser_img);
-        requestsBtn= view.findViewById(R.id.postdetails_view_requests_btn);
-        closeBtn= view.findViewById(R.id.postdetails_close_btn);
+        requestsBtn = view.findViewById(R.id.postdetails_view_requests_btn);
+        closeBtn = view.findViewById(R.id.postdetails_close_btn);
 
         updateUI(View.INVISIBLE);
         Model.instance.getPostById(postId, new Model.getPostByIdListener() {
@@ -122,14 +112,22 @@ public class DetailsPostFragment extends Fragment {
                         if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
                             deleteBtn.setEnabled(true);
                             deleteBtn.setEnabled(true);
-                            if(role.compareTo("SOS")==0){
+                            if (role.compareTo("SOS") == 0) {
                                 closeBtn.setVisibility(View.VISIBLE);
                                 requestsBtn.setVisibility(View.VISIBLE);
+
+                                deleteBtn.setVisibility(View.VISIBLE);
+                                editBtn.setVisibility(View.VISIBLE);
+
                             }
-                        }
-                        else{
-                            deleteBtn.setEnabled(false);
-                            editBtn.setEnabled(false);
+                        } else {
+//                            deleteBtn.setEnabled(false);
+//                            editBtn.setEnabled(false);
+
+                            deleteBtn.setVisibility(View.GONE);
+                            editBtn.setVisibility(View.GONE);
+                            closeBtn.setVisibility(View.GONE);
+                            requestsBtn.setVisibility(View.GONE);
                         }
 
                     }
@@ -198,7 +196,7 @@ public class DetailsPostFragment extends Fragment {
 
     private void refresh() {
         Model.instance.getPostComments(postId, commentsList -> {
-            if(commentsList.size() ==0)
+            if (commentsList.size() == 0)
                 swipeRefresh.setVisibility(View.GONE);
             else {
                 System.out.println("Comments" + commentsList.size());
@@ -245,9 +243,9 @@ public class DetailsPostFragment extends Fragment {
     //#### Comments ViewHolder ####
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView username,time,rate,correct;
+        TextView username, time, rate, correct;
         EditText content;
-        Button delete,edit,editsave,positive,negative;
+        Button delete, edit, editsave, positive, negative;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -256,13 +254,13 @@ public class DetailsPostFragment extends Fragment {
             time = itemView.findViewById(R.id.coomentListRow_time_tv);
             content = itemView.findViewById(R.id.coomentListRow_content_ev);
 
-            delete=itemView.findViewById(R.id.coomentListRow_deleteBtn);
-            edit=itemView.findViewById(R.id.coomentListRow_editBtn);
-            editsave=itemView.findViewById(R.id.coomentListRow_saveEditBtn);
-            positive=itemView.findViewById(R.id.coomentListRow_upBtn);
-            negative=itemView.findViewById(R.id.coomentListRow_downBtn);
-            rate=itemView.findViewById(R.id.coomentListRow_rateTv);
-            correct=itemView.findViewById(R.id.coomentListRow_approvedTv);
+            delete = itemView.findViewById(R.id.coomentListRow_deleteBtn);
+            edit = itemView.findViewById(R.id.coomentListRow_editBtn);
+            editsave = itemView.findViewById(R.id.coomentListRow_saveEditBtn);
+            positive = itemView.findViewById(R.id.coomentListRow_upBtn);
+            negative = itemView.findViewById(R.id.coomentListRow_downBtn);
+            rate = itemView.findViewById(R.id.coomentListRow_rateTv);
+            correct = itemView.findViewById(R.id.coomentListRow_approvedTv);
 
             edit.setOnClickListener(v -> {
                 //TODO: ADD REFRESH
@@ -280,7 +278,7 @@ public class DetailsPostFragment extends Fragment {
                 map.put("content", content.getText().toString());
                 String id = comment.getCommentId().toString();
 
-                Model.instance.editComment(map,id, () -> {
+                Model.instance.editComment(map, id, () -> {
                     // TODO: Add comment to local DB ??
                     content.setEnabled(false);
                     edit.setVisibility(View.VISIBLE);
@@ -297,33 +295,33 @@ public class DetailsPostFragment extends Fragment {
 
                 String id = comment.getCommentId().toString();
 
-                        Model.instance.deleteComment(id, () -> {
-                        refresh();
-                        });
-                    });
-            positive.setOnClickListener(v->{
-                int pos=getAdapterPosition();
-                Comment comment=postViewModel.getData().get(pos);
-                String id=comment.getCommentId().toString();
+                Model.instance.deleteComment(id, () -> {
+                    refresh();
+                });
+            });
+            positive.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                Comment comment = postViewModel.getData().get(pos);
+                String id = comment.getCommentId().toString();
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_rate", Model.instance.getCurrentUserModel().getId());
 
-                Model.instance.upComment(id,map, () -> {
+                Model.instance.upComment(id, map, () -> {
                     positive.setVisibility(View.GONE);
                     negative.setVisibility(View.VISIBLE);
                     refresh();
                 });
             });
-            negative.setOnClickListener(v->{
-               int pos=getAdapterPosition();
-                Comment comment=postViewModel.getData().get(pos);
-                String id=comment.getCommentId().toString();
+            negative.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                Comment comment = postViewModel.getData().get(pos);
+                String id = comment.getCommentId().toString();
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_rate", Model.instance.getCurrentUserModel().getId());
 
-                Model.instance.downComment(id, map,() -> {
+                Model.instance.downComment(id, map, () -> {
                     positive.setVisibility(View.GONE);
                     negative.setVisibility(View.VISIBLE);
                     refresh();
@@ -346,35 +344,38 @@ public class DetailsPostFragment extends Fragment {
                     /*  ## if login user is the same as the comment.sender user
                         ## hide the ability to rate the comment
                         ## show the ability to delete and edit */
-                     if(user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail())==0){
-                         delete.setVisibility(View.VISIBLE);
-                         edit.setVisibility(View.VISIBLE);
-                         positive.setVisibility(View.GONE);
-                         negative.setVisibility(View.GONE); }
-                     else{
-                         delete.setVisibility(View.GONE);
-                         edit.setVisibility(View.GONE);
-                         positive.setVisibility(View.VISIBLE);
-                         negative.setVisibility(View.VISIBLE); }
+                    if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
+                        delete.setVisibility(View.VISIBLE);
+                        edit.setVisibility(View.VISIBLE);
+                        positive.setVisibility(View.GONE);
+                        negative.setVisibility(View.GONE);
+                    } else {
+                        delete.setVisibility(View.GONE);
+                        edit.setVisibility(View.GONE);
+                        positive.setVisibility(View.VISIBLE);
+                        negative.setVisibility(View.VISIBLE);
+                    }
                 }
             });
 
 
             // # check if the login user already rated
-            if(comment.IsUserRated_negative(Model.instance.getCurrentUserModel().getId())){
-                negative.setVisibility(View.GONE); }
-            else if(comment.IsUserRated_positive(Model.instance.getCurrentUserModel().getId())) {
-                positive.setVisibility(View.GONE); }
+            if (comment.IsUserRated_negative(Model.instance.getCurrentUserModel().getId())) {
+                negative.setVisibility(View.GONE);
+            } else if (comment.IsUserRated_positive(Model.instance.getCurrentUserModel().getId())) {
+                positive.setVisibility(View.GONE);
+            }
 
             //# check what is the rate of the comment - calc in model
-            int rate_val=comment.getCommentRate();
+            int rate_val = comment.getCommentRate();
             rate.setText(String.valueOf(rate_val));
 
             //# check if the comment IsCorrect
-            if(comment.IsCorrect().compareTo("true")==0){
-                correct.setVisibility(View.VISIBLE); }
-            else{
-                correct.setVisibility(View.GONE); }
+            if (comment.IsCorrect().compareTo("true") == 0) {
+                correct.setVisibility(View.VISIBLE);
+            } else {
+                correct.setVisibility(View.GONE);
+            }
 
 
             content.setText(comment.getContent());
