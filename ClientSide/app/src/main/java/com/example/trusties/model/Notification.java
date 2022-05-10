@@ -8,16 +8,14 @@ public class Notification {
     String postID;
     String authorID;
     String time;
-    String role;
-    Integer circle;
+    String type;
 
-    public Notification(String notificationID, String postID, String authorID, String time, String role, Integer circle) {
+    public Notification(String notificationID, String postID, String authorID, String time, String type) {
         this.notificationID = notificationID;
         this.postID = postID;
         this.authorID = authorID;
         this.time = time;
-        this.role = role;
-        this.circle = circle;
+        this.type = type;
     }
 
     public String getNotificationID() {
@@ -52,20 +50,12 @@ public class Notification {
         this.time = time;
     }
 
-    public String getRole() {
-        return role;
+    public String getType() {
+        return type;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Integer getCircle() {
-        return circle;
-    }
-
-    public void setCircle(Integer circle) {
-        this.circle = circle;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public static Notification create(JsonObject json) {
@@ -73,11 +63,10 @@ public class Notification {
         String postId = json.get("postId").getAsString();
         String author = json.get("sender").getAsString();
         String time = json.get("time").getAsString();
-        String role = json.get("role").getAsString();
+        String type = json.get("type").getAsString();
         Boolean isDeleted = json.get("isDeleted").getAsBoolean();
-        Integer circle = json.get("friends_circle").getAsInt();
 
-        Notification notification = new Notification(notificationId, postId, author, time, role, circle);
+        Notification notification = new Notification(notificationId, postId, author, time, type);
         return notification;
     }
 
@@ -87,9 +76,8 @@ public class Notification {
         json.addProperty("postId", postID);
         json.addProperty("sender", authorID);
         json.addProperty("time", time);
-        json.addProperty("role", role);
+        json.addProperty("type", type);
         json.addProperty("status", "OPEN");
-        json.addProperty("friends_circle", circle);
         return json;
     }
 }

@@ -111,7 +111,7 @@ public class NotificationsFragment extends Fragment {
         public void bind(Notification notification) {
             String type;
 
-            if (notification.getRole().toLowerCase().equals("sos")) {
+            if (notification.getType().toLowerCase().equals("sos")) {
                 type = "sos";
                 MaterialCardView card = (MaterialCardView) itemView;
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
