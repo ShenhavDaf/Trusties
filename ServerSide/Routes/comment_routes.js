@@ -42,12 +42,13 @@ const authenticate = require("../Common/auth_middleware");
  *          isCorrect: 'true'
  */
 
-// router.get("/:id", authenticate, Comment.getAllComments_Post);
 router.get("/allComments", authenticate, Comment.getAllComments);
 router.get("/:id/allComments", authenticate, Comment.getPostComments);
 router.get("/:id", authenticate, Comment.getCommentById);
 router.post("/add", authenticate, Comment.addComment);
 router.post("/edit/:id", authenticate, Comment.editComment);
 router.post("/delete/:id", authenticate, Comment.deleteComment);
+router.post("/up/:id", authenticate, Comment.positiveComment);
+router.post("/down/:id", authenticate, Comment.negativeComment);
 
 module.exports = router;
