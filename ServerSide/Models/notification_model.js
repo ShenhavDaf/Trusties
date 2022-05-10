@@ -18,6 +18,11 @@ const notificationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  circle: {
+    type: Number,
+    required: true
+  }
+  
 });
 
 module.exports = mongoose.model("Notification", notificationSchema);
