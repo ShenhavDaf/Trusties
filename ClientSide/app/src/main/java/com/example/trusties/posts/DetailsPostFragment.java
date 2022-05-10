@@ -108,10 +108,9 @@ public class DetailsPostFragment extends Fragment {
                 String role = post.get("role").toString().replace("\"", "");
 
 
-                if(post.get("photo")!=null )
-                {
+                if (post.get("photo") != null) {
                     String photoBase64 = post.get("photo").getAsString();
-                    byte[] decodedString = Base64.decode(photoBase64,Base64.DEFAULT);
+                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
                     decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 }
                 displayPost(title, description, time, senderId, status, role, decodedByte);
@@ -229,7 +228,7 @@ public class DetailsPostFragment extends Fragment {
             authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
             statusEt.setText(status);
             roleEt.setText(role);
-            if(bm!=null)
+            if (bm != null)
                 postImg.setImageBitmap(bm);
             else
                 postImg.setVisibility(View.GONE);

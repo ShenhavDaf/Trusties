@@ -38,6 +38,7 @@ const register = async (req, res, next) => {
   const password = req.body.password;
   const name = req.body.name;
   const phone = req.body.phone;
+  var photo = req.body.photo;
 
   try {
     const exists = await User.findOne({ email: email });
@@ -56,6 +57,7 @@ const register = async (req, res, next) => {
           password: hashPwd,
           name: name,
           phone: phone,
+          photo: photo,
         });
 
         randomCode = getRandomInt();
@@ -78,6 +80,7 @@ const register = async (req, res, next) => {
         password: hashPwd,
         name: name,
         phone: phone,
+        photo: photo,
       });
 
       randomCode = getRandomInt();
@@ -290,6 +293,7 @@ const findUserById = async (req, res, next) => {
       email: user.email,
       phone: user.phone,
       raiting: user.raiting,
+      photo: user.photo,
     });
   } catch (err) {
     res.status(400).send({
