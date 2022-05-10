@@ -287,6 +287,32 @@ public class Model {
     public void editUser(HashMap<String, String> map, String id, editUserListener listener) {
         modelServer.editUser(map, id, listener);
     }
+    /* ---------------------------------------------------------------------------- */
+    public interface upCommentListener {
+        void onComplete();
+    }
+
+    public void upComment(String id,HashMap<String, String> map, upCommentListener listener) {
+        modelServer.upComment(id,map, listener);
+    }
+    /* ---------------------------------------------------------------------------- */
+    public interface downCommentListener {
+        void onComplete();
+    }
+
+    public void downComment(String id,HashMap<String, String> map, downCommentListener listener) {
+        modelServer.downComment(id,map, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+//    public interface getCommentRate {
+//        void onComplete(JsonObject comment);
+//    }
+//
+//    public void getCommentRate(String id,getCommentRate listener) {
+//        modelServer.getCommentRate(id,listener);
+//    }
+
 
 
     /* ---------------------------------------------------------------------------- */

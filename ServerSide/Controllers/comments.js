@@ -2,6 +2,7 @@ const User = require("../Models/user_model");
 const Post = require("../Models/post_model");
 const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
+const { object } = require("mongoose/lib/utils");
 
 const getAllComments = async (req, res, next) => {
   Comment.find({}, function (err, docs) {
@@ -68,12 +69,6 @@ const addComment = async (req, res, next) => {
 };
 
 const editComment = async (req, res, next) => {
-  // console.log("Edit Comment");
-  // console.log("req.params.id");
-  // console.log(req.params.id);
-  // console.log("req.params.comtent");
-  // console.log(req.body.content);
-
   try {
     const exists = await Comment.updateOne(
       { _id: req.params.id },
@@ -133,6 +128,179 @@ const deleteComment = async (req, res, next) => {
   }
 };
 
+//## the function increase the user rating value,
+//## insert the user to comment.report_positive list,
+//## if the user is the post sender, comment.IsCorrect become true 
+
+const negativeComment = async (req, res, next) => {
+  try {
+    const reporter = await User.findById(req.body.user_rate);
+    if (!reporter) {
+      console.log("400: User not found!");
+      res.status(400).send({
+        status: "fail",
+        error: "User not found!",
+      });
+    }
+
+    Comment.findById({ _id: req.params.id }).populate({
+      path: 'post',
+      populate: {
+        path: 'sender',
+        model: 'User'
+      }
+    }).
+      populate({
+        path: 'report_positive',
+        model: 'User'
+      }).
+      populate({
+        path: 'report_negative',
+        model: 'User'
+      }).
+      populate({
+        path: 'sender',
+        model: 'User'
+      }).
+      exec(function (err, comment) {
+        if (err) {
+          res.status(400).send({
+            status: "fail",
+            error: err.message,
+          });
+        }
+
+        //Checking if the reporter already report positive
+        for (var i = 0; i < comment.report_positive.length; i++) {
+          if (comment.report_positive[i].email == reporter.email) {
+            console.log("Include in report_positive");
+            comment.report_positive.splice(i, 1);
+          }
+        }
+
+        comment.report_negative.addToSet(reporter._id);
+        //If user reporter is the post sender-> IsCorrect:true
+        if (reporter.email == comment.post.sender.email) {
+          comment.isCorrect = false;
+        }
+
+        comment.save(function (err) {
+          if (err) {
+            res.status(400).send({
+              status: "fail",
+              error: err.message,
+            });
+
+          }
+        });
+
+
+
+        comment.sender.rating -= process.env.RATING_COMMENT
+        comment.sender.save(function (err) {
+          if (err) {
+            res.status(400).send({
+              status: "fail",
+              error: err.message,
+            });
+
+          }
+        });
+      });
+
+  }
+
+
+  catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+
+  }
+}
+
+const positiveComment = async (req, res, next) => {
+  try {
+    const reporter = await User.findById(req.body.user_rate);
+    if (!reporter) {
+      console.log("400: User not found!");
+      res.status(400).send({
+        status: "fail",
+        error: "User not found!",
+      });
+    }
+
+    Comment.findById({ _id: req.params.id }).populate({
+      path: 'post',
+      populate: {
+        path: 'sender',
+        model: 'User'
+      }
+    }).
+      populate({
+        path: 'report_positive',
+        model: 'User'
+      }).
+      populate({
+        path: 'report_negative',
+        model: 'User'
+      }).
+      populate({
+        path: 'sender',
+        model: 'User'
+      }).
+      exec(function (err, comment) {
+        if (err) {
+          res.status(400).send({
+            status: "fail",
+            error: err.message,
+          });
+        }
+
+        //Checking if the reporter already report positive
+        for (var i = 0; i < comment.report_negative.length; i++) {
+          if (comment.report_negative[i].email == reporter.email) {
+            comment.report_negative.splice(i, 1);
+          }
+        }
+
+        comment.report_positive.addToSet(reporter._id);
+        if (reporter.email == comment.post.sender.email) {
+          comment.isCorrect = true;
+        }
+        comment.save(function (err) {
+          if (err) {
+            res.status(400).send({
+              status: "fail",
+              error: err.message,
+            });
+
+          }
+        });
+        comment.sender.rating += process.env.RATING_COMMENT
+        comment.sender.save(function (err) {
+          if (err) {
+            res.status(400).send({
+              status: "fail",
+              error: err.message,
+            });
+
+          }
+        });
+      });
+
+  }
+  catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+
+  }
+}
+
+
 module.exports = {
   getAllComments,
   getPostComments,
@@ -140,4 +308,7 @@ module.exports = {
   addComment,
   editComment,
   deleteComment,
+  positiveComment,
+  negativeComment,
+  // getCommentRate,
 };
