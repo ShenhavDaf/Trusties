@@ -9,13 +9,15 @@ public class Notification {
     String postID;
     String time;
     String type;
+    Integer circle;
 
-    public Notification(String notificationID, String postID, String authorID, String time, String type) {
+    public Notification(String notificationID, String postID, String authorID, String time, String type, Integer circle) {
         this.notificationID = notificationID;
         this.postID = postID;
         this.authorID = authorID;
         this.time = time;
         this.type = type;
+        this.circle = circle;
     }
 
     public String getNotificationID() {
@@ -58,14 +60,23 @@ public class Notification {
         this.type = type;
     }
 
+    public Integer getCircle() {
+        return circle;
+    }
+
+    public void setCircle(Integer circle) {
+        this.circle = circle;
+    }
+
     public static Notification create(JsonObject json) {
         String notificationId = json.get("_id").getAsString();
         String author = json.get("sender").getAsString();
         String postId = json.get("post").getAsString();
         String time = json.get("time").getAsString();
         String type = json.get("type").getAsString();
+        Integer circle = json.get("circle").getAsInt();
 
-        Notification notification = new Notification(notificationId, postId, author, time, type);
+        Notification notification = new Notification(notificationId, postId, author, time, type, circle);
         return notification;
     }
 
@@ -76,6 +87,7 @@ public class Notification {
         json.addProperty("post", postID);
         json.addProperty("time", time);
         json.addProperty("type", type);
+        json.addProperty("circle", circle.toString());
         return json;
     }
 }

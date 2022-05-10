@@ -723,6 +723,9 @@ public class ModelServer {
     }
 
     public void getAllNotifications(Model.allNotificationsListener listener) {
+        String currentUserModel = Model.instance.getCurrentUserModel().userID;
+        List<Notification> filteredList = new ArrayList<>();
+
         retrofitInterface.getAllNotifications(accessToken).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -730,6 +733,22 @@ public class ModelServer {
                 List<Notification> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
                     list.add(Notification.create(element.getAsJsonObject()));
+                }
+
+                for (Notification notification : list) {
+                    if (notification.getAuthorID().equals(currentUserModel) &&
+                            (notification.getType().equals("comment") || notification.getType().equals("like")))
+                        filteredList.add(notification);
+                    else {
+                        getFriendsList(notification.getAuthorID(), notification.getCircle(), friendsList -> {
+                            for (JsonElement friend : friendsList) {
+                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+                                    filteredList.add(notification);
+                                }
+                            }
+                        });
+                    }
+
                 }
                 Collections.reverse(list);
                 listener.onComplete(list);
@@ -740,6 +759,21 @@ public class ModelServer {
             }
         });
 
+    }
+
+    public void sendNotification(HashMap<String, String> map, String token, Model.sendNotificationListener listener) {
+        retrofitInterface.sendNotification(token, map).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("TAG", "send notification successfully");
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("TAG", "send notification failed");
+            }
+        });
     }
 
 

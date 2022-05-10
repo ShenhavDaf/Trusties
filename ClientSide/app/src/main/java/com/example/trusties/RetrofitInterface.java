@@ -118,4 +118,7 @@ public interface RetrofitInterface {
     @POST("/notification/add")
     Call<Void> addNotification(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
+    @POST("/notification/sendNotification")
+    Call<Void> sendNotification(@Query("token") String token, @Body HashMap<String, String> map);
+
 }
