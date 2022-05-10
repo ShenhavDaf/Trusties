@@ -381,13 +381,13 @@ public class Model {
 //    }
 
 
-    public interface SaveImageListener {
+    public interface encodeBitMapImgListener {
         void onComplete(String url);
     }
 
-    public void saveUserImage(Bitmap imageBitmap, String imageName, SaveImageListener listener) {
+    public void encodeBitMapImg(Bitmap imageBitmap,  encodeBitMapImgListener listener) {
 
-        modelServer.saveUserImage(imageBitmap, imageName, listener);
+        modelServer.encodeBitMapImg(imageBitmap, listener);
     }
 
 

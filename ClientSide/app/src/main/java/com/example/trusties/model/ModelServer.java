@@ -3,6 +3,7 @@ package com.example.trusties.model;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 
 import com.example.trusties.CommonFunctions;
@@ -699,9 +700,47 @@ public class ModelServer {
     }
 
 
-    public void saveUserImage(Bitmap imageBitmap, String imageName, Model.SaveImageListener listener) {
-        //TODO: add server functionality + how to save the Bitmap ?
+    public void encodeBitMapImg(Bitmap imageBitmap, Model.encodeBitMapImgListener listener) {
 
+        Bitmap scaledBitmap = getScaledBitmap(imageBitmap, 250, 350);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG,100,bos);
+        byte[] bitmapdata = bos.toByteArray();
+        String encodedImage = Base64.encodeToString(bitmapdata,Base64.NO_WRAP);
+        Log.d("TAG", "encoded" + encodedImage);
+        listener.onComplete(encodedImage);
+
+    }
+
+    private Bitmap getScaledBitmap(Bitmap b, int reqWidth, int reqHeight)
+    {
+        int bWidth = b.getWidth();
+        int bHeight = b.getHeight();
+
+        int nWidth = bWidth;
+        int nHeight = bHeight;
+
+        if(nWidth > reqWidth)
+        {
+            int ratio = bWidth / reqWidth;
+            if(ratio > 0)
+            {
+                nWidth = reqWidth;
+                nHeight = bHeight / ratio;
+            }
+        }
+
+        if(nHeight > reqHeight)
+        {
+            int ratio = bHeight / reqHeight;
+            if(ratio > 0)
+            {
+                nHeight = reqHeight;
+                nWidth = bWidth / ratio;
+            }
+        }
+
+        return Bitmap.createScaledBitmap(b, nWidth, nHeight, true);
     }
 
     /* ------------------------------------------------------------------------- */

@@ -53,6 +53,7 @@ const addPosts = async (req, res, next) => {
   var time = req.body.time;
   var role = req.body.role;
   var category = req.body.category;
+  var photo = req.body.photo;
 
   console.log("circle = " + req.body.circle);
 
@@ -68,6 +69,7 @@ const addPosts = async (req, res, next) => {
     role: role,
     friends_circle: friendsCircle,
     category: category,
+    photo: photo,
   });
 
   // const post = Post({
