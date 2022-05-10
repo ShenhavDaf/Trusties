@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment {
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
 
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -80,11 +81,13 @@ public class HomeFragment extends Fragment {
             System.out.println("the postID is:  " + postId);
             Navigation.findNavController(v).navigate(HomeFragmentDirections.actionNavigationHomeToDetailsPostFragment(postId));
         });
+        Model.instance.getAllPosts(postsList -> {
+            homeViewModel.data = postsList;
+            adapter.notifyDataSetChanged();
+        });
 
-
-        refresh();
+//        refresh();
         return root;
-
     }
 
     @Override
@@ -99,10 +102,11 @@ public class HomeFragment extends Fragment {
 //            homeViewModel.data = postsList;
 //            adapter.notifyDataSetChanged();
 //        });
-        Model.instance.getAllPosts(postsList -> {
-            homeViewModel.data = postsList;
-            adapter.notifyDataSetChanged();
-        });
+//        Model.instance.getAllPosts(postsList -> {
+//            homeViewModel.data = postsList;
+//
+//        });
+        adapter.notifyDataSetChanged();
         swipeRefresh.setRefreshing(false);
     }
     /* *************************************** Holder *************************************** */

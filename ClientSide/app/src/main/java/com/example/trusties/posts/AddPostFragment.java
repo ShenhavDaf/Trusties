@@ -55,12 +55,16 @@ public class AddPostFragment extends Fragment {
     //TODO: location
     ConstraintLayout location_layout, circle_layout;
 
+    String category;
+
     Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
 
     Integer circle;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,6 +76,10 @@ public class AddPostFragment extends Fragment {
         description = view.findViewById(R.id.newpost_description_et);
         tags = view.findViewById(R.id.newpost_tags_spinner);
         image = view.findViewById(R.id.newpost_post_image);
+        carBtn = view.findViewById(R.id.newpost_car_btn);
+        toolsBtn = view.findViewById(R.id.newpost_tools_btn);
+        deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
+        houseBtn = view.findViewById(R.id.newpost_house_damage_btn);
 
         progressBar = view.findViewById(R.id.newpost_progressBar);
         progressBar.setVisibility(View.GONE);
@@ -85,6 +93,24 @@ public class AddPostFragment extends Fragment {
         detailsTV = view.findViewById(R.id.newpost_details_tv);
         detailsTV.setVisibility(View.GONE);
 
+        carBtn.setOnClickListener(v -> {
+            category = "car";
+            setColorsBtn(1,0,0,0);
+        });
+        houseBtn.setOnClickListener(v -> {
+            category = "house";
+            setColorsBtn(0,0,0,1);
+        });
+        deliveryBtn.setOnClickListener(v ->
+        {
+            category = "delivery";
+            setColorsBtn(0,1,0,0);
+        });
+        toolsBtn.setOnClickListener(v -> {
+            category = "tools";
+            setColorsBtn(0,0,1,0);
+
+        });
 
         cameraBtn = view.findViewById(R.id.newpost_camera_btn);
         galleryBtn = view.findViewById(R.id.newpost_gallery_btn);
@@ -94,13 +120,11 @@ public class AddPostFragment extends Fragment {
         postBtn = view.findViewById(R.id.newpost_post_btn);
         sosBtn = view.findViewById(R.id.newpost_sos_btn);
 
-
         cameraBtn.setOnClickListener(v -> OpenCamera());
         galleryBtn.setOnClickListener(v -> OpenGallery());
         firstCircleBtn.setOnClickListener(v -> FindFirstCircle());
         secondCircleBtn.setOnClickListener(v -> FindSecondCircle());
         thirdCircleBtn.setOnClickListener(v -> FindThirdCircle());
-
 
         postBtn.setOnClickListener(v -> PostQuestion(v));
         sosBtn.setOnClickListener(v -> postSOSCall(v));
@@ -112,6 +136,29 @@ public class AddPostFragment extends Fragment {
         houseBtn = view.findViewById(R.id.newpost_house_damage_btn);
 
         return view;
+    }
+
+    public void setColorsBtn(int flagCar,int flagDelivery,int flagTools,int flagHouse)
+    {
+        if(flagCar==1)
+            carBtn.setBackgroundTintList(carBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
+        if(flagCar ==0)
+            carBtn.setBackgroundTintList(carBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
+        if(flagDelivery==1)
+            deliveryBtn.setBackgroundTintList(deliveryBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
+        if(flagDelivery ==0)
+            deliveryBtn.setBackgroundTintList(deliveryBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
+        if(flagTools==1)
+            toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
+        if(flagTools ==0)
+            toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
+        if(flagHouse==1)
+            houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
+        if(flagHouse ==0)
+            houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
+
+
+
     }
 
     private void OpenCamera() {
@@ -217,6 +264,7 @@ public class AddPostFragment extends Fragment {
         String email = user.getEmail().replace("\"", "");
 
         HashMap<String, String> map = new HashMap<>();
+        map.put("category",category);
         map.put("title", title);
         map.put("description", message);
         map.put("email", email);
