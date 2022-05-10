@@ -19,8 +19,10 @@
     <color name="StatusBarColor">#6EA9F1</color>
     <color name="ActionBarColor">#907CB7FF</color>
 
+    <color name="btnClicked">#D3D3D3</color>
     <color name="titleColor">#7CA3FF</color>
     <color name="hintColor">#5473B9</color>
+    <color name="whiteColor">#FFFF</color>
     <color name="disabledInputFieldTextColor">#3C3434</color>
     <color name="disabledInputField">#309A9A9A</color>
     <color name="progressBarColor">#8CCBF4</color>
