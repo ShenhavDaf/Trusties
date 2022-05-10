@@ -22,6 +22,7 @@ const notificationSchema = new mongoose.Schema({
     type: Number,
     required: true
   }
+  
 });
 
 module.exports = mongoose.model("Notification", notificationSchema);

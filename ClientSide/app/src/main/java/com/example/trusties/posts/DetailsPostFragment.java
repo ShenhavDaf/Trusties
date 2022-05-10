@@ -177,6 +177,7 @@ public class DetailsPostFragment extends Fragment {
             notification.put("type", "comment");
             notification.put("circle", "0");
 
+
             Model.instance.addNotification(notification, () -> {
 
             });
