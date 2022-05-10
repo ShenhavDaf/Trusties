@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.text.Layout;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.example.trusties.model.User;
 import com.example.trusties.ui.home.HomeFragment;
 import com.google.android.material.button.MaterialButton;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -275,16 +277,15 @@ public class AddPostFragment extends Fragment {
             map.put("circle", circle.toString());
 
         if (imageBitmap != null) {
-
             Log.d("TAG", imageBitmap.toString());
-            Model.instance.saveUserImage(imageBitmap, "postPhoto", new Model.SaveImageListener() {
+            Model.instance.encodeBitMapImg(imageBitmap,  new Model.encodeBitMapImgListener() {
                 @Override
                 public void onComplete(String url) {
-
+                    map.put("photo",url);
                 }
             });
-        }
 
+        }
         Model.instance.addPost(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
     }
 

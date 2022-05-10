@@ -2,6 +2,8 @@ package com.example.trusties.posts;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +52,7 @@ public class DetailsPostFragment extends Fragment {
 
     String postId, senderId;
     User currUser;
+    Bitmap decodedByte;
 
     private DetailsPostViewModel postViewModel;
     private FragmentDetailsPostBinding binding;
@@ -102,7 +106,14 @@ public class DetailsPostFragment extends Fragment {
                 senderId = post.get("sender").toString().replace("\"", "");
                 String status = post.get("status").toString().replace("\"", "");
                 String role = post.get("role").toString().replace("\"", "");
-                displayPost(title, description, time, senderId, status, role);
+
+                String photoBase64 = post.get("photo").getAsString();
+                if(photoBase64!=null )
+                {
+                    byte[] decodedString = Base64.decode(photoBase64,Base64.DEFAULT);
+                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                }
+                displayPost(title, description, time, senderId, status, role, decodedByte);
                 progressBar.setVisibility(View.GONE);
 
                 //Checking if the Current user is the sender of the post for enabling the - EditBtn and DeleteBtn-
@@ -209,7 +220,7 @@ public class DetailsPostFragment extends Fragment {
     }
 
 
-    public void displayPost(String title, String description, String time, String senderId, String status, String role) {
+    public void displayPost(String title, String description, String time, String senderId, String status, String role, Bitmap bm) {
         Model.instance.findUserById(senderId, user -> {
             titleEt.setText(title);
             descriptionEt.setText(description);
@@ -217,6 +228,8 @@ public class DetailsPostFragment extends Fragment {
             authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
             statusEt.setText(status);
             roleEt.setText(role);
+            postImg.setImageBitmap(bm);
+
             updateUI(View.VISIBLE);
 
             if (role == "SOS") {
