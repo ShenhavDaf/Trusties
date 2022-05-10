@@ -183,6 +183,7 @@ public class AddPostFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
+                image.setImageBitmap(imageBitmap);
 
             }
         } else if (requestCode == REQUEST_IMAGE_GALLERY) {
@@ -191,6 +192,7 @@ public class AddPostFragment extends Fragment {
                     final Uri imageUri = data.getData();
                     final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                     imageBitmap = BitmapFactory.decodeStream(imageStream);
+                    image.setImageBitmap(imageBitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }

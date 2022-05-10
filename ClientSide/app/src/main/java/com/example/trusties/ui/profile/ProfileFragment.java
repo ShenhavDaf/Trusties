@@ -2,12 +2,16 @@ package com.example.trusties.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,6 +41,7 @@ public class ProfileFragment extends Fragment {
     SwipeRefreshLayout swipeRefresh;
     User currUser;
     Button edit;
+    Bitmap decodedByte;
 
 
     @Override
@@ -136,6 +141,8 @@ public class ProfileFragment extends Fragment {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName,title, description, time, commentNumber;
+        ImageView photo;
+
 
         public MyViewHolder(@NonNull View itemView, ProfileFragment.OnItemClickListener listener) {
             super(itemView);
@@ -145,6 +152,7 @@ public class ProfileFragment extends Fragment {
             title = itemView.findViewById(R.id.listrow_post_title_tv);
             description = itemView.findViewById(R.id.listrow_post_description_tv);
             commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
+            photo = itemView.findViewById(R.id.listrow_post_img);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -178,6 +186,23 @@ public class ProfileFragment extends Fragment {
 
             Model.instance.getPostComments(post.getId(),commentsList -> {
                 commentNumber.setText(commentsList.size() + " Comments ");
+            });
+            Model.instance.getPostById(post.getId(), new Model.getPostByIdListener() {
+                @Override
+                public void onComplete(JsonObject post) {
+                    if (post.get("photo") != null) {
+                        String photoBase64 = post.get("photo").getAsString();
+                        if(photoBase64!=null )
+                        {
+                            byte[] decodedString = Base64.decode(photoBase64,Base64.DEFAULT);
+                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            photo.setImageBitmap(decodedByte);
+                        }
+                    }
+                    else{
+                        photo.setVisibility(View.GONE);
+                    }
+                }
             });
         }
     }
