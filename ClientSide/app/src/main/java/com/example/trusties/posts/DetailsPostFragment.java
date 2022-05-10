@@ -147,6 +147,18 @@ public class DetailsPostFragment extends Fragment {
                 comment.setText("");
                 refresh();
             });
+
+            /* ------ Add Notification ------ */
+            HashMap<String, String> notification = new HashMap<>();
+            notification.put("postId", postId);
+            notification.put("sender", user.getEmail());
+            notification.put("time", (new Long(0)).toString());
+            notification.put("role", "comment");
+            notification.put("friends_circle", "");
+
+            Model.instance.addNotification(notification, () -> {
+
+            });
         });
 
         swipeRefresh = view.findViewById(R.id.comment_swiperefresh);

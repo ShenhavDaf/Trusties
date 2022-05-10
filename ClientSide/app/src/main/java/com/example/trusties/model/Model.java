@@ -350,4 +350,24 @@ public class Model {
     }
 
 
+    /* ---------------------------------------------------------------------------- */
+
+    public interface addNotificationListener {
+        void onComplete();
+    }
+
+    public void addNotification(HashMap<String, String> map, addNotificationListener listener) {
+        Log.d("TAG", "Model --> addNotification");
+        modelServer.addNotification(map, listener);
+    }
+
+    public interface allNotificationsListener {
+        void onComplete(List<Notification> notificationsList);
+    }
+
+    public void getAllNotifications(allNotificationsListener listener) {
+        Log.d("TAG", "Model --> getAllNotifications");
+        modelServer.getAllNotifications(listener);
+    }
+
 }

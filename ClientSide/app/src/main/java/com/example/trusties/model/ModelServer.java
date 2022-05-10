@@ -669,4 +669,47 @@ public class ModelServer {
         //TODO: add server functionality + how to save the Bitmap ?
 
     }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void addNotification(HashMap<String, String> map, Model.addNotificationListener listener) {
+        Log.d("TAG", map.get("ModelServer --> add notification"));
+        Call<Void> notification = retrofitInterface.addNotification(accessToken, map);
+
+        notification.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
+        });
+    }
+
+    public void getAllNotifications(Model.allNotificationsListener listener) {
+        Log.d("TAG", "Modek Server --> gelAllNotifactions");
+        String currentUserModel = Model.instance.getCurrentUserModel().userID;
+        List<Notification> filteredList = new ArrayList<>();
+
+        retrofitInterface.getAllNotifications(accessToken).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                List<Post> list = new ArrayList<>();
+
+                List<Notification> finalList = filteredList;
+                Collections.reverse(finalList);
+                listener.onComplete(finalList);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+
+    }
+
+
 }
