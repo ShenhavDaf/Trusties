@@ -3,6 +3,10 @@ const User = require("../Models/user_model");
 const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 
+const UserController = require("../Controllers/users");
+const { route } = require("../Routes/post_routes");
+const router = require("../Routes/post_routes");
+
 const getAllPosts = async (req, res, next) => {
   Post.find({}, function (err, docs) {
     if (err) console.log(err);
@@ -48,6 +52,13 @@ const addPosts = async (req, res, next) => {
   var title = req.body.title;
   var time = req.body.time;
   var role = req.body.role;
+  var category = req.body.category;
+
+  console.log("circle = " + req.body.circle);
+
+  var friendsCircle;
+  if (role == "SOS") friendsCircle = Number(req.body.circle);
+  // else friendsCircle = 1;
 
   const post = await Post({
     sender: user,
@@ -55,6 +66,8 @@ const addPosts = async (req, res, next) => {
     time: time,
     description: description,
     role: role,
+    friends_circle: friendsCircle,
+    category: category,
   });
 
   // const post = Post({
@@ -164,6 +177,16 @@ const getMyPosts = async (req, res, next) => {
   });
 };
 
+const allPostsFiltered = async (req, res, next) => {
+  //   var post = await Post.findById(req.query.id);
+  //   var sender = post.sender;
+  //   var circle = post.friends_circle;
+  //   console.log("sender = " + sender);
+  //   console.log("circle444444444444 = " + circle);
+  //   // var list = UserController.getFriendsList(sender,circle);
+  //   console.log("list = " + list);
+};
+
 module.exports = {
   getAllPosts,
   // getQuestions,
@@ -173,4 +196,5 @@ module.exports = {
   getMyPosts,
   editPost,
   deletePost,
+  allPostsFiltered,
 };

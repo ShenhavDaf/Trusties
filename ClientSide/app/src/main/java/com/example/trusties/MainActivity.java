@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
 //        });
         /*****************/
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
+//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
+        /*HIDES THE TOP ACTION BAR*/
+          getSupportActionBar().hide();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

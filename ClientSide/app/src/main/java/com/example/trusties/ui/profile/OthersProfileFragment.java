@@ -4,11 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -19,6 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
 import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentDashboardBinding;
 import com.example.trusties.model.Model;
@@ -27,7 +29,8 @@ import com.example.trusties.model.User;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.JsonObject;
 
-public class ProfileFragment extends Fragment {
+
+public class OthersProfileFragment extends Fragment {
 
     private ProfileViewModel profileViewModel;
     private FragmentDashboardBinding binding;
@@ -35,61 +38,71 @@ public class ProfileFragment extends Fragment {
     MyAdapter adapter;
     TextView connections;
     SwipeRefreshLayout swipeRefresh;
+    JsonObject profileUser;
+    Button add;
+    String userId;
     User currUser;
-    Button edit;
+    Button alreadyFriends;
 
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        userId = OthersProfileFragmentArgs.fromBundle(getArguments()).getUserId();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View root = inflater.inflate(R.layout.fragment_others_profile, container, false);
 
         /**********************************/
 
-        userName = root.findViewById(R.id.profile_name);
-        currUser = Model.instance.getCurrentUserModel();
-        Model.instance.findUserById(Model.instance.getCurrentUserModel().getId(), new Model.findUserByIdListener() {
+
+        userName = root.findViewById(R.id.Othersprofile_name);
+        Model.instance.findUserById(userId, new Model.findUserByIdListener() {
             @Override
             public void onComplete(JsonObject user) {
                 userName.setText(user.get("name").toString().replace("\"", ""));
+                profileUser = user;
             }
         });
+        currUser = Model.instance.getCurrentUserModel();
 
-//        if (Model.instance.getCurrentUserModel() != null) {
-//            userName.setText(Model.instance.getCurrentUserModel().getFullName());
-//            currUser = Model.instance.getCurrentUserModel();
-//            Log.d("TAG",currUser.toString());
-//        }
-//        else
-//            userName.setText("Guest");
-
-        connections = root.findViewById(R.id.profile_connections);
-        Model.instance.getFriendsList(currUser.getId(), 1, friendsList -> {
-            connections.setText( friendsList.size() + " connections");
-        });
-        connections.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToConnectionsFragment());
+        connections = root.findViewById(R.id.Othersprofile_connections);
+        Model.instance.getFriendsList(userId, 1, friendsList -> {
+            connections.setText(friendsList.size() + " connections");
+            for(int i=0; i<friendsList.size();i++)
+            {
+                if(friendsList.get(i).toString().replace("\"", "").equals(currUser.getId()))
+                {
+                    Log.d("TAG", friendsList.get(i).toString());
+                    alreadyFriends.setVisibility(View.VISIBLE);
+                    alreadyFriends.setClickable(false);
+                    add.setVisibility(View.GONE);
+                }
             }
         });
-        edit = root.findViewById(R.id.profile_edit_btn);
-        edit.setOnClickListener(new View.OnClickListener() {
+        alreadyFriends = root.findViewById(R.id.othersProfile_alreadyFriends_btn);
+
+        add = root.findViewById(R.id.Othersprofile_add_btn);
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToEditProfileFragment(currUser.getId()));
+                Model.instance.addFriendToMyContacts(currUser.getId(), userId, new Model.addFriendListener() {
+                    @Override
+                    public void onComplete() {
+                        alreadyFriends.setVisibility(View.VISIBLE);
+                        add.setVisibility(View.GONE);
+                        refresh();
+                    }
+                });
             }
         });
 
         /**********************************/
-        swipeRefresh = root.findViewById(R.id.profile_swiperefresh);
+        swipeRefresh = root.findViewById(R.id.Othersprofile_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> refresh());
 
         RecyclerView list = root.findViewById(R.id.Othersprofile_postlist_rv);
@@ -104,7 +117,7 @@ public class ProfileFragment extends Fragment {
 
             String postId = profileViewModel.getData().get(position).getId();
             System.out.println("the postID is:  " + postId);
-            Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToDetailsPostFragment(postId));
+            Navigation.findNavController(v).navigate(OthersProfileFragmentDirections.actionOthersProfileFragmentToDetailsPostFragment(postId));
         });
 
 
@@ -119,7 +132,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void refresh() {
-        Model.instance.getMyPosts(currUser.getId(),postsList -> {
+        Model.instance.getFriendsList(userId, 1, friendsList -> {
+            connections.setText(friendsList.size() + " connections");
+        });
+        Model.instance.getMyPosts(userId, postsList -> {
             profileViewModel.data = postsList;
             adapter.notifyDataSetChanged();
         });
@@ -137,7 +153,7 @@ public class ProfileFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName,title, description, time, commentNumber;
 
-        public MyViewHolder(@NonNull View itemView, ProfileFragment.OnItemClickListener listener) {
+        public MyViewHolder(@NonNull View itemView, OthersProfileFragment.OnItemClickListener listener) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.listrow_username_tv);
@@ -190,26 +206,26 @@ public class ProfileFragment extends Fragment {
         void onItemClick(View v, int position);
     }
 
-    class MyAdapter extends RecyclerView.Adapter<ProfileFragment.MyViewHolder> {
+    class MyAdapter extends RecyclerView.Adapter<OthersProfileFragment.MyViewHolder> {
 
-        ProfileFragment.OnItemClickListener listener;
+        OthersProfileFragment.OnItemClickListener listener;
 
-        public void setOnItemClickListener(ProfileFragment.OnItemClickListener listener) {
+        public void setOnItemClickListener(OthersProfileFragment.OnItemClickListener listener) {
             this.listener = listener;
         }
 
         @NonNull
         @Override
-        public ProfileFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public OthersProfileFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
             View view = getLayoutInflater().inflate(R.layout.post_list_row, parent, false);
-            ProfileFragment.MyViewHolder holder = new ProfileFragment.MyViewHolder(view, listener);
+            OthersProfileFragment.MyViewHolder holder = new OthersProfileFragment.MyViewHolder(view, listener);
             return holder;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
-        public void onBindViewHolder(@NonNull ProfileFragment.MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull OthersProfileFragment.MyViewHolder holder, int position) {
             Post post = profileViewModel.getData().get(position);
             holder.bind(post);
         }

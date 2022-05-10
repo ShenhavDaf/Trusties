@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.ProfileFragment">
+    tools:context=".ui.profile.OthersProfileFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/profile_swiperefresh"
+        android:id="@+id/Othersprofile_swiperefresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_line">
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Othersprofile_postlist_rv"
@@ -24,7 +24,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <View
-        android:id="@+id/profile_line2"
+        android:id="@+id/Othersprofile_line2"
         android:layout_width="0dp"
         android:layout_height="75dp"
         android:background="#C5E3EC"
@@ -34,7 +34,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/profile_line"
+        android:id="@+id/Othersprofile_line"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="12dp"
@@ -44,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_connections" />
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_connections" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -53,7 +53,7 @@
         android:layout_marginTop="10dp"
         android:src="@android:drawable/btn_star_big_on"
         app:layout_constraintEnd_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/profile_line2" />
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -62,7 +62,7 @@
         android:layout_marginTop="10dp"
         android:src="@android:drawable/btn_star_big_on"
         app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/profile_line2" />
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -72,10 +72,10 @@
         android:layout_marginEnd="10dp"
         android:src="@android:drawable/btn_star_big_on"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_line2" />
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
 
     <ImageView
-        android:id="@+id/profile_image"
+        android:id="@+id/Othersprofile_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginStart="10dp"
@@ -85,17 +85,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/profile_name"
+        android:id="@+id/Othersprofile_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="35dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginEnd="140dp"
         android:text="TextView"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/Othersprofile_image"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -105,29 +105,43 @@
         android:layout_marginTop="10dp"
         android:src="@android:drawable/btn_star_big_on"
         app:layout_constraintEnd_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/profile_line2" />
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
 
     <Button
-        android:id="@+id/profile_edit_btn"
-        android:layout_width="48dp"
+        android:id="@+id/Othersprofile_add_btn"
+        android:layout_width="0dp"
         android:layout_height="45dp"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="23dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="#7393B3"
-        app:cornerRadius="15dp"
-        app:icon="@drawable/edit_icon"
+        android:text="Add me"
+        app:icon="@drawable/ic_add_black_24dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Othersprofile_name"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/profile_connections"
+        android:id="@+id/Othersprofile_connections"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:clickable="true"
-        android:text="365 connections"
+        android:clickable="false"
+        android:text="30 connections"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <Button
+        android:id="@+id/othersProfile_alreadyFriends_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@android:color/holo_green_light"
+        android:text="Friends"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

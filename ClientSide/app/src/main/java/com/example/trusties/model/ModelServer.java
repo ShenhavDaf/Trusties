@@ -1,6 +1,8 @@
 package com.example.trusties.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.trusties.CommonFunctions;
@@ -12,10 +14,12 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,7 +32,7 @@ public class ModelServer {
 
     private final RetrofitInterface retrofitInterface;
     final private static String BASE_URL = "http://10.0.2.2:4000";
-//final private static String BASE_URL = "http://193.106.55.119:4000";
+    //final private static String BASE_URL = "http://193.106.55.119:4000";
     private String accessToken;
 
     public ModelServer() {
@@ -241,8 +245,24 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
+    public void getFriendsList(String userID, Integer circle, Model.friendsListListener listener) {
+        retrofitInterface.getFriendsList(userID, circle).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
 
     public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
+
         Call<Void> add = retrofitInterface.addPost(accessToken, map);
 
         add.enqueue(new Callback<Void>() {
@@ -256,9 +276,14 @@ public class ModelServer {
             }
         });
     }
+
     /* ------------------------------------------------------------------------- */
 
+
     public void getAllPosts(Model.allPostsListener listener) {
+
+        String currentUserModel = Model.instance.getCurrentUserModel().userID;
+        List<Post> filteredList = new ArrayList<>();
 
         retrofitInterface.getAllPosts(accessToken).enqueue(new Callback<JsonArray>() {
             @Override
@@ -266,25 +291,68 @@ public class ModelServer {
 
                 List<Post> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
-                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean()) {
                         list.add(Post.create(element.getAsJsonObject()));
+                    }
                 }
+                for (Post post : list) {
+                    if (post.getAuthorID().equals(currentUserModel))
+                        filteredList.add(post);
+                    else {
+                        getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
+                            for (JsonElement friend : friendsList) {
+                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+                                    filteredList.add(post);
+                                }
+                            }
+                        });
+                    }
 
-                Collections.reverse(list);
-                listener.onComplete(list);
+                }
+                List<Post> finalList = filteredList;
+
+                System.out.println("++++++++++++++++++++ end");
+                Collections.reverse(finalList);
+                listener.onComplete(finalList);
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
             }
         });
+
     }
+
+//    private List<Post> func(List<Post> list) {
+//        List<Post> filteredList = new ArrayList<>();
+//
+//        String currentUserModel = Model.instance.getCurrentUserModel().getId();
+//
+//        for (Post post : list) {
+//            if (post.getAuthorID().equals(currentUserModel))
+//                filteredList.add(post);
+//            else {
+//                this.getFriendsList(post.getAuthorID(), /*post.getCircle()*/1, friendsList -> {
+//                    System.out.println("friendsList = " + friendsList);
+//                    for (JsonElement friend : friendsList) {
+//                        System.out.println("inside for");
+//                        if (friend.toString().equals(currentUserModel)) {
+//                            filteredList.add(post);
+//                        }
+//                    }
+//                });
+//            }
+//        }
+//
+//        System.out.println("after = " + filteredList);
+//        return filteredList;
+//    }
 
     /* ------------------------------------------------------------------------- */
 
     public void getPostById(String postId, Model.getPostByIdListener listener) {
 
-        Call<JsonObject> postDetails = retrofitInterface.getPostById(accessToken,postId);
+        Call<JsonObject> postDetails = retrofitInterface.getPostById(accessToken, postId);
         postDetails.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -380,16 +448,16 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void getPostComments(String postId,Model.allCommentsListener listener) {
+    public void getPostComments(String postId, Model.allCommentsListener listener) {
 
-        retrofitInterface.getPostComments(accessToken,postId).enqueue(new Callback<JsonArray>() {
+        retrofitInterface.getPostComments(accessToken, postId).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
 
                 List<Comment> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
                     if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
-                    list.add(Comment.create(element.getAsJsonObject()));
+                        list.add(Comment.create(element.getAsJsonObject()));
                 }
                 listener.onComplete(list);
             }
@@ -403,7 +471,7 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
     public void editComment(HashMap<String, String> map, String id, Model.editCommentListener listener) {
 
-        Call<Void> editComment = retrofitInterface.editComment(accessToken, map,id);
+        Call<Void> editComment = retrofitInterface.editComment(accessToken, map, id);
 
 
         editComment.enqueue(new Callback<Void>() {
@@ -472,28 +540,6 @@ public class ModelServer {
         });
     }
 
-
-    /* ------------------------------------------------------------------------- */
-
-
-//    public void getCommentRate(String commentId, Model.getCommentRate listener) {
-//
-//        Call<JsonObject> commentRate_retro = retrofitInterface.getCommentRate(accessToken,commentId);
-//        commentRate_retro.enqueue(new Callback<JsonObject>() {
-//            @Override
-//            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//                System.out.println(response.body());
-//                listener.onComplete(response.body());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JsonObject> call, Throwable t) {
-//
-//            }
-//        });
-//
-//    }
-
     /* ------------------------------------------------------------------------- */
     public void getMyPosts(String id, Model.getMyPostsListener listener) {
 
@@ -508,6 +554,7 @@ public class ModelServer {
                         list.add(Post.create(element.getAsJsonObject()));
                 }
 
+
                 Collections.reverse(list);
                 listener.onComplete(list);
             }
@@ -518,6 +565,47 @@ public class ModelServer {
             }
         });
     }
+
+    /* ------------------------------------------------------------------------- */
+
+//    public void getAllPostsInHomePage(Model.getAllPostsInHomePageListener listener) {
+//
+//        String currentUserModel = Model.instance.getCurrentUserModel().userID;
+//        List<Post> filteredList = new ArrayList<>();
+//        Call<JsonArray> getAllPosts = retrofitInterface.getAllPosts(accessToken);
+//        getAllPosts.enqueue(new Callback<JsonArray>() {
+//            @Override
+//            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+//                List<Post> list = new ArrayList<>();
+//                for (JsonElement element : response.body()) {
+//                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+//                        list.add(Post.create(element.getAsJsonObject()));
+//                }
+//                for (Post post : list) {
+//                    if (post.getAuthorID().equals(currentUserModel))
+//                        filteredList.add(post);
+//
+//                    getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
+//                        for (JsonElement friend : friendsList) {
+//                            if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+//                                filteredList.add(post);
+//                            }
+//                        }
+//                    });
+//
+//                }
+//                Collections.reverse(filteredList);
+//                listener.onComplete(filteredList);
+//            }
+//            @Override
+//            public void onFailure(Call<JsonArray> call, Throwable t) {
+//                System.out.println("--- failed\n" + t.getMessage());
+//
+//            }
+//        });
+//    }
+
+    /* ------------------------------------------------------------------------- */
 
     public void editUser(HashMap<String, String> map, String id, Model.editUserListener listener) {
         String userId = Model.instance.getCurrentUserModel().userID;
@@ -531,12 +619,88 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
 
             }
         });
 
     }
 
+    /* ------------------------------------------------------------------------- */
+
+    public void getAllUsers(Model.allUsersListener listener) {
+
+        retrofitInterface.getAllUsers(accessToken).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                List<User> list = new ArrayList<>();
+                for (JsonElement element : response.body()) {
+                    if (element.getAsJsonObject().get("verified").getAsBoolean())
+                        list.add(User.create(element.getAsJsonObject()));
+                }
+
+                listener.onComplete(list);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void getSecondCircle(String userID, Model.secondCircleListener listener) {
+        retrofitInterface.getSecondCircle(userID).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void getThirdCircle(String userID, Model.thirdCircleListener listener) {
+        retrofitInterface.getThirdCircle(userID).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void addFriendToMyContacts(String myID, String hisID, Model.addFriendListener listener) {
+
+        retrofitInterface.addFriendToMyContacts(myID, hisID).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
 
 
+    public void saveUserImage(Bitmap imageBitmap, String imageName, Model.SaveImageListener listener) {
+        //TODO: add server functionality + how to save the Bitmap ?
+
+    }
 }

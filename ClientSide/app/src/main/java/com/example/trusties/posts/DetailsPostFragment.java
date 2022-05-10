@@ -57,6 +57,8 @@ public class DetailsPostFragment extends Fragment {
     ImageView sendCommentBtn;
 
     View line;
+    String senderId;
+    User currUser;
 
     private DetailsPostViewModel postViewModel;
     private FragmentDetailsPostBinding binding;
@@ -84,7 +86,7 @@ public class DetailsPostFragment extends Fragment {
         titleEt = view.findViewById(R.id.postdetails_title_tv);
         timeEt = view.findViewById(R.id.postdetails_time_tv);
         authorEt = view.findViewById(R.id.postdetails_author_tv);
-        descriptionEt=view.findViewById(R.id.postdetails_description_tv);
+        descriptionEt = view.findViewById(R.id.postdetails_description_tv);
         roleEt = view.findViewById(R.id.postdetails_role_tv);
         statusEt = view.findViewById(R.id.postdetails_status_tv);
         editBtn = view.findViewById(R.id.postdetails_edit_btn);
@@ -107,17 +109,17 @@ public class DetailsPostFragment extends Fragment {
                 String description = post.get("description").toString().replace("\"", "");
 //                String time = post.get("time").toString().replace("\"", "");
                 String time = post.get("time").getAsString().substring(0, 16).replace("T", "  ").replace("-", "/");
-                String senderId = post.get("sender").toString().replace("\"", "");
+                senderId = post.get("sender").toString().replace("\"", "");
                 String status = post.get("status").toString().replace("\"", "");
                 String role = post.get("role").toString().replace("\"", "");
-                displayPost(title, description, time,senderId, status, role);
+                displayPost(title, description, time, senderId, status, role);
                 progressBar.setVisibility(View.GONE);
 
                 //Checking if the Current user is the sender of the post for enabling the - EditBtn and DeleteBtn-
                 Model.instance.findUserById(post.get("sender").toString().replace("\"", ""), new Model.findUserByIdListener() {
                     @Override
                     public void onComplete(JsonObject user) {
-                        if(user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail())==0){
+                        if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
                             deleteBtn.setEnabled(true);
                             deleteBtn.setEnabled(true);
                             if(role.compareTo("SOS")==0){
@@ -166,24 +168,38 @@ public class DetailsPostFragment extends Fragment {
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new DetailsPostFragment.MyAdapter();
         list.setAdapter(adapter);
+        currUser = Model.instance.getCurrentUserModel();
+
+        authorEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (senderId.equals(currUser.getId()))
+                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToNavigationDashboard());
+                else
+                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToOthersProfileFragment(senderId));
+            }
+        });
 
         refresh();
         return view;
     }
 
     private void refresh() {
-        Model.instance.getPostComments(postId,commentsList -> {
-            System.out.println("Comments" + commentsList.size());
-            postViewModel.data = commentsList;
-            adapter.notifyDataSetChanged();
+        Model.instance.getPostComments(postId, commentsList -> {
+            if(commentsList.size() ==0)
+                swipeRefresh.setVisibility(View.GONE);
+            else {
+                System.out.println("Comments" + commentsList.size());
+                postViewModel.data = commentsList;
+                adapter.notifyDataSetChanged();
+            }
 
         });
         swipeRefresh.setRefreshing(false);
     }
 
 
-    public void displayPost(String title, String description, String time,String senderId, String status, String role)
-    {
+    public void displayPost(String title, String description, String time, String senderId, String status, String role) {
         Model.instance.findUserById(senderId, user -> {
             titleEt.setText(title);
             descriptionEt.setText(description);
@@ -193,7 +209,7 @@ public class DetailsPostFragment extends Fragment {
             roleEt.setText(role);
             updateUI(View.VISIBLE);
 
-            if(role == "SOS") {
+            if (role == "SOS") {
                 // TODO: Display specific details of SOS call
             }
         });
@@ -243,13 +259,14 @@ public class DetailsPostFragment extends Fragment {
                 delete.setVisibility(View.GONE);
                 editsave.setVisibility(View.VISIBLE);
             });
-            editsave.setOnClickListener(v->{
-               int pos=getAdapterPosition();
-               Comment comment=postViewModel.getData().get(pos);
 
-               HashMap<String, String> map = new HashMap<>();
-               map.put("content", content.getText().toString());
-               String id=comment.getCommentId().toString();
+            editsave.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                Comment comment = postViewModel.getData().get(pos);
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("content", content.getText().toString());
+                String id = comment.getCommentId().toString();
 
                 Model.instance.editComment(map,id, () -> {
                     // TODO: Add comment to local DB ??
@@ -262,11 +279,11 @@ public class DetailsPostFragment extends Fragment {
 
             });
             delete.setOnClickListener(v -> {
-                        //TODO: ADD REFRESH
-                        int pos = getAdapterPosition();
-                        Comment comment = postViewModel.getData().get(pos);
+                //TODO: ADD REFRESH
+                int pos = getAdapterPosition();
+                Comment comment = postViewModel.getData().get(pos);
 
-                        String id = comment.getCommentId().toString();
+                String id = comment.getCommentId().toString();
 
                         Model.instance.deleteComment(id, () -> {
                         refresh();
@@ -360,7 +377,7 @@ public class DetailsPostFragment extends Fragment {
         void onItemClick(View v, int position);
     }
 
-    class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
+    class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         OnItemClickListener listener;
 

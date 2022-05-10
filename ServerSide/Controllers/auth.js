@@ -252,6 +252,13 @@ const verifiedUser = async (req, res, next) => {
   }
 };
 
+const getAllUsers = async (req, res, next) => {
+  User.find({}, function (err, docs) {
+    if (err) console.log(err);
+    else res.status(200).send(docs);
+  });
+};
+
 //Find user by email
 const findUserByEmail = async (req, res, next) => {
   try {
@@ -364,4 +371,5 @@ module.exports = {
   findUserById,
 
   editUser,
+  getAllUsers,
 };

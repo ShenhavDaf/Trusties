@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,12 +24,6 @@ import com.example.trusties.databinding.FragmentHomeBinding;
 import com.example.trusties.model.Model;
 import com.google.android.material.card.MaterialCardView;
 
-import java.sql.Time;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
@@ -40,6 +33,7 @@ public class HomeFragment extends Fragment {
 
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -55,7 +49,7 @@ public class HomeFragment extends Fragment {
         /***********************************/
 //        usersEmail = MainActivity.usersEmail;
         TextView userName = root.findViewById(R.id.home_userName_tv);
-        if(Model.instance.getCurrentUserModel() != null)
+        if (Model.instance.getCurrentUserModel() != null)
             userName.setText(Model.instance.getCurrentUserModel().getFullName());
         else
             userName.setText("Guest");
@@ -87,11 +81,13 @@ public class HomeFragment extends Fragment {
             System.out.println("the postID is:  " + postId);
             Navigation.findNavController(v).navigate(HomeFragmentDirections.actionNavigationHomeToDetailsPostFragment(postId));
         });
+        Model.instance.getAllPosts(postsList -> {
+            homeViewModel.data = postsList;
+            adapter.notifyDataSetChanged();
+        });
 
-
-        refresh();
+//        refresh();
         return root;
-
     }
 
     @Override
@@ -102,24 +98,29 @@ public class HomeFragment extends Fragment {
 
 
     private void refresh() {
-        Model.instance.getAllPosts(postsList -> {
-            homeViewModel.data = postsList;
-            adapter.notifyDataSetChanged();
-        });
-
+//        Model.instance.getAllPostsInHomePage( postsList->{
+//            homeViewModel.data = postsList;
+//            adapter.notifyDataSetChanged();
+//        });
+//        Model.instance.getAllPosts(postsList -> {
+//            homeViewModel.data = postsList;
+//
+//        });
+        adapter.notifyDataSetChanged();
         swipeRefresh.setRefreshing(false);
     }
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView userName, description, time,commentNumber ;
+        TextView userName, title, description, time, commentNumber;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.listrow_username_tv);
             time = itemView.findViewById(R.id.listrow_date_tv);
-            description = itemView.findViewById(R.id.listrow_post_text_tv);
+            title = itemView.findViewById(R.id.listrow_post_title_tv);
+            description = itemView.findViewById(R.id.listrow_post_description_tv);
             commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
 
             itemView.setOnClickListener(v -> {
@@ -140,12 +141,20 @@ public class HomeFragment extends Fragment {
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
             }
             //TODO: change userName from post title to author name
-            userName.setText(post.getTitle());
-            description.setText(post.getDescription());
+            Model.instance.findUserById(post.getAuthorID(), user ->
+                    userName.setText(user.get("name").getAsString())
+            );
+
+            title.setText(post.getTitle());
+            if (post.getDescription().length() > 150)
+                description.setText(post.getDescription().substring(0, 150) + "...");
+            else
+                description.setText(post.getDescription());
+
             String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
 
-            Model.instance.getPostComments(post.getId(),commentsList -> {
+            Model.instance.getPostComments(post.getId(), commentsList -> {
                 commentNumber.setText(commentsList.size() + " Comments ");
             });
 
