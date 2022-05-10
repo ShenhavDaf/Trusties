@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 public class Notification {
 
     String notificationID;
-    String postID;
     String authorID;
+    String postID;
     String time;
     String type;
 
@@ -60,11 +60,10 @@ public class Notification {
 
     public static Notification create(JsonObject json) {
         String notificationId = json.get("_id").getAsString();
-        String postId = json.get("postId").getAsString();
         String author = json.get("sender").getAsString();
+        String postId = json.get("post").getAsString();
         String time = json.get("time").getAsString();
         String type = json.get("type").getAsString();
-        Boolean isDeleted = json.get("isDeleted").getAsBoolean();
 
         Notification notification = new Notification(notificationId, postId, author, time, type);
         return notification;
@@ -73,11 +72,10 @@ public class Notification {
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("_id", notificationID);
-        json.addProperty("postId", postID);
         json.addProperty("sender", authorID);
+        json.addProperty("post", postID);
         json.addProperty("time", time);
         json.addProperty("type", type);
-        json.addProperty("status", "OPEN");
         return json;
     }
 }

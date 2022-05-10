@@ -113,9 +113,9 @@ public interface RetrofitInterface {
   /*------------------------------------------Notifications----------------------------------------*/
 
     @GET("/notification/allNotifications")
-    Call<JsonArray> getAllNotifications(String accessToken);
+    Call<JsonArray> getAllNotifications(@Header("authorization") String accessToken);
 
     @POST("/notification/add")
-    Call<Void> addNotification(String accessToken, HashMap<String, String> map);
+    Call<Void> addNotification(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
 }

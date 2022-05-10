@@ -6,6 +6,7 @@ const Notification = require("../Models/notification_model");
 const { object } = require("mongoose/lib/utils");
 
 const getAllNotifications = async (req, res, next) => {
+  console.log("get all notifications");
   Notification.find({}, function (err, docs) {
     if (err) console.log(err);
     else res.status(200).send(docs);
@@ -15,8 +16,8 @@ const getAllNotifications = async (req, res, next) => {
 const addNotification = async (req, res, next) => {
   console.log("add new notification ");
 
-  const post = await Post.findOne({ _id: req.body.postId });
-  const user = await User.findOne({ email: req.body.authorID });
+  const post = await Post.findOne({ _id: req.body.post });
+  const user = await User.findOne({ email: req.body.sender });
   const time = req.body.time;
   const type = req.body.type;
 
