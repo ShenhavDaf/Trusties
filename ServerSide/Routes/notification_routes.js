@@ -30,11 +30,15 @@ const authenticate = require("../Common/auth_middleware");
  *          type:
  *                type: String
  *                description: The notification type --> Like, Comment, New post, New sos call
+ *          circle:
+ *                type: Number
+ *                description: Circle
  *        example:
  *          sender: '62264bf53dfa30aef30f6ca0'
  *          post: '264b62f53d0aef3fa36ca00f'
  *          time: '2022-03-07 18:16:21'
  *          type: 'Comment'
+ *          circle: 1
  */
 
 /**
