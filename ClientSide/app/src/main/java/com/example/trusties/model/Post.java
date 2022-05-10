@@ -26,7 +26,7 @@ public class Post {
 
     /* ****************************** Constructors ****************************** */
 
-    public Post(String id, String authorID, String title, String description, String time, String role, String status, Boolean isDeleted, String area, String address,Integer circle) {
+    public Post(String id, String authorID, String title, String description, String time, String role, String status, Boolean isDeleted, String area, String address, Integer circle) {
         this.postID = id;
         this.authorID = authorID;
         this.title = title;
@@ -37,7 +37,7 @@ public class Post {
         this.isDeleted = isDeleted;
         this.area = area;
         this.address = address;
-        this.circle = 1;
+        this.circle = circle;
     }
 
     /* ****************************** Getters & Setters ****************************** */
@@ -142,7 +142,7 @@ public class Post {
         Integer circle = json.get("friends_circle").getAsInt();
 
 
-        Post post = new Post( id,  author,  title,  description,  time,  role,  status,  isDeleted, area, address,circle);
+        Post post = new Post(id, author, title, description, time, role, status, isDeleted, area, address, circle);
 
         return post;
     }

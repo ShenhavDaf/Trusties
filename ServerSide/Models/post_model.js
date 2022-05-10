@@ -36,7 +36,6 @@ const postSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Comment",
     default: [],
-
   },
   friends_circle: {
     type: Number,
