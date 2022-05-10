@@ -468,8 +468,7 @@ public class ModelServer {
         });
     }
 
-
-    //Chnage to MAP instead of String.
+    /* ------------------------------------------------------------------------- */
     public void editComment(HashMap<String, String> map, String id, Model.editCommentListener listener) {
 
         Call<Void> editComment = retrofitInterface.editComment(accessToken, map, id);
@@ -487,8 +486,9 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
 
-    public void deleteComment(String id, Model.deleteCommentListener listener) {
+    public void deleteComment(String id, Model.deleteCommentListener listener){
 
         Call<Void> deleteComment = retrofitInterface.deleteComment(accessToken, id);
 
@@ -506,7 +506,41 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
+    public void upComment(String id,HashMap<String, String> map, Model.upCommentListener listener) {
 
+        Call<Void> deleteComment = retrofitInterface.upComment(accessToken, id,map);
+
+        deleteComment.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+    /* ------------------------------------------------------------------------- */
+    public void downComment(String id, HashMap<String, String> map, Model.downCommentListener listener) {
+
+        Call<Void> deleteComment = retrofitInterface.downComment(accessToken, id,map);
+
+        deleteComment.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
     public void getMyPosts(String id, Model.getMyPostsListener listener) {
 
         Call<JsonArray> getMyPosts = retrofitInterface.getMyPosts(accessToken, id);

@@ -101,11 +101,21 @@ public interface RetrofitInterface {
     @POST("/comment/delete/{id}")
     Call<Void> deleteComment(@Header("authorization") String accessToken, @Path("id") String id);
 
-    /*------------------------------------------Notifications----------------------------------------*/
+    @POST("/comment/up/{id}")
+    Call<Void> upComment(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+
+    @POST("/comment/down/{id}")
+    Call<Void> downComment(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+//
+//    @GET("/comment/rate/{id}")
+//    Call<JsonObject> getCommentRate(@Header("authorization") String accessToken, @Path("id") String id);
+  
+  /*------------------------------------------Notifications----------------------------------------*/
 
     @GET("/notification/allNotifications")
     Call<JsonArray> getAllNotifications(String accessToken);
 
     @POST("/notification/add")
     Call<Void> addNotification(String accessToken, HashMap<String, String> map);
+
 }

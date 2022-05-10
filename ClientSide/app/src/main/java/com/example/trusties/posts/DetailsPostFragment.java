@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,11 +47,15 @@ public class DetailsPostFragment extends Fragment {
     // TODO: Add location (SOS Call)
     Button editBtn;
     Button deleteBtn;
+    Button requestsBtn;
+    Button closeBtn;
     String postId;
+
     ProgressBar progressBar;
     ImageView postImg;
     ImageView imgUser;
     ImageView sendCommentBtn;
+
     View line;
     String senderId;
     User currUser;
@@ -92,6 +97,8 @@ public class DetailsPostFragment extends Fragment {
         comment = view.findViewById(R.id.postdetails_comment_et);
         sendCommentBtn = view.findViewById(R.id.postdetails_sendComment_btn);
         imgUser = view.findViewById(R.id.postdetails_imgUser_img);
+        requestsBtn= view.findViewById(R.id.postdetails_view_requests_btn);
+        closeBtn= view.findViewById(R.id.postdetails_close_btn);
 
         updateUI(View.INVISIBLE);
         Model.instance.getPostById(postId, new Model.getPostByIdListener() {
@@ -115,14 +122,18 @@ public class DetailsPostFragment extends Fragment {
                         if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
                             deleteBtn.setEnabled(true);
                             deleteBtn.setEnabled(true);
-                        } else {
+                            if(role.compareTo("SOS")==0){
+                                closeBtn.setVisibility(View.VISIBLE);
+                                requestsBtn.setVisibility(View.VISIBLE);
+                            }
+                        }
+                        else{
                             deleteBtn.setEnabled(false);
                             editBtn.setEnabled(false);
                         }
 
                     }
                 });
-
             }
         });
 
@@ -181,12 +192,6 @@ public class DetailsPostFragment extends Fragment {
             }
         });
 
-
-//        adapter.setOnItemClickListener((v, position) -> {
-//            String postId = postViewModel.getData().get(position).toString();
-//            System.out.println("Comments:  " + postId);
-//        });
-
         refresh();
         return view;
     }
@@ -214,12 +219,6 @@ public class DetailsPostFragment extends Fragment {
             authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
             statusEt.setText(status);
             roleEt.setText(role);
-            //        if(!post.getPhoto().contentEquals("")) {
-            //            Picasso.get()
-            //                    .load(post.getPhoto())
-            //                    .into(postImg);
-            //        }
-
             updateUI(View.VISIBLE);
 
             if (role == "SOS") {
@@ -243,10 +242,12 @@ public class DetailsPostFragment extends Fragment {
     }
 
 
+    //#### Comments ViewHolder ####
+
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView username, time;
+        TextView username,time,rate,correct;
         EditText content;
-        Button delete, edit, editsave;
+        Button delete,edit,editsave,positive,negative;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -255,10 +256,13 @@ public class DetailsPostFragment extends Fragment {
             time = itemView.findViewById(R.id.coomentListRow_time_tv);
             content = itemView.findViewById(R.id.coomentListRow_content_ev);
 
-            delete = itemView.findViewById(R.id.coomentListRow_deleteBtn);
-            edit = itemView.findViewById(R.id.coomentListRow_editBtn);
-            editsave = itemView.findViewById(R.id.coomentListRow_saveEditBtn);
-
+            delete=itemView.findViewById(R.id.coomentListRow_deleteBtn);
+            edit=itemView.findViewById(R.id.coomentListRow_editBtn);
+            editsave=itemView.findViewById(R.id.coomentListRow_saveEditBtn);
+            positive=itemView.findViewById(R.id.coomentListRow_upBtn);
+            negative=itemView.findViewById(R.id.coomentListRow_downBtn);
+            rate=itemView.findViewById(R.id.coomentListRow_rateTv);
+            correct=itemView.findViewById(R.id.coomentListRow_approvedTv);
 
             edit.setOnClickListener(v -> {
                 //TODO: ADD REFRESH
@@ -276,8 +280,7 @@ public class DetailsPostFragment extends Fragment {
                 map.put("content", content.getText().toString());
                 String id = comment.getCommentId().toString();
 
-                Model.instance.editComment(map, id, () -> {
-                    System.out.println("Save on DB");
+                Model.instance.editComment(map,id, () -> {
                     // TODO: Add comment to local DB ??
                     content.setEnabled(false);
                     edit.setVisibility(View.VISIBLE);
@@ -287,8 +290,6 @@ public class DetailsPostFragment extends Fragment {
                 });
 
             });
-            //Need to change to delete comment in server side.
-
             delete.setOnClickListener(v -> {
                 //TODO: ADD REFRESH
                 int pos = getAdapterPosition();
@@ -296,16 +297,40 @@ public class DetailsPostFragment extends Fragment {
 
                 String id = comment.getCommentId().toString();
 
-                Model.instance.deleteComment(id, () -> {
+                        Model.instance.deleteComment(id, () -> {
+                        refresh();
+                        });
+                    });
+            positive.setOnClickListener(v->{
+                int pos=getAdapterPosition();
+                Comment comment=postViewModel.getData().get(pos);
+                String id=comment.getCommentId().toString();
 
+                HashMap<String, String> map = new HashMap<>();
+                map.put("user_rate", Model.instance.getCurrentUserModel().getId());
+
+                Model.instance.upComment(id,map, () -> {
+                    positive.setVisibility(View.GONE);
+                    negative.setVisibility(View.VISIBLE);
                     refresh();
                 });
             });
+            negative.setOnClickListener(v->{
+               int pos=getAdapterPosition();
+                Comment comment=postViewModel.getData().get(pos);
+                String id=comment.getCommentId().toString();
 
+                HashMap<String, String> map = new HashMap<>();
+                map.put("user_rate", Model.instance.getCurrentUserModel().getId());
+
+                Model.instance.downComment(id, map,() -> {
+                    positive.setVisibility(View.GONE);
+                    negative.setVisibility(View.VISIBLE);
+                    refresh();
+                });
+            });
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
-
-//                listener.onItemClick(v, pos);
             });
         }
 
@@ -313,26 +338,49 @@ public class DetailsPostFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Comment comment) {
             Model.instance.findUserById(comment.getSender(), new Model.findUserByIdListener() {
-
                 @Override
+
                 public void onComplete(JsonObject user) {
                     username.setText(user.get("name").toString().replace("\"", ""));
 
-                    //Checking if the Current user is the sender of the post for enabling the - Editand Delete comments-
-                    if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
-                        delete.setVisibility(View.VISIBLE);
-                        edit.setVisibility(View.VISIBLE);
-                    } else {
-                        delete.setVisibility(View.GONE);
-                        edit.setVisibility(View.GONE);
-                    }
-
+                    /*  ## if login user is the same as the comment.sender user
+                        ## hide the ability to rate the comment
+                        ## show the ability to delete and edit */
+                     if(user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail())==0){
+                         delete.setVisibility(View.VISIBLE);
+                         edit.setVisibility(View.VISIBLE);
+                         positive.setVisibility(View.GONE);
+                         negative.setVisibility(View.GONE); }
+                     else{
+                         delete.setVisibility(View.GONE);
+                         edit.setVisibility(View.GONE);
+                         positive.setVisibility(View.VISIBLE);
+                         negative.setVisibility(View.VISIBLE); }
                 }
             });
+
+
+            // # check if the login user already rated
+            if(comment.IsUserRated_negative(Model.instance.getCurrentUserModel().getId())){
+                negative.setVisibility(View.GONE); }
+            else if(comment.IsUserRated_positive(Model.instance.getCurrentUserModel().getId())) {
+                positive.setVisibility(View.GONE); }
+
+            //# check what is the rate of the comment - calc in model
+            int rate_val=comment.getCommentRate();
+            rate.setText(String.valueOf(rate_val));
+
+            //# check if the comment IsCorrect
+            if(comment.IsCorrect().compareTo("true")==0){
+                correct.setVisibility(View.VISIBLE); }
+            else{
+                correct.setVisibility(View.GONE); }
+
 
             content.setText(comment.getContent());
             String newTime = comment.getCurrentTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
+
 
         }
     }
@@ -347,7 +395,6 @@ public class DetailsPostFragment extends Fragment {
 
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
-
         }
 
         @NonNull

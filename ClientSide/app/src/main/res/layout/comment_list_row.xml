@@ -20,22 +20,40 @@
 
     <ImageView
         android:id="@+id/connectionListRow_userImg_img"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="10dp"
+        android:layout_width="56dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/coomentListRow_upBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/avatar" />
+
+    <EditText
+        android:id="@+id/coomentListRow_content_ev"
+        android:layout_width="146dp"
+        android:layout_height="38dp"
+        android:editable="true"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/coomentListRow_downBtn"
+        app:layout_constraintEnd_toStartOf="@+id/coomentListRow_deleteBtn"
+        app:layout_constraintHorizontal_bias="0.034"
+        app:layout_constraintStart_toEndOf="@+id/connectionListRow_userImg_img"
+        app:layout_constraintTop_toBottomOf="@+id/connectionListRow_userName_tv"
+        app:layout_constraintVertical_bias="0.45" />
 
     <TextView
         android:id="@+id/connectionListRow_userName_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/connectionListRow_userImg_img"
@@ -57,6 +75,7 @@
         android:layout_width="33dp"
         android:layout_height="33dp"
         android:layout_marginStart="120dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="#AEA8A8"
         android:padding="2dp"
@@ -69,15 +88,17 @@
         app:icon="@drawable/save_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/coomentListRow_content_ev"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@+id/coomentListRow_time_tv"
+        app:layout_constraintVertical_bias="0.454" />
 
     <Button
         android:id="@+id/coomentListRow_editBtn"
         android:layout_width="33dp"
         android:layout_height="33dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
         android:backgroundTint="#AEA8A8"
         android:padding="2dp"
         android:paddingLeft="2dp"
@@ -93,8 +114,8 @@
         android:id="@+id/coomentListRow_deleteBtn"
         android:layout_width="33dp"
         android:layout_height="33dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
         android:backgroundTint="#AEA8A8"
         android:padding="2dp"
         android:textSize="12sp"
@@ -102,23 +123,60 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/coomentListRow_editBtn" />
 
-    <EditText
-        android:id="@+id/coomentListRow_content_ev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:editable="true"
-        android:ems="10"
-        android:enabled="false"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:textColor="@android:color/primary_text_light"
+    <Button
+        android:id="@+id/coomentListRow_downBtn"
+        android:layout_width="43dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="252dp"
+        android:layout_marginBottom="4dp"
+        android:backgroundTint="#AEA8A8"
+        android:text="N"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/coomentListRow_upBtn"
+        android:layout_width="43dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="4dp"
+        android:backgroundTint="#AEA8A8"
+        android:text="P"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/coomentListRow_rateTv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/coomentListRow_approvedTv"
+        android:layout_width="142dp"
+        android:layout_height="20dp"
+        android:text="Approved by Author!"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.535"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.065" />
+
+    <TextView
+        android:id="@+id/coomentListRow_rateTv"
+        android:layout_width="48dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="0dp"
+        android:text="0"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/coomentListRow_deleteBtn"
-        app:layout_constraintHorizontal_bias="0.104"
-        app:layout_constraintStart_toEndOf="@+id/connectionListRow_userImg_img"
-        app:layout_constraintTop_toBottomOf="@+id/connectionListRow_userName_tv"
-        app:layout_constraintVertical_bias="0.666" />
+        app:layout_constraintEnd_toStartOf="@+id/coomentListRow_downBtn"
+        app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_ev"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
