@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,6 +25,7 @@ import com.example.trusties.databinding.FragmentNotificationsBinding;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.Notification;
 import com.example.trusties.model.Post;
+import com.example.trusties.posts.AddPostFragmentDirections;
 import com.google.android.material.card.MaterialCardView;
 
 public class NotificationsFragment extends Fragment {
@@ -62,8 +64,7 @@ public class NotificationsFragment extends Fragment {
 
             String postId = notificationsViewModel.getData().get(position).getPostID();
             System.out.println("the postID is:  " + postId);
-            // TODO: Connect list row notification to post details page
-//            Navigation.findNavController(v).navigate(HomeFragmentDirections.actionNavigationHomeToDetailsPostFragment(postId));
+            Navigation.findNavController(v).navigate(NotificationsFragmentDirections.actionNavigationNotificationsToDetailsPostFragment(postId));
         });
 
         refresh();
@@ -78,11 +79,10 @@ public class NotificationsFragment extends Fragment {
 
 
     private void refresh() {
-//        Model.instance.getAllPosts(postsList -> {
-//            homeViewModel.data = postsList;
-//            adapter.notifyDataSetChanged();
-//        });
-        // TODO: Implement --> getAllNotifications
+        Model.instance.getAllNotifications(notificationsList -> {
+            notificationsViewModel.data = notificationsList;
+            adapter.notifyDataSetChanged();
+        });
         swipeRefresh.setRefreshing(false);
     }
 
@@ -109,24 +109,28 @@ public class NotificationsFragment extends Fragment {
         @SuppressLint("SimpleDateFormat")
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Notification notification) {
-            String type;
+            String type = notification.getType();
 
-            if (notification.getType().toLowerCase().equals("sos")) {
-                type = "sos";
+            if (type.equals("sos")) {
                 MaterialCardView card = (MaterialCardView) itemView;
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
-            } else {
-                type = "post";
             }
 
             Model.instance.findUserById(notification.getAuthorID(), user -> {
-                        String userName = user.get("name").getAsString();
-                        if (type == "sos") {
-                            description.setText(userName + " shared a SOS call");
-                        } else {
-                            description.setText(userName + " shared a post");
-                        }
+                    String userName = user.get("name").getAsString();
+                    if(type.equals("sos")) {
+                        description.setText(userName + " shared a SOS call");
                     }
+                    else if(type.equals("post")) {
+                        description.setText(userName + " shared a post");
+                    }
+                    else if(type.equals("comment")) {
+                        description.setText(userName + " commented on post");
+                    }
+                    else if(type.equals("like")) {
+                        description.setText(userName + " liked a post");
+                    }
+                }
             );
 
             String newTime = notification.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");

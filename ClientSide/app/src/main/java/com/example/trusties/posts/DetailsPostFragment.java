@@ -161,8 +161,8 @@ public class DetailsPostFragment extends Fragment {
 
             /* ------ Add Notification ------ */
             HashMap<String, String> notification = new HashMap<>();
-            notification.put("postId", postId);
             notification.put("sender", user.getEmail());
+            notification.put("post", postId);
             notification.put("time", (new Long(0)).toString());
             notification.put("type", "comment");
             notification.put("friends_circle", "");
