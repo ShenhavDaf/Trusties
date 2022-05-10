@@ -109,4 +109,13 @@ public interface RetrofitInterface {
 //
 //    @GET("/comment/rate/{id}")
 //    Call<JsonObject> getCommentRate(@Header("authorization") String accessToken, @Path("id") String id);
+  
+  /*------------------------------------------Notifications----------------------------------------*/
+
+    @GET("/notification/allNotifications")
+    Call<JsonArray> getAllNotifications(String accessToken);
+
+    @POST("/notification/add")
+    Call<Void> addNotification(String accessToken, HashMap<String, String> map);
+
 }
