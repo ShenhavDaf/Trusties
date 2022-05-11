@@ -489,7 +489,7 @@ public class ModelServer {
     }
     /* ------------------------------------------------------------------------- */
 
-    public void deleteComment(String id, Model.deleteCommentListener listener){
+    public void deleteComment(String id, Model.deleteCommentListener listener) {
 
         Call<Void> deleteComment = retrofitInterface.deleteComment(accessToken, id);
 
@@ -507,9 +507,9 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
-    public void upComment(String id,HashMap<String, String> map, Model.upCommentListener listener) {
+    public void upComment(String id, HashMap<String, String> map, Model.upCommentListener listener) {
 
-        Call<Void> deleteComment = retrofitInterface.upComment(accessToken, id,map);
+        Call<Void> deleteComment = retrofitInterface.upComment(accessToken, id, map);
 
         deleteComment.enqueue(new Callback<Void>() {
             @Override
@@ -523,10 +523,11 @@ public class ModelServer {
             }
         });
     }
+
     /* ------------------------------------------------------------------------- */
     public void downComment(String id, HashMap<String, String> map, Model.downCommentListener listener) {
 
-        Call<Void> deleteComment = retrofitInterface.downComment(accessToken, id,map);
+        Call<Void> deleteComment = retrofitInterface.downComment(accessToken, id, map);
 
         deleteComment.enqueue(new Callback<Void>() {
             @Override
@@ -704,37 +705,32 @@ public class ModelServer {
 
         Bitmap scaledBitmap = getScaledBitmap(imageBitmap, 250, 350);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG,100,bos);
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         byte[] bitmapdata = bos.toByteArray();
-        String encodedImage = Base64.encodeToString(bitmapdata,Base64.NO_WRAP);
+        String encodedImage = Base64.encodeToString(bitmapdata, Base64.NO_WRAP);
         Log.d("TAG", "encoded" + encodedImage);
         listener.onComplete(encodedImage);
 
     }
 
-    private Bitmap getScaledBitmap(Bitmap b, int reqWidth, int reqHeight)
-    {
+    private Bitmap getScaledBitmap(Bitmap b, int reqWidth, int reqHeight) {
         int bWidth = b.getWidth();
         int bHeight = b.getHeight();
 
         int nWidth = bWidth;
         int nHeight = bHeight;
 
-        if(nWidth > reqWidth)
-        {
+        if (nWidth > reqWidth) {
             int ratio = bWidth / reqWidth;
-            if(ratio > 0)
-            {
+            if (ratio > 0) {
                 nWidth = reqWidth;
                 nHeight = bHeight / ratio;
             }
         }
 
-        if(nHeight > reqHeight)
-        {
+        if (nHeight > reqHeight) {
             int ratio = bHeight / reqHeight;
-            if(ratio > 0)
-            {
+            if (ratio > 0) {
                 nHeight = reqHeight;
                 nWidth = bWidth / ratio;
             }
@@ -779,7 +775,7 @@ public class ModelServer {
                             (notification.getType().equals("comment") || notification.getType().equals("like")))
                         filteredList.add(notification);
                     else {
-                        getFriendsList(notification.getAuthorID(), notification.getCircle(), friendsList -> {
+                        getFriendsList(notification.getAuthorID(), Integer.valueOf(notification.getCircle()), friendsList -> {
                             for (JsonElement friend : friendsList) {
                                 if (friend.toString().replace("\"", "").equals(currentUserModel)) {
                                     filteredList.add(notification);
