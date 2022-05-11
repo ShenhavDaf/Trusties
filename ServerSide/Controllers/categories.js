@@ -4,7 +4,6 @@ const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 const Category = require("../Models/category_model");
 
-const { route } = require("../Routes/category_routes");
 const router = require("../Routes/category_routes");
 
 Category.countDocuments({}, function (err, count) {
