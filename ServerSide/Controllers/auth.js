@@ -343,6 +343,7 @@ const editUser = async (req, res, next) => {
       {
         name: req.body.name,
         phone: req.body.phone,
+        photo: req.body.photo,
       }
     );
     const updateUser = await User.findById(req.params.id);
