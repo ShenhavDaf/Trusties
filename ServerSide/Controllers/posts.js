@@ -121,6 +121,7 @@ const editPost = async (req, res, next) => {
       {
         title: req.body.title,
         description: req.body.description,
+        photo: req.body.photo,
       }
     );
     const updatePost = await Post.findById(req.params.id);
