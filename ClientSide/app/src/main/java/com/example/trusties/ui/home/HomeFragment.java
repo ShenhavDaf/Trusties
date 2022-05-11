@@ -80,7 +80,6 @@ public class HomeFragment extends Fragment {
         list.setAdapter(adapter);
 
 
-
         adapter.setOnItemClickListener((v, position) -> {
             System.out.println("the POSITION is:  " + position);
 
@@ -115,18 +114,21 @@ public class HomeFragment extends Fragment {
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView userName, title, description, time, commentNumber;
-        ImageView photo;
+        TextView userName, title, description, time, commentNumber, category, status;
+        ImageView photo, userImage;
 
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.listrow_username_tv);
+            userImage = itemView.findViewById(R.id.listrow_avatar_imv);
             time = itemView.findViewById(R.id.listrow_date_tv);
             title = itemView.findViewById(R.id.listrow_post_title_tv);
             description = itemView.findViewById(R.id.listrow_post_description_tv);
             commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
+            category = itemView.findViewById(R.id.listrow_category_tv);
+            status = itemView.findViewById(R.id.listrow_post_status_tv);
             photo = itemView.findViewById(R.id.listrow_post_img);
 
             itemView.setOnClickListener(v -> {
@@ -147,8 +149,16 @@ public class HomeFragment extends Fragment {
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
             }
             //TODO: change userName from post title to author name
-            Model.instance.findUserById(post.getAuthorID(), user ->
-                    userName.setText(user.get("name").getAsString())
+            Model.instance.findUserById(post.getAuthorID(), user -> {
+                        userName.setText(user.get("name").getAsString());
+
+                        if (user.get("photo") != null) {
+                            String photoBase64 = user.get("photo").getAsString();
+                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            userImage.setImageBitmap(decodedByte);
+                        }
+                    }
             );
 
             title.setText(post.getTitle());
@@ -164,19 +174,27 @@ public class HomeFragment extends Fragment {
                 commentNumber.setText(commentsList.size() + " Comments ");
             });
 
+
+            /* TODO: Update the "Post" model and use getters & setters instead of using getPostById
+                Unnecessary server calls */
             Model.instance.getPostById(post.getId(), new Model.getPostByIdListener() {
                 @Override
                 public void onComplete(JsonObject post) {
+
+                    status.setText(post.get("status").getAsString());
+                    if (status.getText().equals("OPEN")) {
+                        status.setBackgroundColor(status.getContext().getColor(R.color.green));
+                    }
+                    category.setText(post.get("category").getAsString());
+
                     if (post.get("photo") != null) {
                         String photoBase64 = post.get("photo").getAsString();
-                        if(photoBase64!=null )
-                        {
-                            byte[] decodedString = Base64.decode(photoBase64,Base64.DEFAULT);
+                        if (photoBase64 != null) {
+                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
                             decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                             photo.setImageBitmap(decodedByte);
                         }
-                    }
-                    else{
+                    } else {
                         photo.setVisibility(View.GONE);
                     }
                 }

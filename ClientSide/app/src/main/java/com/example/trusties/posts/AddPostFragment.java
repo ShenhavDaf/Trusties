@@ -105,21 +105,21 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
 
         carBtn.setOnClickListener(v -> {
-            category = "car";
-            setColorsBtn(1,0,0,0);
+            category = "Car";
+            setColorsBtn(1, 0, 0, 0);
         });
         houseBtn.setOnClickListener(v -> {
-            category = "house";
-            setColorsBtn(0,0,0,1);
+            category = "House";
+            setColorsBtn(0, 0, 0, 1);
         });
         deliveryBtn.setOnClickListener(v ->
         {
-            category = "delivery";
-            setColorsBtn(0,1,0,0);
+            category = "Delivery";
+            setColorsBtn(0, 1, 0, 0);
         });
         toolsBtn.setOnClickListener(v -> {
-            category = "tools";
-            setColorsBtn(0,0,1,0);
+            category = "Tools";
+            setColorsBtn(0, 0, 1, 0);
 
         });
 
@@ -149,26 +149,23 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-    public void setColorsBtn(int flagCar,int flagDelivery,int flagTools,int flagHouse)
-    {
-        if(flagCar==1)
+    public void setColorsBtn(int flagCar, int flagDelivery, int flagTools, int flagHouse) {
+        if (flagCar == 1)
             carBtn.setBackgroundTintList(carBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
-        if(flagCar ==0)
+        if (flagCar == 0)
             carBtn.setBackgroundTintList(carBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
-        if(flagDelivery==1)
+        if (flagDelivery == 1)
             deliveryBtn.setBackgroundTintList(deliveryBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
-        if(flagDelivery ==0)
+        if (flagDelivery == 0)
             deliveryBtn.setBackgroundTintList(deliveryBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
-        if(flagTools==1)
+        if (flagTools == 1)
             toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
-        if(flagTools ==0)
+        if (flagTools == 0)
             toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
-        if(flagHouse==1)
+        if (flagHouse == 1)
             houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
-        if(flagHouse ==0)
+        if (flagHouse == 0)
             houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
-
-
 
     }
 
@@ -263,7 +260,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         String currUserID = Model.instance.getCurrentUserModel().getId();
 
-        if(circle == null) circle = 1;
+        if (circle == null) circle = 1;
 
         Model.instance.getFriendsList(currUserID, circle, friendsList -> {
             System.out.println(circle + "--> " + friendsList);
@@ -276,7 +273,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         String email = user.getEmail().replace("\"", "");
 
         HashMap<String, String> map = new HashMap<>();
-        map.put("category",category);
+        map.put("category", category);
         map.put("title", title);
         map.put("description", message);
         map.put("email", email);
@@ -286,10 +283,10 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         if (imageBitmap != null) {
             Log.d("TAG", imageBitmap.toString());
-            Model.instance.encodeBitMapImg(imageBitmap,  new Model.encodeBitMapImgListener() {
+            Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
                 @Override
                 public void onComplete(String url) {
-                    map.put("photo",url);
+                    map.put("photo", url);
                 }
             });
 

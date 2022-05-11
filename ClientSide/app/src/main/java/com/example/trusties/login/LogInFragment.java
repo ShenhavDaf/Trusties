@@ -133,7 +133,7 @@ public class LogInFragment extends Fragment {
                 "After login we recommend updating the new password (by editing a profile)";
 
         EditText input = new EditText(getContext());
-        input.setBackground(new ColorDrawable(Integer.valueOf(R.color.lightGray)));
+        input.setBackgroundColor(this.getContext().getResources().getColor(R.color.titleColor));
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -157,7 +157,7 @@ public class LogInFragment extends Fragment {
         Model.instance.findUserByEmail(localEmail, new Model.findUserByEmailListener() {
             @Override
             public void onComplete(JsonObject user) {
-                Model.instance.setCurrentUserModel(new User(user.get("_id").toString().replace("\"", ""),user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", "")));
+                Model.instance.setCurrentUserModel(new User(user.get("_id").toString().replace("\"", ""), user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", "")));
             }
         });
 
