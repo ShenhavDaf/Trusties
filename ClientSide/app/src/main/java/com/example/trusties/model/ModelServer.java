@@ -700,7 +700,26 @@ public class ModelServer {
         });
     }
 
+    /* ------------------------------------------------------------------------- */
 
+
+    public void removeFriendFromMyContacts(String myID, String hisID, Model.removeFriendListener listener) {
+
+        retrofitInterface.removeFriendFromMyContacts(myID, hisID).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    /* ------------------------------------------------------------------------- */
     public void encodeBitMapImg(Bitmap imageBitmap, Model.encodeBitMapImgListener listener) {
 
         Bitmap scaledBitmap = getScaledBitmap(imageBitmap, 250, 350);
@@ -810,6 +829,5 @@ public class ModelServer {
             }
         });
     }
-
 
 }

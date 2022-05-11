@@ -174,6 +174,53 @@ const addFriendToMyContacts = async (req, res, next) => {
   });
 };
 
+const removeFriendFromMyContacts = async (req, res, next) => {
+  console.log("remove this friend ");
+
+  const me = await User.findOne({ _id: req.query.myId });
+  const otherUser = await User.findOne({ _id: req.query.hisId });
+
+  const myPromise = new Promise((resolve, reject) => {
+    me.save(async (error) => {
+      if (error) {
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+        });
+      } else {
+        await User.updateOne(
+          { _id: me._id },
+          {
+            $pull: { friends: otherUser._id },
+          }
+        );
+        resolve("done");
+      }
+    });
+
+    otherUser.save(async (error) => {
+      if (error) {
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+        });
+      } else {
+        await User.updateOne(
+          { _id: otherUser._id },
+          {
+            $pull: { friends: me._id },
+          }
+        );
+      }
+      resolve("done");
+    });
+  });
+  myPromise.then((alert) => {
+    res.status(200).send(me);
+    console.log(alert);
+  });
+};
+
 module.exports = {
   // findUserByEmail,
   // findUserById,
@@ -182,4 +229,5 @@ module.exports = {
   getSecondCircleOnly,
   getThirdCircleOnly,
   addFriendToMyContacts,
+  removeFriendFromMyContacts,
 };
