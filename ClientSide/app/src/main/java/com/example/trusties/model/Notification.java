@@ -9,9 +9,9 @@ public class Notification {
     String postID;
     String time;
     String type;
-    Integer circle;
+    String circle;
 
-    public Notification(String notificationID, String postID, String authorID, String time, String type, Integer circle) {
+    public Notification(String notificationID, String postID, String authorID, String time, String type, String circle) {
         this.notificationID = notificationID;
         this.postID = postID;
         this.authorID = authorID;
@@ -60,11 +60,11 @@ public class Notification {
         this.type = type;
     }
 
-    public Integer getCircle() {
+    public String getCircle() {
         return circle;
     }
 
-    public void setCircle(Integer circle) {
+    public void setCircle(String circle) {
         this.circle = circle;
     }
 
@@ -74,7 +74,7 @@ public class Notification {
         String postId = json.get("post").getAsString();
         String time = json.get("time").getAsString();
         String type = json.get("type").getAsString();
-        Integer circle = json.get("circle").getAsInt();
+        String circle = json.get("circle").getAsString();
 
         Notification notification = new Notification(notificationId, postId, author, time, type, circle);
         return notification;
