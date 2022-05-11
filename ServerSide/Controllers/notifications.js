@@ -20,12 +20,15 @@ const addNotification = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.sender });
   const time = req.body.time;
   const type = req.body.type;
+  const circle = req.body.circle;
+  
 
   const notification = Notification({
     sender: user,
     post: post,
     time: Date.now(),
-    type: type
+    type: type,
+    circle: circle
   });
 
   notification.save(async (error, notification) => {
@@ -44,7 +47,25 @@ const addNotification = async (req, res, next) => {
   });
 };
 
+const sendNotification = async (req, res, next) => {
+  console.log("Send notification");
+  const payload = {
+    to: req.body.token,
+      notification: {
+          title: "Test Notification",
+          body: "Hey..."
+      }
+  }
+
+  request.post({
+    headers: {'content-type': 'application/json', "Authorization": process.env.FIREBASE_TOKEN},
+    url: "https://fcm.googleapis.com/fcm/send",
+    body: payload
+  });
+};
+
 module.exports = {
   getAllNotifications,
-  addNotification
+  addNotification,
+  sendNotification
 };

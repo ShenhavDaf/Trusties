@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -38,6 +39,9 @@ import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
 import com.example.trusties.ui.home.HomeFragment;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.ByteArrayOutputStream;
@@ -45,7 +49,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-public class AddPostFragment extends Fragment {
+public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     EditText postTitle, description;
     TextView detailsTV;
@@ -56,6 +60,7 @@ public class AddPostFragment extends Fragment {
     ProgressBar progressBar;
     //TODO: location
     ConstraintLayout location_layout, circle_layout;
+    MapView mapView;
 
     String category;
 
@@ -78,6 +83,7 @@ public class AddPostFragment extends Fragment {
         description = view.findViewById(R.id.newpost_description_et);
         tags = view.findViewById(R.id.newpost_tags_spinner);
         image = view.findViewById(R.id.newpost_post_image);
+        mapView = view.findViewById(R.id.newpost_map);
         carBtn = view.findViewById(R.id.newpost_car_btn);
         toolsBtn = view.findViewById(R.id.newpost_tools_btn);
         deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
@@ -94,6 +100,9 @@ public class AddPostFragment extends Fragment {
 
         detailsTV = view.findViewById(R.id.newpost_details_tv);
         detailsTV.setVisibility(View.GONE);
+
+        mapView.getMapAsync(this);
+        mapView.onCreate(savedInstanceState);
 
         carBtn.setOnClickListener(v -> {
             category = "Car";
@@ -245,9 +254,6 @@ public class AddPostFragment extends Fragment {
                 postSOSCall(view);
             }
         });
-//        createPost(view, "SOS");
-
-        // TODO: Check if all relevant details of SOS call are exist
     }
 
     private void createPost(View view, String type) {
@@ -286,6 +292,66 @@ public class AddPostFragment extends Fragment {
 
         }
         Model.instance.addPost(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
+
+//        /* ------ Add Notification ------ */
+//        HashMap<String, String> notification = new HashMap<>();
+//        notification.put("sender", user.getEmail());
+//        notification.put("post", postId);
+//        notification.put("time", (new Long(0)).toString());
+//        notification.put("type", "post");
+//
+//        Model.instance.addNotification(notification, () -> {
+//
+//        });
+//        String token = Model.getToken();
+//        Model.instance.sendNotification(notification, token, () -> {
+//        });
     }
 
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        mapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mapView.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
 }

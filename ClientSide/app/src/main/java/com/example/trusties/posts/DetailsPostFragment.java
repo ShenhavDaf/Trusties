@@ -174,10 +174,14 @@ public class DetailsPostFragment extends Fragment {
             notification.put("post", postId);
             notification.put("time", (new Long(0)).toString());
             notification.put("type", "comment");
-            notification.put("friends_circle", "");
+            notification.put("circle", "0");
+
 
             Model.instance.addNotification(notification, () -> {
 
+            });
+            String token = Model.getToken();
+            Model.instance.sendNotification(notification, token, () -> {
             });
         });
 
