@@ -372,6 +372,18 @@ public class Model {
 
     /* ---------------------------------------------------------------------------- */
 
+    public interface removeFriendListener {
+        void onComplete();
+    }
+
+    public void removeFriendFromMyContacts(String myID, String hisID, removeFriendListener listener) {
+        modelServer.removeFriendFromMyContacts(myID, hisID, listener);
+    }
+
+
+
+    /* ---------------------------------------------------------------------------- */
+
 //    public interface getAllPostsInHomePageListener {
 //        void onComplete(List<Post> postsList);
 //    }

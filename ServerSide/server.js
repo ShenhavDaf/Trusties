@@ -43,6 +43,7 @@ const userRouter = require("./Routes/user_routes");
 const commentRouter = require("./Routes/comment_routes");
 const sosRouter = require("./Routes/sos_routes");
 const notificationRouter = require("./Routes/notification_routes");
+const categoryRouter = require("./Routes/category_routes");
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
@@ -51,5 +52,6 @@ app.use("/post", postRouter);
 app.use("/comment", commentRouter);
 app.use("/sos", sosRouter);
 app.use("/notification", notificationRouter);
+app.use("/category", categoryRouter);
 
 module.exports = app;

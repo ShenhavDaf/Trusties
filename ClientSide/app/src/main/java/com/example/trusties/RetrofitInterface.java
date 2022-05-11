@@ -60,6 +60,9 @@ public interface RetrofitInterface {
     @GET("/user/addFriendToMyContacts/{myId}/{hisId}")
     Call<Void> addFriendToMyContacts(@Query("myId") String myID,@Query("hisId") String hisID);
 
+    @GET("/user/removeFriendFromMyContacts/{myId}/{hisId}")
+    Call<Void> removeFriendFromMyContacts(@Query("myId") String myID,@Query("hisId") String hisID);
+
 
     /*------------------------------------------Posts----------------------------------------*/
 

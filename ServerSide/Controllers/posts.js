@@ -72,6 +72,7 @@ const addPosts = async (req, res, next) => {
     photo: photo,
   });
 
+  
   // const post = Post({
   //     message: req.body.message,
   //     sender: sender
