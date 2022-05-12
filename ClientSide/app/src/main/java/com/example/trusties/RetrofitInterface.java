@@ -1,17 +1,23 @@
 package com.example.trusties;
 
+import com.google.android.datatransport.runtime.dagger.MapKey;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface RetrofitInterface {
 
@@ -70,7 +76,7 @@ public interface RetrofitInterface {
     Call<JsonArray> getAllPosts(@Header("authorization") String accessToken);
 
     @POST("/post/add")
-    Call<Void> addPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
+    Call<JsonObject> addPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
     @GET("/post/{id}")
     Call<JsonObject> getPostById(@Header("authorization") String accessToken, @Path("id") String id);
@@ -83,6 +89,9 @@ public interface RetrofitInterface {
 
     @GET("/post/MyPosts/{id}")
     Call<JsonArray> getMyPosts(@Header("authorization") String accessToken, @Path("id") String id);
+
+    @POST("/post/addPhotosToPost/{id}")
+    Call<Void> addPhotosToPost(/*@Header("authorization") String accessToken,*/ @Body ArrayList<String> photos, @Query("id") String id);
 
     /*------------------------------------------Comments----------------------------------------*/
 

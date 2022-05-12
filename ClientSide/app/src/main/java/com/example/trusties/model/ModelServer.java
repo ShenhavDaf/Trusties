@@ -262,9 +262,25 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
+    public void addPost(HashMap<String, String> map,Model.addPostListener listener) {
 
-        Call<Void> add = retrofitInterface.addPost(accessToken, map);
+        Call<JsonObject> add = retrofitInterface.addPost(accessToken, map);
+
+        add.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+            }
+        });
+    }
+
+    public void addPhotosToPost(ArrayList< String> photos,String id, Model.addPhotosToPostListener listener) {
+
+        Call<Void> add = retrofitInterface.addPhotosToPost(/*accessToken,*/ photos,id);
 
         add.enqueue(new Callback<Void>() {
             @Override
@@ -274,6 +290,7 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("TAG", t.getMessage());
             }
         });
     }
@@ -722,9 +739,9 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
     public void encodeBitMapImg(Bitmap imageBitmap, Model.encodeBitMapImgListener listener) {
 
-        Bitmap scaledBitmap = getScaledBitmap(imageBitmap, 250, 350);
+        Bitmap scaledBitmap = getScaledBitmap(imageBitmap, 450, 450);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos);
         byte[] bitmapdata = bos.toByteArray();
         String encodedImage = Base64.encodeToString(bitmapdata, Base64.NO_WRAP);
         Log.d("TAG", "encoded" + encodedImage);

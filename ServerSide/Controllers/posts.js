@@ -53,6 +53,10 @@ const addPosts = async (req, res, next) => {
   var role = req.body.role;
   var category = req.body.category;
   var photo = req.body.photo;
+  // if (req.queryMap.photos == null) {
+  //   console.log("in");
+  photo = req.body.photo;
+  // } else photo = req.queryMap.photos;
 
   const findCategory = await Category.findOne({ name: category });
 
@@ -106,10 +110,39 @@ const addPosts = async (req, res, next) => {
       console.log("post added!");
       res.status(200).send({
         status: "OK",
-        post: newPost,
+        // post: newPost,
+        _id: post._id,
       });
     }
   });
+};
+
+const addPhotosToPost = async (req, res, next) => {
+  console.log("size" + req.query.id);
+  console.log("body- " + req.body);
+  try {
+    const exists = await Post.updateOne(
+      { _id: req.query.id },
+      {
+        $push: { photo: req.body },
+      }
+    );
+
+    const updatePost = await Post.findById(req.params.id);
+    if (exists == null) return sendError(res, 400, "post does not exist");
+    else {
+      console.log("post photos!");
+      res.status(200).send({
+        status: "OK",
+        post: updatePost,
+      });
+    }
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
 };
 
 /* ********************************************************** */
@@ -217,4 +250,5 @@ module.exports = {
   editPost,
   deletePost,
   allPostsFiltered,
+  addPhotosToPost,
 };
