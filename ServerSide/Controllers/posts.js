@@ -2,9 +2,8 @@ const Post = require("../Models/post_model");
 const User = require("../Models/user_model");
 const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
+const Category = require("../Models/category_model");
 
-const UserController = require("../Controllers/users");
-const { route } = require("../Routes/post_routes");
 const router = require("../Routes/post_routes");
 
 const getAllPosts = async (req, res, next) => {
@@ -55,6 +54,8 @@ const addPosts = async (req, res, next) => {
   var category = req.body.category;
   var photo = req.body.photo;
 
+  const findCategory = await Category.findOne({ name: category });
+
   console.log("circle = " + req.body.circle);
 
   var friendsCircle;
@@ -70,6 +71,22 @@ const addPosts = async (req, res, next) => {
     friends_circle: friendsCircle,
     category: category,
     photo: photo,
+  });
+
+  findCategory.save(async (error) => {
+    if (error) {
+      res.status(400).send({
+        status: "fail",
+        error: error.message,
+      });
+    } else {
+      await Category.updateOne(
+        { name: category },
+        {
+          $push: { posts: [post._id] },
+        }
+      );
+    }
   });
 
   // const post = Post({
@@ -104,6 +121,7 @@ const editPost = async (req, res, next) => {
       {
         title: req.body.title,
         description: req.body.description,
+        photo: req.body.photo,
       }
     );
     const updatePost = await Post.findById(req.params.id);

@@ -46,7 +46,7 @@ public class OthersProfileFragment extends Fragment {
     Button add;
     String userId;
     User currUser;
-    Button alreadyFriends;
+    Button unFriend;
     ImageView userImage;
     Bitmap decodedByte;
 
@@ -68,6 +68,7 @@ public class OthersProfileFragment extends Fragment {
 
         userName = root.findViewById(R.id.Othersprofile_name);
         userImage = root.findViewById(R.id.Othersprofile_image);
+        unFriend = root.findViewById(R.id.othersProfile_unfriend_btn);
 
         Model.instance.findUserById(userId, new Model.findUserByIdListener() {
             @Override
@@ -91,13 +92,13 @@ public class OthersProfileFragment extends Fragment {
             for (int i = 0; i < friendsList.size(); i++) {
                 if (friendsList.get(i).toString().replace("\"", "").equals(currUser.getId())) {
                     Log.d("TAG", friendsList.get(i).toString());
-                    alreadyFriends.setVisibility(View.VISIBLE);
-                    alreadyFriends.setClickable(false);
+                    unFriend.setVisibility(View.VISIBLE);
+                    unFriend.setClickable(true);
                     add.setVisibility(View.GONE);
                 }
             }
         });
-        alreadyFriends = root.findViewById(R.id.othersProfile_alreadyFriends_btn);
+
 
         add = root.findViewById(R.id.Othersprofile_add_btn);
         add.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +107,7 @@ public class OthersProfileFragment extends Fragment {
                 Model.instance.addFriendToMyContacts(currUser.getId(), userId, new Model.addFriendListener() {
                     @Override
                     public void onComplete() {
-                        alreadyFriends.setVisibility(View.VISIBLE);
+                        unFriend.setVisibility(View.VISIBLE);
                         add.setVisibility(View.GONE);
                         refresh();
                     }
@@ -114,43 +115,64 @@ public class OthersProfileFragment extends Fragment {
             }
         });
 
-        /**********************************/
-        swipeRefresh = root.findViewById(R.id.Othersprofile_swiperefresh);
-        swipeRefresh.setOnRefreshListener(() -> refresh());
-
-        RecyclerView list = root.findViewById(R.id.Othersprofile_postlist_rv);
-        list.setHasFixedSize(true);
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new MyAdapter();
-        list.setAdapter(adapter);
-
-
-        adapter.setOnItemClickListener((v, position) -> {
-            System.out.println("the POSITION is:  " + position);
-
-            String postId = profileViewModel.getData().get(position).getId();
-            System.out.println("the postID is:  " + postId);
-            Navigation.findNavController(v).navigate(OthersProfileFragmentDirections.actionOthersProfileFragmentToDetailsPostFragment(postId));
+        unFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Model.instance.removeFriendFromMyContacts(currUser.getId(), userId, new Model.removeFriendListener() {
+                    @Override
+                    public void onComplete() {
+                        unFriend.setVisibility(View.GONE);
+                        add.setVisibility(View.VISIBLE);
+                        refresh();
+                    }
+                });
+            }
         });
 
+/**********************************/
+                swipeRefresh=root.findViewById(R.id.Othersprofile_swiperefresh);
+                        swipeRefresh.setOnRefreshListener(()->
 
-        refresh();
-        return root;
-    }
+                        refresh());
 
-    @Override
-    public void onDestroyView() {
+                        RecyclerView list=root.findViewById(R.id.Othersprofile_postlist_rv);
+                        list.setHasFixedSize(true);
+                        list.setLayoutManager(new
+
+                        LinearLayoutManager(getContext()));
+                        adapter=new
+
+                        MyAdapter();
+                        list.setAdapter(adapter);
+
+
+                        adapter.setOnItemClickListener((v,position)->
+
+                        {
+                        System.out.println("the POSITION is:  "+position);
+
+                        String postId=profileViewModel.getData().get(position).getId();
+                        System.out.println("the postID is:  "+postId);
+                        Navigation.findNavController(v).navigate(OthersProfileFragmentDirections.actionOthersProfileFragmentToDetailsPostFragment(postId));
+                        });
+
+                        refresh();
+                        return root;
+                        }
+
+@Override
+public void onDestroyView(){
         super.onDestroyView();
-        binding = null;
-    }
+        binding=null;
+        }
 
-    private void refresh() {
-        Model.instance.getFriendsList(userId, 1, friendsList -> {
-            connections.setText(friendsList.size() + " connections");
+private void refresh(){
+        Model.instance.getFriendsList(userId,1,friendsList->{
+        connections.setText(friendsList.size()+" connections");
         });
-        Model.instance.getMyPosts(userId, postsList -> {
-            profileViewModel.data = postsList;
-            adapter.notifyDataSetChanged();
+        Model.instance.getMyPosts(userId,postsList->{
+        profileViewModel.data=postsList;
+        adapter.notifyDataSetChanged();
         });
 
 //        Model.instance.getMyPosts(currUser.get,postsList -> {
@@ -159,133 +181,133 @@ public class OthersProfileFragment extends Fragment {
 //        });
 
         swipeRefresh.setRefreshing(false);
-    }
-
-    /* *************************************** Holder *************************************** */
-
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView userName, title, description, time, commentNumber, category, status;
-        ImageView photo, userImage;
-
-        public MyViewHolder(@NonNull View itemView, OthersProfileFragment.OnItemClickListener listener) {
-            super(itemView);
-
-            userName = itemView.findViewById(R.id.listrow_username_tv);
-            userImage = itemView.findViewById(R.id.listrow_avatar_imv);
-            time = itemView.findViewById(R.id.listrow_date_tv);
-            title = itemView.findViewById(R.id.listrow_post_title_tv);
-            description = itemView.findViewById(R.id.listrow_post_description_tv);
-            commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
-            category = itemView.findViewById(R.id.listrow_category_tv);
-            status = itemView.findViewById(R.id.listrow_post_status_tv);
-            photo = itemView.findViewById(R.id.listrow_post_img);
-
-            itemView.setOnClickListener(v -> {
-                int pos = getAdapterPosition();
-                listener.onItemClick(v, pos);
-            });
         }
 
+/* *************************************** Holder *************************************** */
 
-        @SuppressLint("SimpleDateFormat")
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        public void bind(Post post) {
+class MyViewHolder extends RecyclerView.ViewHolder {
+    TextView userName, title, description, time, commentNumber, category, status;
+    ImageView photo, userImage;
 
-            if (post.getRole().toLowerCase().equals("sos")) {
-                //TODO: if role == sos change to "sos layout"
+    public MyViewHolder(@NonNull View itemView, OthersProfileFragment.OnItemClickListener listener) {
+        super(itemView);
+
+        userName = itemView.findViewById(R.id.listrow_username_tv);
+        userImage = itemView.findViewById(R.id.listrow_avatar_imv);
+        time = itemView.findViewById(R.id.listrow_date_tv);
+        title = itemView.findViewById(R.id.listrow_post_title_tv);
+        description = itemView.findViewById(R.id.listrow_post_description_tv);
+        commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
+        category = itemView.findViewById(R.id.listrow_category_tv);
+        status = itemView.findViewById(R.id.listrow_post_status_tv);
+        photo = itemView.findViewById(R.id.listrow_post_img);
+
+        itemView.setOnClickListener(v -> {
+            int pos = getAdapterPosition();
+            listener.onItemClick(v, pos);
+        });
+    }
+
+
+    @SuppressLint("SimpleDateFormat")
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void bind(Post post) {
+
+        if (post.getRole().toLowerCase().equals("sos")) {
+            //TODO: if role == sos change to "sos layout"
 //                getLayoutInflater().inflate(R.layout.sos_list_row, (ViewGroup) itemView,true); // double
-                MaterialCardView card = (MaterialCardView) itemView;
-                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
-            }
-            //TODO: change userName from post title to author name
-            Model.instance.findUserById(post.getAuthorID(), user -> {
-                        userName.setText(user.get("name").getAsString());
+            MaterialCardView card = (MaterialCardView) itemView;
+            card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
+        }
+        //TODO: change userName from post title to author name
+        Model.instance.findUserById(post.getAuthorID(), user -> {
+                    userName.setText(user.get("name").getAsString());
 
-                        if (user.get("photo") != null) {
-                            String photoBase64 = user.get("photo").getAsString();
-                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
-                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            userImage.setImageBitmap(decodedByte);
-                        }
-                    }
-            );
-            title.setText(post.getTitle());
-            if (post.getDescription().length() > 150)
-                description.setText(post.getDescription().substring(0, 150) + "...");
-            else
-                description.setText(post.getDescription());
-
-            String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
-            time.setText(newTime);
-
-            Model.instance.getPostComments(post.getId(), commentsList -> {
-                commentNumber.setText(commentsList.size() + " Comments ");
-            });
-
-            Model.instance.getPostById(post.getId(), new Model.getPostByIdListener() {
-                @Override
-                public void onComplete(JsonObject post) {
-
-                    status.setText(post.get("status").getAsString());
-                    if (status.getText().equals("OPEN")) {
-                        status.setBackgroundColor(status.getContext().getColor(R.color.green));
-                    }
-                    category.setText(post.get("category").getAsString());
-
-                    if (post.get("photo") != null) {
-                        String photoBase64 = post.get("photo").getAsString();
-                        if (photoBase64 != null) {
-                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
-                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            photo.setImageBitmap(decodedByte);
-                        }
-                    } else {
-                        photo.setVisibility(View.GONE);
+                    if (user.get("photo") != null) {
+                        String photoBase64 = user.get("photo").getAsString();
+                        byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        userImage.setImageBitmap(decodedByte);
                     }
                 }
-            });
-        }
+        );
+        title.setText(post.getTitle());
+        if (post.getDescription().length() > 150)
+            description.setText(post.getDescription().substring(0, 150) + "...");
+        else
+            description.setText(post.getDescription());
 
-    }
+        String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
+        time.setText(newTime);
 
+        Model.instance.getPostComments(post.getId(), commentsList -> {
+            commentNumber.setText(commentsList.size() + " Comments ");
+        });
 
+        Model.instance.getPostById(post.getId(), new Model.getPostByIdListener() {
+            @Override
+            public void onComplete(JsonObject post) {
 
-    /* *************************************** Adapter *************************************** */
+                status.setText(post.get("status").getAsString());
+                if (status.getText().equals("OPEN")) {
+                    status.setBackgroundColor(status.getContext().getColor(R.color.green));
+                }
+                category.setText(post.get("category").getAsString());
 
-    interface OnItemClickListener {
-        void onItemClick(View v, int position);
-    }
-
-    class MyAdapter extends RecyclerView.Adapter<OthersProfileFragment.MyViewHolder> {
-
-        OthersProfileFragment.OnItemClickListener listener;
-
-        public void setOnItemClickListener(OthersProfileFragment.OnItemClickListener listener) {
-            this.listener = listener;
-        }
-
-        @NonNull
-        @Override
-        public OthersProfileFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-            View view = getLayoutInflater().inflate(R.layout.post_list_row, parent, false);
-            OthersProfileFragment.MyViewHolder holder = new OthersProfileFragment.MyViewHolder(view, listener);
-            return holder;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void onBindViewHolder(@NonNull OthersProfileFragment.MyViewHolder holder, int position) {
-            Post post = profileViewModel.getData().get(position);
-            holder.bind(post);
-        }
-
-        @Override
-        public int getItemCount() {
-            if (profileViewModel.getData() == null) {
-                return 0;
+                if (post.get("photo") != null) {
+                    String photoBase64 = post.get("photo").getAsString();
+                    if (photoBase64 != null) {
+                        byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        photo.setImageBitmap(decodedByte);
+                    }
+                } else {
+                    photo.setVisibility(View.GONE);
+                }
             }
-            return profileViewModel.getData().size();
-        }
+        });
     }
+
+}
+
+
+
+/* *************************************** Adapter *************************************** */
+
+interface OnItemClickListener {
+    void onItemClick(View v, int position);
+}
+
+class MyAdapter extends RecyclerView.Adapter<OthersProfileFragment.MyViewHolder> {
+
+    OthersProfileFragment.OnItemClickListener listener;
+
+    public void setOnItemClickListener(OthersProfileFragment.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public OthersProfileFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        View view = getLayoutInflater().inflate(R.layout.post_list_row, parent, false);
+        OthersProfileFragment.MyViewHolder holder = new OthersProfileFragment.MyViewHolder(view, listener);
+        return holder;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onBindViewHolder(@NonNull OthersProfileFragment.MyViewHolder holder, int position) {
+        Post post = profileViewModel.getData().get(position);
+        holder.bind(post);
+    }
+
+    @Override
+    public int getItemCount() {
+        if (profileViewModel.getData() == null) {
+            return 0;
+        }
+        return profileViewModel.getData().size();
+    }
+}
 }
