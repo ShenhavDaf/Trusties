@@ -138,11 +138,20 @@ public class Model {
     /* ---------------------------------------------------------------------------- */
 
     public interface addPostListener {
-        void onComplete();
+        void onComplete(JsonObject res);
+
     }
 
     public void addPost(HashMap<String, String> map, addPostListener listener) {
         modelServer.addPost(map, listener);
+    }
+
+    public interface addPhotosToPostListener {
+        void onComplete();
+    }
+
+    public void addPhotosToPost(ArrayList<String> photos,String id, addPhotosToPostListener listener) {
+        modelServer.addPhotosToPost(photos,id, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
