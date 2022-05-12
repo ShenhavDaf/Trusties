@@ -7,11 +7,15 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -68,6 +72,9 @@ public class HomeFragment extends Fragment {
 //                userName.setText(connectedUser.getFullName().replace("\"", ""));
 //            }
 //        });
+
+
+
         /************************************/
 
         swipeRefresh = root.findViewById(R.id.home_swiperefresh);
@@ -92,6 +99,9 @@ public class HomeFragment extends Fragment {
 //            adapter.notifyDataSetChanged();
             refresh();
         });
+
+
+
 //        refresh();
         return root;
     }
@@ -111,6 +121,7 @@ public class HomeFragment extends Fragment {
         adapter.notifyDataSetChanged();
         swipeRefresh.setRefreshing(false);
     }
+
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -131,6 +142,7 @@ public class HomeFragment extends Fragment {
             status = itemView.findViewById(R.id.listrow_post_status_tv);
             photo = itemView.findViewById(R.id.listrow_post_img);
 
+
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(v, pos);
@@ -150,18 +162,16 @@ public class HomeFragment extends Fragment {
             }
             //TODO: change userName from post title to author name
             Model.instance.findUserById(post.getAuthorID(), user -> {
-                        userName.setText(user.get("name").getAsString());
+                userName.setText(user.get("name").getAsString());
+                if (user.get("photo") != null) {
+                    String photoBase64 = user.get("photo").getAsString();
+                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    userImage.setImageBitmap(decodedByte);
+                }
+            });
 
-                        if (user.get("photo") != null) {
-                            String photoBase64 = user.get("photo").getAsString();
-                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
-                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            userImage.setImageBitmap(decodedByte);
-                        }
-                    }
-            );
-
-            title.setText(post.getTitle());
+              title.setText(post.getTitle());
             if (post.getDescription().length() > 150)
                 description.setText(post.getDescription().substring(0, 150) + "...");
             else
@@ -187,8 +197,8 @@ public class HomeFragment extends Fragment {
                     }
                     category.setText(post.get("category").getAsString());
 
-                    if (post.get("photo") != null) {
-                        String photoBase64 = post.get("photo").getAsString();
+                    if (post.get("photo") != null) {// CHANGED
+                        String photoBase64 = post.get("photo").getAsJsonArray().get(0).getAsString();
                         if (photoBase64 != null) {
                             byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
                             decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -200,6 +210,8 @@ public class HomeFragment extends Fragment {
                 }
             });
 
+            // implement the ViewFactory interface and implement
+            // unimplemented method that returns an imageView
 
 
 
