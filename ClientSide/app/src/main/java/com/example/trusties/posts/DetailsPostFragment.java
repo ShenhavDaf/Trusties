@@ -108,7 +108,7 @@ public class DetailsPostFragment extends Fragment {
                 String role = post.get("role").toString().replace("\"", "");
 
 
-                if (post.get("photo").getAsJsonArray() != null) { // CHANGED
+                if (post.get("photo").getAsJsonArray().size() > 0) { // CHANGED
                     String photoBase64 = post.get("photo").getAsJsonArray().get(0).getAsString();
                     byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
                     decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);

@@ -262,7 +262,7 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void addPost(HashMap<String, String> map,Model.addPostListener listener) {
+    public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
 
         Call<JsonObject> add = retrofitInterface.addPost(accessToken, map);
 
@@ -278,9 +278,9 @@ public class ModelServer {
         });
     }
 
-    public void addPhotosToPost(ArrayList< String> photos,String id, Model.addPhotosToPostListener listener) {
+    public void addPhotosToPost(ArrayList<String> photos, String id, Model.addPhotosToPostListener listener) {
 
-        Call<Void> add = retrofitInterface.addPhotosToPost(/*accessToken,*/ photos,id);
+        Call<Void> add = retrofitInterface.addPhotosToPost(/*accessToken,*/ photos, id);
 
         add.enqueue(new Callback<Void>() {
             @Override
@@ -325,13 +325,10 @@ public class ModelServer {
                             }
                         });
                     }
-
                 }
-                List<Post> finalList = filteredList;
 
-                System.out.println("++++++++++++++++++++ end");
-                Collections.reverse(finalList);
-                listener.onComplete(finalList);
+                Collections.reverse(filteredList);
+                listener.onComplete(filteredList);
             }
 
             @Override
@@ -340,31 +337,6 @@ public class ModelServer {
         });
 
     }
-
-//    private List<Post> func(List<Post> list) {
-//        List<Post> filteredList = new ArrayList<>();
-//
-//        String currentUserModel = Model.instance.getCurrentUserModel().getId();
-//
-//        for (Post post : list) {
-//            if (post.getAuthorID().equals(currentUserModel))
-//                filteredList.add(post);
-//            else {
-//                this.getFriendsList(post.getAuthorID(), /*post.getCircle()*/1, friendsList -> {
-//                    System.out.println("friendsList = " + friendsList);
-//                    for (JsonElement friend : friendsList) {
-//                        System.out.println("inside for");
-//                        if (friend.toString().equals(currentUserModel)) {
-//                            filteredList.add(post);
-//                        }
-//                    }
-//                });
-//            }
-//        }
-//
-//        System.out.println("after = " + filteredList);
-//        return filteredList;
-//    }
 
     /* ------------------------------------------------------------------------- */
 
