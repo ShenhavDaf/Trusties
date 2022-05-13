@@ -254,7 +254,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
                 }
                 category.setText(post.get("category").getAsString());
 
-                if (post.get("photo") != null) {
+                if (post.get("photo").getAsJsonArray().size() > 0) {
                     String photoBase64 = post.get("photo").getAsString();
                     if (photoBase64 != null) {
                         byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);

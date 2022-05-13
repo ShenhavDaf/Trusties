@@ -19,8 +19,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.trusties.CommonFunctions;
 import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentConnectionsBinding;
 import com.example.trusties.model.Model;
@@ -41,10 +43,11 @@ public class ConnectionsFragment extends Fragment {
     private FragmentConnectionsBinding binding;
     SwipeRefreshLayout swipeRefresh;
     MyAdapter adapter;
+    Button firstCircle, secondCircle, thirdCircle;
+    ImageButton searchBtn, refreshBtn;
+    TextView searchBar;
     User currUser;
-    Button secondCircle;
-    Button firstCircle;
-    Button thirdCircle;
+
     String userId;
     int flagSecond = 0;
     int flagFirst = 0;
@@ -88,6 +91,16 @@ public class ConnectionsFragment extends Fragment {
 
         });
 
+
+        searchBar = root.findViewById(R.id.connections_search_tv);
+        searchBtn = root.findViewById(R.id.connections_search_btn);
+        refreshBtn = root.findViewById(R.id.connections_refresh_btn);
+        refreshBtn.setVisibility(View.GONE);
+
+        searchBtn.setOnClickListener(v -> searchFunction());
+        refreshBtn.setOnClickListener(v -> refreshFunction());
+
+
         firstCircle = root.findViewById(R.id.connections_firstcircle_btn);
         firstCircle.setOnClickListener(v -> {
             refreshFirstCircle(1);
@@ -113,6 +126,43 @@ public class ConnectionsFragment extends Fragment {
 
         refreshFirstCircle(1);
         return root;
+    }
+
+
+    private void searchFunction() {
+        String str = searchBar.getText().toString().toLowerCase();
+
+        if (flagFirst == 0 && flagSecond == 0 && flagThird == 0) {
+            new CommonFunctions().myPopup(this.getContext(), "Error", "Please select a circle number first..");
+        } else if (str.equals("")) {
+            new CommonFunctions().myPopup(this.getContext(), "Error", "Please enter name of friend..");
+        } else {
+
+            List<JsonObject> filteredList = new LinkedList<>();
+
+            for (JsonObject user : lst) {
+                if (user.get("name").getAsString().toLowerCase().contains(str))
+                    filteredList.add(user);
+            }
+
+            connectionsViewModel.data = filteredList;
+            adapter.notifyDataSetChanged();
+            refreshBtn.setVisibility(View.VISIBLE);
+            firstCircle.setEnabled(false);
+            secondCircle.setEnabled(false);
+            thirdCircle.setEnabled(false);
+
+        }
+    }
+
+    private void refreshFunction() {
+        connectionsViewModel.data = lst;
+        adapter.notifyDataSetChanged();
+
+        refreshBtn.setVisibility(View.GONE);
+        firstCircle.setEnabled(true);
+        secondCircle.setEnabled(true);
+        thirdCircle.setEnabled(true);
     }
 
 
