@@ -35,6 +35,8 @@ import com.example.trusties.model.Comment;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
 import com.google.gson.JsonObject;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import java.util.HashMap;
 
@@ -59,6 +61,10 @@ public class DetailsPostFragment extends Fragment {
 
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
+
+    CarouselView carouselView;
+    Bitmap[] sampleImages;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -85,14 +91,16 @@ public class DetailsPostFragment extends Fragment {
         statusEt = view.findViewById(R.id.postdetails_status_tv);
         editBtn = view.findViewById(R.id.postdetails_edit_btn);
         deleteBtn = view.findViewById(R.id.postdetails_delete_btn);
-        postImg = view.findViewById(R.id.postDetails_post_img);
-        postImg.setVisibility(View.GONE);
+//        postImg = view.findViewById(R.id.postDetails_post_img);
+//        postImg.setVisibility(View.GONE);
         line = view.findViewById(R.id.postdetails_line);
         comment = view.findViewById(R.id.postdetails_comment_et);
         sendCommentBtn = view.findViewById(R.id.postdetails_sendComment_btn);
         imgUser = view.findViewById(R.id.postdetails_imgUser_img);
         requestsBtn = view.findViewById(R.id.postdetails_view_requests_btn);
         closeBtn = view.findViewById(R.id.postdetails_close_btn);
+
+        carouselView = view.findViewById(R.id.carouselView);
 
         updateUI(View.INVISIBLE);
         Model.instance.getPostById(postId, new Model.getPostByIdListener() {
@@ -109,11 +117,22 @@ public class DetailsPostFragment extends Fragment {
 
 
                 if (post.get("photo").getAsJsonArray().size() > 0) { // CHANGED
+                    if(post.get("photo").getAsJsonArray().size() == 1)
+                        sampleImages = new Bitmap[1];
+                    if(post.get("photo").getAsJsonArray().size() == 2)
+                        sampleImages = new Bitmap[2];
                     String photoBase64 = post.get("photo").getAsJsonArray().get(0).getAsString();
                     byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
                     decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    sampleImages[0]= decodedByte;
                 }
-                displayPost(title, description, time, senderId, status, role, decodedByte);
+                if (post.get("photo").getAsJsonArray().size() == 2) { // CHANGED
+                    String photoBase64 = post.get("photo").getAsJsonArray().get(1).getAsString();
+                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    sampleImages[1]=decodedByte;
+                }
+                displayPost(title, description, time, senderId, status, role, sampleImages);
                 progressBar.setVisibility(View.GONE);
 
                 //Checking if the Current user is the sender of the post for enabling the - EditBtn and DeleteBtn-
@@ -224,7 +243,7 @@ public class DetailsPostFragment extends Fragment {
     }
 
 
-    public void displayPost(String title, String description, String time, String senderId, String status, String role, Bitmap bm) {
+    public void displayPost(String title, String description, String time, String senderId, String status, String role, Bitmap[] bm) {
         Model.instance.findUserById(senderId, user -> {
             titleEt.setText(title);
             descriptionEt.setText(description);
@@ -232,10 +251,20 @@ public class DetailsPostFragment extends Fragment {
             authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
             statusEt.setText(status);
             roleEt.setText(role);
+            ImageListener imageListener = new ImageListener() {
+                @Override
+                public void setImageForPosition(int position, ImageView imageView) {
+                    imageView.setImageBitmap(sampleImages[position]);
+                }
+            };
             if (bm != null)
-                postImg.setImageBitmap(bm);
+            {
+                carouselView.setImageListener(imageListener);
+                carouselView.setPageCount(bm.length);
+            }
+
             else
-                postImg.setVisibility(View.GONE);
+                carouselView.setVisibility(View.GONE);
 
             updateUI(View.VISIBLE);
 
@@ -246,6 +275,7 @@ public class DetailsPostFragment extends Fragment {
 
     }
 
+
     public void updateUI(int type) {
         titleEt.setVisibility(type);
         timeEt.setVisibility(type);
@@ -254,7 +284,7 @@ public class DetailsPostFragment extends Fragment {
         roleEt.setVisibility(type);
         statusEt.setVisibility(type);
         line.setVisibility(type);
-        postImg.setVisibility(type);
+//        postImg.setVisibility(type);
         sendCommentBtn.setVisibility(type);
         imgUser.setVisibility(type);
     }

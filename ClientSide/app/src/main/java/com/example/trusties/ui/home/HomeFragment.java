@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, title, description, time, commentNumber, category, status;
-        ImageView photo, userImage;
+        ImageView photo, userImage,plusOne;
 
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
@@ -174,6 +174,7 @@ public class HomeFragment extends Fragment {
             category = itemView.findViewById(R.id.listrow_category_tv);
             status = itemView.findViewById(R.id.listrow_post_status_tv);
             photo = itemView.findViewById(R.id.listrow_post_img);
+            plusOne = itemView.findViewById(R.id.listrow_plus_one_image);
 
 
             itemView.setOnClickListener(v -> {
@@ -231,6 +232,8 @@ public class HomeFragment extends Fragment {
                     category.setText(post.get("category").getAsString());
 
                     if (post.get("photo").getAsJsonArray().size() > 0) {// CHANGED
+                        if(post.get("photo").getAsJsonArray().size() == 2 )
+                            plusOne.setVisibility(View.VISIBLE);
                         String photoBase64 = post.get("photo").getAsJsonArray().get(0).getAsString();
                         if (photoBase64 != null) {
                             byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
