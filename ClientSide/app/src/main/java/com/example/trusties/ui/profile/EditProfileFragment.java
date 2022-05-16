@@ -44,7 +44,7 @@ public class EditProfileFragment extends Fragment {
     Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
-
+    User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +60,7 @@ public class EditProfileFragment extends Fragment {
         galleryBtn = view.findViewById(R.id.editProfile_gallery_btn);
         image = view.findViewById(R.id.editProfile_image);
 
-        User user = Model.instance.getCurrentUserModel();
+        user = Model.instance.getCurrentUserModel();
         nameEt.setText(user.getFullName());
         phoneEt.setText(user.getPhone());
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +132,9 @@ public class EditProfileFragment extends Fragment {
         Model.instance.editUser(map, userId, new Model.editUserListener() {
             @Override
             public void onComplete() {
+
+                User newUsr = new User(userId,map.get("name"),user.getEmail(),map.get("phone"));
+                Model.instance.setCurrentUserModel(newUsr);
                 Navigation.findNavController(view).navigateUp();
             }
         });
