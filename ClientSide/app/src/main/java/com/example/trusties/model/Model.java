@@ -236,7 +236,7 @@ public class Model {
     /* ---------------------------------------------------------------------------- */
 
     public interface editPostListener {
-        void onComplete();
+        void onComplete(JsonObject post);
     }
 
     public void editPost(HashMap<String, String> map, String id, editPostListener listener) {

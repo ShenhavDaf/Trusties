@@ -378,16 +378,16 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
     public void editPost(HashMap<String, String> map, String postId, Model.editPostListener listener) {
-        Call<Void> editPost = retrofitInterface.editPost(accessToken, map, postId);
+        Call<JsonObject> editPost = retrofitInterface.editPost(accessToken, map, postId);
 
-        editPost.enqueue(new Callback<Void>() {
+        editPost.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                listener.onComplete();
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
 
             }
         });

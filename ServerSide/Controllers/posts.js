@@ -124,6 +124,12 @@ const addPhotosToPost = async (req, res, next) => {
     const exists = await Post.updateOne(
       { _id: req.query.id },
       {
+        $set: { photo: [] },
+      }
+    );
+    exists = await Post.updateOne(
+      { _id: req.query.id },
+      {
         $push: { photo: req.body },
       }
     );
@@ -163,7 +169,7 @@ const editPost = async (req, res, next) => {
       console.log("post edited!");
       res.status(200).send({
         status: "OK",
-        post: updatePost,
+        _id: updatePost._id,
       });
     }
   } catch (err) {
