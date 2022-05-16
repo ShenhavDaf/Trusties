@@ -85,7 +85,7 @@ public interface RetrofitInterface {
     Call<Void> deletePost(@Header("authorization") String accessToken, @Path("id") String id);
 
     @POST("/post/edit/{id}")
-    Call<Void> editPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map, @Path("id") String id);
+    Call<JsonObject> editPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map, @Path("id") String id);
 
     @GET("/post/MyPosts/{id}")
     Call<JsonArray> getMyPosts(@Header("authorization") String accessToken, @Path("id") String id);
