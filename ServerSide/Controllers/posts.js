@@ -183,10 +183,29 @@ const deletePost = async (req, res, next) => {
       { _id: req.params.id },
       { isDeleted: true }
     );
+
     const updatePost = await Post.findById(req.params.id);
     if (exists == null) return sendError(res, 400, "post does not exist");
     else {
       console.log("post deleted!");
+      const findCategory = await Category.findOne({
+        name: updatePost.category,
+      });
+      findCategory.save(async (error) => {
+        if (error) {
+          res.status(400).send({
+            status: "fail",
+            error: error.message,
+          });
+        } else {
+          await Category.updateOne(
+            { name: updatePost.category },
+            {
+              $pull: { posts: req.params.id },
+            }
+          );
+        }
+      });
 
       res.status(200).send({
         status: "OK",
