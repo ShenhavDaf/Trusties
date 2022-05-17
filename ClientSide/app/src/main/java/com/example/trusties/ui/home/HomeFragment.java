@@ -110,30 +110,31 @@ public class HomeFragment extends Fragment {
 
 
         searchView = root.findViewById(R.id.home_searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+        searchView.setOnClickListener(v->Navigation.findNavController(v).navigate(HomeFragmentDirections.actionGlobalSearchFragment()));
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                adapter.getFilter().filter(newText);
+//                return false;
+//            }
+//        });
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-
-                searchClose = true;
-//                homeViewModel.data.clear();
-//                homeViewModel.data.addAll(copyFullList);
-////                refresh();
-                return false;
-            }
-        });
+//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//
+//                searchClose = true;
+////                homeViewModel.data.clear();
+////                homeViewModel.data.addAll(copyFullList);
+//////                refresh();
+//                return false;
+//            }
+//        });
 
 //        refresh();
         return root;
