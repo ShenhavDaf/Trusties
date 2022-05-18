@@ -131,7 +131,15 @@ public class Model {
     }
 
     /* ---------------------------------------------------------------------------- */
+    public interface addSosListener {
+        void onComplete();
+    }
 
+    public void addSos(HashMap<String, String> map, addSosListener listener) {
+        modelServer.addSos(map, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
     public interface allPostsListener {
         void onComplete(List<Post> postsList);
     }
@@ -373,6 +381,41 @@ public class Model {
     public void saveUserImage(Bitmap imageBitmap, String imageName, SaveImageListener listener) {
 
         modelServer.saveUserImage(imageBitmap, imageName, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface approveVolunteerListener {
+        void onComplete();
+    }
+
+    public void approveVolunteer(String id,HashMap<String, String> map, approveVolunteerListener listener) {
+        modelServer.approveVolunteer(id,map, listener);
+    }
+
+    public interface cancelVolunteerListener {
+        void onComplete();
+    }
+
+    public void cancelVolunteer(String id,HashMap<String, String> map, cancelVolunteerListener listener) {
+        modelServer.cancelVolunteer(id,map, listener);
+    }
+
+    public interface volunteerListener {
+        void onComplete();
+    }
+
+    public void volunteer(String id,HashMap<String, String> map, volunteerListener listener) {
+        modelServer.volunteer(id,map, listener);
+    }
+
+    public interface getSosVolunteersListener  {
+        void onComplete(List<User> volunteers);
+        //void onComplete(JsonArray volunteers);
+    }
+
+    public void getSosVolunteers(String id, getSosVolunteersListener listener) {
+        modelServer.getSosVolunteers(id, listener);
     }
 
 

@@ -3,8 +3,8 @@ const User = require("../Models/user_model");
 const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 
-const UserController = require("../Controllers/users");
-const { route } = require("../Routes/post_routes");
+// const UserController = require("../Controllers/users");
+// const { route } = require("../Routes/post_routes");
 const router = require("../Routes/post_routes");
 
 const getAllPosts = async (req, res, next) => {

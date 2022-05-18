@@ -158,7 +158,6 @@ public class AddPostFragment extends Fragment {
             houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
 
 
-
     }
 
     private void OpenCamera() {
@@ -283,7 +282,13 @@ public class AddPostFragment extends Fragment {
             });
         }
 
-        Model.instance.addPost(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
+        if (type.equals("SOS")){
+            Model.instance.addSos(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
+        }
+        else{
+            Model.instance.addPost(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
+
+        }
     }
 
 }

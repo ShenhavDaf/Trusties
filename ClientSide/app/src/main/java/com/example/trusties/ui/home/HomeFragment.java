@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,10 +20,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.trusties.R;
+import com.example.trusties.model.Comment;
 import com.example.trusties.model.Post;
 import com.example.trusties.databinding.FragmentHomeBinding;
 import com.example.trusties.model.Model;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
 
@@ -112,7 +119,8 @@ public class HomeFragment extends Fragment {
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView userName, title, description, time, commentNumber;
+        TextView userName, title, description, time, commentNumber,volunteer_txt,volunteer_count;
+        Button volunteer;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -123,10 +131,28 @@ public class HomeFragment extends Fragment {
             description = itemView.findViewById(R.id.listrow_post_description_tv);
             commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
 
+            volunteer = itemView.findViewById(R.id.postListRow_volunteer);
+            volunteer_txt= itemView.findViewById(R.id.post_listRow_volunteer_Tv);
+            volunteer_count= itemView.findViewById(R.id.post_listRow_volunteerCount_Tv);
+
+
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(v, pos);
             });
+            volunteer.setOnClickListener(v->{
+                int pos=getAdapterPosition();
+                Post post=homeViewModel.getData().get(pos);
+                String id=post.getId();
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("vol_id", Model.instance.getCurrentUserModel().getId());
+
+                Model.instance.volunteer(id,map, () -> {
+                    refresh();
+                });
+            });
+
         }
 
 
@@ -134,12 +160,35 @@ public class HomeFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Post post) {
 
+            // ##TYPE :SOS
             if (post.getRole().toLowerCase().equals("sos")) {
-                //TODO: if role == sos change to "sos layout"
-//                getLayoutInflater().inflate(R.layout.sos_list_row, (ViewGroup) itemView,true); // double
+
                 MaterialCardView card = (MaterialCardView) itemView;
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
+                int volunteersSize=0;
+
+                if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
+                    if (post.getStatus().equals("OPEN")) {
+                        //if the status is close & the current user is NOT the post sender
+                        volunteer.setVisibility(View.VISIBLE);
+
+                    }
+                }
+
+                Model.instance.getSosVolunteers(post.getId(), list ->
+                {   for (int i = 0; i < list.size();i++) {
+                        if (list.get(i).getEmail().equals(Model.instance.getCurrentUserModel().getEmail())) {
+                            volunteer.setVisibility(View.GONE);
+                            volunteer_txt.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    volunteer_count.setText(list.size()+"Volunteers");
+                    volunteer_count.setVisibility(View.VISIBLE);
+                });
+
             }
+            // ##TYPE :SOS+QUES
+
             //TODO: change userName from post title to author name
             Model.instance.findUserById(post.getAuthorID(), user ->
                     userName.setText(user.get("name").getAsString())

@@ -83,12 +83,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="10dp"
             android:text="Comments"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_post_description_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/listrow_post_description_tv"
+            app:layout_constraintVertical_bias="0.684" />
 
         <TextView
             android:id="@+id/listrow_post_title_tv"
@@ -112,9 +113,12 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="10dp"
             android:text="Description"
+            app:layout_constraintBottom_toTopOf="@+id/post_listRow_volunteerCount_Tv"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_post_title_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/listrow_post_title_tv"
+            app:layout_constraintVertical_bias="0.24" />
 
         <View
             android:id="@+id/postrv_line"
@@ -128,6 +132,43 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/listrow_date_tv" />
+
+        <Button
+            android:id="@+id/postListRow_volunteer"
+            android:layout_width="91dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#AEA8A8"
+            android:text="Volunteer!"
+            android:textSize="8sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/listrow_comment_num_tv"
+            app:layout_constraintHorizontal_bias="0.075"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/post_listRow_volunteer_Tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Waiting to volunteer"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/post_listRow_volunteerCount_Tv"
+            app:layout_constraintHorizontal_bias="0.145"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/post_listRow_volunteerCount_Tv"
+            android:layout_width="68dp"
+            android:layout_height="19dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="Volunteers"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/listrow_comment_num_tv" />
 
         <!--        <RatingBar-->
         <!--            android:id="@+id/listrow_ratingBar"-->

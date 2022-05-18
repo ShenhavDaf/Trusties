@@ -15,9 +15,6 @@ public class HomeViewModel extends ViewModel {
         Model.instance.getAllPosts(postsList -> {
             this.data = postsList;
         });
-//        Model.instance.getAllPostsInHomePage( postsList->{
-//            this.data = postsList;
-//        });
     }
 
     public List<Post> getData() {

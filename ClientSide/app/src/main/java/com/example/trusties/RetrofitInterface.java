@@ -69,6 +69,9 @@ public interface RetrofitInterface {
     @POST("/post/add")
     Call<Void> addPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
+    @POST("/sos/add")
+    Call<Void> addSos(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
+
     @GET("/post/{id}")
     Call<JsonObject> getPostById(@Header("authorization") String accessToken, @Path("id") String id);
 
@@ -106,7 +109,20 @@ public interface RetrofitInterface {
 
     @POST("/comment/down/{id}")
     Call<Void> downComment(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
-//
-//    @GET("/comment/rate/{id}")
-//    Call<JsonObject> getCommentRate(@Header("authorization") String accessToken, @Path("id") String id);
+
+
+    @POST("/sos/approveVolunteer/{id}")
+    Call<Void> approveVolunteer(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+
+    @POST("/sos/volunteer/{id}")
+    Call<Void> volunteer(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+
+
+    @POST("/sos/cancelVolunteer/{id}")
+    Call<Void> cancelVolunteer(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+
+    @GET("/sos/getSosVolunteers/{id}")
+    Call<JsonArray> getSosVolunteers(@Header("authorization") String accessToken, @Query("id") String id);
+
+
 }
