@@ -2,13 +2,16 @@ package com.example.trusties.posts;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -41,9 +45,18 @@ import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
 import com.example.trusties.ui.home.HomeFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.JsonObject;
 
@@ -55,7 +68,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AddPostFragment extends Fragment implements OnMapReadyCallback {
+public class AddPostFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     EditText postTitle, description;
     TextView detailsTV;
@@ -69,6 +82,10 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     //TODO: location
     ConstraintLayout location_layout, circle_layout;
     MapView mapView;
+    GoogleMap mGoogleMap;
+    private GoogleApiClient googleApiClient;
+
+    private FusedLocationProviderClient fusedLocationProviderClientLocationClient;
 
     String category;
 
@@ -112,8 +129,8 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         detailsTV = view.findViewById(R.id.newpost_details_tv);
         detailsTV.setVisibility(View.GONE);
 
-        mapView.getMapAsync(this);
-        mapView.onCreate(savedInstanceState);
+//        mapView.getMapAsync(this);
+//        mapView.onCreate(savedInstanceState);
 
         carBtn.setOnClickListener(v -> {
             category = "Car";
@@ -157,6 +174,14 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
         toolsBtn = view.findViewById(R.id.newpost_tools_btn);
         houseBtn = view.findViewById(R.id.newpost_house_damage_btn);
+
+        mapView.getMapAsync(this);
+        mapView.onCreate(savedInstanceState); //NEED?
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
 
         return view;
     }
@@ -253,11 +278,10 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                         }
                         //setting 1st selected image into image switcher
                         image.setImageURI(mArrayUri.get(0));
-                        if(count==2)
+                        if (count == 2)
                             image2.setImageURI(mArrayUri.get(1));
                     }
-                }
-                else if (data.getData() != null) { //only one pic
+                } else if (data.getData() != null) { //only one pic
                     Log.d("TAG", 4 + "");
                     Uri imageurl = data.getData();
                     mArrayUri.add(imageurl);
@@ -380,15 +404,14 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             if (type.equals("SOS")) {
 
                 Model.instance.addSos(map, new Model.addSosListener() {
-                            @Override
-                            public void onComplete() {
-                                Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
+                    @Override
+                    public void onComplete() {
+                        Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
 
-                            }
+                    }
 
                 });
-            }
-            else {
+            } else {
 
                 Model.instance.addPost(map, new Model.addPostListener() {
                     @Override
@@ -451,8 +474,41 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 //        });
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+
+        System.out.println("------------------1------------------");
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            return;
+        }
+        System.out.println("------------------2------------------");
+//        mGoogleMap = googleMap;
+        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                System.out.println("------------------3------------------");
+                // GPS location can be null if GPS is switched off
+                if (location != null) {
+//                    Toast.makeText(getContext(), "lat " + location.getLatitude() + "\nlong " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+                    System.out.println("lat " + location.getLatitude() + "\nlong " + location.getLongitude());
+                    LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    googleMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                }
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
 
     }
 
@@ -496,5 +552,20 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
