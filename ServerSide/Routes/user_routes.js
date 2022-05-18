@@ -11,5 +11,9 @@ router.get(
   "/addFriendToMyContacts/:myId/:hisId",
   /*authenticate,*/ User.addFriendToMyContacts
 );
+router.get(
+  "/removeFriendFromMyContacts/:myId/:hisId",
+  /*authenticate,*/ User.removeFriendFromMyContacts
+);
 
 module.exports = router;

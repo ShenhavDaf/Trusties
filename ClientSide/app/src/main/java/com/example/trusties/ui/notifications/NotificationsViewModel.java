@@ -1,19 +1,27 @@
 package com.example.trusties.ui.notifications;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
+
+import com.example.trusties.model.Model;
+import com.example.trusties.model.Notification;
+import com.example.trusties.model.Post;
+
+import java.util.List;
 
 public class NotificationsViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    List<Notification> data;
 
     public NotificationsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        Log.d("TAG", "Model --> getAllNotifications");
+        Model.instance.getAllNotifications(notificationsList -> {
+            this.data = notificationsList;
+        });
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public List<Notification> getData() {
+        return data;
     }
 }

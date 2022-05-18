@@ -16,7 +16,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="376dp">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/listrow_avatar_imv"
@@ -66,11 +66,11 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/listrow_post_img"
             android:layout_width="0dp"
-            android:layout_height="170dp"
+            android:layout_height="200dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="5dp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,25 +78,27 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"
             app:srcCompat="@drawable/image_place" />
 
-        <TextView
-            android:id="@+id/listrow_comment_num_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:text="Comments"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_post_description_tv"
-            app:layout_constraintVertical_bias="0.684" />
+<!--        <TextView-->
+<!--            android:id="@+id/listrow_comment_num_tv"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:text="Comments"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/listrow_post_description_tv"-->
+<!--            app:layout_constraintVertical_bias="0.684" />-->
+<!--        -->
+
 
         <TextView
             android:id="@+id/listrow_post_title_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
             android:text="Title"
             android:textSize="20sp"
@@ -110,22 +112,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
             android:text="Description"
-            app:layout_constraintBottom_toTopOf="@+id/post_listRow_volunteerCount_Tv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_post_title_tv"
-            app:layout_constraintVertical_bias="0.24" />
+            app:layout_constraintTop_toBottomOf="@+id/listrow_post_title_tv" />
 
         <View
             android:id="@+id/postrv_line"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="16dp"
             android:background="#A3A1A1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +144,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/listrow_comment_num_tv"
             app:layout_constraintHorizontal_bias="0.075"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="NotSibling" />
 
         <TextView
             android:id="@+id/post_listRow_volunteer_Tv"
@@ -168,7 +168,8 @@
             android:text="Volunteers"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/listrow_comment_num_tv" />
+            app:layout_constraintEnd_toStartOf="@+id/listrow_comment_num_tv"
+            tools:ignore="NotSibling" />
 
         <!--        <RatingBar-->
         <!--            android:id="@+id/listrow_ratingBar"-->
@@ -184,6 +185,64 @@
         <!--            app:layout_constraintHorizontal_bias="0.5"-->
         <!--            app:layout_constraintStart_toStartOf="parent"-->
         <!--            app:layout_constraintTop_toBottomOf="@+id/listrow_post_img" />-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/listrow_bottom_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listrow_post_description_tv"
+            app:layout_constraintVertical_bias="1.0">
+
+
+            <TextView
+                android:id="@+id/listrow_post_status_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/listrow_comment_num_tv"
+                app:layout_constraintHorizontal_bias="0.515"
+                app:layout_constraintStart_toEndOf="@+id/listrow_category_tv"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                tools:ignore="NotSibling" />
+
+            <TextView
+                android:id="@+id/listrow_category_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Category"
+                app:layout_constraintBaseline_toBaselineOf="@+id/listrow_post_status_tv"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/listrow_comment_num_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comments"
+                tools:layout_editor_absoluteX="317dp"
+                tools:layout_editor_absoluteY="2dp"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/listrow_plus_one_image"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/listrow_post_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/plus_one_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

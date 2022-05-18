@@ -70,65 +70,38 @@
             app:layout_constraintStart_toEndOf="@+id/editpost_description_tv" />
 
         <TextView
-            android:id="@+id/editpost_tags_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="62dp"
-            android:text="Tags"
-            android:textSize="24sp"
-
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_description_tv" />
-
-        <TextView
             android:id="@+id/editpost_pictures_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="20dp"
             android:text="Pictures"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_tags_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/editpost_description_show" />
 
         <ImageButton
             android:id="@+id/editpost_camera_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
 
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="14dp"
             android:src="@android:drawable/ic_menu_camera"
-            app:layout_constraintStart_toEndOf="@+id/editpost_pictures_tv"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_tags_tv" />
-
-        <Spinner
-            android:id="@+id/editpost_dropdown"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/editpost_tags_tv"
+            app:layout_constraintEnd_toStartOf="@+id/editpost_gallery_btn"
             app:layout_constraintTop_toBottomOf="@+id/editpost_description_show" />
 
         <Button
             android:id="@+id/editpost_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="200dp"
             android:layout_marginEnd="12dp"
             android:backgroundTint="#7b9abe"
-            app:cornerRadius="15dp"
             android:text="SAVE"
             android:textSize="16sp"
+            app:cornerRadius="15dp"
             app:icon="@drawable/save_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editpost_gallery_btn" />
@@ -162,10 +135,30 @@
             android:id="@+id/editpost_gallery_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="29dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="23dp"
             android:src="@android:drawable/ic_menu_gallery"
-            app:layout_constraintStart_toEndOf="@+id/editpost_camera_btn"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_dropdown" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editpost_description_show" />
+
+        <ImageView
+            android:id="@+id/editpost_image_show"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="168dp"
+            android:src="@drawable/image_place"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editpost_pictures_tv" />
+
+        <ImageView
+            android:id="@+id/editpost_image2_show"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/image_place"
+            app:layout_constraintEnd_toStartOf="@+id/editpost_image_show"
+            app:layout_constraintTop_toBottomOf="@+id/editpost_pictures_tv" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

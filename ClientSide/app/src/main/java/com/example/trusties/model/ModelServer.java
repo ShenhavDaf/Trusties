@@ -3,6 +3,7 @@ package com.example.trusties.model;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 
 import com.example.trusties.CommonFunctions;
@@ -263,7 +264,23 @@ public class ModelServer {
 
     public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
 
-        Call<Void> add = retrofitInterface.addPost(accessToken, map);
+        Call<JsonObject> add = retrofitInterface.addPost(accessToken, map);
+
+        add.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+            }
+        });
+    }
+
+    public void addPhotosToPost(ArrayList<String> photos, String id, Model.addPhotosToPostListener listener) {
+
+        Call<Void> add = retrofitInterface.addPhotosToPost(/*accessToken,*/ photos, id);
 
         add.enqueue(new Callback<Void>() {
             @Override
@@ -273,6 +290,7 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("TAG", t.getMessage());
             }
         });
     }
@@ -324,13 +342,10 @@ public class ModelServer {
                             }
                         });
                     }
-
                 }
-                List<Post> finalList = filteredList;
 
-                System.out.println("++++++++++++++++++++ end");
-                Collections.reverse(finalList);
-                listener.onComplete(finalList);
+                Collections.reverse(filteredList);
+                listener.onComplete(filteredList);
             }
 
             @Override
@@ -339,31 +354,6 @@ public class ModelServer {
         });
 
     }
-
-//    private List<Post> func(List<Post> list) {
-//        List<Post> filteredList = new ArrayList<>();
-//
-//        String currentUserModel = Model.instance.getCurrentUserModel().getId();
-//
-//        for (Post post : list) {
-//            if (post.getAuthorID().equals(currentUserModel))
-//                filteredList.add(post);
-//            else {
-//                this.getFriendsList(post.getAuthorID(), /*post.getCircle()*/1, friendsList -> {
-//                    System.out.println("friendsList = " + friendsList);
-//                    for (JsonElement friend : friendsList) {
-//                        System.out.println("inside for");
-//                        if (friend.toString().equals(currentUserModel)) {
-//                            filteredList.add(post);
-//                        }
-//                    }
-//                });
-//            }
-//        }
-//
-//        System.out.println("after = " + filteredList);
-//        return filteredList;
-//    }
 
     /* ------------------------------------------------------------------------- */
 
@@ -405,16 +395,16 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
     public void editPost(HashMap<String, String> map, String postId, Model.editPostListener listener) {
-        Call<Void> editPost = retrofitInterface.editPost(accessToken, map, postId);
+        Call<JsonObject> editPost = retrofitInterface.editPost(accessToken, map, postId);
 
-        editPost.enqueue(new Callback<Void>() {
+        editPost.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                listener.onComplete();
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
 
             }
         });
@@ -505,7 +495,7 @@ public class ModelServer {
     }
     /* ------------------------------------------------------------------------- */
 
-    public void deleteComment(String id, Model.deleteCommentListener listener){
+    public void deleteComment(String id, Model.deleteCommentListener listener) {
 
         Call<Void> deleteComment = retrofitInterface.deleteComment(accessToken, id);
 
@@ -523,9 +513,9 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
-    public void upComment(String id,HashMap<String, String> map, Model.upCommentListener listener) {
+    public void upComment(String id, HashMap<String, String> map, Model.upCommentListener listener) {
 
-        Call<Void> deleteComment = retrofitInterface.upComment(accessToken, id,map);
+        Call<Void> deleteComment = retrofitInterface.upComment(accessToken, id, map);
 
         deleteComment.enqueue(new Callback<Void>() {
             @Override
@@ -539,10 +529,11 @@ public class ModelServer {
             }
         });
     }
+
     /* ------------------------------------------------------------------------- */
     public void downComment(String id, HashMap<String, String> map, Model.downCommentListener listener) {
 
-        Call<Void> deleteComment = retrofitInterface.downComment(accessToken, id,map);
+        Call<Void> deleteComment = retrofitInterface.downComment(accessToken, id, map);
 
         deleteComment.enqueue(new Callback<Void>() {
             @Override
@@ -715,10 +706,81 @@ public class ModelServer {
         });
     }
 
+    /* ------------------------------------------------------------------------- */
 
-    public void saveUserImage(Bitmap imageBitmap, String imageName, Model.SaveImageListener listener) {
-        //TODO: add server functionality + how to save the Bitmap ?
 
+    public void removeFriendFromMyContacts(String myID, String hisID, Model.removeFriendListener listener) {
+
+        retrofitInterface.removeFriendFromMyContacts(myID, hisID).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+    public void encodeBitMapImg(Bitmap imageBitmap, Model.encodeBitMapImgListener listener) {
+
+        Bitmap scaledBitmap = getScaledBitmap(imageBitmap, 450, 450);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos);
+        byte[] bitmapdata = bos.toByteArray();
+        String encodedImage = Base64.encodeToString(bitmapdata, Base64.NO_WRAP);
+        Log.d("TAG", "encoded" + encodedImage);
+        listener.onComplete(encodedImage);
+
+    }
+
+    private Bitmap getScaledBitmap(Bitmap b, int reqWidth, int reqHeight) {
+        int bWidth = b.getWidth();
+        int bHeight = b.getHeight();
+
+        int nWidth = bWidth;
+        int nHeight = bHeight;
+
+        if (nWidth > reqWidth) {
+            int ratio = bWidth / reqWidth;
+            if (ratio > 0) {
+                nWidth = reqWidth;
+                nHeight = bHeight / ratio;
+            }
+        }
+
+        if (nHeight > reqHeight) {
+            int ratio = bHeight / reqHeight;
+            if (ratio > 0) {
+                nHeight = reqHeight;
+                nWidth = bWidth / ratio;
+            }
+        }
+
+        return Bitmap.createScaledBitmap(b, nWidth, nHeight, true);
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void addNotification(HashMap<String, String> map, Model.addNotificationListener listener) {
+        Log.d("TAG", "ModelServer --> add notification");
+        Call<Void> notification = retrofitInterface.addNotification(accessToken, map);
+
+        notification.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+
+        });
     }
 
     public void approveVolunteer(String id, HashMap<String, String> map, Model.approveVolunteerListener listener) {
@@ -797,6 +859,58 @@ public class ModelServer {
         });
     }
 
+    public void getAllNotifications(Model.allNotificationsListener listener) {
+        String currentUserModel = Model.instance.getCurrentUserModel().userID;
+        List<Notification> filteredList = new ArrayList<>();
 
+        retrofitInterface.getAllNotifications(accessToken).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                List<Notification> list = new ArrayList<>();
+                for (JsonElement element : response.body()) {
+                    list.add(Notification.create(element.getAsJsonObject()));
+                }
+
+                for (Notification notification : list) {
+                    if (notification.getAuthorID().equals(currentUserModel) &&
+                            (notification.getType().equals("comment") || notification.getType().equals("like")))
+                        filteredList.add(notification);
+                    else {
+                        getFriendsList(notification.getAuthorID(), Integer.valueOf(notification.getCircle()), friendsList -> {
+                            for (JsonElement friend : friendsList) {
+                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+                                    filteredList.add(notification);
+                                }
+                            }
+                        });
+                    }
+
+                }
+                Collections.reverse(list);
+                listener.onComplete(list);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+
+    }
+
+    public void sendNotification(HashMap<String, String> map, String token, Model.sendNotificationListener listener) {
+        retrofitInterface.sendNotification(token, map).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("TAG", "send notification successfully");
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("TAG", "send notification failed");
+            }
+        });
+    }
 
 }

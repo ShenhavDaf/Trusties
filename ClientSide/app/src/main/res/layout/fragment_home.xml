@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,7 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
 
     <TextView
@@ -24,10 +24,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="6dp"
-        android:text="Hello"
+        android:text="@string/hello"
         android:textColor="@color/TrustiesPrimaryColor"
         android:textSize="19sp"
-        app:layout_constraintBottom_toTopOf="@+id/home_swiperefresh"
+        app:layout_constraintBottom_toTopOf="@+id/home_search_layout"
         app:layout_constraintEnd_toStartOf="@+id/home_userName_tv"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,6 +41,34 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/home_hello_tv"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/home_swiperefresh"
+        app:layout_constraintTop_toBottomOf="@+id/home_logo"
+        tools:ignore="MissingConstraints">
+
+        <SearchView
+            android:id="@+id/home_searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/rounded_corner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/home_swiperefresh"
         android:layout_width="0dp"
@@ -52,7 +80,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_logo">
+        app:layout_constraintTop_toBottomOf="@+id/home_search_layout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/home_postlist_rv"

@@ -7,8 +7,12 @@ import android.os.Looper;
 import android.text.Editable;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,11 +29,22 @@ import retrofit2.http.Body;
 public class Model {
 
     public static final Model instance = new Model();
+    private static String token;
     ModelServer modelServer = new ModelServer();
 
     public Executor executor = Executors.newFixedThreadPool(1);
     public Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
 
+    public Model() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            token = task.getResult();
+            Log.d("tag token", token);
+        });
+    }
+
+    public static String getToken() {
+        return token;
+    }
 
     /* ---------------------------------------------------------------------------- */
     User currentUserModel;
@@ -123,11 +138,20 @@ public class Model {
     /* ---------------------------------------------------------------------------- */
 
     public interface addPostListener {
-        void onComplete();
+        void onComplete(JsonObject res);
+
     }
 
     public void addPost(HashMap<String, String> map, addPostListener listener) {
         modelServer.addPost(map, listener);
+    }
+
+    public interface addPhotosToPostListener {
+        void onComplete();
+    }
+
+    public void addPhotosToPost(ArrayList<String> photos,String id, addPhotosToPostListener listener) {
+        modelServer.addPhotosToPost(photos,id, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -220,7 +244,7 @@ public class Model {
     /* ---------------------------------------------------------------------------- */
 
     public interface editPostListener {
-        void onComplete();
+        void onComplete(JsonObject post);
     }
 
     public void editPost(HashMap<String, String> map, String id, editPostListener listener) {
@@ -365,6 +389,18 @@ public class Model {
 
     /* ---------------------------------------------------------------------------- */
 
+    public interface removeFriendListener {
+        void onComplete();
+    }
+
+    public void removeFriendFromMyContacts(String myID, String hisID, removeFriendListener listener) {
+        modelServer.removeFriendFromMyContacts(myID, hisID, listener);
+    }
+
+
+
+    /* ---------------------------------------------------------------------------- */
+
 //    public interface getAllPostsInHomePageListener {
 //        void onComplete(List<Post> postsList);
 //    }
@@ -374,15 +410,44 @@ public class Model {
 //    }
 
 
-    public interface SaveImageListener {
+    public interface encodeBitMapImgListener {
         void onComplete(String url);
     }
 
-    public void saveUserImage(Bitmap imageBitmap, String imageName, SaveImageListener listener) {
+    public void encodeBitMapImg(Bitmap imageBitmap,  encodeBitMapImgListener listener) {
 
-        modelServer.saveUserImage(imageBitmap, imageName, listener);
+        modelServer.encodeBitMapImg(imageBitmap, listener);
     }
 
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface addNotificationListener {
+        void onComplete();
+    }
+
+    public void addNotification(HashMap<String, String> map, addNotificationListener listener) {
+        Log.d("TAG", "Model --> addNotification");
+        modelServer.addNotification(map, listener);
+    }
+
+    public interface allNotificationsListener {
+        void onComplete(List<Notification> notificationsList);
+    }
+
+    public void getAllNotifications(allNotificationsListener listener) {
+        Log.d("TAG", "Model --> getAllNotifications");
+        modelServer.getAllNotifications(listener);
+    }
+
+    public interface sendNotificationListener {
+        void onComplete();
+    }
+
+    public void sendNotification(HashMap<String, String> map, String token, sendNotificationListener listener) {
+        Log.d("TAG", "Model --> send notifications");
+        modelServer.sendNotification(map, token, listener);
+    }
     /* ---------------------------------------------------------------------------- */
 
     public interface approveVolunteerListener {

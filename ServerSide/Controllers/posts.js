@@ -2,6 +2,7 @@ const Post = require("../Models/post_model");
 const User = require("../Models/user_model");
 const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
+const Category = require("../Models/category_model");
 
 // const UserController = require("../Controllers/users");
 // const { route } = require("../Routes/post_routes");
@@ -53,6 +54,13 @@ const addPosts = async (req, res, next) => {
   var time = req.body.time;
   var role = req.body.role;
   var category = req.body.category;
+  var photo = req.body.photo;
+  // if (req.queryMap.photos == null) {
+  //   console.log("in");
+  photo = req.body.photo;
+  // } else photo = req.queryMap.photos;
+
+  const findCategory = await Category.findOne({ name: category });
 
   console.log("circle = " + req.body.circle);
 
@@ -68,6 +76,23 @@ const addPosts = async (req, res, next) => {
     role: role,
     friends_circle: friendsCircle,
     category: category,
+    photo: photo,
+  });
+
+  findCategory.save(async (error) => {
+    if (error) {
+      res.status(400).send({
+        status: "fail",
+        error: error.message,
+      });
+    } else {
+      await Category.updateOne(
+        { name: category },
+        {
+          $push: { posts: [post._id] },
+        }
+      );
+    }
   });
 
   // const post = Post({
@@ -87,10 +112,45 @@ const addPosts = async (req, res, next) => {
       console.log("post added!");
       res.status(200).send({
         status: "OK",
-        post: newPost,
+        // post: newPost,
+        _id: post._id,
       });
     }
   });
+};
+
+const addPhotosToPost = async (req, res, next) => {
+  console.log("size" + req.query.id);
+  console.log("body- " + req.body);
+  try {
+    const exists = await Post.updateOne(
+      { _id: req.query.id },
+      {
+        $set: { photo: [] },
+      }
+    );
+    exists = await Post.updateOne(
+      { _id: req.query.id },
+      {
+        $push: { photo: req.body },
+      }
+    );
+
+    const updatePost = await Post.findById(req.params.id);
+    if (exists == null) return sendError(res, 400, "post does not exist");
+    else {
+      console.log("post photos!");
+      res.status(200).send({
+        status: "OK",
+        post: updatePost,
+      });
+    }
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
 };
 
 /* ********************************************************** */
@@ -102,6 +162,7 @@ const editPost = async (req, res, next) => {
       {
         title: req.body.title,
         description: req.body.description,
+        photo: req.body.photo,
       }
     );
     const updatePost = await Post.findById(req.params.id);
@@ -110,7 +171,7 @@ const editPost = async (req, res, next) => {
       console.log("post edited!");
       res.status(200).send({
         status: "OK",
-        post: updatePost,
+        _id: updatePost._id,
       });
     }
   } catch (err) {
@@ -130,10 +191,29 @@ const deletePost = async (req, res, next) => {
       { _id: req.params.id },
       { isDeleted: true }
     );
+
     const updatePost = await Post.findById(req.params.id);
     if (exists == null) return sendError(res, 400, "post does not exist");
     else {
       console.log("post deleted!");
+      const findCategory = await Category.findOne({
+        name: updatePost.category,
+      });
+      findCategory.save(async (error) => {
+        if (error) {
+          res.status(400).send({
+            status: "fail",
+            error: error.message,
+          });
+        } else {
+          await Category.updateOne(
+            { name: updatePost.category },
+            {
+              $pull: { posts: req.params.id },
+            }
+          );
+        }
+      });
 
       res.status(200).send({
         status: "OK",
@@ -197,4 +277,5 @@ module.exports = {
   editPost,
   deletePost,
   allPostsFiltered,
+  addPhotosToPost,
 };

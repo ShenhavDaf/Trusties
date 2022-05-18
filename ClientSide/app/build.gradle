@@ -3,7 +3,7 @@ plugins {
     id 'androidx.navigation.safeargs'
 //    id 'com.google.gms.google-services'
 }
-
+apply plugin: 'com.google.gms.google-services'
 android {
     compileSdk 31
 
@@ -35,6 +35,8 @@ android {
 dependencies {
     api 'com.google.android.material:material:1.1.0-alpha06'
 
+    implementation 'com.synnapps:carouselview:0.1.4'
+
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -61,4 +63,8 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.2.6'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation platform('com.google.firebase:firebase-bom:30.0.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
 }

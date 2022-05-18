@@ -2,12 +2,16 @@ package com.example.trusties.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,6 +41,8 @@ public class ProfileFragment extends Fragment {
     SwipeRefreshLayout swipeRefresh;
     User currUser;
     Button edit;
+    ImageView userImage;
+    Bitmap decodedByte;
 
 
     @Override
@@ -54,11 +60,20 @@ public class ProfileFragment extends Fragment {
         /**********************************/
 
         userName = root.findViewById(R.id.profile_name);
+        userImage = root.findViewById(R.id.profile_image);
+
         currUser = Model.instance.getCurrentUserModel();
         Model.instance.findUserById(Model.instance.getCurrentUserModel().getId(), new Model.findUserByIdListener() {
             @Override
             public void onComplete(JsonObject user) {
                 userName.setText(user.get("name").toString().replace("\"", ""));
+
+                if (user.get("photo") != null) {
+                    String photoBase64 = user.get("photo").getAsString();
+                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    userImage.setImageBitmap(decodedByte);
+                }
             }
         });
 
@@ -72,7 +87,7 @@ public class ProfileFragment extends Fragment {
 
         connections = root.findViewById(R.id.profile_connections);
         Model.instance.getFriendsList(currUser.getId(), 1, friendsList -> {
-            connections.setText( friendsList.size() + " connections");
+            connections.setText(friendsList.size() + " connections");
         });
         connections.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +134,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void refresh() {
-        Model.instance.getMyPosts(currUser.getId(),postsList -> {
+        Model.instance.getMyPosts(currUser.getId(), postsList -> {
             profileViewModel.data = postsList;
             adapter.notifyDataSetChanged();
         });
@@ -135,16 +150,22 @@ public class ProfileFragment extends Fragment {
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView userName,title, description, time, commentNumber;
+        TextView userName, title, description, time, commentNumber, category, status;
+        ImageView photo, userImage;
+
 
         public MyViewHolder(@NonNull View itemView, ProfileFragment.OnItemClickListener listener) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.listrow_username_tv);
+            userImage = itemView.findViewById(R.id.listrow_avatar_imv);
             time = itemView.findViewById(R.id.listrow_date_tv);
             title = itemView.findViewById(R.id.listrow_post_title_tv);
             description = itemView.findViewById(R.id.listrow_post_description_tv);
             commentNumber = itemView.findViewById(R.id.listrow_comment_num_tv);
+            category = itemView.findViewById(R.id.listrow_category_tv);
+            status = itemView.findViewById(R.id.listrow_post_status_tv);
+            photo = itemView.findViewById(R.id.listrow_post_img);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -164,20 +185,50 @@ public class ProfileFragment extends Fragment {
                 card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
             }
             //TODO: change userName from post title to author name
-            Model.instance.findUserById(post.getAuthorID(), user ->
-                    userName.setText(user.get("name").getAsString())
+            Model.instance.findUserById(post.getAuthorID(), user -> {
+                        userName.setText(user.get("name").getAsString());
+
+                        if (user.get("photo") != null) {
+                            String photoBase64 = user.get("photo").getAsString();
+                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            userImage.setImageBitmap(decodedByte);
+                        }
+                    }
             );
             title.setText(post.getTitle());
-            if(post.getDescription().length()>150)
-                description.setText(post.getDescription().substring(0,150)+"...");
+            if (post.getDescription().length() > 150)
+                description.setText(post.getDescription().substring(0, 150) + "...");
             else
                 description.setText(post.getDescription());
 
             String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
 
-            Model.instance.getPostComments(post.getId(),commentsList -> {
+            Model.instance.getPostComments(post.getId(), commentsList -> {
                 commentNumber.setText(commentsList.size() + " Comments ");
+            });
+            Model.instance.getPostById(post.getId(), new Model.getPostByIdListener() {
+                @Override
+                public void onComplete(JsonObject post) {
+
+                    status.setText(post.get("status").getAsString());
+                    if (status.getText().equals("OPEN")) {
+                        status.setBackgroundColor(status.getContext().getColor(R.color.green));
+                    }
+                    category.setText(post.get("category").getAsString());
+
+                    if (post.get("photo").getAsJsonArray().size() > 0) {
+                        String photoBase64 = post.get("photo").getAsJsonArray().get(0).getAsString();
+                        if (photoBase64 != null) {
+                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            photo.setImageBitmap(decodedByte);
+                        }
+                    } else {
+                        photo.setVisibility(View.GONE);
+                    }
+                }
             });
         }
     }
