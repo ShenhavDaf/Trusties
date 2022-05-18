@@ -505,6 +505,13 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
                     googleMap.getUiSettings().setCompassEnabled(true);
                     googleMap.getUiSettings().setScrollGesturesEnabled(true);
                     googleMap.setMyLocationEnabled(true);
+                    googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                        @Override
+                        public void onMapClick(@NonNull LatLng latLng) {
+                            googleMap.clear();
+                            googleMap.addMarker(new MarkerOptions().position(latLng));
+                        }
+                    });
 
 
                 }
