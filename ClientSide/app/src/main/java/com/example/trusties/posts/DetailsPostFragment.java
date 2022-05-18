@@ -20,7 +20,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,7 +69,7 @@ public class DetailsPostFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         postId = DetailsPostFragmentArgs.fromBundle(getArguments()).getPostId();
-        postViewModel = new ViewModelProvider(this, new MyViewModelFactory(postId)).get(DetailsPostViewModel.class);
+        postViewModel = new ViewModelProvider(this, new DetailsPostModelFactory(postId)).get(DetailsPostViewModel.class);
     }
 
     @Override
@@ -140,14 +139,13 @@ public class DetailsPostFragment extends Fragment {
                     @Override
                     public void onComplete(JsonObject user) {
                         if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
-                            deleteBtn.setEnabled(true);
-                            deleteBtn.setEnabled(true);
+                            deleteBtn.setVisibility(View.VISIBLE);
+                            editBtn.setVisibility(View.VISIBLE);
                             if (role.compareTo("SOS") == 0) {
                                 closeBtn.setVisibility(View.VISIBLE);
                                 requestsBtn.setVisibility(View.VISIBLE);
 
-                                deleteBtn.setVisibility(View.VISIBLE);
-                                editBtn.setVisibility(View.VISIBLE);
+
 
                             }
                         } else {
@@ -204,6 +202,9 @@ public class DetailsPostFragment extends Fragment {
             });
         });
 
+        requestsBtn.setOnClickListener(v->{
+            Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailPostFragmentToVolunteersFragment(postId));
+        });
         swipeRefresh = view.findViewById(R.id.comment_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> refresh());
 
@@ -237,11 +238,9 @@ public class DetailsPostFragment extends Fragment {
                 postViewModel.data = commentsList;
                 adapter.notifyDataSetChanged();
             }
-
         });
         swipeRefresh.setRefreshing(false);
     }
-
 
     public void displayPost(String title, String description, String time, String senderId, String status, String role, Bitmap[] bm) {
         Model.instance.findUserById(senderId, user -> {
@@ -443,9 +442,9 @@ public class DetailsPostFragment extends Fragment {
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         OnItemClickListener listener;
-
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
+
         }
 
         @NonNull

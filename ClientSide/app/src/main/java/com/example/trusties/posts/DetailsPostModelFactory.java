@@ -9,11 +9,11 @@ import com.example.trusties.model.Comment;
 
 import java.util.List;
 
-public class MyViewModelFactory implements ViewModelProvider.Factory {
+public class DetailsPostModelFactory implements ViewModelProvider.Factory {
     private String postId;
     List<Comment> data;
 
-    public MyViewModelFactory(String param) {
+    public DetailsPostModelFactory(String param) {
         postId = param;
     }
 

@@ -65,6 +65,9 @@
         <action
             android:id="@+id/action_detailsPostFragment_to_navigation_dashboard"
             app:destination="@id/navigation_dashboard" />
+        <action
+            android:id="@+id/action_detailPostFragment_to_VolunteersFragment"
+            app:destination="@id/volunteersFragment" />
     </fragment>
     <fragment
         android:id="@+id/editPostFragment"
@@ -108,6 +111,15 @@
         <action
             android:id="@+id/action_othersProfileFragment_to_detailsPostFragment"
             app:destination="@id/detailsPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/volunteersFragment"
+        android:name="com.example.trusties.posts.sos.VolunteersFragment"
+        android:label="fragment_volunteers"
+        tools:layout="@layout/fragment_volunteers" >
+        <argument
+            android:name="postId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

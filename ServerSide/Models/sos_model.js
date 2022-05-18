@@ -11,12 +11,24 @@ const sosSchema = Base.discriminator(
     },
     area: {
       type: String,
-      required: true,
+      // required: true,
+      required: false,
+
     },
     address: {
       type: String,
-      required: true,
+      // required: true,
+      required: false,
     },
+
+    volunteers: {
+      type: [mongoose.Schema.Types.ObjectId],
+    },
+    approved_volunteer: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null
+    },
+
   })
 );
 

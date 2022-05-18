@@ -57,6 +57,17 @@ const authenticate = require("../Common/auth_middleware");
  */
 
 router.get("/", authenticate, Sos.getSoss);
-router.post("/", authenticate, Sos.addSos);
+router.post("/add", authenticate, Sos.addSos);
+router.get("/addSos", authenticate, Sos.getSoss);
+// router.post("/getSoss", authenticate, Sos.getSoss);
+router.post("/volunteer/:id", authenticate, Sos.volunteer);
+router.post("/approveVolunteer/:id", authenticate, Sos.approveVolunteer);
+router.post("/cancelVolunteer/:id", authenticate, Sos.cancelVolunteer);
+router.post("/cancelApproveVolunteer/:id", authenticate, Sos.cancelApproveVolunteer);
+router.get("/getSosVolunteers/:id", authenticate, Sos.getSosVolunteers);
+router.post("/closeSosCancel/:id", authenticate, Sos.closeSosCancel);
+
+
+
 
 module.exports = router;

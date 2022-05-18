@@ -294,6 +294,23 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
+
+    public void addSos(HashMap<String, String> map, Model.addSosListener listener) {
+
+        Call<Void> add = retrofitInterface.addSos(accessToken, map);
+
+        add.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
+        });
+    }
 
     /* ------------------------------------------------------------------------- */
 
@@ -707,7 +724,6 @@ public class ModelServer {
         });
     }
 
-
     /* ------------------------------------------------------------------------- */
     public void encodeBitMapImg(Bitmap imageBitmap, Model.encodeBitMapImgListener listener) {
 
@@ -761,6 +777,84 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+
+        });
+    }
+
+    public void approveVolunteer(String id, HashMap<String, String> map, Model.approveVolunteerListener listener) {
+
+        Call<Void> approveVolunteer_retrofit = retrofitInterface.approveVolunteer(accessToken, id,map);
+
+        approveVolunteer_retrofit.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getSosVolunteers(String id,Model.getSosVolunteersListener listener) {
+
+        Call<JsonArray> getSosVolunteers_retrofit = retrofitInterface.getSosVolunteers(accessToken, id);
+        getSosVolunteers_retrofit.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                List<User> list = new ArrayList<>();
+
+                if(response.body()!=null) {
+                    for (JsonElement element : response.body()) {
+                        list.add(User.create(element.getAsJsonObject()));
+                    }
+                }
+                listener.onComplete(list);
+            }
+
+
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+    }
+
+    public void cancelVolunteer(String id, HashMap<String, String> map, Model.cancelVolunteerListener listener) {
+
+        Call<Void> cancelVolunteer_retrofit = retrofitInterface.cancelVolunteer(accessToken, id,map);
+
+        cancelVolunteer_retrofit.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void volunteer(String id, HashMap<String, String> map, Model.volunteerListener listener) {
+
+        Call<Void> volunteer_retrofit = retrofitInterface.volunteer(accessToken, id,map);
+
+        volunteer_retrofit.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
             }
         });
     }

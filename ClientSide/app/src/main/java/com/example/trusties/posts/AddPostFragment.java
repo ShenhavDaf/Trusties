@@ -376,19 +376,61 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                     e.printStackTrace();
                 }
             }
-            Model.instance.addPost(map, new Model.addPostListener() {
-                @Override
-                public void onComplete(JsonObject res) {
-                    Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
-                    Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
-                        @Override
-                        public void onComplete() {
-                            Log.d("TAG", "stopppppppppp");
-                        }
-                    });
-                    Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
-                }
-            });
+
+            if (type.equals("SOS")) {
+
+                Model.instance.addSos(map, new Model.addSosListener() {
+                            @Override
+                            public void onComplete() {
+                                Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
+
+                            }
+
+                });
+            }
+            else {
+
+                Model.instance.addPost(map, new Model.addPostListener() {
+                    @Override
+                    public void onComplete(JsonObject res) {
+                        Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
+                        Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                            @Override
+                            public void onComplete() {
+                                Log.d("TAG", "stopppppppppp");
+                            }
+                        });
+
+
+                        Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
+                    }
+                });
+            }
+
+//            if (type.equals("SOS")){
+//            //    Model.instance.addSos(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
+//                Model.instance.addSos(map, new Model.addPostListener() {
+//                    @Override
+//                    public void onComplete(JsonObject res) {
+//                        Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
+//                        Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+//                            @Override
+//                            public void onComplete() {
+//                                Log.d("TAG", "stopppppppppp");
+//                            }
+//                        });
+//
+//
+//                        Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
+//                    }
+//                });
+//
+//            }
+//            else{
+//
+//
+//            }
+
         }
 
 

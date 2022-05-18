@@ -4,6 +4,8 @@ const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 const Category = require("../Models/category_model");
 
+// const UserController = require("../Controllers/users");
+// const { route } = require("../Routes/post_routes");
 const router = require("../Routes/post_routes");
 
 const getAllPosts = async (req, res, next) => {
