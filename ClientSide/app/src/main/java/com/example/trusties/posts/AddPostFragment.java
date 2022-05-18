@@ -486,7 +486,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
             return;
         }
         System.out.println("------------------2------------------");
-//        mGoogleMap = googleMap;
+
         FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -498,7 +498,15 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
                     System.out.println("lat " + location.getLatitude() + "\nlong " + location.getLongitude());
                     LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
                     googleMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+//                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    float zoomLevel = 16.0f; //This goes up to 21
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel));
+                    googleMap.getUiSettings().setZoomControlsEnabled(true);
+                    googleMap.getUiSettings().setCompassEnabled(true);
+                    googleMap.getUiSettings().setScrollGesturesEnabled(true);
+                    googleMap.setMyLocationEnabled(true);
+
+
                 }
             }
         })

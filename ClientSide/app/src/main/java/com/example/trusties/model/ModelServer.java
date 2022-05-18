@@ -317,12 +317,12 @@ public class ModelServer {
 
     public void getAllPosts(Model.allPostsListener listener) {
 
-        String currentUserModel = Model.instance.getCurrentUserModel().userID;
-        List<Post> filteredList = new ArrayList<>();
 
         retrofitInterface.getAllPosts(accessToken).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                String currentUserModel = Model.instance.getCurrentUserModel().userID;
+                List<Post> filteredList = new ArrayList<>();
 
                 List<Post> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
