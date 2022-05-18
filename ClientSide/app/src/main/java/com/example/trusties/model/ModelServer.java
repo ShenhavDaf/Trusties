@@ -48,12 +48,14 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void handleLoginDialog(String email, String password, Model.loginListener listener, Context context) {
+    public void handleLoginDialog(String email, String password, String token, Model.loginListener listener, Context context) {
 
         HashMap<String, String> map = new HashMap<>();
         map.put("email", email);
         map.put("password", password);
+        map.put("firebaseToken", Model.getToken());
 
+        Log.d("TAG", "Token ---- " + Model.getToken());
 
         Call<JsonObject> call = retrofitInterface.executeLogin(map);
 
@@ -334,13 +336,13 @@ public class ModelServer {
                     if (post.getAuthorID().equals(currentUserModel))
                         filteredList.add(post);
                     else {
-                        getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
-                            for (JsonElement friend : friendsList) {
-                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
-                                    filteredList.add(post);
-                                }
-                            }
-                        });
+//                        getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
+//                            for (JsonElement friend : friendsList) {
+//                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+//                                    filteredList.add(post);
+//                                }
+//                            }
+//                        });
                     }
                 }
 

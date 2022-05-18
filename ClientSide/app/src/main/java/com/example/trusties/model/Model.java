@@ -10,8 +10,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
 
+import com.example.trusties.MyApplication;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -36,6 +38,7 @@ public class Model {
     public Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
 
     public Model() {
+        FirebaseApp.initializeApp(MyApplication.getContext());
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             token = task.getResult();
             Log.d("tag token", token);
@@ -64,7 +67,8 @@ public class Model {
     }
 
     public void login(String email, String password, loginListener listener, Context context) {
-        modelServer.handleLoginDialog(email, password, listener, context);
+
+        modelServer.handleLoginDialog(email, password, token, listener, context);
     }
 
     /* ---------------------------------------------------------------------------- */
