@@ -55,6 +55,11 @@ const postSchema = new mongoose.Schema({
     type: [String],
     required: false,
   },
+  location: {
+    type: String,
+    required: false,
+    default: "",
+  },
 });
 
 module.exports = mongoose.model("Post", postSchema);
