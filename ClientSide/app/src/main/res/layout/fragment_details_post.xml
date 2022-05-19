@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:paddingBottom="60dp"
     tools:context=".posts.DetailsPostFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -149,6 +150,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/carouselView" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/postdetails_location_layout"
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_description_tv">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/post_details_map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/postdetails_author_tv"
             android:layout_width="0dp"
@@ -216,17 +241,17 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/avatar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_description_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_address_tv" />
 
         <EditText
             android:id="@+id/postdetails_comment_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="38dp"
             android:background="@drawable/rounded_corner"
             android:ems="10"
             android:hint="Write your comment"
@@ -236,19 +261,19 @@
             android:paddingStart="11dp"
             app:layout_constraintEnd_toStartOf="@+id/postdetails_sendComment_btn"
             app:layout_constraintStart_toEndOf="@+id/postdetails_imgUser_img"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_description_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_location_layout" />
 
         <ImageButton
             android:id="@+id/postdetails_sendComment_btn"
             android:layout_width="57dp"
             android:layout_height="52dp"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="12dp"
             android:background="@drawable/send_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/postdetails_comment_et"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_description_tv"
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_address_tv"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -258,6 +283,8 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -274,6 +301,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/postdetails_comment_et" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/postdetails_address_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_location_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

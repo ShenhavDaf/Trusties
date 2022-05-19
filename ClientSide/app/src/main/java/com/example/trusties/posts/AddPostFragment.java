@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -27,8 +25,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
-import android.text.Layout;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +42,6 @@ import com.example.trusties.CommonFunctions;
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
-import com.example.trusties.ui.home.HomeFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -59,16 +54,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.button.MaterialButton;
 import com.google.gson.JsonObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,7 +74,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
     ProgressBar progressBar;
     int flag = 0;
     int picFlag = 1;
-    //TODO: location
     ConstraintLayout location_layout, circle_layout;
     MapView mapView;
     HashMap<String, String> map;
@@ -121,7 +111,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
         tags = view.findViewById(R.id.newpost_tags_spinner);
         image = view.findViewById(R.id.newpost_post_image);
         image2 = view.findViewById(R.id.newpost_post_image2);
-        mapView = view.findViewById(R.id.newpost_map);
+        mapView = view.findViewById(R.id.post_details_map);
         carBtn = view.findViewById(R.id.newpost_car_btn);
         toolsBtn = view.findViewById(R.id.newpost_tools_btn);
         deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);

@@ -1,7 +1,9 @@
 package com.example.trusties.posts;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -33,6 +36,12 @@ import com.example.trusties.databinding.FragmentDetailsPostBinding;
 import com.example.trusties.model.Comment;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
@@ -40,11 +49,10 @@ import com.synnapps.carouselview.ImageListener;
 import java.util.HashMap;
 
 
-public class DetailsPostFragment extends Fragment {
+public class DetailsPostFragment extends Fragment implements OnMapReadyCallback {
 
-    TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt;
+    TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt, addressEt;
     EditText comment;
-    // TODO: Add location (SOS Call)
     ImageButton editBtn, deleteBtn, closeBtn;
     Button requestsBtn;
     ProgressBar progressBar;
@@ -58,11 +66,15 @@ public class DetailsPostFragment extends Fragment {
     private DetailsPostViewModel postViewModel;
     private FragmentDetailsPostBinding binding;
 
+    MapView mapView;
+
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
 
     CarouselView carouselView;
     Bitmap[] sampleImages;
+    String location = null;
+    int isSOS =0;
 
 
     @Override
@@ -87,6 +99,7 @@ public class DetailsPostFragment extends Fragment {
         authorEt = view.findViewById(R.id.postdetails_author_tv);
         descriptionEt = view.findViewById(R.id.postdetails_description_tv);
         roleEt = view.findViewById(R.id.postdetails_role_tv);
+        addressEt = view.findViewById(R.id.postdetails_address_tv);
         statusEt = view.findViewById(R.id.postdetails_status_tv);
         editBtn = view.findViewById(R.id.postdetails_edit_btn);
         deleteBtn = view.findViewById(R.id.postdetails_delete_btn);
@@ -98,6 +111,7 @@ public class DetailsPostFragment extends Fragment {
         imgUser = view.findViewById(R.id.postdetails_imgUser_img);
         requestsBtn = view.findViewById(R.id.postdetails_view_requests_btn);
         closeBtn = view.findViewById(R.id.postdetails_close_btn);
+        mapView = view.findViewById(R.id.post_details_map);
 
         carouselView = view.findViewById(R.id.carouselView);
 
@@ -105,6 +119,7 @@ public class DetailsPostFragment extends Fragment {
         Model.instance.getPostById(postId, new Model.getPostByIdListener() {
             @Override
             public void onComplete(JsonObject post) {
+                String address = null;
 
                 String title = post.get("title").toString().replace("\"", "");
                 String description = post.get("description").toString().replace("\"", "");
@@ -113,25 +128,36 @@ public class DetailsPostFragment extends Fragment {
                 senderId = post.get("sender").toString().replace("\"", "");
                 String status = post.get("status").toString().replace("\"", "");
                 String role = post.get("role").toString().replace("\"", "");
+                if (role.equals("SOS")) {
+                    isSOS = 1;
+                    address = post.get("address").toString().replace("\"", "");
+                    location = post.get("location").toString().replace("\"", "");
+
+
+                }
+                else{ // in post we don't have location
+                    mapView.setVisibility(View.GONE);
+                    addressEt.setVisibility(View.GONE);
+                }
 
 
                 if (post.get("photo").getAsJsonArray().size() > 0) { // CHANGED
-                    if(post.get("photo").getAsJsonArray().size() == 1)
+                    if (post.get("photo").getAsJsonArray().size() == 1)
                         sampleImages = new Bitmap[1];
-                    if(post.get("photo").getAsJsonArray().size() == 2)
+                    if (post.get("photo").getAsJsonArray().size() == 2)
                         sampleImages = new Bitmap[2];
                     String photoBase64 = post.get("photo").getAsJsonArray().get(0).getAsString();
                     byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
                     decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    sampleImages[0]= decodedByte;
+                    sampleImages[0] = decodedByte;
                 }
                 if (post.get("photo").getAsJsonArray().size() == 2) { // CHANGED
                     String photoBase64 = post.get("photo").getAsJsonArray().get(1).getAsString();
                     byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
                     decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    sampleImages[1]=decodedByte;
+                    sampleImages[1] = decodedByte;
                 }
-                displayPost(title, description, time, senderId, status, role, sampleImages);
+                displayPost(title, description, time, senderId, status, role, sampleImages, address);
                 progressBar.setVisibility(View.GONE);
 
                 //Checking if the Current user is the sender of the post for enabling the - EditBtn and DeleteBtn-
@@ -144,7 +170,6 @@ public class DetailsPostFragment extends Fragment {
                             if (role.compareTo("SOS") == 0) {
                                 closeBtn.setVisibility(View.VISIBLE);
                                 requestsBtn.setVisibility(View.VISIBLE);
-
 
 
                             }
@@ -202,7 +227,7 @@ public class DetailsPostFragment extends Fragment {
             });
         });
 
-        requestsBtn.setOnClickListener(v->{
+        requestsBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailPostFragmentToVolunteersFragment(postId));
         });
         swipeRefresh = view.findViewById(R.id.comment_swiperefresh);
@@ -225,6 +250,10 @@ public class DetailsPostFragment extends Fragment {
             }
         });
 
+        mapView.getMapAsync(this);
+        mapView.onCreate(savedInstanceState); //NEED?
+
+
         refresh();
         return view;
     }
@@ -242,7 +271,7 @@ public class DetailsPostFragment extends Fragment {
         swipeRefresh.setRefreshing(false);
     }
 
-    public void displayPost(String title, String description, String time, String senderId, String status, String role, Bitmap[] bm) {
+    public void displayPost(String title, String description, String time, String senderId, String status, String role, Bitmap[] bm, String address) {
         Model.instance.findUserById(senderId, user -> {
             titleEt.setText(title);
             descriptionEt.setText(description);
@@ -250,26 +279,23 @@ public class DetailsPostFragment extends Fragment {
             authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
             statusEt.setText(status);
             roleEt.setText(role);
+
+            if (address != null) // only if role == SOS
+                addressEt.setText(address);
+
             ImageListener imageListener = new ImageListener() {
                 @Override
                 public void setImageForPosition(int position, ImageView imageView) {
                     imageView.setImageBitmap(sampleImages[position]);
                 }
             };
-            if (bm != null)
-            {
+            if (bm != null) {
                 carouselView.setImageListener(imageListener);
                 carouselView.setPageCount(bm.length);
-            }
-
-            else
+            } else
                 carouselView.setVisibility(View.GONE);
 
             updateUI(View.VISIBLE);
-
-            if (role == "SOS") {
-                // TODO: Display specific details of SOS call
-            }
         });
 
     }
@@ -286,6 +312,71 @@ public class DetailsPostFragment extends Fragment {
 //        postImg.setVisibility(type);
         sendCommentBtn.setVisibility(type);
         imgUser.setVisibility(type);
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+        if(isSOS == 1) {
+            String str = location.substring(10, location.length() - 1);
+            String[] latLong = str.split(",");
+            Log.d("TAG", "latttt " + latLong[0] + " " + latLong[1]);
+            LatLng sosLocation = new LatLng(Double.parseDouble(latLong[0]), Double.parseDouble(latLong[1]));
+            googleMap.addMarker(new MarkerOptions().position(sosLocation).title("here!"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sosLocation));
+            float zoomLevel = 16.0f; //This goes up to 21
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sosLocation, zoomLevel));
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            googleMap.setMyLocationEnabled(true);
+        }
+
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        mapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mapView.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
 
