@@ -920,6 +920,7 @@ public class ModelServer {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("TAG", t.getMessage());
                 Log.d("TAG", "send notification failed");
             }
         });

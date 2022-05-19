@@ -4,6 +4,7 @@ const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 const Notification = require("../Models/notification_model");
 const { object } = require("mongoose/lib/utils");
+const request = require("request");
 
 const getAllNotifications = async (req, res, next) => {
   console.log("get all notifications");
@@ -49,18 +50,24 @@ const addNotification = async (req, res, next) => {
 
 const sendNotification = async (req, res, next) => {
   console.log("Send notification");
-  // const payload = {
-  //   to: req.body.token,
-  //     notification: {
-  //         title: "Test Notification",
-  //         body: "Hey..."
-  //     }
-  // }
+  console.log(req.body);
+  const post = await Post.findOne({ _id: req.body.post });
+  const token = (await User.findOne({ _id: post.sender })).firebaseToken;
+  console.log("token: " + token);
+
+  const payload = {
+    to: token,
+    notification: {
+        title: "Test Notification",
+        body: "Hey..."
+    }
+  }
 
   request.post({
     headers: {'content-type': 'application/json', "Authorization": process.env.FIREBASE_TOKEN},
     url: "https://fcm.googleapis.com/fcm/send",
-    body: payload
+    body: payload,
+    json: true,
   });
 };
 

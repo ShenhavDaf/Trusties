@@ -109,8 +109,6 @@ const login = async (req, res, next) => {
   const password = req.body.password;
   const token = req.body.firebaseToken;
 
-  console.log('Token --- ' + token);
-
   if (email == null || password == null)
     return sendError(res, 400, "Wrong email or password");
 
