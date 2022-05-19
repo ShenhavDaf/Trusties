@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema({
   friends: {
     type: [mongoose.Schema.Types.ObjectId],
   },
+  firebaseToken: {
+    type: String,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

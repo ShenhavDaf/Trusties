@@ -107,6 +107,7 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+  const token = req.body.firebaseToken;
 
   if (email == null || password == null)
     return sendError(res, 400, "Wrong email or password");
@@ -124,6 +125,7 @@ const login = async (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
     );
+    await User.updateOne({'email': email}, {$set:{firebaseToken: token}});
 
     // const refreshToken = await jwt.sign(
     //   { id: user._id },

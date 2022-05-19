@@ -187,7 +187,7 @@ public class DetailsPostFragment extends Fragment {
 
             /* ------ Add Notification ------ */
             HashMap<String, String> notification = new HashMap<>();
-            notification.put("sender", user.getEmail());
+            notification.put("sender", user.getId());
             notification.put("post", postId);
             notification.put("time", (new Long(0)).toString());
             notification.put("type", "comment");
@@ -197,8 +197,8 @@ public class DetailsPostFragment extends Fragment {
             Model.instance.addNotification(notification, () -> {
 
             });
-            String token = Model.getToken();
-            Model.instance.sendNotification(notification, token, () -> {
+
+            Model.instance.sendNotification(notification, () -> {
             });
         });
 
