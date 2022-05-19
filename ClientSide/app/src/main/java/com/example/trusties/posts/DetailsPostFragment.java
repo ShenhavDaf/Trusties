@@ -197,8 +197,8 @@ public class DetailsPostFragment extends Fragment {
             Model.instance.addNotification(notification, () -> {
 
             });
-            String token = Model.getToken();
-            Model.instance.sendNotification(notification, token, () -> {
+
+            Model.instance.sendNotification(notification, () -> {
             });
         });
 

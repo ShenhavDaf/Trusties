@@ -81,6 +81,7 @@ router.get("/allNotifications", authenticate, Notification.getAllNotifications);
  */
 
 router.post("/add", authenticate, Notification.addNotification);
+router.post("/sendNotification", authenticate, Notification.sendNotification);
 
 
 module.exports = router;

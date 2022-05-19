@@ -7,7 +7,10 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.example.trusties.CommonFunctions;
+import com.example.trusties.MyApplication;
 import com.example.trusties.RetrofitInterface;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -35,6 +38,7 @@ public class ModelServer {
     final private static String BASE_URL = "http://10.0.2.2:4000";
     //final private static String BASE_URL = "http://193.106.55.119:4000";
     private String accessToken;
+    private String firebaseToken;
 
     public ModelServer() {
         Retrofit retrofit = new Retrofit
@@ -48,48 +52,54 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void handleLoginDialog(String email, String password, String token, Model.loginListener listener, Context context) {
+    public void handleLoginDialog(String email, String password, Model.loginListener listener, Context context) {
 
-        HashMap<String, String> map = new HashMap<>();
-        map.put("email", email);
-        map.put("password", password);
-        map.put("firebaseToken", Model.getToken());
+        FirebaseApp.initializeApp(MyApplication.getContext());
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            firebaseToken = task.getResult();
 
-        Log.d("TAG", "Token ---- " + Model.getToken());
+            HashMap<String, String> map = new HashMap<>();
+            map.put("email", email);
+            map.put("password", password);
+            map.put("firebaseToken", firebaseToken);
 
-        Call<JsonObject> call = retrofitInterface.executeLogin(map);
+            Log.d("TAG", "firebase token ---- " + firebaseToken);
 
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            Call<JsonObject> call = retrofitInterface.executeLogin(map);
 
-                JsonObject user = new JsonObject();
-                String resMessage = "";
+            call.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                if (response.code() == 200) {
-                    accessToken = "JWT " + response.body().get("accessToken").getAsString();
-                    user = response.body().get("user").getAsJsonObject();
-                    User.create(user);
-                    resMessage = "user exists";
-                } else if (response.code() == 400) {
-                    JSONObject jObjError = null;
-                    try {
-                        jObjError = new JSONObject(response.errorBody().string());
-                        resMessage = jObjError.get("error").toString();
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
+                    JsonObject user = new JsonObject();
+                    String resMessage = "";
+
+                    if (response.code() == 200) {
+                        accessToken = "JWT " + response.body().get("accessToken").getAsString();
+                        user = response.body().get("user").getAsJsonObject();
+                        User.create(user);
+                        resMessage = "user exists";
+                    } else if (response.code() == 400) {
+                        JSONObject jObjError = null;
+                        try {
+                            jObjError = new JSONObject(response.errorBody().string());
+                            resMessage = jObjError.get("error").toString();
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+
+                    user.addProperty("message", resMessage);
+                    listener.onComplete(response.code(), user);
                 }
 
-                user.addProperty("message", resMessage);
-                listener.onComplete(response.code(), user);
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                new CommonFunctions().myPopup(context, "Error", t.getMessage());
-            }
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    new CommonFunctions().myPopup(context, "Error", t.getMessage());
+                }
+            });
         });
+
     }
 
     /* ------------------------------------------------------------------------- */
@@ -900,8 +910,8 @@ public class ModelServer {
 
     }
 
-    public void sendNotification(HashMap<String, String> map, String token, Model.sendNotificationListener listener) {
-        retrofitInterface.sendNotification(token, map).enqueue(new Callback<Void>() {
+    public void sendNotification(HashMap<String, String> map, Model.sendNotificationListener listener) {
+        retrofitInterface.sendNotification(accessToken, map).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.d("TAG", "send notification successfully");

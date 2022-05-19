@@ -49,13 +49,13 @@ const addNotification = async (req, res, next) => {
 
 const sendNotification = async (req, res, next) => {
   console.log("Send notification");
-  const payload = {
-    to: req.body.token,
-      notification: {
-          title: "Test Notification",
-          body: "Hey..."
-      }
-  }
+  // const payload = {
+  //   to: req.body.token,
+  //     notification: {
+  //         title: "Test Notification",
+  //         body: "Hey..."
+  //     }
+  // }
 
   request.post({
     headers: {'content-type': 'application/json', "Authorization": process.env.FIREBASE_TOKEN},

@@ -10,17 +10,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
 
-import com.example.trusties.MyApplication;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -31,23 +25,10 @@ import retrofit2.http.Body;
 public class Model {
 
     public static final Model instance = new Model();
-    private static String token;
     ModelServer modelServer = new ModelServer();
 
     public Executor executor = Executors.newFixedThreadPool(1);
     public Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
-
-    public Model() {
-        FirebaseApp.initializeApp(MyApplication.getContext());
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            token = task.getResult();
-            Log.d("tag token", token);
-        });
-    }
-
-    public static String getToken() {
-        return token;
-    }
 
     /* ---------------------------------------------------------------------------- */
     User currentUserModel;
@@ -68,7 +49,7 @@ public class Model {
 
     public void login(String email, String password, loginListener listener, Context context) {
 
-        modelServer.handleLoginDialog(email, password, token, listener, context);
+        modelServer.handleLoginDialog(email, password, listener, context);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -448,9 +429,9 @@ public class Model {
         void onComplete();
     }
 
-    public void sendNotification(HashMap<String, String> map, String token, sendNotificationListener listener) {
+    public void sendNotification(HashMap<String, String> map, sendNotificationListener listener) {
         Log.d("TAG", "Model --> send notifications");
-        modelServer.sendNotification(map, token, listener);
+        modelServer.sendNotification(map, listener);
     }
     /* ---------------------------------------------------------------------------- */
 
