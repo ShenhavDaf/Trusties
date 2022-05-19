@@ -79,7 +79,7 @@ public interface RetrofitInterface {
     Call<JsonObject> addPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
     @POST("/sos/add")
-    Call<Void> addSos(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
+    Call<JsonObject> addSos(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
     @GET("/post/{id}")
     Call<JsonObject> getPostById(@Header("authorization") String accessToken, @Path("id") String id);

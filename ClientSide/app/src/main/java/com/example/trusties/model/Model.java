@@ -141,7 +141,7 @@ public class Model {
 
     /* ---------------------------------------------------------------------------- */
     public interface addSosListener {
-        void onComplete();
+        void onComplete(JsonObject res);
     }
 
     public void addSos(HashMap<String, String> map, addSosListener listener) {

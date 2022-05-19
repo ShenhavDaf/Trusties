@@ -18,7 +18,7 @@ public class Post {
     String role;
     String status;
     Boolean isDeleted;
-    String area;
+    String location;
     String address;
     Integer circle;
     //    Long updateDate = new Long(0);
@@ -26,7 +26,7 @@ public class Post {
 
     /* ****************************** Constructors ****************************** */
 
-    public Post(String id, String authorID, String title, String description, String time, String role, String status, Boolean isDeleted, String area, String address, Integer circle) {
+    public Post(String id, String authorID, String title, String description, String time, String role, String status, Boolean isDeleted, String location, String address, Integer circle) {
         this.postID = id;
         this.authorID = authorID;
         this.title = title;
@@ -35,7 +35,7 @@ public class Post {
         this.role = role;
         this.status = status;
         this.isDeleted = isDeleted;
-        this.area = area;
+        this.location = location;
         this.address = address;
         this.circle = circle;
     }
@@ -137,12 +137,12 @@ public class Post {
         String role = json.get("role").getAsString();
         String status = json.get("status").getAsString();
         Boolean isDeleted = json.get("isDeleted").getAsBoolean();
-        String area = json.get("area").getAsString();
+        String location = json.get("location").getAsString();
         String address = json.get("address").getAsString();
         Integer circle = json.get("friends_circle").getAsInt();
 
 
-        Post post = new Post(id, author, title, description, time, role, status, isDeleted, area, address, circle);
+        Post post = new Post(id, author, title, description, time, role, status, isDeleted, location, address, circle);
 
         return post;
     }
@@ -160,7 +160,7 @@ public class Post {
         json.addProperty("role", role);
         json.addProperty("status", "OPEN");
         json.addProperty("isDeleted", true);
-        json.addProperty("area", area);
+        json.addProperty("location", location);
         json.addProperty("address", address);
         json.addProperty("friends_circle", circle);
 

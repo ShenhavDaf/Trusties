@@ -11,6 +11,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -62,11 +64,13 @@ import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class AddPostFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -82,8 +86,11 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
     //TODO: location
     ConstraintLayout location_layout, circle_layout;
     MapView mapView;
+    HashMap<String, String> map;
     GoogleMap mGoogleMap;
+    String fullAddress;
     private GoogleApiClient googleApiClient;
+    String address;
 
     private FusedLocationProviderClient fusedLocationProviderClientLocationClient;
 
@@ -94,6 +101,9 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
     static final int REQUEST_IMAGE_GALLERY = 2;
     int PICK_IMAGE_MULTIPLE = 1;
     ArrayList<Uri> mArrayUri;
+    LatLng locationOnMap;
+    Geocoder geocoder;
+    List<Address> addresses;
 
     Integer circle;
 
@@ -363,7 +373,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
         User user = Model.instance.getCurrentUserModel();
         String email = user.getEmail().replace("\"", "");
 
-        HashMap<String, String> map = new HashMap<>();
+        map = new HashMap<>();
         map.put("category", category);
         map.put("title", title);
         map.put("description", message);
@@ -375,18 +385,17 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
         ArrayList<String> photos = new ArrayList<>();
 
         if (imageBitmap != null) {
-            Log.d("TAG", imageBitmap.toString());
+//            Log.d("TAG", imageBitmap.toString());
             Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
                 @Override
                 public void onComplete(String url) {
+                    photos.add(url);
                     map.put("photo", url);
                 }
             });
 
         }
         if (mArrayUri != null) {
-            Log.d("TAG", map.size() + "   jhhk ");
-
             flag = 1;
             for (int i = 0; i < mArrayUri.size(); i++) {
                 try {
@@ -402,10 +411,20 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
             }
 
             if (type.equals("SOS")) {
+                map.put("location",locationOnMap.toString());
+                map.put("address", fullAddress);
 
                 Model.instance.addSos(map, new Model.addSosListener() {
                     @Override
-                    public void onComplete() {
+                    public void onComplete(JsonObject res) {
+                        Log.d("TAG","photossssss"+ photos.toString());
+                        Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
+                        Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                            @Override
+                            public void onComplete() {
+                                Log.d("TAG", "stopppppppppp");
+                            }
+                        });
                         Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
 
                     }
@@ -429,30 +448,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
                     }
                 });
             }
-
-//            if (type.equals("SOS")){
-//            //    Model.instance.addSos(map, () -> Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
-//                Model.instance.addSos(map, new Model.addPostListener() {
-//                    @Override
-//                    public void onComplete(JsonObject res) {
-//                        Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
-//                        Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
-//                            @Override
-//                            public void onComplete() {
-//                                Log.d("TAG", "stopppppppppp");
-//                            }
-//                        });
-//
-//
-//                        Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
-//                    }
-//                });
-//
-//            }
-//            else{
-//
-//
-//            }
 
         }
 
@@ -505,14 +500,37 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
                     googleMap.getUiSettings().setCompassEnabled(true);
                     googleMap.getUiSettings().setScrollGesturesEnabled(true);
                     googleMap.setMyLocationEnabled(true);
+                    locationOnMap = myLocation;
+                    geocoder = new Geocoder(getContext(), Locale.getDefault());
+                    try {
+                        addresses = geocoder.getFromLocation(myLocation.latitude, myLocation.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                        address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                        fullAddress = address;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override
                         public void onMapClick(@NonNull LatLng latLng) {
+                            Log.d("TAG",latLng.toString());
                             googleMap.clear();
                             googleMap.addMarker(new MarkerOptions().position(latLng));
+                            geocoder = new Geocoder(getContext(), Locale.getDefault());
+                            try {
+                                addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                                fullAddress = address;
+                                Log.d("TAG",fullAddress);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            locationOnMap = latLng;
+
                         }
                     });
-
 
                 }
             }

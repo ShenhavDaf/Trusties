@@ -310,16 +310,16 @@ public class ModelServer {
 
     public void addSos(HashMap<String, String> map, Model.addSosListener listener) {
 
-        Call<Void> add = retrofitInterface.addSos(accessToken, map);
+        Call<JsonObject> add = retrofitInterface.addSos(accessToken, map);
 
-        add.enqueue(new Callback<Void>() {
+        add.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                listener.onComplete();
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
             }
         });
     }
