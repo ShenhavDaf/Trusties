@@ -42,11 +42,6 @@ const postSchema = new mongoose.Schema({
     required: false,
     default: 1,
   },
-  area: {
-    type: String,
-    required: false,
-    default: "",
-  },
   address: {
     type: String,
     required: false,
