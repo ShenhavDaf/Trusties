@@ -29,7 +29,8 @@ const sosSchema = Base.discriminator(
     },
     location: {
       type: String,
-      required: true,
+      required: false,
+      default: "",
     },
   })
 );
