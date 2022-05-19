@@ -13,7 +13,6 @@ const sosSchema = Base.discriminator(
       type: String,
       // required: true,
       required: false,
-
     },
     address: {
       type: String,
@@ -26,9 +25,12 @@ const sosSchema = Base.discriminator(
     },
     approved_volunteer: {
       type: mongoose.Schema.Types.ObjectId,
-      default: null
+      default: null,
     },
-
+    location: {
+      type: String,
+      required: true,
+    },
   })
 );
 

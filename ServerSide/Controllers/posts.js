@@ -121,7 +121,7 @@ const addPosts = async (req, res, next) => {
 
 const addPhotosToPost = async (req, res, next) => {
   console.log("size" + req.query.id);
-  console.log("body- " + req.body);
+  // console.log("body- " + req.body);
   try {
     const exists = await Post.updateOne(
       { _id: req.query.id },
