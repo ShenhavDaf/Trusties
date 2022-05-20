@@ -111,7 +111,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         imgUser = view.findViewById(R.id.postdetails_imgUser_img);
         requestsBtn = view.findViewById(R.id.postdetails_view_requests_btn);
         closeBtn = view.findViewById(R.id.postdetails_close_btn);
-        mapView = view.findViewById(R.id.post_details_map);
+        mapView = view.findViewById(R.id.post_edit_map);
 
         carouselView = view.findViewById(R.id.carouselView);
 
