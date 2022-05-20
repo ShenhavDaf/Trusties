@@ -92,19 +92,44 @@
             app:layout_constraintEnd_toStartOf="@+id/editpost_gallery_btn"
             app:layout_constraintTop_toBottomOf="@+id/editpost_description_show" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/editpost_location_layout"
+            android:layout_width="400dp"
+            android:layout_height="140dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editpost_image_show">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/post_edit_map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <Button
             android:id="@+id/editpost_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:layout_marginTop="200dp"
             android:layout_marginEnd="12dp"
+            android:layout_marginBottom="60dp"
             android:backgroundTint="#7b9abe"
             android:text="SAVE"
             android:textSize="16sp"
             app:cornerRadius="15dp"
             app:icon="@drawable/save_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_gallery_btn" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/editpost_cancel_btn"

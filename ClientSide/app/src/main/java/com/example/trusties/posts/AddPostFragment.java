@@ -63,11 +63,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class AddPostFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     EditText postTitle, description;
     TextView detailsTV;
-    Spinner tags;
     ImageView image, image2;
     ImageButton cameraBtn, galleryBtn, carBtn, deliveryBtn, toolsBtn, houseBtn;
     Button firstCircleBtn, secondCircleBtn, thirdCircleBtn, postBtn, sosBtn;
@@ -108,10 +107,9 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
         mArrayUri = new ArrayList<Uri>();
         postTitle = view.findViewById(R.id.newpost_title_et);
         description = view.findViewById(R.id.newpost_description_et);
-        tags = view.findViewById(R.id.newpost_tags_spinner);
         image = view.findViewById(R.id.newpost_post_image);
         image2 = view.findViewById(R.id.newpost_post_image2);
-        mapView = view.findViewById(R.id.post_details_map);
+        mapView = view.findViewById(R.id.post_edit_map);
         carBtn = view.findViewById(R.id.newpost_car_btn);
         toolsBtn = view.findViewById(R.id.newpost_tools_btn);
         deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
@@ -120,7 +118,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
         progressBar = view.findViewById(R.id.newpost_progressBar);
         progressBar.setVisibility(View.GONE);
 
-        location_layout = view.findViewById(R.id.newpost_location_layout);
+        location_layout = view.findViewById(R.id.editpost_location_layout);
         location_layout.setVisibility(View.GONE);
 
         circle_layout = view.findViewById(R.id.newpost_circle_layout);
@@ -177,11 +175,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
 
         mapView.getMapAsync(this);
         mapView.onCreate(savedInstanceState); //NEED?
-        googleApiClient = new GoogleApiClient.Builder(getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
 
         return view;
     }
@@ -577,18 +570,4 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback, Goo
         mapView.onLowMemory();
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 }

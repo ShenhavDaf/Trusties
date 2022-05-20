@@ -163,6 +163,8 @@ const editPost = async (req, res, next) => {
         title: req.body.title,
         description: req.body.description,
         photo: req.body.photo,
+        location: req.body.location,
+        address: req.body.address,
       }
     );
     const updatePost = await Post.findById(req.params.id);

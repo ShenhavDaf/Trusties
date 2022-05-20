@@ -173,48 +173,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/newpost_tags_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
-            android:background="@color/disabledInputField"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newpost_description_layout">
-
-            <TextView
-                android:id="@+id/newpost_tags_tv"
-                android:layout_width="98dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/poppins"
-                android:text="@string/tags_text_view"
-                android:textColor="@color/titleColor"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Spinner
-                android:id="@+id/newpost_tags_spinner"
-                android:layout_width="167dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.801"
-                app:layout_constraintStart_toEndOf="@+id/newpost_tags_tv"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                tools:ignore="SpeakableTextPresentCheck" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/newpost_location_layout"
+            android:id="@+id/editpost_location_layout"
             android:layout_width="400dp"
             android:layout_height="140dp"
             android:layout_marginStart="20dp"
@@ -226,7 +185,7 @@
             app:layout_constraintTop_toBottomOf="@+id/newpost_details_tv">
 
             <com.google.android.gms.maps.MapView
-                android:id="@+id/post_details_map"
+                android:id="@+id/post_edit_map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -247,7 +206,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newpost_tags_layout">
+            app:layout_constraintTop_toBottomOf="@+id/newpost_description_layout">
 
             <TextView
                 android:id="@+id/newpost_image_tv"
@@ -333,7 +292,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newpost_location_layout">
+            app:layout_constraintTop_toBottomOf="@+id/editpost_location_layout">
 
             <TextView
                 android:id="@+id/newpost_circle_tv"
