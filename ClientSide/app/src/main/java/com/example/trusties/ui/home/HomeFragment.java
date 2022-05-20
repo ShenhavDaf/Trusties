@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment {
         ImageView photo, userImage,plusOne;
 
 //        TextView userName, title, description, time, commentNumber,
-        Button volunteer;
+        Button volunteer,sos;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -185,6 +185,7 @@ public class HomeFragment extends Fragment {
             status = itemView.findViewById(R.id.listrow_post_status_tv);
             photo = itemView.findViewById(R.id.listrow_post_img);
             plusOne = itemView.findViewById(R.id.listrow_plus_one_image);
+            sos = itemView.findViewById(R.id.listrow_sos_btn);
 
 
             volunteer = itemView.findViewById(R.id.postListRow_volunteer);
@@ -217,10 +218,11 @@ public class HomeFragment extends Fragment {
         public void bind(Post post) {
 
             // ##TYPE :SOS
-            if (post.getRole().toLowerCase().equals("sos")) {
+            if (post.getRole().equals("SOS")) {
+                sos.setVisibility(View.VISIBLE);
 
                 MaterialCardView card = (MaterialCardView) itemView;
-                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
+//                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
                 int volunteersSize=0;
 
                 if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
