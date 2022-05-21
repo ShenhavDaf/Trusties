@@ -40,6 +40,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -56,8 +57,6 @@ public class HomeFragment extends Fragment {
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
     Bitmap decodedByte;
-    List<Post> copyFullList;
-    Boolean searchClose = false;
 
 
     @Override
@@ -92,13 +91,8 @@ public class HomeFragment extends Fragment {
         /************************************/
 
         swipeRefresh = root.findViewById(R.id.home_swiperefresh);
-        swipeRefresh.setOnRefreshListener(() -> refresh());
-
-        Model.instance.getAllPosts(postsList -> {
-
-            homeViewModel.data = postsList;
-            refresh();
-        });
+        swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshPostList());
+//        swipeRefresh.setOnRefreshListener(() -> refresh());
 
 
         RecyclerView list = root.findViewById(R.id.home_postlist_rv);
@@ -109,42 +103,25 @@ public class HomeFragment extends Fragment {
 
 
         adapter.setOnItemClickListener((v, position) -> {
-            System.out.println("the POSITION is:  " + position);
-
-            String postId = homeViewModel.getData().get(position).getId();
-            System.out.println("the postID is:  " + postId);
+            String postId = homeViewModel.getData().getValue().get(position).getId();
             Navigation.findNavController(v).navigate(HomeFragmentDirections.actionNavigationHomeToDetailsPostFragment(postId));
         });
 
+        homeViewModel.getData().observe(getViewLifecycleOwner(), posts -> refresh());
+
+        swipeRefresh.setRefreshing(Model.instance.getPostsListLoadingState().getValue() == Model.LoadingState.loading);
+
+        Model.instance.getPostsListLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
+            if (loadingState == Model.LoadingState.loading) {
+                swipeRefresh.setRefreshing(true);
+            } else {
+                swipeRefresh.setRefreshing(false);
+            }
+        });
 
         searchView = root.findViewById(R.id.home_searchView);
-        searchView.setOnClickListener(v->Navigation.findNavController(v).navigate(HomeFragmentDirections.actionGlobalSearchFragment()));
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                adapter.getFilter().filter(newText);
-//                return false;
-//            }
-//        });
+        searchView.setOnClickListener(v -> Navigation.findNavController(v).navigate(HomeFragmentDirections.actionGlobalSearchFragment()));
 
-//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-//            @Override
-//            public boolean onClose() {
-//
-//                searchClose = true;
-////                homeViewModel.data.clear();
-////                homeViewModel.data.addAll(copyFullList);
-//////                refresh();
-//                return false;
-//            }
-//        });
-
-//        refresh();
         return root;
     }
 
@@ -167,9 +144,11 @@ public class HomeFragment extends Fragment {
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView userName, title, description, time, commentNumber, category, status,volunteer_txt,volunteer_count;
-        ImageView photo, userImage,plusOne;
-        Button volunteer,sos;
+        TextView userName, title, description, time, commentNumber, category, status, volunteer_txt, volunteer_count;
+        ImageView photo, userImage, plusOne;
+
+        //        TextView userName, title, description, time, commentNumber,
+        Button volunteer, sos;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -188,23 +167,23 @@ public class HomeFragment extends Fragment {
 
 
             volunteer = itemView.findViewById(R.id.postListRow_volunteer);
-            volunteer_txt= itemView.findViewById(R.id.post_listRow_volunteer_Tv);
-            volunteer_count= itemView.findViewById(R.id.post_listRow_volunteerCount_Tv);
+            volunteer_txt = itemView.findViewById(R.id.post_listRow_volunteer_Tv);
+            volunteer_count = itemView.findViewById(R.id.post_listRow_volunteerCount_Tv);
 
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(v, pos);
             });
-            volunteer.setOnClickListener(v->{
-                int pos=getAdapterPosition();
-                Post post=homeViewModel.getData().get(pos);
-                String id=post.getId();
+            volunteer.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                Post post = homeViewModel.getData().getValue().get(pos);
+                String id = post.getId();
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put("vol_id", Model.instance.getCurrentUserModel().getId());
 
-                Model.instance.volunteer(id,map, () -> {
+                Model.instance.volunteer(id, map, () -> {
                     refresh();
                 });
             });
@@ -229,17 +208,20 @@ public class HomeFragment extends Fragment {
                 }
 
                 Model.instance.getSosVolunteers(post.getId(), list ->
-                {   for (int i = 0; i < list.size();i++) {
+                {
+                    for (int i = 0; i < list.size(); i++) {
                         if (list.get(i).getEmail().equals(Model.instance.getCurrentUserModel().getEmail())) {
                             volunteer.setVisibility(View.GONE);
                             volunteer_txt.setVisibility(View.VISIBLE);
                         }
                     }
-                    volunteer_count.setText(list.size()+"Volunteers");
+                    volunteer_count.setText(list.size() + "Volunteers");
                     volunteer_count.setVisibility(View.VISIBLE);
                 });
 
             }
+            // ##TYPE :SOS+QUES
+
             //TODO: change userName from post title to author name
             Model.instance.findUserById(post.getAuthorID(), user -> {
                 userName.setText(user.get("name").getAsString());
@@ -278,7 +260,7 @@ public class HomeFragment extends Fragment {
                     category.setText(post.get("category").getAsString());
 
                     if (post.get("photo").getAsJsonArray().size() > 0) {// CHANGED
-                        if(post.get("photo").getAsJsonArray().size() == 2 )
+                        if (post.get("photo").getAsJsonArray().size() == 2)
                             plusOne.setVisibility(View.VISIBLE);
                         String photoBase64 = post.get("photo").getAsJsonArray().get(0).getAsString();
                         if (photoBase64 != null) {
@@ -294,7 +276,6 @@ public class HomeFragment extends Fragment {
 
             // implement the ViewFactory interface and implement
             // unimplemented method that returns an imageView
-
 
 
 //            comment.setOnClickListener(v -> {
@@ -317,7 +298,7 @@ public class HomeFragment extends Fragment {
         void onItemClick(View v, int position);
     }
 
-    class MyAdapter extends RecyclerView.Adapter<MyViewHolder> implements Filterable {
+    class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         OnItemClickListener listener;
 
@@ -337,89 +318,18 @@ public class HomeFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            Post post = homeViewModel.getData().get(position);
-//            System.out.println(" ");
-//            System.out.println("inside - {{{{{{{{{{{{{{{ homeViewModel.data }}}}}}}}}}}}} = " + homeViewModel.data);
-//            System.out.println("inside - {{{{{{{{{{{{{{{ copyFullList }}}}}}}}}}}}} = " + copyFullList);
-            copyFullList = new ArrayList<>(homeViewModel.getData());
+            Post post = homeViewModel.getData().getValue().get(position);
             holder.bind(post);
         }
 
         @Override
         public int getItemCount() {
-            if (homeViewModel.getData() == null) {
+            if (homeViewModel.getData().getValue() == null) {
                 return 0;
             }
-            return homeViewModel.getData().size();
+            return homeViewModel.getData().getValue().size();
         }
 
-
-        /* *************************************** Search *************************************** */
-        @Override
-        public Filter getFilter() {
-            return myFilter;
-        }
-
-        private Filter myFilter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                List<Post> filteredList = new ArrayList<>();
-
-                if (constraint == null || constraint.length() == 0) {
-                    filteredList.addAll(copyFullList);
-                } else {
-                    String filterPattern = constraint.toString().toLowerCase().trim();
-
-                    for (Post item : copyFullList) {
-
-                        System.out.println("=============== all list   " + copyFullList);
-
-//                        Model.instance.getPostById(item.getId(), post -> {
-//
-//                            if (post.get("sender").toString().toLowerCase().contains(filterPattern)) {
-//                                filteredList.add(item);
-//                            } else if (post.get("title").toString().toLowerCase().contains(filterPattern)) {
-//                                filteredList.add(item);
-//                            } else if (post.get("description").toString().toLowerCase().contains(filterPattern)) {
-//                                filteredList.add(item);
-//                            } else if (post.get("status").toString().toLowerCase().contains(filterPattern)) {
-//                                filteredList.add(item);
-//                            } else if (post.get("role").toString().toLowerCase().contains(filterPattern)) {
-//                                filteredList.add(item);
-//                            }
-//
-//
-//                        });
-
-//                        if (item.sender.toLowerCase().contains(filterPattern)) {
-//                            filteredList.add(item);
-                        if (item.getTitle().toLowerCase().contains(filterPattern)) {
-                            filteredList.add(item);
-                        } else if (item.getDescription().toLowerCase().contains(filterPattern)) {
-                            filteredList.add(item);
-//                        } else if (item.getCategory().toLowerCase().contains(filterPattern)) {
-//                            filteredList.add(item);
-                        } else if (item.getStatus().toLowerCase().contains(filterPattern)) {
-                            filteredList.add(item);
-                        }
-                    }
-                }
-
-                FilterResults results = new FilterResults();
-                results.values = filteredList;
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                homeViewModel.data.clear();
-                homeViewModel.data.addAll((List) results.values);
-                if (searchClose) {
-                    homeViewModel.data.addAll(copyFullList);
-                }
-                adapter.notifyDataSetChanged();
-            }
-        };
     }
 
 }
