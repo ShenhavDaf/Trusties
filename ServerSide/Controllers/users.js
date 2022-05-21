@@ -221,6 +221,51 @@ const removeFriendFromMyContacts = async (req, res, next) => {
   });
 };
 
+//# PARAMS
+// req.params.id -user
+//req.body.stars -stars number
+const rateMyHelp = async (req, res, next) => {
+  console.log("## RATE MY HELP");
+
+  const stars_raitng = req.body.stars;
+  console.log("## STARS RATING NUMBER");
+  console.log(stars_raitng);
+
+
+  User.findById(req.params.id)
+    .exec((err, user) => {
+      if (err) {
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+          message: "user not found in DB",
+        });
+      }
+
+      var number = user.rating + (stars_raitng * 0.5);
+      if (number > 5) {
+        user.rating = 5;
+      }
+      else {
+        user.rating = number;
+      }
+      user.save(function (err) {
+        if (err) {
+          res.status(400).send({
+            status: "fail",
+            error: err.message,
+            message: "user Rating NOT saved",
+          });
+        }
+        else {
+          console.log("## SAVED USER");
+          console.log(user);
+
+        }
+      });
+    });
+};
+
 module.exports = {
   // findUserByEmail,
   // findUserById,
@@ -230,4 +275,5 @@ module.exports = {
   getThirdCircleOnly,
   addFriendToMyContacts,
   removeFriendFromMyContacts,
+  rateMyHelp,
 };

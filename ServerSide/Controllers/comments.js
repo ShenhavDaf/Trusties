@@ -196,7 +196,7 @@ const negativeComment = async (req, res, next) => {
 
 
 
-        comment.sender.rating -= process.env.RATING_COMMENT
+        comment.sender.rating -= 0.1;
         comment.sender.save(function (err) {
           if (err) {
             res.status(400).send({
@@ -278,7 +278,7 @@ const positiveComment = async (req, res, next) => {
 
           }
         });
-        comment.sender.rating += process.env.RATING_COMMENT
+        comment.sender.rating += 0.1;
         comment.sender.save(function (err) {
           if (err) {
             res.status(400).send({

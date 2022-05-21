@@ -136,10 +136,14 @@ public interface RetrofitInterface {
     @GET("/sos/getSosVolunteers/{id}")
     Call<JsonArray> getSosVolunteers(@Header("authorization") String accessToken, @Query("id") String id);
 
+    @POST("/sos/closeSos/{id}")
+    Call<Void> closeSos(@Header("authorization") String accessToken, @Path("id") String id);
 
-//
-//    @GET("/comment/rate/{id}")
-//    Call<JsonObject> getCommentRate(@Header("authorization") String accessToken, @Path("id") String id);
+    @GET("/sos/getApprovedVolunteer/{id}")
+    Call<JsonObject> getApprovedVolunteer(@Header("authorization") String accessToken, @Path("id") String id);
+
+    @POST("/user/rateMyHelp/{id}")
+    Call<Void> rateMyHelp(@Path("id") String id,@Body HashMap<String, String> map);
 
   /*------------------------------------------Notifications----------------------------------------*/
 

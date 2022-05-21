@@ -947,4 +947,57 @@ public class ModelServer {
         });
     }
 
+    public void closeSos(String id, Model.closeSosListener listener) {
+
+
+        Call<Void> closeSosRetro = retrofitInterface.closeSos(accessToken, id);
+
+
+        closeSosRetro.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getApprovedVolunteer(String id, Model.getApprovedVolunteerListener listener) {
+
+        Call<JsonObject> retrofit = retrofitInterface.getApprovedVolunteer(accessToken,id);
+        retrofit.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void rateMyHelp(String userId, HashMap<String, String> map, Model.rateMyHelpListener listener) {
+
+
+        Call<Void> rateMyHelpRetro = retrofitInterface.rateMyHelp(userId,map);
+
+
+        rateMyHelpRetro.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
 }

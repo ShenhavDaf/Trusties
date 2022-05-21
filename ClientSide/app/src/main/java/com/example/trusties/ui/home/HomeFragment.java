@@ -198,16 +198,12 @@ public class HomeFragment extends Fragment {
             // ##TYPE :SOS
             if (post.getRole().equals("SOS")) {
                 sos.setVisibility(View.VISIBLE);
-
                 MaterialCardView card = (MaterialCardView) itemView;
-//                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
-                int volunteersSize = 0;
-
+                int volunteersSize=0;
                 if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
                     if (post.getStatus().equals("OPEN")) {
                         //if the status is close & the current user is NOT the post sender
                         volunteer.setVisibility(View.VISIBLE);
-
                     }
                 }
 

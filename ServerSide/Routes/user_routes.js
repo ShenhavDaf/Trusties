@@ -15,5 +15,7 @@ router.get(
   "/removeFriendFromMyContacts/:myId/:hisId",
   /*authenticate,*/ User.removeFriendFromMyContacts
 );
+router.post("/rateMyHelp/:id", User.rateMyHelp);
+
 
 module.exports = router;
