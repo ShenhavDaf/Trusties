@@ -9,6 +9,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -39,6 +41,20 @@ public class Model {
 
     public void setCurrentUserModel(User currentUserModel) {
         this.currentUserModel = currentUserModel;
+    }
+    /* ---------------------------------------------------------------------------- */
+    public enum LoadingState {loading, loaded}
+
+    MutableLiveData<LoadingState> postsListLoadingState = new MutableLiveData<>();
+
+    public MutableLiveData<LoadingState> getPostsListLoadingState() {
+        return postsListLoadingState;
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    private Model() {
+        postsListLoadingState.setValue(LoadingState.loaded);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -128,7 +144,10 @@ public class Model {
     }
 
     public void addPost(HashMap<String, String> map, addPostListener listener) {
-        modelServer.addPost(map, listener);
+        modelServer.addPost(map, res -> {
+            refreshPostList();
+            listener.onComplete(res);
+        });
     }
 
     public interface addPhotosToPostListener {
@@ -145,66 +164,43 @@ public class Model {
     }
 
     public void addSos(HashMap<String, String> map, addSosListener listener) {
-        modelServer.addSos(map, listener);
+        modelServer.addSos(map, res -> {
+            refreshPostList();
+            listener.onComplete(res);
+        });
     }
 
     /* ---------------------------------------------------------------------------- */
-    public interface allPostsListener {
-        void onComplete(List<Post> postsList);
-    }
-
-    public void getAllPosts(allPostsListener listener) {
-        modelServer.getAllPosts(listener);
-    }
-
-//    MutableLiveData<List<Post>> allPostsList = new MutableLiveData<List<Post>>();
-//
-//    public LiveData<List<Post>> getAllPosts() {
-//        if (allPostsList.getValue() == null) {
-//            refreshPostsList();
-//        }
-//        return allPostsList;
+//    public interface allPostsListener {
+//        void onComplete(List<Post> postsList);
 //    }
 //
-//    public void refreshPostsList() {
-//
-//        /*---------- firebase - get all updates since localUpdateDate ----------*/
-//        modelServer.getAllPosts(new ModelServer.GetAllPostsListener() {
-//
-//            @Override
-//            public void onComplete(List<Post> list) {
-//
-//                executor.execute(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        List<Post> filteredList = new ArrayList<>();
-//
-//                        /*---------- add all records to local db ----------*/
-//
-//                        for (Post post : list) {
-//                            if (post.getAuthorID().equals(currentUserModel.getId()))
-//                                filteredList.add(post);
-//                            else {
-//                                modelServer.getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
-//                                    for (JsonElement friend : friendsList) {
-//                                        if(friend.toString().equals(currentUserModel.getId())){
-//                                            filteredList.add(post);
-//                                        }
-//                                    }
-//                                });
-//                            }
-//                        }
-//
-//                        allPostsList.postValue(filteredList);
-//
-//                    }
-//                });
-//
-//            }
-//        });
-//
+//    public void getAllPosts(allPostsListener listener) {
+//        modelServer.getAllPosts(listener);
 //    }
+
+    MutableLiveData<List<Post>> mutablePostsList = new MutableLiveData<>();
+
+    public LiveData<List<Post>> getAll() {
+        if (mutablePostsList.getValue() == null) {
+            refreshPostList();
+        }
+        return mutablePostsList;
+    }
+
+    public void refreshPostList() {
+
+        postsListLoadingState.setValue(LoadingState.loading);
+
+        modelServer.getAllPosts(new ModelServer.allPostsListener() {
+            @Override
+            public void onComplete(List<Post> postsList) {
+                mutablePostsList.postValue(postsList);
+                postsListLoadingState.setValue(LoadingState.loaded);
+            }
+        });
+    }
+
 
     /* ---------------------------------------------------------------------------- */
 

@@ -50,6 +50,11 @@ public class ModelServer {
         retrofitInterface = retrofit.create(RetrofitInterface.class);
     }
 
+
+    public interface allPostsListener {
+        void onComplete(List<Post> postsList);
+    }
+
     /* ------------------------------------------------------------------------- */
 
     public void handleLoginDialog(String email, String password, Model.loginListener listener, Context context) {
@@ -327,12 +332,15 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
 
-    public void getAllPosts(Model.allPostsListener listener) {
+    public void getAllPosts(allPostsListener listener) {
+//        Model.instance.postsListLoadingState.setValue(Model.LoadingState.loading);
 
+        System.out.println("---------------1---------------");
 
         retrofitInterface.getAllPosts(accessToken).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                System.out.println("---------------2---------------");
                 String currentUserModel = Model.instance.getCurrentUserModel().userID;
                 List<Post> filteredList = new ArrayList<>();
 
@@ -342,22 +350,35 @@ public class ModelServer {
                         list.add(Post.create(element.getAsJsonObject()));
                     }
                 }
+
+//                if (list.isEmpty())
+//                    Model.instance.postsListLoadingState.setValue(Model.LoadingState.loaded);
+
                 for (Post post : list) {
-                    if (post.getAuthorID().equals(currentUserModel))
-                        filteredList.add(post);
-                    else {
-//                        getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
-//                            for (JsonElement friend : friendsList) {
-//                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
-//                                    filteredList.add(post);
-//                                }
-//                            }
-//                        });
-                    }
+                    System.out.println("---------------3---------------");
+//                    Model.instance.postsListLoadingState.setValue(Model.LoadingState.loading);
+                    getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
+
+                        if (post.getAuthorID().equals(currentUserModel))
+                            filteredList.add(post);
+                        else {
+                            for (JsonElement friend : friendsList) {
+                                findUserById(friend.toString().replace("\"", ""), user -> System.out.println("888 " + user.get("name")));
+                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+                                    filteredList.add(post);
+                                }
+                            }
+                        }
+                    });
+//                    Model.instance.postsListLoadingState.setValue(Model.LoadingState.loaded);
+                    System.out.println("---------------4---------------");
                 }
 
+//                if (Model.instance.getPostsListLoadingState().getValue() == Model.LoadingState.loaded) {
+                System.out.println("---------------5---------------");
                 Collections.reverse(filteredList);
                 listener.onComplete(filteredList);
+//                }
             }
 
             @Override
@@ -366,6 +387,7 @@ public class ModelServer {
         });
 
     }
+
 
     /* ------------------------------------------------------------------------- */
 
@@ -797,7 +819,7 @@ public class ModelServer {
 
     public void approveVolunteer(String id, HashMap<String, String> map, Model.approveVolunteerListener listener) {
 
-        Call<Void> approveVolunteer_retrofit = retrofitInterface.approveVolunteer(accessToken, id,map);
+        Call<Void> approveVolunteer_retrofit = retrofitInterface.approveVolunteer(accessToken, id, map);
 
         approveVolunteer_retrofit.enqueue(new Callback<Void>() {
             @Override
@@ -812,7 +834,7 @@ public class ModelServer {
         });
     }
 
-    public void getSosVolunteers(String id,Model.getSosVolunteersListener listener) {
+    public void getSosVolunteers(String id, Model.getSosVolunteersListener listener) {
 
         Call<JsonArray> getSosVolunteers_retrofit = retrofitInterface.getSosVolunteers(accessToken, id);
         getSosVolunteers_retrofit.enqueue(new Callback<JsonArray>() {
@@ -821,14 +843,13 @@ public class ModelServer {
 
                 List<User> list = new ArrayList<>();
 
-                if(response.body()!=null) {
+                if (response.body() != null) {
                     for (JsonElement element : response.body()) {
                         list.add(User.create(element.getAsJsonObject()));
                     }
                 }
                 listener.onComplete(list);
             }
-
 
 
             @Override
@@ -839,7 +860,7 @@ public class ModelServer {
 
     public void cancelVolunteer(String id, HashMap<String, String> map, Model.cancelVolunteerListener listener) {
 
-        Call<Void> cancelVolunteer_retrofit = retrofitInterface.cancelVolunteer(accessToken, id,map);
+        Call<Void> cancelVolunteer_retrofit = retrofitInterface.cancelVolunteer(accessToken, id, map);
 
         cancelVolunteer_retrofit.enqueue(new Callback<Void>() {
             @Override
@@ -856,7 +877,7 @@ public class ModelServer {
 
     public void volunteer(String id, HashMap<String, String> map, Model.volunteerListener listener) {
 
-        Call<Void> volunteer_retrofit = retrofitInterface.volunteer(accessToken, id,map);
+        Call<Void> volunteer_retrofit = retrofitInterface.volunteer(accessToken, id, map);
 
         volunteer_retrofit.enqueue(new Callback<Void>() {
             @Override
