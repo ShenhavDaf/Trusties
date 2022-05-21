@@ -12,10 +12,15 @@ public class ProfileViewModel extends ViewModel {
     List<Post> data;
 
     public ProfileViewModel() {
-        Model.instance.getAllPosts(postsList -> {
-            this.data = postsList;
-        });
+//        Model.instance.getAllPosts(postsList -> {
+//            this.data = postsList;
+//        });
+        Model.instance.getMyPosts(
+                Model.instance.getCurrentUserModel().getId(), postsList -> {
+                    this.data = postsList;
+                });
     }
+
 
     public List<Post> getData() {
         return data;
