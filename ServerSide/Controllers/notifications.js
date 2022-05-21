@@ -22,7 +22,7 @@ const addNotification = async (req, res, next) => {
   const time = req.body.time;
   const type = req.body.type;
   const circle = req.body.circle;
-  
+
 
   const notification = Notification({
     sender: user,
@@ -58,13 +58,13 @@ const sendNotification = async (req, res, next) => {
   const payload = {
     to: token,
     notification: {
-        title: "Test Notification",
-        body: "Hey..."
+      title: "Test Notification",
+      body: "Hey..."
     }
   }
 
   request.post({
-    headers: {'content-type': 'application/json', "Authorization": process.env.FIREBASE_TOKEN},
+    headers: { 'content-type': 'application/json', "Authorization": process.env.FIREBASE_TOKEN },
     url: "https://fcm.googleapis.com/fcm/send",
     body: payload,
     json: true,

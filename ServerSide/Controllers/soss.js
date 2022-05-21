@@ -3,7 +3,6 @@ const Sos = require("../Models/sos_model");
 const User = require("../Models/user_model");
 
 const addSos = async (req, res, next) => {
-  console.log("## Add Sos");
   var email = req.body.email;
   const user = await User.findOne({ email: email });
   var description = req.body.description;
@@ -51,48 +50,6 @@ const addSos = async (req, res, next) => {
   });
 };
 
-// const addSos = async (req, res, next) => {
-//   console.log("add new sos: " + req.body.message);
-//   sender = req.user.id;
-//   var message = req.body.message;
-//   var title = req.body.title;
-//   var time = req.body.time;
-//   var role = "SOS";
-//   var status = req.body.status;
-
-//   var friends_circle = req.body.friends_circle;
-//   var area = req.body.area;
-//   var address = req.body.address;
-
-//   const sos = Sos({
-//     sender: sender,
-//     title: title,
-//     time: time,
-//     message: message,
-//     role: role,
-//     status: status,
-
-//     friends_circle: friends_circle,
-//     area: area,
-//     address: address,
-//     volunteers: [],
-//     approved_volunteer: null,
-//   });
-
-//   sos.save((error, newPost) => {
-//     if (error) {
-//       res.status(400).send({
-//         status: "fail",
-//         error: error.message,
-//       });
-//     } else {
-//       res.status(200).send({
-//         status: "OK",
-//         post: newPost,
-//       });
-//     }
-//   });
-// };
 
 const getSoss = async (req, res, next) => {
   Post.find({ role: "SOS" }, function (err, docs) {
@@ -113,9 +70,6 @@ const getSosVolunteers = async (req, res, next) => {
       model: "User",
     })
     .exec((err, postInclude) => {
-      console.log("postInclude.volunteers");
-      console.log(postInclude.volunteers);
-
       res.status(200).send(postInclude.volunteers);
     });
 };
@@ -195,8 +149,7 @@ const cancelVolunteer = async (req, res, next) => {
 
 //# PARAMS
 // req.params.id -sos
-const closeSosCancel = async (req, res, next) => {
-  console.log(" ## closeSos");
+const closeSos = async (req, res, next) => {
   Post.findById(req.params.id)
     .where({ role: "SOS" })
     .populate({ path: "volunteers" })
@@ -221,12 +174,10 @@ const closeSosCancel = async (req, res, next) => {
             message: "the request to help NOT saved.",
           });
         }
-
-        console.log(" ## closeSos saved");
-        console.log(sos);
       });
     });
 };
+
 
 //# PARAMS
 //req.body.vol_id - user
@@ -271,7 +222,6 @@ const approveVolunteer = async (req, res, next) => {
         }
 
         console.log(" ## approveRequest saved");
-        console.log(sos);
       });
     });
 };
@@ -282,13 +232,12 @@ const approveVolunteer = async (req, res, next) => {
 const cancelApproveVolunteer = async (req, res, next) => {
   //if the post publisher want to cancel the approve OR the request sender wants to cancel the request after approve
 
-  console.log(" ## cancelApproveRequest");
   const user = await User.findById(req.body.request_id);
 
   Post.findById(req.params.id)
     .where({ role: "SOS" })
     .populate({ path: "volunteers" })
-    .populate({ path: "approved_help" })
+    .populate({ path: "approved_volunteer" })
     .exec((err, sos) => {
       if (err) {
         res.status(400).send({
@@ -311,13 +260,37 @@ const cancelApproveVolunteer = async (req, res, next) => {
         }
 
         console.log(" ## cancelApproveRequest saved");
-        console.log(sos);
       });
     });
 };
 
-//Stop point
-// NEEDTO build the clisent side
+
+//# PARAMS
+// req.params.id -sos
+const getApprovedVolunteer = async (req, res, next) => {
+  //if the post publisher want to cancel the approve OR the request sender wants to cancel the request after approve
+
+  Post.findById(req.params.id)
+    .where({ role: "SOS" })
+    .populate({ path: "approved_volunteer", model: User })
+    .exec((err, sos) => {
+      if (err) {
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+          message: "SOS not found in DB",
+        });
+
+      }
+      else {
+        console.log("## approved_volunteer");
+        res.status(200).send(sos.approved_volunteer);
+
+      }
+    });
+};
+
+
 
 module.exports = {
   addSos,
@@ -327,5 +300,6 @@ module.exports = {
   cancelVolunteer,
   cancelApproveVolunteer,
   getSosVolunteers,
-  closeSosCancel,
+  closeSos,
+  getApprovedVolunteer,
 };

@@ -469,4 +469,35 @@ public class Model {
     }
 
 
+    public interface closeSosListener  {
+        void onComplete();
+        //void onComplete(JsonArray volunteers);
+    }
+
+    public void closeSos(String id, closeSosListener listener) {
+        modelServer.closeSos(id, listener);
+    }
+
+
+    public interface getApprovedVolunteerListener  {
+        void onComplete(JsonObject volunteer);
+    }
+
+    public void getApprovedVolunteer(String id, getApprovedVolunteerListener listener) {
+        modelServer.getApprovedVolunteer(id, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface rateMyHelpListener  {
+        void onComplete();
+    }
+
+    public void rateMyHelp(String userId, HashMap<String, String> map, rateMyHelpListener listener) {
+        modelServer.rateMyHelp(userId, map,listener);
+
+    }
+
+
+
 }

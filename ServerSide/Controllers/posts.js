@@ -11,7 +11,9 @@ const router = require("../Routes/post_routes");
 const getAllPosts = async (req, res, next) => {
   Post.find({}, function (err, docs) {
     if (err) console.log(err);
-    else res.status(200).send(docs);
+    else {
+      res.status(200).send(docs);
+    }
   });
 };
 
@@ -255,7 +257,10 @@ const getMyPosts = async (req, res, next) => {
   console.log(sender);
   Post.find({ sender: sender }, function (err, docs) {
     if (err) console.log(err);
-    else res.status(200).send(docs);
+    else {
+      res.status(200).send(docs);
+
+    }
   });
 };
 

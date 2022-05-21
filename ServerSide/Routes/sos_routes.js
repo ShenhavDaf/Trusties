@@ -65,7 +65,9 @@ router.post("/approveVolunteer/:id", authenticate, Sos.approveVolunteer);
 router.post("/cancelVolunteer/:id", authenticate, Sos.cancelVolunteer);
 router.post("/cancelApproveVolunteer/:id", authenticate, Sos.cancelApproveVolunteer);
 router.get("/getSosVolunteers/:id", authenticate, Sos.getSosVolunteers);
-router.post("/closeSosCancel/:id", authenticate, Sos.closeSosCancel);
+router.post("/closeSos/:id", authenticate, Sos.closeSos);
+router.get("/getApprovedVolunteer/:id", authenticate, Sos.getApprovedVolunteer);
+
 
 
 

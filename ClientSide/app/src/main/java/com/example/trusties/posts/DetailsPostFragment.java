@@ -132,6 +132,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                     isSOS = 1;
                     address = post.get("address").toString().replace("\"", "");
                     location = post.get("location").toString().replace("\"", "");
+                    requestsBtn.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.VISIBLE);
 
 
                 }
@@ -230,13 +232,39 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         requestsBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailPostFragmentToVolunteersFragment(postId));
         });
+        closeBtn.setOnClickListener(v->{
+
+                Model.instance.closeSos(postId, () -> {
+                });
+
+                Model.instance.getApprovedVolunteer(postId,(volunteer)->{
+
+                // TODO: Add comment to local DB ??
+                    if(volunteer!=null){
+                        String id=volunteer.get("_id").toString().replace("\"", "");
+                        Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToFeedbackFragment(id));
+                    }
+                    else{
+                        Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionGlobalNavigationHome(Model.instance.getCurrentUserModel().getFullName()));
+
+
+                    }
+                refresh();
+
+            });
+
+
+        });
+
+
+
         swipeRefresh = view.findViewById(R.id.comment_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> refresh());
 
         RecyclerView list = view.findViewById(R.id.postdetails_rv_comment);
         list.setHasFixedSize(true);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new DetailsPostFragment.MyAdapter();
+        adapter = new MyAdapter();
         list.setAdapter(adapter);
         currUser = Model.instance.getCurrentUserModel();
 

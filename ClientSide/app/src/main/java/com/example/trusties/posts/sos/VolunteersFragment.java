@@ -23,15 +23,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentVolunteersBinding;
-import com.example.trusties.model.Comment;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
-import com.example.trusties.posts.DetailsPostFragment;
-import com.example.trusties.posts.DetailsPostFragmentDirections;
-import com.example.trusties.ui.profile.ConnectionsFragment;
-import com.example.trusties.ui.profile.ConnectionsViewModel;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 

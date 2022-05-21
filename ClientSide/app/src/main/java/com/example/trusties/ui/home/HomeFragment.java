@@ -95,6 +95,7 @@ public class HomeFragment extends Fragment {
         swipeRefresh.setOnRefreshListener(() -> refresh());
 
         Model.instance.getAllPosts(postsList -> {
+
             homeViewModel.data = postsList;
             refresh();
         });
@@ -168,8 +169,6 @@ public class HomeFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, title, description, time, commentNumber, category, status,volunteer_txt,volunteer_count;
         ImageView photo, userImage,plusOne;
-
-//        TextView userName, title, description, time, commentNumber,
         Button volunteer,sos;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
@@ -220,16 +219,12 @@ public class HomeFragment extends Fragment {
             // ##TYPE :SOS
             if (post.getRole().equals("SOS")) {
                 sos.setVisibility(View.VISIBLE);
-
                 MaterialCardView card = (MaterialCardView) itemView;
-//                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
                 int volunteersSize=0;
-
                 if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
                     if (post.getStatus().equals("OPEN")) {
                         //if the status is close & the current user is NOT the post sender
                         volunteer.setVisibility(View.VISIBLE);
-
                     }
                 }
 
@@ -245,8 +240,6 @@ public class HomeFragment extends Fragment {
                 });
 
             }
-            // ##TYPE :SOS+QUES
-
             //TODO: change userName from post title to author name
             Model.instance.findUserById(post.getAuthorID(), user -> {
                 userName.setText(user.get("name").getAsString());
