@@ -4,16 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -42,6 +39,7 @@ public class Model {
     public void setCurrentUserModel(User currentUserModel) {
         this.currentUserModel = currentUserModel;
     }
+
     /* ---------------------------------------------------------------------------- */
     public enum LoadingState {loading, loaded}
 
@@ -154,8 +152,8 @@ public class Model {
         void onComplete();
     }
 
-    public void addPhotosToPost(ArrayList<String> photos,String id, addPhotosToPostListener listener) {
-        modelServer.addPhotosToPost(photos,id, listener);
+    public void addPhotosToPost(ArrayList<String> photos, String id, addPhotosToPostListener listener) {
+        modelServer.addPhotosToPost(photos, id, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -201,7 +199,6 @@ public class Model {
         });
     }
 
-
     /* ---------------------------------------------------------------------------- */
 
     public interface getPostByIdListener {
@@ -239,7 +236,6 @@ public class Model {
     }
 
     public void addComment(HashMap<String, String> map, addCommentListener listener) {
-        Log.d("TAG", "2222");
         modelServer.addComment(map, listener);
     }
 
@@ -300,21 +296,23 @@ public class Model {
     public void editUser(HashMap<String, String> map, String id, editUserListener listener) {
         modelServer.editUser(map, id, listener);
     }
+
     /* ---------------------------------------------------------------------------- */
     public interface upCommentListener {
         void onComplete();
     }
 
-    public void upComment(String id,HashMap<String, String> map, upCommentListener listener) {
-        modelServer.upComment(id,map, listener);
+    public void upComment(String id, HashMap<String, String> map, upCommentListener listener) {
+        modelServer.upComment(id, map, listener);
     }
+
     /* ---------------------------------------------------------------------------- */
     public interface downCommentListener {
         void onComplete();
     }
 
-    public void downComment(String id,HashMap<String, String> map, downCommentListener listener) {
-        modelServer.downComment(id,map, listener);
+    public void downComment(String id, HashMap<String, String> map, downCommentListener listener) {
+        modelServer.downComment(id, map, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -382,20 +380,11 @@ public class Model {
 
     /* ---------------------------------------------------------------------------- */
 
-//    public interface getAllPostsInHomePageListener {
-//        void onComplete(List<Post> postsList);
-//    }
-//
-//    public void getAllPostsInHomePage(getAllPostsInHomePageListener listener) {
-//        modelServer.getAllPostsInHomePage(listener);
-//    }
-
-
     public interface encodeBitMapImgListener {
         void onComplete(String url);
     }
 
-    public void encodeBitMapImg(Bitmap imageBitmap,  encodeBitMapImgListener listener) {
+    public void encodeBitMapImg(Bitmap imageBitmap, encodeBitMapImgListener listener) {
 
         modelServer.encodeBitMapImg(imageBitmap, listener);
     }
@@ -435,27 +424,27 @@ public class Model {
         void onComplete();
     }
 
-    public void approveVolunteer(String id,HashMap<String, String> map, approveVolunteerListener listener) {
-        modelServer.approveVolunteer(id,map, listener);
+    public void approveVolunteer(String id, HashMap<String, String> map, approveVolunteerListener listener) {
+        modelServer.approveVolunteer(id, map, listener);
     }
 
     public interface cancelVolunteerListener {
         void onComplete();
     }
 
-    public void cancelVolunteer(String id,HashMap<String, String> map, cancelVolunteerListener listener) {
-        modelServer.cancelVolunteer(id,map, listener);
+    public void cancelVolunteer(String id, HashMap<String, String> map, cancelVolunteerListener listener) {
+        modelServer.cancelVolunteer(id, map, listener);
     }
 
     public interface volunteerListener {
         void onComplete();
     }
 
-    public void volunteer(String id,HashMap<String, String> map, volunteerListener listener) {
-        modelServer.volunteer(id,map, listener);
+    public void volunteer(String id, HashMap<String, String> map, volunteerListener listener) {
+        modelServer.volunteer(id, map, listener);
     }
 
-    public interface getSosVolunteersListener  {
+    public interface getSosVolunteersListener {
         void onComplete(List<User> volunteers);
         //void onComplete(JsonArray volunteers);
     }
@@ -465,7 +454,7 @@ public class Model {
     }
 
 
-    public interface closeSosListener  {
+    public interface closeSosListener {
         void onComplete();
         //void onComplete(JsonArray volunteers);
     }
@@ -475,7 +464,7 @@ public class Model {
     }
 
 
-    public interface getApprovedVolunteerListener  {
+    public interface getApprovedVolunteerListener {
         void onComplete(JsonObject volunteer);
     }
 
@@ -485,15 +474,14 @@ public class Model {
 
     /* ---------------------------------------------------------------------------- */
 
-    public interface rateMyHelpListener  {
+    public interface rateMyHelpListener {
         void onComplete();
     }
 
     public void rateMyHelp(String userId, HashMap<String, String> map, rateMyHelpListener listener) {
-        modelServer.rateMyHelp(userId, map,listener);
+        modelServer.rateMyHelp(userId, map, listener);
 
     }
-
 
 
 }
