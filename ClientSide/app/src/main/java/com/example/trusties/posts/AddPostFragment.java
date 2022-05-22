@@ -200,13 +200,11 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void OpenCamera() {
-        //TODO
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     private void OpenGallery() {
-        //TODO
 //        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 //        photoPickerIntent.setType("image/*");
 //        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);

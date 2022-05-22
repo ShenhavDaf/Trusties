@@ -2,19 +2,24 @@ package com.example.trusties.ui.home;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
 
 import java.util.List;
 
 public class SearchViewModel extends ViewModel {
 
-    List<User> data;
+    List<User> usersData;
 
-    public SearchViewModel() {
+    public List<User> getUsersData() {
+        return usersData;
     }
 
-    public List<User> getData() {
-        return data;
-    }
+    /*----------------------------------------------------------*/
 
+    List<Post> postsData;
+
+    public List<Post> getPostsData() {
+        return postsData;
+    }
 }

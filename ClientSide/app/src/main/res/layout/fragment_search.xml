@@ -11,7 +11,68 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/textViewTOP"
+            android:id="@+id/search_textViewChoiceTOP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/poppins"
+            android:text="What search would you like to do?"
+            android:textSize="16sp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/search_friend_choice_tv"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:ellipsize="middle"
+            android:focusable="true"
+            android:longClickable="true"
+            android:text="Find Friend"
+            android:textColor="@color/titleColor"
+            android:textColorHighlight="@color/TrustiesPrimaryColor"
+            android:textColorLink="@color/TrustiesPrimaryColor"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/search_post_choice_tv"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_textViewChoiceTOP" />
+
+        <TextView
+            android:id="@+id/search_post_choice_tv"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:ellipsize="middle"
+            android:focusable="true"
+            android:longClickable="true"
+            android:text="Find Post"
+            android:textColor="@color/titleColor"
+            android:textColorHighlight="@color/TrustiesPrimaryColor"
+            android:textColorLink="@color/TrustiesPrimaryColor"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/search_friend_choice_tv"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/search_textViewPostsTOP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -22,7 +83,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/search_friend_choice_tv" />
 
         <TextView
             android:id="@+id/search_categories_tv"
@@ -40,7 +101,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTOP" />
+            app:layout_constraintTop_toBottomOf="@+id/search_textViewPostsTOP" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/search_categories_layout"
@@ -225,7 +286,7 @@
 
         <EditText
             android:id="@+id/search_author_et"
-            android:layout_width="237dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="21dp"
             android:layout_marginEnd="21dp"
@@ -254,11 +315,11 @@
             android:text="Description/ Title:"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_author_tv"
-            android:visibility="gone" />
+            app:layout_constraintTop_toBottomOf="@+id/search_author_tv" />
 
         <EditText
             android:id="@+id/search_description_et"
@@ -279,83 +340,56 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_description_tv" />
 
-        <TextView
-            android:id="@+id/textViewDOWN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:fontFamily="@font/poppins"
-            android:text="You can also find your friends"
-            android:textSize="16sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_description_et" />
-
-        <Button
-            android:id="@+id/search_friend_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_marginTop="15dp"
-            android:backgroundTint="#7393B3"
-            android:fontFamily="@font/poppins"
-            android:text="Find a new friend"
-            android:textSize="12sp"
-            app:icon="@android:drawable/ic_menu_search"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDOWN" />
-
         <EditText
             android:id="@+id/search_friend_et"
-            android:layout_width="237dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/rounded_corner"
             android:ems="10"
+            android:focusable="auto"
             android:fontFamily="@font/poppins"
             android:hint="Enter friend name"
             android:inputType="textPersonName"
             android:padding="5dp"
             android:paddingStart="11dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_friend_btn" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/search_btn"
+            app:layout_constraintEnd_toStartOf="@+id/search_btn"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <Button
             android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
             android:backgroundTint="#7393B3"
             android:fontFamily="@font/poppins"
+            android:padding="5dp"
             android:text="Search"
             android:textSize="16sp"
             android:visibility="gone"
             app:icon="@android:drawable/ic_menu_search"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_friend_et" />
+            app:layout_constraintTop_toBottomOf="@+id/search_description_et" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/search_swiperefresh"
+            android:id="@+id/search_swiperefresh_users"
             android:layout_width="0dp"
-            android:layout_height="250dp"
+            android:layout_height="500dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_btn">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/search_list_rv"
+                android:id="@+id/search_users_list_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="76dp"
@@ -366,6 +400,38 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+
+        <!-- ***********************************************************************  -->
+
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/search_swiperefresh_posts"
+            android:layout_width="0dp"
+            android:layout_height="500dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_btn">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/search_posts_list_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="76dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
+
+
+
