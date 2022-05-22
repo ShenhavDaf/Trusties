@@ -11,7 +11,7 @@ public class Post {
     final public static String LAST_UPDATE = "PostsLastUpdateDate";
 
     String postID;
-    String authorID; //TODO: ID / email / name?
+    String authorID;
     String title;
     String description;
     String time;

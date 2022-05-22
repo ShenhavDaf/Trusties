@@ -222,7 +222,7 @@ public class HomeFragment extends Fragment {
             }
             // ##TYPE :SOS+QUES
 
-            //TODO: change userName from post title to author name
+
             Model.instance.findUserById(post.getAuthorID(), user -> {
                 userName.setText(user.get("name").getAsString());
                 if (user.get("photo") != null) {

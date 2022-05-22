@@ -76,8 +76,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/Othersprofile_image"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
@@ -90,9 +90,9 @@
         android:id="@+id/Othersprofile_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="140dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="100dp"
         android:text="TextView"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -111,17 +111,18 @@
 
     <Button
         android:id="@+id/Othersprofile_add_btn"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="3dp"
         android:backgroundTint="#7393B3"
+        android:includeFontPadding="false"
+        android:padding="5dp"
         android:text="Add me"
         app:icon="@drawable/ic_add_black_24dp"
+        app:iconPadding="0dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/Othersprofile_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/Othersprofile_name"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/Othersprofile_name" />
 
     <TextView
         android:id="@+id/Othersprofile_connections"
@@ -135,15 +136,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
+
     <Button
         android:id="@+id/othersProfile_unfriend_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="3dp"
         android:backgroundTint="@color/red"
+        android:includeFontPadding="false"
+        android:padding="5dp"
         android:text="UnFriend"
         android:visibility="gone"
+        app:iconPadding="0dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/Othersprofile_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/Othersprofile_name" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
