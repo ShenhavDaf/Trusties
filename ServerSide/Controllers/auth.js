@@ -81,6 +81,7 @@ const register = async (req, res, next) => {
         name: name,
         phone: phone,
         photo: photo,
+        isSignedIn: true,
       });
 
       randomCode = getRandomInt();
@@ -125,7 +126,15 @@ const login = async (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
     );
-    await User.updateOne({'email': email}, {$set:{firebaseToken: token}});
+    await User.updateOne(
+      { email: email },
+      {
+        $set: {
+          firebaseToken: token,
+          isSignedIn: true,
+        },
+      }
+    );
 
     // const refreshToken = await jwt.sign(
     //   { id: user._id },
@@ -149,10 +158,24 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  res.status(400).send({
-    status: "fail",
-    error: "not implemented",
-  });
+  console.log("inside logout");
+  try {
+    const exists = await User.updateOne(
+      { _id: req.query.id },
+      {
+        isSignedIn: false,
+      }
+    );
+    if (exists == null) return sendError(res, 400, "user does not exist");
+    res.status(200).send({
+      _id: req.query.id,
+    });
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
 
   // const authHeader = req.headers["authorization"];
   // const token = authHeader && authHeader.split(" ")[1];

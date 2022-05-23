@@ -981,4 +981,23 @@ public class ModelServer {
             }
         });
     }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void signOut(String userId, Model.signOutListener listener) {
+        Call<Void> signOut = retrofitInterface.logout(userId);
+        signOut.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("TAG"," inside logout - client side");
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
 }
