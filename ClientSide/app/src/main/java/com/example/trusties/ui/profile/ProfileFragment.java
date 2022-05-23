@@ -1,7 +1,10 @@
 package com.example.trusties.ui.profile;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -23,8 +26,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.trusties.MyApplication;
 import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentDashboardBinding;
+import com.example.trusties.login.LoginActivity;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
@@ -40,7 +45,7 @@ public class ProfileFragment extends Fragment {
     TextView connections;
     SwipeRefreshLayout swipeRefresh;
     User currUser;
-    Button edit;
+    Button edit, logout;
     ImageView userImage;
     Bitmap decodedByte;
 
@@ -121,6 +126,39 @@ public class ProfileFragment extends Fragment {
             System.out.println("the postID is:  " + postId);
             Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToDetailsPostFragment(postId));
         });
+        logout = root.findViewById(R.id.profile_logout_btn);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Logout").
+                        setMessage("You sure, that you want to logout?");
+                builder.setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Model.instance.signOut(currUser.getId(), new Model.signOutListener() {
+                                    @Override
+                                    public void onComplete() {
+                                        Intent i = new Intent(MyApplication.getContext(),
+                                                LoginActivity.class);
+                                        startActivity(i);
+                                        getActivity().finish();
+                                    }
+                                });
+
+                            }
+                        });
+                builder.setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert11 = builder.create();
+                alert11.show();
+            }
+        });
+
 
 
         refresh();

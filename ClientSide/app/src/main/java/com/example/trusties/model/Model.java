@@ -483,5 +483,16 @@ public class Model {
 
     }
 
+    /* ---------------------------------------------------------------------------- */
+
+
+    public interface signOutListener {
+        void onComplete();
+    }
+    public void signOut(String userId, signOutListener listener) {
+        modelServer.signOut(userId,listener);
+    }
+
+
 
 }
