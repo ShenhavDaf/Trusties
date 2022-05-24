@@ -493,6 +493,16 @@ public class Model {
         modelServer.signOut(userId,listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
+    public interface isSignedInListener {
+        void onComplete(int flag);
+    }
+    public void isSignedIn(isSignedInListener listener) {
+        modelServer.isSignedIn(listener);
+    }
+
+
 
 
 }

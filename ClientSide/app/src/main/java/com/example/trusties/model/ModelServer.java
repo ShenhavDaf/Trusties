@@ -339,14 +339,15 @@ public class ModelServer {
 //        Model.instance.postsListLoadingState.setValue(Model.LoadingState.loading);
 
         System.out.println("---------------1---------------");
-
+//        retrofitInterface.getAllPosts().enqueue(new Callback<JsonArray>() {
         retrofitInterface.getAllPosts(accessToken).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 System.out.println("---------------2---------------");
-                String currentUserModel = Model.instance.getCurrentUserModel().userID;
+                String currentUserModel = Model.instance.getCurrentUserModel().userID; //V
+                Log.d("TAG", " curr user ~~~~" + currentUserModel);
                 List<Post> filteredList = new ArrayList<>();
-
+                Log.d("TAG", " response.body ~~~~" + response.body());
                 List<Post> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
                     if (!element.getAsJsonObject().get("isDeleted").getAsBoolean()) {
@@ -999,5 +1000,46 @@ public class ModelServer {
             }
         });
     }
+
+    public int flag = 0;
+
+    public void isSignedIn(Model.isSignedInListener listener) {
+        Call<JsonObject> call = retrofitInterface.getCurrUser();
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                Log.d("TAG", response.body().toString());
+                if(!response.body().get("id").toString().replace("\"","").equals("null")) {
+                    Log.d("TAG", response.body().get("id").toString().replace("\"",""));
+                    Log.d("TAG", "yes! signed in!");
+                    retrofitInterface.findUserById(response.body().get("id").toString().replace("\"","")).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response2) {
+                            Log.d("TAG", "bodyydydy" + response2.body());
+                            User usr = new User(response.body().get("id").toString().replace("\"",""), response2.body().get("name").toString().replace("\"",""), response2.body().get("email").toString().replace("\"",""),
+                                    response2.body().get("phone").toString().replace("\"",""));
+                            Model.instance.setCurrentUserModel(usr);
+                            accessToken = "JWT " + response.body().get("accessToken").getAsString();
+                        }
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                        }
+                    });
+
+                    flag = 1;
+                }
+                listener.onComplete(flag);
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+
 
 }

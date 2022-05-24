@@ -352,9 +352,11 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         String title = postTitle.getText().toString();
         String message = description.getText().toString();
         User user = Model.instance.getCurrentUserModel();
+        Log.d("TAG", "user%%%% - "+ user.getEmail());
         String email = user.getEmail().replace("\"", "");
 
         map = new HashMap<>();
+//        map.put("sender",currUserID);
         map.put("category", category);
         map.put("title", title);
         map.put("description", message);

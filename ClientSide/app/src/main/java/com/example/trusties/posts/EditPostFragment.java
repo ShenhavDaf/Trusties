@@ -130,6 +130,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                 displayPost(title, description); //TODO: add tags, image etc..
                 progressBar.setVisibility(View.GONE);
                 updateUI(View.VISIBLE);
+                mapView.setVisibility(View.GONE);
                 Log.d("TAG",post.get("role").toString());
                 if (post.get("role").toString().replace("\"", "").equals("SOS")) {
                     mapView.setVisibility(View.VISIBLE);
