@@ -19,7 +19,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_line">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/Othersprofile_postlist_rv"
+            android:id="@+id/profile_postlist_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

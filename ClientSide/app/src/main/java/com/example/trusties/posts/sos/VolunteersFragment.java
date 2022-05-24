@@ -2,6 +2,7 @@ package com.example.trusties.posts.sos;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -106,6 +107,7 @@ public class VolunteersFragment extends Fragment {
             approve = itemView.findViewById(R.id.volunteerListRow_approveBtn);
 
             approve.setOnClickListener(v->{
+                approve.setBackgroundColor(Color.parseColor("#FF4CAF50"));
                 int pos=getAdapterPosition();
                 User vol=viewModel.getData().get(pos);
 
