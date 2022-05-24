@@ -135,7 +135,7 @@ public class OthersProfileFragment extends Fragment {
 
                         refresh());
 
-                        RecyclerView list=root.findViewById(R.id.Othersprofile_postlist_rv);
+                        RecyclerView list=root.findViewById(R.id.profile_postlist_rv);
                         list.setHasFixedSize(true);
                         list.setLayoutManager(new
 
@@ -188,6 +188,7 @@ private void refresh(){
 class MyViewHolder extends RecyclerView.ViewHolder {
     TextView userName, title, description, time, commentNumber, category, status;
     ImageView photo, userImage;
+    Button volunteer, sos;
 
     public MyViewHolder(@NonNull View itemView, OthersProfileFragment.OnItemClickListener listener) {
         super(itemView);
@@ -201,6 +202,10 @@ class MyViewHolder extends RecyclerView.ViewHolder {
         category = itemView.findViewById(R.id.listrow_category_tv);
         status = itemView.findViewById(R.id.listrow_post_status_tv);
         photo = itemView.findViewById(R.id.listrow_post_img);
+        sos = itemView.findViewById(R.id.listrow_sos_btn);
+
+
+        volunteer = itemView.findViewById(R.id.postListRow_volunteer);
 
         itemView.setOnClickListener(v -> {
             int pos = getAdapterPosition();
@@ -214,10 +219,17 @@ class MyViewHolder extends RecyclerView.ViewHolder {
     public void bind(Post post) {
 
         if (post.getRole().toLowerCase().equals("sos")) {
+            sos.setVisibility(View.VISIBLE);
             //TODO: if role == sos change to "sos layout"
 //                getLayoutInflater().inflate(R.layout.sos_list_row, (ViewGroup) itemView,true); // double
             MaterialCardView card = (MaterialCardView) itemView;
-            card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
+//            card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
+            if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
+                if (post.getStatus().toString().replace("\"","").equals("OPEN")) {
+                    //if the status is close & the current user is NOT the post sender
+                    volunteer.setVisibility(View.VISIBLE);
+                }
+            }
         }
         //TODO: change userName from post title to author name
         Model.instance.findUserById(post.getAuthorID(), user -> {

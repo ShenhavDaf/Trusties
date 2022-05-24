@@ -112,7 +112,7 @@ public class ProfileFragment extends Fragment {
         swipeRefresh = root.findViewById(R.id.profile_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> refresh());
 
-        RecyclerView list = root.findViewById(R.id.Othersprofile_postlist_rv);
+        RecyclerView list = root.findViewById(R.id.profile_postlist_rv);
         list.setHasFixedSize(true);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MyAdapter();
@@ -190,6 +190,7 @@ public class ProfileFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, title, description, time, commentNumber, category, status;
         ImageView photo, userImage;
+        Button sos;
 
 
         public MyViewHolder(@NonNull View itemView, ProfileFragment.OnItemClickListener listener) {
@@ -204,6 +205,7 @@ public class ProfileFragment extends Fragment {
             category = itemView.findViewById(R.id.listrow_category_tv);
             status = itemView.findViewById(R.id.listrow_post_status_tv);
             photo = itemView.findViewById(R.id.listrow_post_img);
+            sos = itemView.findViewById(R.id.listrow_sos_btn);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -218,9 +220,10 @@ public class ProfileFragment extends Fragment {
 
             if (post.getRole().toLowerCase().equals("sos")) {
                 //TODO: if role == sos change to "sos layout"
+                sos.setVisibility(View.VISIBLE);
 //                getLayoutInflater().inflate(R.layout.sos_list_row, (ViewGroup) itemView,true); // double
                 MaterialCardView card = (MaterialCardView) itemView;
-                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
+//                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
             }
             //TODO: change userName from post title to author name
             Model.instance.findUserById(post.getAuthorID(), user -> {
