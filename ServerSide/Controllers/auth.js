@@ -32,6 +32,36 @@ function getRandomPassword() {
 
 var randomCode = 0;
 var email;
+var currUser;
+var accessToken;
+
+const getCurrUser = async (req, res, next) => {
+  var idUser;
+  try {
+    if (currUser == undefined || currUser == null) {
+      idUser = "null";
+      accessToken = null;
+    } else if (currUser.isSignedIn == false) {
+      idUser = "null";
+      accessToken = null;
+    } else {
+      idUser = currUser._id;
+      console.log("INNNNN" + currUser.name);
+      accessToken = await jwt.sign(
+        { id: idUser },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
+      );
+    }
+    res.status(200).send({ accessToken, id: idUser });
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
 
 const register = async (req, res, next) => {
   email = req.body.email;
@@ -63,11 +93,13 @@ const register = async (req, res, next) => {
         randomCode = getRandomInt();
         await sendEmail(user.email, "Verify Email", String(randomCode));
 
-        const accessToken = await jwt.sign(
+        accessToken = await jwt.sign(
           { id: user._id },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
         );
+        user.isSignedIn = true;
+        currUser = user;
 
         res.status(200).send({ accessToken, user, randomCode });
       }
@@ -87,8 +119,12 @@ const register = async (req, res, next) => {
       randomCode = getRandomInt();
       await sendEmail(user.email, "Verify Email", String(randomCode));
       newUser = await user.save();
+      user.isSignedIn = true;
+      currUser = user;
+      console.log("currentInRegister" + currUser.name);
+      console.log("currentInRegister" + currUser.isSignedIn);
 
-      const accessToken = await jwt.sign(
+      accessToken = await jwt.sign(
         { id: user._id },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
@@ -121,7 +157,7 @@ const login = async (req, res, next) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return sendError(res, 400, "Incorrect password");
 
-    const accessToken = await jwt.sign(
+    accessToken = await jwt.sign(
       { id: user._id },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
@@ -135,7 +171,10 @@ const login = async (req, res, next) => {
         },
       }
     );
-
+    user.isSignedIn = true;
+    currUser = user;
+    console.log("currentInLogin" + currUser.name);
+    console.log("currentInLogin" + currUser.isSignedIn);
     // const refreshToken = await jwt.sign(
     //   { id: user._id },
     //   process.env.REFRESH_TOKEN_SECRET
@@ -167,6 +206,7 @@ const logout = async (req, res, next) => {
       }
     );
     if (exists == null) return sendError(res, 400, "user does not exist");
+    currUser = null;
     res.status(200).send({
       _id: req.query.id,
     });
@@ -393,6 +433,7 @@ module.exports = {
   register,
   logout,
   refreshToken,
+  getCurrUser,
 
   resendEmail,
   verifiedUser,

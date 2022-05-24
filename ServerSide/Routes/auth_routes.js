@@ -150,5 +150,6 @@ router.get("/findByEmail", Auth.findUserByEmail);
 router.get("/findById", Auth.findUserById);
 router.post("/editUser/:id", Auth.editUser);
 router.get("/allUsers", Auth.getAllUsers);
+router.get("/getCurrUser", Auth.getCurrUser);
 
 module.exports = router;

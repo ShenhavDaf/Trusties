@@ -23,6 +23,9 @@ public interface RetrofitInterface {
 
     /*------------------------------------------Authentication----------------------------------------*/
 
+    @GET("/auth/getCurrUser")
+    Call<JsonObject> getCurrUser();
+
     @POST("/auth/login")
     Call<JsonObject> executeLogin(@Body HashMap<String, String> map);
 
@@ -67,16 +70,18 @@ public interface RetrofitInterface {
     Call<JsonArray> getThirdCircle(@Query("id") String userID);
 
     @GET("/user/addFriendToMyContacts/{myId}/{hisId}")
-    Call<Void> addFriendToMyContacts(@Query("myId") String myID,@Query("hisId") String hisID);
+    Call<Void> addFriendToMyContacts(@Query("myId") String myID, @Query("hisId") String hisID);
 
     @GET("/user/removeFriendFromMyContacts/{myId}/{hisId}")
-    Call<Void> removeFriendFromMyContacts(@Query("myId") String myID,@Query("hisId") String hisID);
+    Call<Void> removeFriendFromMyContacts(@Query("myId") String myID, @Query("hisId") String hisID);
 
 
     /*------------------------------------------Posts----------------------------------------*/
 
-    @GET("/post/allPosts")
+        @GET("/post/allPosts")
     Call<JsonArray> getAllPosts(@Header("authorization") String accessToken);
+//    @GET("/post/allPosts")
+//    Call<JsonArray> getAllPosts();
 
     @POST("/post/add")
     Call<JsonObject> addPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
@@ -108,33 +113,33 @@ public interface RetrofitInterface {
     Call<JsonArray> getAllComments(@Header("authorization") String accessToken);
 
     @GET("/comment/{id}/allComments")
-    Call<JsonArray> getPostComments(@Header("authorization") String accessToken,@Path("id") String id);
+    Call<JsonArray> getPostComments(@Header("authorization") String accessToken, @Path("id") String id);
 
     @GET("/comment/{id}")
     Call<Void> getCommentById(@Header("authorization") String accessToken);
 
     @POST("/comment/edit/{id}")
-    Call<Void> editComment(@Header("authorization") String accessToken, @Body HashMap<String, String> map,@Path("id") String id);
+    Call<Void> editComment(@Header("authorization") String accessToken, @Body HashMap<String, String> map, @Path("id") String id);
 
     @POST("/comment/delete/{id}")
     Call<Void> deleteComment(@Header("authorization") String accessToken, @Path("id") String id);
 
     @POST("/comment/up/{id}")
-    Call<Void> upComment(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+    Call<Void> upComment(@Header("authorization") String accessToken, @Path("id") String id, @Body HashMap<String, String> map);
 
     @POST("/comment/down/{id}")
-    Call<Void> downComment(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+    Call<Void> downComment(@Header("authorization") String accessToken, @Path("id") String id, @Body HashMap<String, String> map);
 
 
     @POST("/sos/approveVolunteer/{id}")
-    Call<Void> approveVolunteer(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+    Call<Void> approveVolunteer(@Header("authorization") String accessToken, @Path("id") String id, @Body HashMap<String, String> map);
 
     @POST("/sos/volunteer/{id}")
-    Call<Void> volunteer(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+    Call<Void> volunteer(@Header("authorization") String accessToken, @Path("id") String id, @Body HashMap<String, String> map);
 
 
     @POST("/sos/cancelVolunteer/{id}")
-    Call<Void> cancelVolunteer(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
+    Call<Void> cancelVolunteer(@Header("authorization") String accessToken, @Path("id") String id, @Body HashMap<String, String> map);
 
     @GET("/sos/getSosVolunteers/{id}")
     Call<JsonArray> getSosVolunteers(@Header("authorization") String accessToken, @Query("id") String id);
@@ -146,9 +151,9 @@ public interface RetrofitInterface {
     Call<JsonObject> getApprovedVolunteer(@Header("authorization") String accessToken, @Path("id") String id);
 
     @POST("/user/rateMyHelp/{id}")
-    Call<Void> rateMyHelp(@Path("id") String id,@Body HashMap<String, String> map);
+    Call<Void> rateMyHelp(@Path("id") String id, @Body HashMap<String, String> map);
 
-  /*------------------------------------------Notifications----------------------------------------*/
+    /*------------------------------------------Notifications----------------------------------------*/
 
     @GET("/notification/allNotifications")
     Call<JsonArray> getAllNotifications(@Header("authorization") String accessToken);
