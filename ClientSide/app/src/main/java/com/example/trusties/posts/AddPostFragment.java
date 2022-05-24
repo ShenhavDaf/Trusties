@@ -4,7 +4,9 @@ import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -39,7 +41,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trusties.CommonFunctions;
+import com.example.trusties.MyApplication;
 import com.example.trusties.R;
+import com.example.trusties.login.LoginActivity;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
 import com.google.android.gms.common.ConnectionResult;
@@ -336,6 +340,11 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                 new CommonFunctions().myPopup(getContext(), "Error", msg);
                 postSOSCall(view);
             }
+            if (category == null) {
+                String msg = "You need to select category first";
+                new CommonFunctions().myPopup(getContext(), "Error", msg);
+            }
+
         });
     }
 
@@ -352,86 +361,92 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         String title = postTitle.getText().toString();
         String message = description.getText().toString();
         User user = Model.instance.getCurrentUserModel();
-        Log.d("TAG", "user%%%% - "+ user.getEmail());
+        Log.d("TAG", "user%%%% - " + user.getEmail());
         String email = user.getEmail().replace("\"", "");
 
-        map = new HashMap<>();
+        if (category != null) {
+
+            map = new HashMap<>();
 //        map.put("sender",currUserID);
-        map.put("category", category);
-        map.put("title", title);
-        map.put("description", message);
-        map.put("email", email);
-        map.put("role", type);
-        if (type.equals("SOS"))
-            map.put("circle", circle.toString());
+            map.put("category", category);
+            map.put("title", title);
+            map.put("description", message);
+            map.put("email", email);
+            map.put("role", type);
+            if (type.equals("SOS"))
+                map.put("circle", circle.toString());
 
-        ArrayList<String> photos = new ArrayList<>();
+            ArrayList<String> photos = new ArrayList<>();
 
-        if (imageBitmap != null) {
+            if (imageBitmap != null) {
 //            Log.d("TAG", imageBitmap.toString());
-            Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
-                @Override
-                public void onComplete(String url) {
-                    photos.add(url);
-                    map.put("photo", url);
-                }
-            });
+                Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
+                    @Override
+                    public void onComplete(String url) {
+                        photos.add(url);
+                        map.put("photo", url);
+                    }
+                });
 
-        }
-        if (mArrayUri != null) {
-            flag = 1;
-            for (int i = 0; i < mArrayUri.size(); i++) {
-                try {
-                    Model.instance.encodeBitMapImg(BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(mArrayUri.get(i))), new Model.encodeBitMapImgListener() {
+            }
+            if (mArrayUri != null) {
+                flag = 1;
+                for (int i = 0; i < mArrayUri.size(); i++) {
+                    try {
+                        Model.instance.encodeBitMapImg(BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(mArrayUri.get(i))), new Model.encodeBitMapImgListener() {
+                            @Override
+                            public void onComplete(String url) {
+                                photos.add(url);
+                            }
+                        });
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (type.equals("SOS")) {
+                    map.put("location", locationOnMap.toString());
+                    map.put("address", fullAddress);
+
+                    Model.instance.addSos(map, new Model.addSosListener() {
                         @Override
-                        public void onComplete(String url) {
-                            photos.add(url);
+                        public void onComplete(JsonObject res) {
+                            Log.d("TAG", "photossssss" + photos.toString());
+                            Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
+                            Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                                @Override
+                                public void onComplete() {
+                                    Log.d("TAG", "stopppppppppp");
+                                }
+                            });
+                            Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
+
+                        }
+
+                    });
+                } else {
+
+                    Model.instance.addPost(map, new Model.addPostListener() {
+                        @Override
+                        public void onComplete(JsonObject res) {
+                            Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
+                            Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                                @Override
+                                public void onComplete() {
+                                    Log.d("TAG", "stopppppppppp");
+                                }
+                            });
+
+
+                            Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
                         }
                     });
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 }
+
             }
-
-            if (type.equals("SOS")) {
-                map.put("location",locationOnMap.toString());
-                map.put("address", fullAddress);
-
-                Model.instance.addSos(map, new Model.addSosListener() {
-                    @Override
-                    public void onComplete(JsonObject res) {
-                        Log.d("TAG","photossssss"+ photos.toString());
-                        Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
-                        Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
-                            @Override
-                            public void onComplete() {
-                                Log.d("TAG", "stopppppppppp");
-                            }
-                        });
-                        Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
-
-                    }
-
-                });
-            } else {
-
-                Model.instance.addPost(map, new Model.addPostListener() {
-                    @Override
-                    public void onComplete(JsonObject res) {
-                        Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
-                        Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
-                            @Override
-                            public void onComplete() {
-                                Log.d("TAG", "stopppppppppp");
-                            }
-                        });
-
-
-                        Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
-                    }
-                });
-            }
-
+        } else if (category == null) {
+            String msg = "You need to select category first";
+            new CommonFunctions().myPopup(getContext(), "Error", msg);
         }
 
 
@@ -496,7 +511,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                     googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override
                         public void onMapClick(@NonNull LatLng latLng) {
-                            Log.d("TAG",latLng.toString());
+                            Log.d("TAG", latLng.toString());
                             googleMap.clear();
                             googleMap.addMarker(new MarkerOptions().position(latLng));
                             geocoder = new Geocoder(getContext(), Locale.getDefault());
@@ -504,7 +519,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                                 addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                                 address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                                 fullAddress = address;
-                                Log.d("TAG",fullAddress);
+                                Log.d("TAG", fullAddress);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
