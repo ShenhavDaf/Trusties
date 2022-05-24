@@ -240,36 +240,94 @@ public class SearchFragment extends Fragment {
 
     private void postModeFunction() {
         lst_posts.clear();
+        List<Post> allPosts = Model.instance.getAll().getValue();
 
-//            List<String> categoriesArray = new ArrayList<>();
-//            if (carCB.isChecked()) categoriesArray.add("car");
-//            if (houseCB.isChecked()) categoriesArray.add("house");
-//            if (toolsCB.isChecked()) categoriesArray.add("tools");
-//            if (deliveryCB.isChecked()) categoriesArray.add("delivery");
+        List<String> categoriesArray = new ArrayList<>();
+        if (carCB.isChecked()) categoriesArray.add("car");
+        if (houseCB.isChecked()) categoriesArray.add("house");
+        if (toolsCB.isChecked()) categoriesArray.add("tools");
+        if (deliveryCB.isChecked()) categoriesArray.add("delivery");
 
         List<String> statusArray = new ArrayList<>();
         if (openCB.isChecked()) statusArray.add("open");
         if (waitingCB.isChecked()) statusArray.add("waiting");
         if (closeCB.isChecked()) statusArray.add("close");
 
+        List<Post> afterCategory = new ArrayList<>();
+        List<Post> afterStatus = new ArrayList<>();
+        List<Post> afterAuthor = new ArrayList<>();
+        List<Post> afterDescription = new ArrayList<>();
 
-        List<Post> allPosts = Model.instance.getAll().getValue();
-        for (Post p : allPosts) {
+    /* --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+       --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- */
 
-            String postStatus = p.getStatus().toLowerCase();
-            for (String status : statusArray) {
-                if (postStatus.equals(status)) {
-                    lst_posts.add(p);
-                    postAdapter.notifyDataSetChanged();
+        if (!categoriesArray.isEmpty()) {
+            for (Post post : allPosts) {
+                String postCategory = post.getCategory().toLowerCase();
+                for (String category : categoriesArray) {
+                    if (postCategory.equals(category)) {
+                        afterCategory.add(post);
+                    }
+                }
+            }
+        } else afterCategory.addAll(allPosts);
+
+    /* --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+       --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- */
+
+        if (!statusArray.isEmpty()) {
+            for (Post post : afterCategory) {
+                String postStatus = post.getStatus().toLowerCase();
+                for (String status : statusArray) {
+                    if (postStatus.equals(status)) {
+                        afterStatus.add(post);
+                    }
+                }
+            }
+        } else afterStatus.addAll(afterCategory);
+
+    /* --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+       --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- */
+
+        String authorText = authorET.getText().toString().toLowerCase().trim();
+        if (!authorText.equals("")) {
+            for (Post post : afterStatus) {
+                if (post.getAuthorName().toLowerCase().contains(authorText)) {
+                    afterAuthor.add(post);
                 }
             }
 
-        }
+        } else
+            afterAuthor.addAll(afterStatus);
 
+        String descriptionText = descriptionET.getText().toString().toLowerCase().trim();
+        if (!descriptionText.equals("")) {
+            for (Post post : afterAuthor) {
+                if (post.getTitle().toLowerCase().contains(descriptionText) ||
+                        post.getDescription().toLowerCase().contains(descriptionText)) {
+                    afterDescription.add(post);
+                }
+            }
+        } else afterDescription.addAll(afterAuthor);
+
+    /* --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+       --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- */
+
+        if (afterDescription.isEmpty())
+            new CommonFunctions().myPopup(this.getContext(),
+                    "Oops..",
+                    "we did not find a match for your filter. Please try something else.");
+
+
+        lst_posts.addAll(afterDescription);
+        postAdapter.notifyDataSetChanged();
         searchViewModel.postsData = lst_posts;
         swipeRefreshPosts.setRefreshing(false);
+
         refresh();
     }
+
+
 
 
 
