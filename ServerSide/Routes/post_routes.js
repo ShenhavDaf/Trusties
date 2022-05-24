@@ -71,6 +71,8 @@ const authenticate = require("../Common/auth_middleware");
 
 router.get("/allPosts", authenticate, Post.getAllPosts);
 
+// router.get("/allPosts", Post.getAllPosts);
+
 /**
  * @swagger
  * /post/{id}:

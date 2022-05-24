@@ -9,6 +9,7 @@ const Category = require("../Models/category_model");
 const router = require("../Routes/post_routes");
 
 const getAllPosts = async (req, res, next) => {
+  console.log("inside getAllPosts");
   Post.find({}, function (err, docs) {
     if (err) console.log(err);
     else {
@@ -259,7 +260,6 @@ const getMyPosts = async (req, res, next) => {
     if (err) console.log(err);
     else {
       res.status(200).send(docs);
-
     }
   });
 };
