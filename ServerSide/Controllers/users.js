@@ -1,5 +1,8 @@
 const { status } = require("express/lib/response");
 const User = require("../Models/user_model");
+const Post = require("../Models/post_model");
+const psSupported = require("jsonwebtoken/lib/psSupported");
+
 
 const getFriendsList = async (req, res) => {
   try {
@@ -227,12 +230,12 @@ const removeFriendFromMyContacts = async (req, res, next) => {
 const rateMyHelp = async (req, res, next) => {
   console.log("## RATE MY HELP");
 
-  const stars_raitng = req.body.stars;
+  var stars_raitng = parseFloat(req.body.stars) * 0.5;
   console.log("## STARS RATING NUMBER");
   console.log(stars_raitng);
 
 
-  User.findById(req.params.id)
+  User.findById({ _id: req.params.id })
     .exec((err, user) => {
       if (err) {
         res.status(400).send({
@@ -242,38 +245,150 @@ const rateMyHelp = async (req, res, next) => {
         });
       }
 
-      var number = user.rating + (stars_raitng * 0.5);
-      if (number > 5) {
-        user.rating = 5;
-      }
-      else {
-        user.rating = number;
-      }
+      user.rating += stars_raitng;
+      //user.rating += 1.4;
+
       user.save(function (err) {
+        if (err) {
+          console.log("ERROR!");
+          console.log(err.message);
+
+          res.status(400).send({
+            status: "fail",
+            error: err.message,
+          });
+        }
+        else {
+          console.log("USER SAVED!");
+        }
+      });
+
+
+    });
+};
+
+//# PARAMS
+// req.query.id -user
+const getMyRelatedPosts = async (req, res) => {
+
+  try {
+
+    console.log("## Params");
+    console.log(req.query.id);
+
+    const user = await User.findById(req.query.id);
+    var myFirstCircle = user.friends;
+    var mySecondCircle = await findFriends(myFirstCircle, user.id);
+    var myThirdCircle = await findFriends(mySecondCircle, user.id);
+
+    var myFirstCircle_str = await ConvertToStringArr(myFirstCircle);
+    var mySecondCircle_str = await ConvertToStringArr(mySecondCircle);
+    var myThirdCircle_str = await ConvertToStringArr(myThirdCircle);
+
+    myFirstCircle_str.push(user._id.valueOf());
+    mySecondCircle_str.push(user._id.valueOf());
+    myThirdCircle_str.push(user._id.valueOf());
+
+    var myFeed = new Array();
+
+    Post.find({})
+      .exec(function (err, docs) {
         if (err) {
           res.status(400).send({
             status: "fail",
             error: err.message,
-            message: "user Rating NOT saved",
           });
         }
         else {
-          console.log("## SAVED USER");
-          console.log(user);
+          var myRelatedPosts = docs.filter((post) => { if (myThirdCircle_str.includes(post.sender.valueOf())) { return post; } });
 
+          for (var i = 0; i < myRelatedPosts.length; i++) {
+            var post = myRelatedPosts[i];
+            var senderId = post.sender.valueOf();
+            var circle = post.friends_circle;
+            //SOS
+            if (post.role == "SOS") {
+              if (circle == 1) {
+                if (user.myFirstCircle_str.includes(senderId)) {
+                  myFeed.push(post);
+                }
+              }
+              if (circle == 2) {
+                if (mySecondCircle_str.includes(senderId)) {
+                  myFeed.push(post);
+                }
+              }
+
+              if (circle == 3) {
+                if (myThirdCircle_str.includes(senderId)) {
+                  myFeed.push(post);
+                }
+              }
+            }
+
+            //QUESTION
+            else {
+
+              if (myFirstCircle_str.includes(senderId)) {
+                myFeed.push(post);
+              }
+
+            }
+          }
+          res.status(200).send(myFeed);
         }
       });
+
+  }
+  catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
     });
+  }
 };
 
+
+//# PARAMS
+// req.query.id -user
+const getRating = async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.query.id);
+    const Obj = {
+      rating: user.rating
+    }
+    res.status(200).send(Obj);
+  }
+  catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
+
+
+//--------------------Helpers------------------//
+
+async function ConvertToStringArr(ObjectIdArr) {
+
+  var StringArr = new Array();
+  ObjectIdArr.forEach(el => {
+    StringArr.push(el.valueOf());
+  });
+
+  return StringArr;
+}
+
 module.exports = {
-  // findUserByEmail,
-  // findUserById,
-  // editUser,
   getFriendsList,
   getSecondCircleOnly,
   getThirdCircleOnly,
   addFriendToMyContacts,
   removeFriendFromMyContacts,
   rateMyHelp,
+  getRating,
+  getMyRelatedPosts,
 };

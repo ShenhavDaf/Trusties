@@ -54,6 +54,9 @@ public interface RetrofitInterface {
     Call<JsonArray> getAllUsers(@Header("authorization") String accessToken);
     /*------------------------------------------Users----------------------------------------*/
 
+    @GET("/user/getFeed/{id}")
+    Call<JsonArray> getMyRelatedPosts(@Query("id") String userId);
+
     @GET("/user/getFriendsList")
     Call<JsonArray> getFriendsList(@Query("id") String userID, @Query("circle") Integer circleNumber);
 
@@ -122,6 +125,7 @@ public interface RetrofitInterface {
     @POST("/comment/down/{id}")
     Call<Void> downComment(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
 
+    /*------------------------------------------SOS----------------------------------------*/
 
     @POST("/sos/approveVolunteer/{id}")
     Call<Void> approveVolunteer(@Header("authorization") String accessToken, @Path("id") String id,@Body HashMap<String, String> map);
@@ -145,7 +149,9 @@ public interface RetrofitInterface {
     @POST("/user/rateMyHelp/{id}")
     Call<Void> rateMyHelp(@Path("id") String id,@Body HashMap<String, String> map);
 
-  /*------------------------------------------Notifications----------------------------------------*/
+
+
+    /*------------------------------------------Notifications----------------------------------------*/
 
     @GET("/notification/allNotifications")
     Call<JsonArray> getAllNotifications(@Header("authorization") String accessToken);
@@ -156,4 +162,6 @@ public interface RetrofitInterface {
     @POST("/notification/sendNotification")
     Call<Void> sendNotification(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
+    @GET("/user/getRating/{id}")
+    Call<JsonObject> getRating(@Query("id") String userId);
 }

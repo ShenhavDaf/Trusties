@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.trusties.R;
@@ -49,6 +50,8 @@ public class OthersProfileFragment extends Fragment {
     Button unFriend;
     ImageView userImage;
     Bitmap decodedByte;
+    RatingBar ratingBar;
+
 
 
     @Override
@@ -69,6 +72,10 @@ public class OthersProfileFragment extends Fragment {
         userName = root.findViewById(R.id.Othersprofile_name);
         userImage = root.findViewById(R.id.Othersprofile_image);
         unFriend = root.findViewById(R.id.othersProfile_unfriend_btn);
+        ratingBar=root.findViewById(R.id.otherProfile_ratingBar);
+
+
+
 
         Model.instance.findUserById(userId, new Model.findUserByIdListener() {
             @Override
@@ -85,6 +92,16 @@ public class OthersProfileFragment extends Fragment {
             }
         });
         currUser = Model.instance.getCurrentUserModel();
+
+        //## Set rating bar
+        Model.instance.getRating(currUser.getId(), new Model.getRatingListener() {
+            @Override
+            public void onComplete(JsonObject obj) {
+                String rating_Str=obj.get("rating").toString().replace("\"", "");
+                Float rating=Float.valueOf(rating_Str);
+                ratingBar.setRating(rating);
+            }
+        });
 
         connections = root.findViewById(R.id.Othersprofile_connections);
         Model.instance.getFriendsList(userId, 1, friendsList -> {

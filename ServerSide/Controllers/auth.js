@@ -125,7 +125,7 @@ const login = async (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
     );
-    await User.updateOne({'email': email}, {$set:{firebaseToken: token}});
+    await User.updateOne({ 'email': email }, { $set: { firebaseToken: token } });
 
     // const refreshToken = await jwt.sign(
     //   { id: user._id },
@@ -269,6 +269,7 @@ const findUserByEmail = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.query.emailAddress });
     if (user == null) return sendError(res, 400, "user does not exist");
+
     res.status(200).send({
       _id: user._id,
       name: user.name,
@@ -276,6 +277,10 @@ const findUserByEmail = async (req, res, next) => {
       phone: user.phone,
       raiting: user.raiting,
     });
+    // console.log("findUserByEmail::user");
+    // console.log(user);
+
+
   } catch (err) {
     res.status(400).send({
       status: "fail",
@@ -297,6 +302,9 @@ const findUserById = async (req, res, next) => {
       raiting: user.raiting,
       photo: user.photo,
     });
+    console.log("user");
+    console.log(user);
+
   } catch (err) {
     res.status(400).send({
       status: "fail",

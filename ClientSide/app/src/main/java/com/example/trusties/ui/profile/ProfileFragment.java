@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,7 @@ public class ProfileFragment extends Fragment {
     Button edit;
     ImageView userImage;
     Bitmap decodedByte;
+    RatingBar ratingBar;
 
 
     @Override
@@ -61,6 +63,7 @@ public class ProfileFragment extends Fragment {
 
         userName = root.findViewById(R.id.profile_name);
         userImage = root.findViewById(R.id.profile_image);
+        ratingBar = root.findViewById(R.id.ratingBar_dashBoard);
 
         currUser = Model.instance.getCurrentUserModel();
         Model.instance.findUserById(Model.instance.getCurrentUserModel().getId(), new Model.findUserByIdListener() {
@@ -74,16 +77,20 @@ public class ProfileFragment extends Fragment {
                     decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     userImage.setImageBitmap(decodedByte);
                 }
+
             }
         });
 
-//        if (Model.instance.getCurrentUserModel() != null) {
-//            userName.setText(Model.instance.getCurrentUserModel().getFullName());
-//            currUser = Model.instance.getCurrentUserModel();
-//            Log.d("TAG",currUser.toString());
-//        }
-//        else
-//            userName.setText("Guest");
+        //## Set rating bar
+        Model.instance.getRating(Model.instance.getCurrentUserModel().getId(), new Model.getRatingListener() {
+            @Override
+            public void onComplete(JsonObject obj) {
+                String rating_Str=obj.get("rating").toString().replace("\"", "");
+                Float rating=Float.valueOf(rating_Str);
+                ratingBar.setRating(rating);
+
+            }
+        });
 
         connections = root.findViewById(R.id.profile_connections);
         Model.instance.getFriendsList(currUser.getId(), 1, friendsList -> {

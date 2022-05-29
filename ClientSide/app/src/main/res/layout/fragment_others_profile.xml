@@ -8,8 +8,8 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/Othersprofile_swiperefresh"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="404dp"
+        android:layout_height="461dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,41 +38,13 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
         android:background="#808080"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Othersprofile_connections" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:src="@android:drawable/btn_star_big_on"
-        app:layout_constraintEnd_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:src="@android:drawable/btn_star_big_on"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:src="@android:drawable/btn_star_big_on"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/Othersprofile_image"
@@ -91,35 +63,28 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="140dp"
         android:text="TextView"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/Othersprofile_image"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:src="@android:drawable/btn_star_big_on"
-        app:layout_constraintEnd_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
-
     <Button
         android:id="@+id/Othersprofile_add_btn"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_width="127dp"
+        android:layout_height="39dp"
         android:layout_marginStart="3dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="#7393B3"
         android:text="Add me"
         app:icon="@drawable/ic_add_black_24dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/Othersprofile_name"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -127,13 +92,13 @@
         android:id="@+id/Othersprofile_connections"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
         android:clickable="false"
         android:text="30 connections"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/otherProfile_ratingBar" />
 
     <Button
         android:id="@+id/othersProfile_unfriend_btn"
@@ -146,4 +111,14 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RatingBar
+        android:id="@+id/otherProfile_ratingBar"
+        android:layout_width="238dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.782"
+        app:layout_constraintStart_toEndOf="@+id/Othersprofile_image"
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

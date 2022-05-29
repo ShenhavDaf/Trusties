@@ -17,6 +17,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -42,6 +43,7 @@ public class Model {
     public void setCurrentUserModel(User currentUserModel) {
         this.currentUserModel = currentUserModel;
     }
+
     /* ---------------------------------------------------------------------------- */
     public enum LoadingState {loading, loaded}
 
@@ -154,8 +156,8 @@ public class Model {
         void onComplete();
     }
 
-    public void addPhotosToPost(ArrayList<String> photos,String id, addPhotosToPostListener listener) {
-        modelServer.addPhotosToPost(photos,id, listener);
+    public void addPhotosToPost(ArrayList<String> photos, String id, addPhotosToPostListener listener) {
+        modelServer.addPhotosToPost(photos, id, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -191,14 +193,28 @@ public class Model {
     public void refreshPostList() {
 
         postsListLoadingState.setValue(LoadingState.loading);
-
-        modelServer.getAllPosts(new ModelServer.allPostsListener() {
+        modelServer.getMyRelatedPosts(currentUserModel.getId(), new getMyRelatedPostsListener() {
             @Override
-            public void onComplete(List<Post> postsList) {
-                mutablePostsList.postValue(postsList);
+            public void onComplete(JsonArray posts) {
+                List<Post> list = new ArrayList<>();
+                for (JsonElement element : posts) {
+                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+                        list.add(Post.create(element.getAsJsonObject()));
+                }
+
+                Collections.reverse(list);
+                mutablePostsList.postValue(list);
                 postsListLoadingState.setValue(LoadingState.loaded);
             }
         });
+
+//        modelServer.getAllPosts(new ModelServer.allPostsListener() {
+//            @Override
+//            public void onComplete(List<Post> postsList) {
+//                mutablePostsList.postValue(postsList);
+//                postsListLoadingState.setValue(LoadingState.loaded);
+//            }
+//        });
     }
 
 
@@ -300,21 +316,23 @@ public class Model {
     public void editUser(HashMap<String, String> map, String id, editUserListener listener) {
         modelServer.editUser(map, id, listener);
     }
+
     /* ---------------------------------------------------------------------------- */
     public interface upCommentListener {
         void onComplete();
     }
 
-    public void upComment(String id,HashMap<String, String> map, upCommentListener listener) {
-        modelServer.upComment(id,map, listener);
+    public void upComment(String id, HashMap<String, String> map, upCommentListener listener) {
+        modelServer.upComment(id, map, listener);
     }
+
     /* ---------------------------------------------------------------------------- */
     public interface downCommentListener {
         void onComplete();
     }
 
-    public void downComment(String id,HashMap<String, String> map, downCommentListener listener) {
-        modelServer.downComment(id,map, listener);
+    public void downComment(String id, HashMap<String, String> map, downCommentListener listener) {
+        modelServer.downComment(id, map, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -395,7 +413,7 @@ public class Model {
         void onComplete(String url);
     }
 
-    public void encodeBitMapImg(Bitmap imageBitmap,  encodeBitMapImgListener listener) {
+    public void encodeBitMapImg(Bitmap imageBitmap, encodeBitMapImgListener listener) {
 
         modelServer.encodeBitMapImg(imageBitmap, listener);
     }
@@ -435,27 +453,27 @@ public class Model {
         void onComplete();
     }
 
-    public void approveVolunteer(String id,HashMap<String, String> map, approveVolunteerListener listener) {
-        modelServer.approveVolunteer(id,map, listener);
+    public void approveVolunteer(String id, HashMap<String, String> map, approveVolunteerListener listener) {
+        modelServer.approveVolunteer(id, map, listener);
     }
 
     public interface cancelVolunteerListener {
         void onComplete();
     }
 
-    public void cancelVolunteer(String id,HashMap<String, String> map, cancelVolunteerListener listener) {
-        modelServer.cancelVolunteer(id,map, listener);
+    public void cancelVolunteer(String id, HashMap<String, String> map, cancelVolunteerListener listener) {
+        modelServer.cancelVolunteer(id, map, listener);
     }
 
     public interface volunteerListener {
         void onComplete();
     }
 
-    public void volunteer(String id,HashMap<String, String> map, volunteerListener listener) {
-        modelServer.volunteer(id,map, listener);
+    public void volunteer(String id, HashMap<String, String> map, volunteerListener listener) {
+        modelServer.volunteer(id, map, listener);
     }
 
-    public interface getSosVolunteersListener  {
+    public interface getSosVolunteersListener {
         void onComplete(List<User> volunteers);
         //void onComplete(JsonArray volunteers);
     }
@@ -465,7 +483,7 @@ public class Model {
     }
 
 
-    public interface closeSosListener  {
+    public interface closeSosListener {
         void onComplete();
         //void onComplete(JsonArray volunteers);
     }
@@ -475,7 +493,7 @@ public class Model {
     }
 
 
-    public interface getApprovedVolunteerListener  {
+    public interface getApprovedVolunteerListener {
         void onComplete(JsonObject volunteer);
     }
 
@@ -485,15 +503,32 @@ public class Model {
 
     /* ---------------------------------------------------------------------------- */
 
-    public interface rateMyHelpListener  {
+    public interface rateMyHelpListener {
         void onComplete();
     }
 
     public void rateMyHelp(String userId, HashMap<String, String> map, rateMyHelpListener listener) {
-        modelServer.rateMyHelp(userId, map,listener);
+        modelServer.rateMyHelp(userId, map, listener);
 
     }
+    /* ---------------------------------------------------------------------------- */
 
+    public interface getMyRelatedPostsListener {
+        void onComplete(JsonArray posts);
+    }
 
+    public void getMyRelatedPosts(String id, getMyRelatedPostsListener listener) {
+        modelServer.getMyRelatedPosts(id, listener);
+    }
 
+    /* ---------------------------------------------------------------------------- */
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface getRatingListener {
+        void onComplete(JsonObject obj);
+    }
+    public void getRating(String id, getRatingListener listener) {
+        modelServer.getRating(id, listener);
+    }
 }

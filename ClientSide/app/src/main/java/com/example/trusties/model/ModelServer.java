@@ -276,6 +276,21 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
+    public void getMyRelatedPosts(String userID, Model.getMyRelatedPostsListener listener) {
+        retrofitInterface.getMyRelatedPosts(userID).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
+            }
+        });
+    }
+
 
     /* ------------------------------------------------------------------------- */
 
@@ -816,6 +831,7 @@ public class ModelServer {
 
         });
     }
+    /* ------------------------------------------------------------------------- */
 
     public void approveVolunteer(String id, HashMap<String, String> map, Model.approveVolunteerListener listener) {
 
@@ -833,6 +849,7 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
 
     public void getSosVolunteers(String id, Model.getSosVolunteersListener listener) {
 
@@ -857,6 +874,7 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
 
     public void cancelVolunteer(String id, HashMap<String, String> map, Model.cancelVolunteerListener listener) {
 
@@ -874,6 +892,7 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
 
     public void volunteer(String id, HashMap<String, String> map, Model.volunteerListener listener) {
 
@@ -891,6 +910,7 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
 
     public void getAllNotifications(Model.allNotificationsListener listener) {
         String currentUserModel = Model.instance.getCurrentUserModel().userID;
@@ -930,6 +950,7 @@ public class ModelServer {
         });
 
     }
+    /* ------------------------------------------------------------------------- */
 
     public void sendNotification(HashMap<String, String> map, Model.sendNotificationListener listener) {
         retrofitInterface.sendNotification(accessToken, map).enqueue(new Callback<Void>() {
@@ -946,6 +967,7 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
 
     public void closeSos(String id, Model.closeSosListener listener) {
 
@@ -965,6 +987,7 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
 
     public void getApprovedVolunteer(String id, Model.getApprovedVolunteerListener listener) {
 
@@ -981,6 +1004,7 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
 
     public void rateMyHelp(String userId, HashMap<String, String> map, Model.rateMyHelpListener listener) {
 
@@ -1000,4 +1024,25 @@ public class ModelServer {
             }
         });
     }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void getRating(String id, Model.getRatingListener listener) {
+
+
+        Call<JsonObject> retrofit = retrofitInterface.getRating(id);
+        retrofit.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                System.out.println("response.body()");
+                System.out.println(response.body());
+                listener.onComplete(response.body());
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
 }
