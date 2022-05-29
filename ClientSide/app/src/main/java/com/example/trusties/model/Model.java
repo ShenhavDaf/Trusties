@@ -4,16 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -217,7 +214,6 @@ public class Model {
 //        });
     }
 
-
     /* ---------------------------------------------------------------------------- */
 
     public interface getPostByIdListener {
@@ -255,7 +251,6 @@ public class Model {
     }
 
     public void addComment(HashMap<String, String> map, addCommentListener listener) {
-        Log.d("TAG", "2222");
         modelServer.addComment(map, listener);
     }
 
@@ -400,15 +395,6 @@ public class Model {
 
     /* ---------------------------------------------------------------------------- */
 
-//    public interface getAllPostsInHomePageListener {
-//        void onComplete(List<Post> postsList);
-//    }
-//
-//    public void getAllPostsInHomePage(getAllPostsInHomePageListener listener) {
-//        modelServer.getAllPostsInHomePage(listener);
-//    }
-
-
     public interface encodeBitMapImgListener {
         void onComplete(String url);
     }
@@ -520,6 +506,26 @@ public class Model {
     public void getMyRelatedPosts(String id, getMyRelatedPostsListener listener) {
         modelServer.getMyRelatedPosts(id, listener);
     }
+    /* ---------------------------------------------------------------------------- */
+
+
+    public interface signOutListener {
+        void onComplete();
+    }
+    public void signOut(String userId, signOutListener listener) {
+        modelServer.signOut(userId,listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface isSignedInListener {
+        void onComplete(int flag);
+    }
+    public void isSignedIn(isSignedInListener listener) {
+        modelServer.isSignedIn(listener);
+    }
+
+
 
     /* ---------------------------------------------------------------------------- */
 

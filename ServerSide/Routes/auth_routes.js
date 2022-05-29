@@ -121,7 +121,7 @@ router.post("/login", Auth.login);
  *           200:
  *               description: logout completed successfully
  */
-router.get("/logout", Auth.logout);
+router.post("/logout/:id", Auth.logout);
 
 /**
  * @swagger
@@ -150,5 +150,6 @@ router.get("/findByEmail", Auth.findUserByEmail);
 router.get("/findById", Auth.findUserById);
 router.post("/editUser/:id", Auth.editUser);
 router.get("/allUsers", Auth.getAllUsers);
+router.get("/getCurrUser", Auth.getCurrUser);
 
 module.exports = router;

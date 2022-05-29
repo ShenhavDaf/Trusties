@@ -2,7 +2,6 @@ package com.example.trusties.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -180,6 +178,8 @@ public class ModelServer {
         });
     }
 
+    /* ------------------------------------------------------------------------- */
+
     public void verifiedUser(HashMap<String, String> map, Model.verifiedUserListener listener, Context context) {
         Call<Void> afterVerify = retrofitInterface.verifiedUser(map);
         afterVerify.enqueue(new Callback<Void>() {
@@ -263,6 +263,7 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
+
     public void getFriendsList(String userID, Integer circle, Model.friendsListListener listener) {
         retrofitInterface.getFriendsList(userID, circle).enqueue(new Callback<JsonArray>() {
             @Override
@@ -310,6 +311,8 @@ public class ModelServer {
         });
     }
 
+    /* ------------------------------------------------------------------------- */
+
     public void addPhotosToPost(ArrayList<String> photos, String id, Model.addPhotosToPostListener listener) {
 
         Call<Void> add = retrofitInterface.addPhotosToPost(/*accessToken,*/ photos, id);
@@ -326,6 +329,7 @@ public class ModelServer {
             }
         });
     }
+
     /* ------------------------------------------------------------------------- */
 
     public void addSos(HashMap<String, String> map, Model.addSosListener listener) {
@@ -346,19 +350,19 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-
     public void getAllPosts(allPostsListener listener) {
 //        Model.instance.postsListLoadingState.setValue(Model.LoadingState.loading);
 
         System.out.println("---------------1---------------");
-
+//        retrofitInterface.getAllPosts().enqueue(new Callback<JsonArray>() {
         retrofitInterface.getAllPosts(accessToken).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 System.out.println("---------------2---------------");
-                String currentUserModel = Model.instance.getCurrentUserModel().userID;
+                String currentUserModel = Model.instance.getCurrentUserModel().userID; //V
+                Log.d("TAG", " curr user ~~~~" + currentUserModel);
                 List<Post> filteredList = new ArrayList<>();
-
+                Log.d("TAG", " response.body ~~~~" + response.body());
                 List<Post> list = new ArrayList<>();
                 for (JsonElement element : response.body()) {
                     if (!element.getAsJsonObject().get("isDeleted").getAsBoolean()) {
@@ -402,7 +406,6 @@ public class ModelServer {
         });
 
     }
-
 
     /* ------------------------------------------------------------------------- */
 
@@ -562,6 +565,7 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
+
     public void upComment(String id, HashMap<String, String> map, Model.upCommentListener listener) {
 
         Call<Void> deleteComment = retrofitInterface.upComment(accessToken, id, map);
@@ -622,45 +626,6 @@ public class ModelServer {
             }
         });
     }
-
-    /* ------------------------------------------------------------------------- */
-
-//    public void getAllPostsInHomePage(Model.getAllPostsInHomePageListener listener) {
-//
-//        String currentUserModel = Model.instance.getCurrentUserModel().userID;
-//        List<Post> filteredList = new ArrayList<>();
-//        Call<JsonArray> getAllPosts = retrofitInterface.getAllPosts(accessToken);
-//        getAllPosts.enqueue(new Callback<JsonArray>() {
-//            @Override
-//            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-//                List<Post> list = new ArrayList<>();
-//                for (JsonElement element : response.body()) {
-//                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
-//                        list.add(Post.create(element.getAsJsonObject()));
-//                }
-//                for (Post post : list) {
-//                    if (post.getAuthorID().equals(currentUserModel))
-//                        filteredList.add(post);
-//
-//                    getFriendsList(post.getAuthorID(), post.getCircle(), friendsList -> {
-//                        for (JsonElement friend : friendsList) {
-//                            if (friend.toString().replace("\"", "").equals(currentUserModel)) {
-//                                filteredList.add(post);
-//                            }
-//                        }
-//                    });
-//
-//                }
-//                Collections.reverse(filteredList);
-//                listener.onComplete(filteredList);
-//            }
-//            @Override
-//            public void onFailure(Call<JsonArray> call, Throwable t) {
-//                System.out.println("--- failed\n" + t.getMessage());
-//
-//            }
-//        });
-//    }
 
     /* ------------------------------------------------------------------------- */
 
@@ -757,7 +722,6 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-
     public void removeFriendFromMyContacts(String myID, String hisID, Model.removeFriendListener listener) {
 
         retrofitInterface.removeFriendFromMyContacts(myID, hisID).enqueue(new Callback<Void>() {
@@ -833,6 +797,8 @@ public class ModelServer {
     }
     /* ------------------------------------------------------------------------- */
 
+    /* ------------------------------------------------------------------------- */
+
     public void approveVolunteer(String id, HashMap<String, String> map, Model.approveVolunteerListener listener) {
 
         Call<Void> approveVolunteer_retrofit = retrofitInterface.approveVolunteer(accessToken, id, map);
@@ -849,6 +815,8 @@ public class ModelServer {
             }
         });
     }
+    /* ------------------------------------------------------------------------- */
+
     /* ------------------------------------------------------------------------- */
 
     public void getSosVolunteers(String id, Model.getSosVolunteersListener listener) {
@@ -876,6 +844,8 @@ public class ModelServer {
     }
     /* ------------------------------------------------------------------------- */
 
+    /* ------------------------------------------------------------------------- */
+
     public void cancelVolunteer(String id, HashMap<String, String> map, Model.cancelVolunteerListener listener) {
 
         Call<Void> cancelVolunteer_retrofit = retrofitInterface.cancelVolunteer(accessToken, id, map);
@@ -892,6 +862,7 @@ public class ModelServer {
             }
         });
     }
+
     /* ------------------------------------------------------------------------- */
 
     public void volunteer(String id, HashMap<String, String> map, Model.volunteerListener listener) {
@@ -967,6 +938,7 @@ public class ModelServer {
             }
         });
     }
+
     /* ------------------------------------------------------------------------- */
 
     public void closeSos(String id, Model.closeSosListener listener) {
@@ -991,7 +963,7 @@ public class ModelServer {
 
     public void getApprovedVolunteer(String id, Model.getApprovedVolunteerListener listener) {
 
-        Call<JsonObject> retrofit = retrofitInterface.getApprovedVolunteer(accessToken,id);
+        Call<JsonObject> retrofit = retrofitInterface.getApprovedVolunteer(accessToken, id);
         retrofit.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -1009,7 +981,7 @@ public class ModelServer {
     public void rateMyHelp(String userId, HashMap<String, String> map, Model.rateMyHelpListener listener) {
 
 
-        Call<Void> rateMyHelpRetro = retrofitInterface.rateMyHelp(userId,map);
+        Call<Void> rateMyHelpRetro = retrofitInterface.rateMyHelp(userId, map);
 
 
         rateMyHelpRetro.enqueue(new Callback<Void>() {
@@ -1027,22 +999,61 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void getRating(String id, Model.getRatingListener listener) {
+    public void signOut(String userId, Model.signOutListener listener) {
+        Call<Void> signOut = retrofitInterface.logout(userId);
+        signOut.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("TAG"," inside logout - client side");
+                listener.onComplete();
+            }
 
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
 
-        Call<JsonObject> retrofit = retrofitInterface.getRating(id);
-        retrofit.enqueue(new Callback<JsonObject>() {
+            }
+        });
+    }
+
+    public int flag = 0;
+
+    public void isSignedIn(Model.isSignedInListener listener) {
+        Call<JsonObject> call = retrofitInterface.getCurrUser();
+        call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                System.out.println("response.body()");
-                System.out.println(response.body());
-                listener.onComplete(response.body());
+
+                Log.d("TAG", response.body().toString());
+                if(!response.body().get("id").toString().replace("\"","").equals("null")) {
+                    Log.d("TAG", response.body().get("id").toString().replace("\"",""));
+                    Log.d("TAG", "yes! signed in!");
+                    retrofitInterface.findUserById(response.body().get("id").toString().replace("\"","")).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response2) {
+                            Log.d("TAG", "bodyydydy" + response2.body());
+                            User usr = new User(response.body().get("id").toString().replace("\"",""), response2.body().get("name").toString().replace("\"",""), response2.body().get("email").toString().replace("\"",""),
+                                    response2.body().get("phone").toString().replace("\"",""));
+                            Model.instance.setCurrentUserModel(usr);
+                            accessToken = "JWT " + response.body().get("accessToken").getAsString();
+                        }
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                        }
+                    });
+
+                    flag = 1;
+                }
+                listener.onComplete(flag);
             }
+
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
 
             }
         });
     }
+
+
 
 }

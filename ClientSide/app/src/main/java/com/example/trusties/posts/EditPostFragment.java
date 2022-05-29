@@ -130,6 +130,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                 displayPost(title, description); //TODO: add tags, image etc..
                 progressBar.setVisibility(View.GONE);
                 updateUI(View.VISIBLE);
+                mapView.setVisibility(View.GONE);
                 Log.d("TAG",post.get("role").toString());
                 if (post.get("role").toString().replace("\"", "").equals("SOS")) {
                     mapView.setVisibility(View.VISIBLE);
@@ -177,13 +178,11 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void OpenCamera() {
-        //TODO
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     private void OpenGallery() {
-        //TODO
 //        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 //        photoPickerIntent.setType("image/*");
 //        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);

@@ -11,7 +11,9 @@ public class Post {
     final public static String LAST_UPDATE = "PostsLastUpdateDate";
 
     String postID;
-    String authorID; //TODO: ID / email / name?
+    String authorID;
+    String authorName;
+    String category;
     String title;
     String description;
     String time;
@@ -26,9 +28,10 @@ public class Post {
 
     /* ****************************** Constructors ****************************** */
 
-    public Post(String id, String authorID, String title, String description, String time, String role, String status, Boolean isDeleted, String location, String address, Integer circle) {
+    public Post(String id, String authorID, String category, String title, String description, String time, String role, String status, Boolean isDeleted, String location, String address, Integer circle) {
         this.postID = id;
         this.authorID = authorID;
+        this.category = category;
         this.title = title;
         this.description = description;
         this.time = time;
@@ -38,6 +41,7 @@ public class Post {
         this.location = location;
         this.address = address;
         this.circle = circle;
+        Model.instance.findUserById(authorID, user -> this.authorName = user.get("name").getAsString());
     }
 
     /* ****************************** Getters & Setters ****************************** */
@@ -125,12 +129,26 @@ public class Post {
         this.circle = circle;
     }
 
+    /*------------------------------------------------------*/
+
+    public String getCategory() {
+        return category;
+    }
+
+    /*------------------------------------------------------*/
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+
     /* ****************************** Functions ****************************** */
 
     public static Post create(JsonObject json) {
 
         String id = json.get("_id").getAsString();
         String author = json.get("sender").getAsString();
+        String category = json.get("category").getAsString();
         String title = json.get("title").getAsString();
         String description = json.get("description").getAsString();
         String time = json.get("time").getAsString();
@@ -142,7 +160,7 @@ public class Post {
         Integer circle = json.get("friends_circle").getAsInt();
 
 
-        Post post = new Post(id, author, title, description, time, role, status, isDeleted, location, address, circle);
+        Post post = new Post(id, author, category, title, description, time, role, status, isDeleted, location, address, circle);
 
         return post;
     }
@@ -154,6 +172,7 @@ public class Post {
         JsonObject json = new JsonObject();
         json.addProperty("_id", postID);
         json.addProperty("sender", authorID);
+        json.addProperty("category", category);
         json.addProperty("title", title);
         json.addProperty("description", description);
         json.addProperty("time", time);

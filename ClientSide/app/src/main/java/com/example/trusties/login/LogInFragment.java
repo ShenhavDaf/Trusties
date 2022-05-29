@@ -86,6 +86,8 @@ public class LogInFragment extends Fragment {
             return;
         }
 
+        progressBar.setVisibility(View.VISIBLE);
+
         Model.instance.login(localEmail, localPassword, (statusCode, user) -> {
             if (statusCode == 200) {
                 String localName = user.get("name").toString();

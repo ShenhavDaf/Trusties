@@ -19,7 +19,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_line">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/Othersprofile_postlist_rv"
+            android:id="@+id/profile_postlist_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -94,6 +94,17 @@
         android:text="365 connections"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar_dashBoard" />
+
+    <Button
+        android:id="@+id/profile_logout_btn"
+        android:layout_width="48dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="#74F63030"
+        app:icon="@drawable/ic_baseline_navigate_next_24"
+        app:layout_constraintBaseline_toBaselineOf="@+id/profile_edit_btn"
+        app:layout_constraintEnd_toStartOf="@+id/profile_edit_btn" />
         app:layout_constraintTop_toBottomOf="@+id/ratingBar_dashBoard" />
 
     <RatingBar

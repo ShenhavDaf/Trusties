@@ -32,6 +32,36 @@ function getRandomPassword() {
 
 var randomCode = 0;
 var email;
+var currUser;
+var accessToken;
+
+const getCurrUser = async (req, res, next) => {
+  var idUser;
+  try {
+    if (currUser == undefined || currUser == null) {
+      idUser = "null";
+      accessToken = null;
+    } else if (currUser.isSignedIn == false) {
+      idUser = "null";
+      accessToken = null;
+    } else {
+      idUser = currUser._id;
+      console.log("INNNNN" + currUser.name);
+      accessToken = await jwt.sign(
+        { id: idUser },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
+      );
+    }
+    res.status(200).send({ accessToken, id: idUser });
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
 
 const register = async (req, res, next) => {
   email = req.body.email;
@@ -63,11 +93,13 @@ const register = async (req, res, next) => {
         randomCode = getRandomInt();
         await sendEmail(user.email, "Verify Email", String(randomCode));
 
-        const accessToken = await jwt.sign(
+        accessToken = await jwt.sign(
           { id: user._id },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
         );
+        user.isSignedIn = true;
+        currUser = user;
 
         res.status(200).send({ accessToken, user, randomCode });
       }
@@ -81,13 +113,18 @@ const register = async (req, res, next) => {
         name: name,
         phone: phone,
         photo: photo,
+        isSignedIn: true,
       });
 
       randomCode = getRandomInt();
       await sendEmail(user.email, "Verify Email", String(randomCode));
       newUser = await user.save();
+      user.isSignedIn = true;
+      currUser = user;
+      console.log("currentInRegister" + currUser.name);
+      console.log("currentInRegister" + currUser.isSignedIn);
 
-      const accessToken = await jwt.sign(
+      accessToken = await jwt.sign(
         { id: user._id },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
@@ -120,13 +157,24 @@ const login = async (req, res, next) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return sendError(res, 400, "Incorrect password");
 
-    const accessToken = await jwt.sign(
+    accessToken = await jwt.sign(
       { id: user._id },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: process.env.JWT_TOKEN_EXPIRATION }
     );
-    await User.updateOne({ 'email': email }, { $set: { firebaseToken: token } });
-
+    await User.updateOne(
+      { email: email },
+      {
+        $set: {
+          firebaseToken: token,
+          isSignedIn: true,
+        },
+      }
+    );
+    user.isSignedIn = true;
+    currUser = user;
+    console.log("currentInLogin" + currUser.name);
+    console.log("currentInLogin" + currUser.isSignedIn);
     // const refreshToken = await jwt.sign(
     //   { id: user._id },
     //   process.env.REFRESH_TOKEN_SECRET
@@ -149,10 +197,25 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  res.status(400).send({
-    status: "fail",
-    error: "not implemented",
-  });
+  console.log("inside logout");
+  try {
+    const exists = await User.updateOne(
+      { _id: req.query.id },
+      {
+        isSignedIn: false,
+      }
+    );
+    if (exists == null) return sendError(res, 400, "user does not exist");
+    currUser = null;
+    res.status(200).send({
+      _id: req.query.id,
+    });
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
 
   // const authHeader = req.headers["authorization"];
   // const token = authHeader && authHeader.split(" ")[1];
@@ -269,7 +332,6 @@ const findUserByEmail = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.query.emailAddress });
     if (user == null) return sendError(res, 400, "user does not exist");
-
     res.status(200).send({
       _id: user._id,
       name: user.name,
@@ -277,10 +339,6 @@ const findUserByEmail = async (req, res, next) => {
       phone: user.phone,
       raiting: user.raiting,
     });
-    // console.log("findUserByEmail::user");
-    // console.log(user);
-
-
   } catch (err) {
     res.status(400).send({
       status: "fail",
@@ -302,9 +360,6 @@ const findUserById = async (req, res, next) => {
       raiting: user.raiting,
       photo: user.photo,
     });
-    console.log("user");
-    console.log(user);
-
   } catch (err) {
     res.status(400).send({
       status: "fail",
@@ -378,6 +433,7 @@ module.exports = {
   register,
   logout,
   refreshToken,
+  getCurrUser,
 
   resendEmail,
   verifiedUser,

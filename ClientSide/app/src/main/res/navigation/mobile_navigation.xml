@@ -137,12 +137,17 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.trusties.SearchFragment"
+        android:name="com.example.trusties.ui.home.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
-    <action
-        android:id="@+id/action_global_searchFragment"
-        app:destination="@id/searchFragment" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_othersProfileFragment"
+            app:destination="@id/othersProfileFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_detailsPostFragment"
+            app:destination="@id/detailsPostFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/feedbackFragment"
         android:name="com.example.trusties.posts.sos.FeedbackFragment"
@@ -154,5 +159,5 @@
         <action
             android:id="@+id/action_feedbackFragment_to_othersProfileFragment"
             app:destination="@id/othersProfileFragment" />
-    </fragment>
+    </fragment><action android:id="@+id/action_global_searchFragment" app:destination="@id/searchFragment"/>
 </navigation>

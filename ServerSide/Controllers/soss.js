@@ -1,6 +1,7 @@
 const Post = require("../Models/post_model");
 const Sos = require("../Models/sos_model");
 const User = require("../Models/user_model");
+const Category = require("../Models/category_model");
 
 const addSos = async (req, res, next) => {
   var email = req.body.email;
@@ -15,6 +16,8 @@ const addSos = async (req, res, next) => {
   var location = req.body.location;
   var address = req.body.address;
 
+  const findCategory = await Category.findOne({ name: category });
+
   const sos = await Sos({
     sender: user,
     title: title,
@@ -28,6 +31,21 @@ const addSos = async (req, res, next) => {
     approved_volunteer: null,
     photo: photo,
     location: location,
+  });
+  findCategory.save(async (error) => {
+    if (error) {
+      res.status(400).send({
+        status: "fail",
+        error: error.message,
+      });
+    } else {
+      await Category.updateOne(
+        { name: category },
+        {
+          $push: { posts: [sos._id] },
+        }
+      );
+    }
   });
 
   sos.save((error, newPost) => {
@@ -49,7 +67,6 @@ const addSos = async (req, res, next) => {
     }
   });
 };
-
 
 const getSoss = async (req, res, next) => {
   Post.find({ role: "SOS" }, function (err, docs) {
@@ -178,7 +195,6 @@ const closeSos = async (req, res, next) => {
     });
 };
 
-
 //# PARAMS
 //req.body.vol_id - user
 // req.params.id -sos
@@ -264,7 +280,6 @@ const cancelApproveVolunteer = async (req, res, next) => {
     });
 };
 
-
 //# PARAMS
 // req.params.id -sos
 const getApprovedVolunteer = async (req, res, next) => {
@@ -280,17 +295,12 @@ const getApprovedVolunteer = async (req, res, next) => {
           error: error.message,
           message: "SOS not found in DB",
         });
-
-      }
-      else {
+      } else {
         console.log("## approved_volunteer");
         res.status(200).send(sos.approved_volunteer);
-
       }
     });
 };
-
-
 
 module.exports = {
   addSos,

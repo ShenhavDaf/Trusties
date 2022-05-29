@@ -18,7 +18,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/Othersprofile_postlist_rv"
+            android:id="@+id/profile_postlist_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -76,14 +76,18 @@
     <Button
         android:id="@+id/Othersprofile_add_btn"
         android:layout_width="127dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="3dp"
+        android:layout_height="45dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="#7393B3"
+        android:includeFontPadding="false"
+        android:padding="5dp"
         android:text="Add me"
         app:icon="@drawable/ic_add_black_24dp"
+        app:iconPadding="0dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/Othersprofile_name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Othersprofile_name" />
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/Othersprofile_name"
         app:layout_constraintTop_toTopOf="parent" />
@@ -100,15 +104,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/otherProfile_ratingBar" />
 
+
     <Button
         android:id="@+id/othersProfile_unfriend_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="3dp"
         android:backgroundTint="@color/red"
+        android:includeFontPadding="false"
+        android:padding="5dp"
         android:text="UnFriend"
         android:visibility="gone"
+        app:iconPadding="0dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/Othersprofile_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -121,4 +129,6 @@
         app:layout_constraintHorizontal_bias="0.782"
         app:layout_constraintStart_toEndOf="@+id/Othersprofile_image"
         app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
+        app:layout_constraintStart_toEndOf="@+id/Othersprofile_name" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

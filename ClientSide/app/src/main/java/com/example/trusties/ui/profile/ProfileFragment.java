@@ -1,7 +1,10 @@
 package com.example.trusties.ui.profile;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -24,8 +27,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.trusties.MyApplication;
 import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentDashboardBinding;
+import com.example.trusties.login.LoginActivity;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
@@ -41,7 +46,7 @@ public class ProfileFragment extends Fragment {
     TextView connections;
     SwipeRefreshLayout swipeRefresh;
     User currUser;
-    Button edit;
+    Button edit, logout;
     ImageView userImage;
     Bitmap decodedByte;
     RatingBar ratingBar;
@@ -114,7 +119,7 @@ public class ProfileFragment extends Fragment {
         swipeRefresh = root.findViewById(R.id.profile_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> refresh());
 
-        RecyclerView list = root.findViewById(R.id.Othersprofile_postlist_rv);
+        RecyclerView list = root.findViewById(R.id.profile_postlist_rv);
         list.setHasFixedSize(true);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MyAdapter();
@@ -128,6 +133,39 @@ public class ProfileFragment extends Fragment {
             System.out.println("the postID is:  " + postId);
             Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToDetailsPostFragment(postId));
         });
+        logout = root.findViewById(R.id.profile_logout_btn);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Logout").
+                        setMessage("You sure, that you want to logout?");
+                builder.setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Model.instance.signOut(currUser.getId(), new Model.signOutListener() {
+                                    @Override
+                                    public void onComplete() {
+                                        Intent i = new Intent(MyApplication.getContext(),
+                                                LoginActivity.class);
+                                        startActivity(i);
+                                        getActivity().finish();
+                                    }
+                                });
+
+                            }
+                        });
+                builder.setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert11 = builder.create();
+                alert11.show();
+            }
+        });
+
 
 
         refresh();
@@ -159,6 +197,7 @@ public class ProfileFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, title, description, time, commentNumber, category, status;
         ImageView photo, userImage;
+        Button sos;
 
 
         public MyViewHolder(@NonNull View itemView, ProfileFragment.OnItemClickListener listener) {
@@ -173,6 +212,7 @@ public class ProfileFragment extends Fragment {
             category = itemView.findViewById(R.id.listrow_category_tv);
             status = itemView.findViewById(R.id.listrow_post_status_tv);
             photo = itemView.findViewById(R.id.listrow_post_img);
+            sos = itemView.findViewById(R.id.listrow_sos_btn);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -187,9 +227,10 @@ public class ProfileFragment extends Fragment {
 
             if (post.getRole().toLowerCase().equals("sos")) {
                 //TODO: if role == sos change to "sos layout"
+                sos.setVisibility(View.VISIBLE);
 //                getLayoutInflater().inflate(R.layout.sos_list_row, (ViewGroup) itemView,true); // double
                 MaterialCardView card = (MaterialCardView) itemView;
-                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
+//                card.setCardBackgroundColor(card.getContext().getColor(R.color.sosCardBackground));
             }
             //TODO: change userName from post title to author name
             Model.instance.findUserById(post.getAuthorID(), user -> {

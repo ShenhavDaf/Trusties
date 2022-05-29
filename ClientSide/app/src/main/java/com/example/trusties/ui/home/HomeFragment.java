@@ -176,7 +176,8 @@ public class HomeFragment extends Fragment {
                 listener.onItemClick(v, pos);
             });
             volunteer.setOnClickListener(v -> {
-                int pos = getAdapterPosition();
+                volunteer.setText("Volunteered");
+                 int pos = getAdapterPosition();
                 Post post = homeViewModel.getData().getValue().get(pos);
                 String id = post.getId();
 
@@ -201,7 +202,7 @@ public class HomeFragment extends Fragment {
                 MaterialCardView card = (MaterialCardView) itemView;
                 int volunteersSize=0;
                 if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
-                    if (post.getStatus().equals("OPEN")) {
+                    if (post.getStatus().toString().replace("\"","").equals("OPEN")) {
                         //if the status is close & the current user is NOT the post sender
                         volunteer.setVisibility(View.VISIBLE);
                     }
@@ -222,7 +223,7 @@ public class HomeFragment extends Fragment {
             }
             // ##TYPE :SOS+QUES
 
-            //TODO: change userName from post title to author name
+
             Model.instance.findUserById(post.getAuthorID(), user -> {
                 userName.setText(user.get("name").getAsString());
                 if (user.get("photo") != null) {
