@@ -278,6 +278,7 @@ public class ModelServer {
         });
     }
     /* ------------------------------------------------------------------------- */
+
     public void getMyRelatedPosts(String userID, Model.getMyRelatedPostsListener listener) {
         retrofitInterface.getMyRelatedPosts(userID).enqueue(new Callback<JsonArray>() {
             @Override
@@ -797,7 +798,6 @@ public class ModelServer {
     }
     /* ------------------------------------------------------------------------- */
 
-    /* ------------------------------------------------------------------------- */
 
     public void approveVolunteer(String id, HashMap<String, String> map, Model.approveVolunteerListener listener) {
 
@@ -815,7 +815,7 @@ public class ModelServer {
             }
         });
     }
-    /* ------------------------------------------------------------------------- */
+
 
     /* ------------------------------------------------------------------------- */
 
@@ -844,7 +844,6 @@ public class ModelServer {
     }
     /* ------------------------------------------------------------------------- */
 
-    /* ------------------------------------------------------------------------- */
 
     public void cancelVolunteer(String id, HashMap<String, String> map, Model.cancelVolunteerListener listener) {
 
@@ -998,6 +997,24 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
+
+    public void getRating(String id, Model.getRatingListener listener) {
+
+        Call<JsonObject> retrofit = retrofitInterface.getRating(id);
+        retrofit.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+    /* ------------------------------------------------------------------------- */
+
 
     public void signOut(String userId, Model.signOutListener listener) {
         Call<Void> signOut = retrofitInterface.logout(userId);
