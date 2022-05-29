@@ -630,14 +630,23 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void editUser(HashMap<String, String> map, String id, Model.editUserListener listener) {
+    public void editUser(HashMap<String, String> map, String id,Context context, Model.editUserListener listener) {
         String userId = Model.instance.getCurrentUserModel().userID;
         Call<Void> editUser = retrofitInterface.editUser(accessToken, map, userId);
 
         editUser.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                listener.onComplete();
+
+                if(response.code()== 400)
+                {
+                    Log.d("TAG","inside wrong curr password");
+                    String msg = "current password is not right!";
+                    new CommonFunctions().myPopup(context, "Error", msg);
+                }
+                else {
+                    listener.onComplete();
+                }
             }
 
             @Override
@@ -648,6 +657,7 @@ public class ModelServer {
         });
 
     }
+
 
     /* ------------------------------------------------------------------------- */
 

@@ -309,9 +309,10 @@ public class Model {
         void onComplete();
     }
 
-    public void editUser(HashMap<String, String> map, String id, editUserListener listener) {
-        modelServer.editUser(map, id, listener);
+    public void editUser(HashMap<String, String> map, String id,Context context, editUserListener listener) {
+        modelServer.editUser(map, id,context, listener);
     }
+
 
     /* ---------------------------------------------------------------------------- */
     public interface upCommentListener {
