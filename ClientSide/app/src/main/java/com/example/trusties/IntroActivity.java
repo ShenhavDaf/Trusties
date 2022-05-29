@@ -24,33 +24,24 @@ public class IntroActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//            if (Model.instance.isSignedIn(new Model.isSignedInListener() {
+//            Model.instance.isSignedIn(new Model.isSignedInListener() {
 //                @Override
 //                public void onComplete(int flag) {
-//                    if(flag==1)
-//                    {
+//                    if (flag == 1) {
 //                        Log.d("TAG", "logged in");
 //                        Model.instance.mainThread.post(() -> {
 //                            toFeedActivity();
 //                        });
+//
+//                    } else {
+//                        Model.instance.mainThread.post(() -> {
+//                            toLoginActivity();
+//                        });
 //                    }
 //                }
-//            })){
-            Model.instance.isSignedIn(new Model.isSignedInListener() {
-                @Override
-                public void onComplete(int flag) {
-                    if (flag == 1) {
-                        Log.d("TAG", "logged in");
-                        Model.instance.mainThread.post(() -> {
-                            toFeedActivity();
-                        });
-
-                    } else {
-                        Model.instance.mainThread.post(() -> {
-                            toLoginActivity();
-                        });
-                    }
-                }
+//            });
+            Model.instance.mainThread.post(() -> {
+                toLoginActivity();
             });
 
         });
