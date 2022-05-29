@@ -2,6 +2,7 @@ package com.example.trusties.ui.profile;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.trusties.CommonFunctions;
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
@@ -35,7 +37,7 @@ public class EditProfileFragment extends Fragment {
 
     TextView nameEt;
     TextView phoneEt;
-    Button saveBtn;
+    Button saveBtn, cancelBtn , changePasswordBtn;
     String userId;
 
     ImageButton cameraBtn;
@@ -45,6 +47,11 @@ public class EditProfileFragment extends Fragment {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
     User user;
+
+    TextView currPassword, newPassword,confirmPassword;
+    int flagPassword=0;
+    TextView currTv, newTv, confirmTv;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +66,16 @@ public class EditProfileFragment extends Fragment {
         cameraBtn = view.findViewById(R.id.editProfile_camera_btn);
         galleryBtn = view.findViewById(R.id.editProfile_gallery_btn);
         image = view.findViewById(R.id.editProfile_image);
+        currPassword = view.findViewById(R.id.edit_profile_curr_password);
+        newPassword = view.findViewById(R.id.edit_profile_new_password);
+        confirmPassword = view.findViewById(R.id.edit_profile_confirm_password);
+        changePasswordBtn = view.findViewById(R.id.edit_profile_change_password_btn);
+        cancelBtn = view.findViewById(R.id.editProfile_cancel_btn);
+        currTv = view.findViewById(R.id.edit_profile_curr_tv);
+        newTv = view.findViewById(R.id.edit_profile_new_tv);
+        confirmTv = view.findViewById(R.id.edit_profile_confirm_tv);
+        setVisibility(View.GONE);
+
 
         user = Model.instance.getCurrentUserModel();
         nameEt.setText(user.getFullName());
@@ -69,6 +86,23 @@ public class EditProfileFragment extends Fragment {
                 save(v);
             }
         });
+        changePasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flagPassword=1;
+                setVisibility(View.VISIBLE);
+
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flagPassword=0;
+                setVisibility(View.GONE);
+
+            }
+        });
+
 
         cameraBtn.setOnClickListener(v -> OpenCamera());
         galleryBtn.setOnClickListener(v -> OpenGallery());
@@ -115,9 +149,36 @@ public class EditProfileFragment extends Fragment {
     }
 
     public void save(View view){
+        int inputOk=1;
         HashMap<String,String> map = new HashMap<>();
+        if(flagPassword == 1) {
+
+            if(!newPassword.getText().toString().equals(confirmPassword.getText().toString()))
+            {
+                inputOk=0;
+                String msg = "New password and confirm password does not match!";
+                new CommonFunctions().myPopup(getContext(), "Error", msg);
+            }
+            else {
+                if(newPassword.getText().toString().length()<6 || confirmPassword.getText().toString().length() <6)
+                {
+                    inputOk=0;
+                    String msg = "Password must be at least 6 digits!";
+                    new CommonFunctions().myPopup(getContext(), "Error", msg);
+                }
+                else {
+
+                    map.put("currPassword", currPassword.getText().toString());
+                    map.put("newPassword", newPassword.getText().toString());
+                }
+            }
+        }
+
         map.put("name",nameEt.getText().toString());
         map.put("phone",phoneEt.getText().toString());
+        map.put("flag",flagPassword+"");
+
+
         if (imageBitmap != null) {
             Log.d("TAG", imageBitmap.toString());
             Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
@@ -128,16 +189,32 @@ public class EditProfileFragment extends Fragment {
             });
 
         }
+        Context context = getContext();
+        if(inputOk==1) {
+            Model.instance.editUser(map, userId, context, new Model.editUserListener() {
+                @Override
+                public void onComplete() {
 
-        Model.instance.editUser(map, userId, new Model.editUserListener() {
-            @Override
-            public void onComplete() {
-
-                User newUsr = new User(userId,map.get("name"),user.getEmail(),map.get("phone"));
-                Model.instance.setCurrentUserModel(newUsr);
-                Navigation.findNavController(view).navigateUp();
-            }
-        });
+                    User newUsr = new User(userId, map.get("name"), user.getEmail(), map.get("phone"));
+                    Model.instance.setCurrentUserModel(newUsr);
+                    Navigation.findNavController(view).navigateUp();
+                }
+            });
+        }
 
     }
+
+    public void setVisibility(int isVisible)
+    {
+        cancelBtn.setVisibility(isVisible);
+        currPassword.setVisibility(isVisible);
+        newPassword.setVisibility(isVisible);
+        confirmPassword.setVisibility(isVisible);
+        confirmTv.setVisibility(isVisible);
+        newTv.setVisibility(isVisible);
+        currTv.setVisibility(isVisible);
+
+
+    }
+
 }

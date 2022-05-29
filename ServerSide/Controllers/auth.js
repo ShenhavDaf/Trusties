@@ -400,8 +400,8 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-//TODO: add edit password!
 const editUser = async (req, res, next) => {
+  const flagPassword = req.body.flag;
   try {
     const exists = await User.updateOne(
       { _id: req.params.id },
@@ -412,6 +412,30 @@ const editUser = async (req, res, next) => {
       }
     );
     const updateUser = await User.findById(req.params.id);
+
+    if (flagPassword == "1") {
+      console.log("inside flaG PASSWORD");
+      const match = await bcrypt.compare(
+        req.body.currPassword,
+        updateUser.password
+      );
+      if (!match) {
+        console.log("~~~~~~~~Incorrect password~~~~~~~~~");
+        res.status(400).send({
+          status: "cuur password incorrect",
+          error: err.message,
+        });
+      }
+      const salt = await bcrypt.genSalt(10);
+      const hashPwd = await bcrypt.hash(req.body.newPassword, salt);
+      const chnagePass = await User.updateOne(
+        { _id: req.params.id },
+        {
+          password: hashPwd,
+        }
+      );
+    }
+
     if (exists == null) return sendError(res, 400, "post does not exist");
     else {
       console.log("user edited!");
