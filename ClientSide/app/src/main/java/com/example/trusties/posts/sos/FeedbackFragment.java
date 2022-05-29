@@ -99,7 +99,7 @@ public class FeedbackFragment extends Fragment {
         });
         submit.setOnClickListener(v -> {
         //TODO: Need to get the correct number of selected stars- now it equals to 5 by defult ?
-            int stars=rating_stars.getNumStars();
+            float stars=rating_stars.getRating();
 
             HashMap<String, String> map = new HashMap<>();
             map.put("stars", String.valueOf(stars));

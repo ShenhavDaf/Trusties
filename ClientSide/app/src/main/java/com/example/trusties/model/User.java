@@ -15,17 +15,27 @@ public class User {
     String email = "";
     String phone = "";
     String userID;
+    Float rating;
 //    List<String> friends;
 
     //public User(String id, String fullName, String email, String phone, List<String> friends) {
 
+    public User(String id, String fullName, String email, String phone,Float rating) {
+        this.userID = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.rating=rating;
+    }
     public User(String id, String fullName, String email, String phone) {
         this.userID = id;
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
-//        this.friends=friends;
+        this.rating=Float.valueOf(0);
     }
+
+
 //    public List<String> getFriends() {
 //        return friends;
 //    }
@@ -67,15 +77,8 @@ public class User {
         String email = json.get("email").getAsString();
         String name = json.get("name").getAsString();
         String phone = json.get("phone").getAsString();
-//        JsonArray friendsArr=json.get("friends").getAsJsonArray();
-//
-//
-//        List<String> friends=new ArrayList<>();
-//        for(int i=0;i<friendsArr.size();i++){
-//            String elm=friendsArr.get(i).toString();
-//            friends.add(elm);
-//        }
-      //  User user = new User( id,  name,  email,  phone,friends);
+     //   Float rating= json.get("rating").getAsFloat();
+
         User user = new User( id,  name,  email,  phone);
 
         return user;

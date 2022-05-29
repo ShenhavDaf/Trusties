@@ -11,9 +11,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -189,14 +191,28 @@ public class Model {
     public void refreshPostList() {
 
         postsListLoadingState.setValue(LoadingState.loading);
-
-        modelServer.getAllPosts(new ModelServer.allPostsListener() {
+        modelServer.getMyRelatedPosts(currentUserModel.getId(), new getMyRelatedPostsListener() {
             @Override
-            public void onComplete(List<Post> postsList) {
-                mutablePostsList.postValue(postsList);
+            public void onComplete(JsonArray posts) {
+                List<Post> list = new ArrayList<>();
+                for (JsonElement element : posts) {
+                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
+                        list.add(Post.create(element.getAsJsonObject()));
+                }
+
+                Collections.reverse(list);
+                mutablePostsList.postValue(list);
                 postsListLoadingState.setValue(LoadingState.loaded);
             }
         });
+
+//        modelServer.getAllPosts(new ModelServer.allPostsListener() {
+//            @Override
+//            public void onComplete(List<Post> postsList) {
+//                mutablePostsList.postValue(postsList);
+//                postsListLoadingState.setValue(LoadingState.loaded);
+//            }
+//        });
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -482,7 +498,15 @@ public class Model {
         modelServer.rateMyHelp(userId, map, listener);
 
     }
+    /* ---------------------------------------------------------------------------- */
 
+    public interface getMyRelatedPostsListener {
+        void onComplete(JsonArray posts);
+    }
+
+    public void getMyRelatedPosts(String id, getMyRelatedPostsListener listener) {
+        modelServer.getMyRelatedPosts(id, listener);
+    }
     /* ---------------------------------------------------------------------------- */
 
 
@@ -504,5 +528,14 @@ public class Model {
 
 
 
+    /* ---------------------------------------------------------------------------- */
 
+    /* ---------------------------------------------------------------------------- */
+
+    public interface getRatingListener {
+        void onComplete(JsonObject obj);
+    }
+    public void getRating(String id, getRatingListener listener) {
+        modelServer.getRating(id, listener);
+    }
 }
