@@ -1,7 +1,9 @@
 package com.example.trusties.ui.home;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -23,6 +25,7 @@ import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -71,6 +74,11 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         /***********************************/
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+
+        }
 //        usersEmail = MainActivity.usersEmail;
         TextView userName = root.findViewById(R.id.home_userName_tv);
         if (Model.instance.getCurrentUserModel() != null)

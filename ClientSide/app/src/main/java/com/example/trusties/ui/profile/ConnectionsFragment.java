@@ -178,7 +178,8 @@ public class ConnectionsFragment extends Fragment {
                         Model.instance.findUserById(elem.toString().replace("\"", ""), new Model.findUserByIdListener() {
                             @Override
                             public void onComplete(JsonObject user) {
-                                lst.add(user);
+                                if(!lst.contains(user))
+                                    lst.add(user);
                                 adapter.notifyDataSetChanged();
                             }
                         });
@@ -228,7 +229,8 @@ public class ConnectionsFragment extends Fragment {
                             @Override
                             public void onComplete(JsonObject user) {
                                 adapter.notifyDataSetChanged();
-                                lst.add(user);
+                                if(!lst.contains(user))
+                                    lst.add(user);
                             }
                         });
                     }
@@ -271,7 +273,8 @@ public class ConnectionsFragment extends Fragment {
                         Model.instance.findUserById(elem.toString().replace("\"", ""), new Model.findUserByIdListener() {
                             @Override
                             public void onComplete(JsonObject user) {
-                                lst.add(user);
+                                if(!lst.contains(user))
+                                    lst.add(user);
                                 adapter.notifyDataSetChanged();
 
                             }
