@@ -190,7 +190,9 @@ public class SignUpFragment extends Fragment {
         Model.instance.findUserByEmail(localEmail, new Model.findUserByEmailListener() {
             @Override
             public void onComplete(JsonObject user) {
-                Model.instance.setCurrentUserModel(new User(user.get("_id").toString().replace("\"", ""),user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", ""),user.get("rating").getAsFloat()));
+
+//              Model.instance.setCurrentUserModel(new User(user.get("_id").toString().replace("\"", ""),user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", ""),user.get("rating").getAsFloat()));
+                Model.instance.setCurrentUserModel(new User(user.get("_id").toString().replace("\"", ""),user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", ""), new Float(0.0)));
             }
         });
 
