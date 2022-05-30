@@ -207,7 +207,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             map.put("currentTime", (new Long(0)).toString());
 
             Model.instance.addComment(map, () -> {
-                // TODO: Add comment to local DB ??
                 comment.setText("");
                 refresh();
             });
@@ -227,6 +226,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
             Model.instance.sendNotification(notification, () -> {
             });
+
         });
 
         requestsBtn.setOnClickListener(v -> {
@@ -239,7 +239,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
                 Model.instance.getApprovedVolunteer(postId,(volunteer)->{
 
-                // TODO: Add comment to local DB ??
                     if(volunteer!=null){
                         String id=volunteer.get("_id").toString().replace("\"", "");
                         Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToFeedbackFragment(id));
@@ -288,13 +287,14 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
     private void refresh() {
         Model.instance.getPostComments(postId, commentsList -> {
-            if (commentsList.size() == 0)
-                swipeRefresh.setVisibility(View.GONE);
-            else {
+//            if (commentsList.size() == 0)
+//                swipeRefresh.setVisibility(View.GONE);
+//
+//            else {
                 System.out.println("Comments" + commentsList.size());
                 postViewModel.data = commentsList;
                 adapter.notifyDataSetChanged();
-            }
+//            }
         });
         swipeRefresh.setRefreshing(false);
     }
@@ -447,7 +447,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 String id = comment.getCommentId().toString();
 
                 Model.instance.editComment(map, id, () -> {
-                    // TODO: Add comment to local DB ??
                     content.setEnabled(false);
                     edit.setVisibility(View.VISIBLE);
                     editsave.setVisibility(View.GONE);
@@ -457,7 +456,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
             });
             delete.setOnClickListener(v -> {
-                //TODO: ADD REFRESH
                 int pos = getAdapterPosition();
                 Comment comment = postViewModel.getData().get(pos);
 

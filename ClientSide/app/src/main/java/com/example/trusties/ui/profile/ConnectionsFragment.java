@@ -41,7 +41,6 @@ public class ConnectionsFragment extends Fragment {
 
     private ConnectionsViewModel connectionsViewModel;
     private FragmentConnectionsBinding binding;
-    SwipeRefreshLayout swipeRefresh;
     MyAdapter adapter;
     Button firstCircle, secondCircle, thirdCircle;
     ImageButton searchBtn, refreshBtn;
@@ -70,8 +69,6 @@ public class ConnectionsFragment extends Fragment {
         /**********************************/
 
         currUser = Model.instance.getCurrentUserModel();
-        swipeRefresh = root.findViewById(R.id.connections_swiperefresh);
-        swipeRefresh.setOnRefreshListener(() -> refreshFirstCircle(1));
 
         RecyclerView list = root.findViewById(R.id.connectionListRow_mutual);
         list.setHasFixedSize(true);
@@ -110,14 +107,12 @@ public class ConnectionsFragment extends Fragment {
         secondCircle.setOnClickListener(v -> {
             adapter.notifyDataSetChanged();
             getSecondCircle();
-            swipeRefresh.setRefreshing(false);
         });
 
         thirdCircle = root.findViewById(R.id.connections_thirdcircle_btn);
         thirdCircle.setOnClickListener(v -> {
             getThirdCircle();
             adapter.notifyDataSetChanged();
-            swipeRefresh.setRefreshing(false);
 
         });
         firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.lightGray));
@@ -206,7 +201,6 @@ public class ConnectionsFragment extends Fragment {
                 }
             });
         }
-        swipeRefresh.setRefreshing(false);
     }
 
     @Override
