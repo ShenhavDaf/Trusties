@@ -65,61 +65,64 @@ const addPosts = async (req, res, next) => {
 
   const findCategory = await Category.findOne({ name: category });
 
-  console.log("circle = " + req.body.circle);
+  if (findCategory == null) {
+    console.log(`Category name "${category}" not found`);
+  } //
+  else {
+    var friendsCircle;
+    if (role == "SOS") friendsCircle = Number(req.body.circle);
+    // else friendsCircle = 1;
 
-  var friendsCircle;
-  if (role == "SOS") friendsCircle = Number(req.body.circle);
-  // else friendsCircle = 1;
+    const post = await Post({
+      sender: user,
+      title: title,
+      time: time,
+      description: description,
+      role: role,
+      friends_circle: friendsCircle,
+      category: category,
+      photo: photo,
+    });
 
-  const post = await Post({
-    sender: user,
-    title: title,
-    time: time,
-    description: description,
-    role: role,
-    friends_circle: friendsCircle,
-    category: category,
-    photo: photo,
-  });
+    findCategory.save(async (error) => {
+      if (error) {
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+        });
+      } else {
+        await Category.updateOne(
+          { name: category },
+          {
+            $push: { posts: [post._id] },
+          }
+        );
+      }
+    });
 
-  findCategory.save(async (error) => {
-    if (error) {
-      res.status(400).send({
-        status: "fail",
-        error: error.message,
-      });
-    } else {
-      await Category.updateOne(
-        { name: category },
-        {
-          $push: { posts: [post._id] },
-        }
-      );
-    }
-  });
+    // const post = Post({
+    //     message: req.body.message,
+    //     sender: sender
+    // });
 
-  // const post = Post({
-  //     message: req.body.message,
-  //     sender: sender
-  // });
-
-  post.save((error, newPost) => {
-    if (error) {
-      console.log("error");
-      res.status(400).send({
-        status: "fail",
-        error: error.message,
-      });
-      console.log(error.message);
-    } else {
-      console.log("post added!");
-      res.status(200).send({
-        status: "OK",
-        // post: newPost,
-        _id: post._id,
-      });
-    }
-  });
+    post.save((error, newPost) => {
+      if (error) {
+        console.log("error");
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+        });
+        console.log(error.message);
+      } else {
+        console.log("post added!");
+        res.status(200).send({
+          status: "OK",
+          post: newPost,
+          // _id: post._id,
+        });
+      }
+    });
+  }
 };
 
 const addPhotosToPost = async (req, res, next) => {
@@ -176,7 +179,8 @@ const editPost = async (req, res, next) => {
       console.log("post edited!");
       res.status(200).send({
         status: "OK",
-        _id: updatePost._id,
+        // _id: updatePost._id,
+        post: updatePost,
       });
     }
   } catch (err) {
@@ -264,16 +268,6 @@ const getMyPosts = async (req, res, next) => {
   });
 };
 
-const allPostsFiltered = async (req, res, next) => {
-  //   var post = await Post.findById(req.query.id);
-  //   var sender = post.sender;
-  //   var circle = post.friends_circle;
-  //   console.log("sender = " + sender);
-  //   console.log("circle444444444444 = " + circle);
-  //   // var list = UserController.getFriendsList(sender,circle);
-  //   console.log("list = " + list);
-};
-
 module.exports = {
   getAllPosts,
   // getQuestions,
@@ -283,6 +277,5 @@ module.exports = {
   getMyPosts,
   editPost,
   deletePost,
-  allPostsFiltered,
   addPhotosToPost,
 };
