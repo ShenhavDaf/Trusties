@@ -25,11 +25,12 @@ describe("Testing Comment API", () => {
   const postDescription = "post message (from comments test)";
   const postTitle = "post title (from comments test)";
   const commentMessage = "comment text (from comment test)";
+  const postCategory = "Car";
   let accessToken = "";
   let userId = "";
   let postID, commentID;
 
-  test("test - registration", async () => {
+  test("Comment test - registration", async () => {
     const response = await request(app).post("/auth/register").send({
       email: email,
       password: pwd,
@@ -43,7 +44,7 @@ describe("Testing Comment API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  test("test - login", async () => {
+  test("Comment test - login", async () => {
     const response = await request(app).post("/auth/login").send({
       email: email,
       password: pwd,
@@ -55,7 +56,7 @@ describe("Testing Comment API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  test("test - add new post", async () => {
+  test("Comment test - add new post", async () => {
     const response = await request(app)
       .post("/post/add")
       .set({ authorization: "JWT " + accessToken })
@@ -63,6 +64,7 @@ describe("Testing Comment API", () => {
         email: email,
         title: postTitle,
         description: postDescription,
+        category: postCategory,
       });
     expect(response.statusCode).toEqual(200);
     postID = response.body.post._id;
@@ -71,7 +73,7 @@ describe("Testing Comment API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  test("test - add new comment", async () => {
+  test("Comment test - add new comment", async () => {
     const response = await request(app)
       .post("/comment/add")
       .set({ authorization: "JWT " + accessToken })
@@ -87,7 +89,7 @@ describe("Testing Comment API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  test("test - get all comments (by post id)", async () => {
+  test("Comment test - get all comments (by post id)", async () => {
     const response = await request(app)
       .get("/comment/" + postID + "/allComments")
       .set({ authorization: "JWT " + accessToken });
@@ -99,7 +101,7 @@ describe("Testing Comment API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  test("test - get comment by id", async () => {
+  test("Comment test - get comment by id", async () => {
     const response = await request(app)
       .get("/comment/" + commentID)
       .set({ authorization: "JWT " + accessToken });
@@ -111,7 +113,7 @@ describe("Testing Comment API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  test("test - edit comment", async () => {
+  test("Comment test - edit comment", async () => {
     const response = await request(app)
       .post("/comment/edit/" + commentID)
       .set({ authorization: "JWT " + accessToken })
@@ -126,7 +128,7 @@ describe("Testing Comment API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  test("test - delete comment", async () => {
+  test("Comment test - delete comment", async () => {
     const response = await request(app)
       .post("/comment/delete/" + commentID)
       .set({ authorization: "JWT " + accessToken })

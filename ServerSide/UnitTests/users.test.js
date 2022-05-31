@@ -22,7 +22,7 @@ afterAll((done) => {
   });
 });
 
-describe("Testing Post API", () => {
+describe("Testing User API", () => {
   const postTitle = "test post title (from unittest)";
   const postMessage = "this is my test post (from unittest)";
   const postCategory = "Car";
@@ -31,7 +31,7 @@ describe("Testing Post API", () => {
   let userId = "";
   let postID;
 
-  test("posts test - registration", async () => {
+  test("user test - registration", async () => {
     const response = await request(app).post("/auth/register").send({
       email: email,
       password: pwd,
@@ -39,13 +39,13 @@ describe("Testing Post API", () => {
       phone: phone,
     });
     expect(response.statusCode).toEqual(200);
-    userId = response.body._id;
+    userId = response.body.newUser._id;
   });
 
   /* ******************************************** */
   /* ******************************************** */
 
-  test("posts test - login", async () => {
+  test("user test - login", async () => {
     const response = await request(app).post("/auth/login").send({
       email: email,
       password: pwd,
@@ -57,17 +57,7 @@ describe("Testing Post API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  test("posts test - get all posts", async () => {
-    const response = await request(app)
-      .get("/post/allPosts")
-      .set({ authorization: "JWT " + accessToken });
-    expect(response.statusCode).toEqual(200);
-  });
-
-  /* ******************************************** */
-  /* ******************************************** */
-
-  test("posts test - add new post", async () => {
+  test("user test - add new post", async () => {
     const response = await request(app)
       .post("/post/add")
       .set({ authorization: "JWT " + accessToken })
@@ -77,53 +67,43 @@ describe("Testing Post API", () => {
         description: postMessage,
         category: postCategory,
       });
-
     expect(response.statusCode).toEqual(200);
-    const newPost = response.body.post;
-    postID = newPost._id;
-    expect(newPost.description).toEqual(postMessage);
-    // expect(newPost.sender).toEqual(sender);
+    // postID = response.body.post._id;
+    console.log("*************** " + response.body.post._id);
   });
 
   /* ******************************************** */
   /* ******************************************** */
 
-  test("posts test - get post by id", async () => {
+  test("user test - get all posts", async () => {
     const response = await request(app)
-      .get("/post/" + postID)
+      .get("/user/getFeed/" + userId)
       .set({ authorization: "JWT " + accessToken });
     expect(response.statusCode).toEqual(200);
-    const post = response.body;
-    expect(post.title).toEqual(postTitle);
-    expect(post.description).toEqual(postMessage);
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + response.body.myFeed);
   });
 
   /* ******************************************** */
   /* ******************************************** */
 
-  test("posts test - edit post", async () => {
-    const response = await request(app)
-      .post("/post/edit/" + postID)
-      .set({ authorization: "JWT " + accessToken })
-      .send({
-        title: "after edit - " + postTitle,
-        description: "after edit - " + postMessage,
-      });
-    expect(response.statusCode).toEqual(200);
-    const updatePost = response.body.post;
-    expect(updatePost.description).toEqual("after edit - " + postMessage);
-  });
+  // test("post test - add new post", async () => {
+  //   const response = await request(app)
+  //     .post("/post/add")
+  //     .set({ authorization: "JWT " + accessToken })
+  //     .send({
+  //       email: email,
+  //       title: postTitle,
+  //       description: postMessage,
+  //       category: postCategory,
+  //     });
+
+  //   expect(response.statusCode).toEqual(200);
+  //   const newPost = response.body.post;
+  //   postID = newPost._id;
+  //   expect(newPost.description).toEqual(postMessage);
+  //   // expect(newPost.sender).toEqual(sender);
+  // });
 
   /* ******************************************** */
   /* ******************************************** */
-
-  test("posts test - delete post", async () => {
-    const response = await request(app)
-      .post("/post/delete/" + postID)
-      .set({ authorization: "JWT " + accessToken })
-      .send();
-    expect(response.statusCode).toEqual(200);
-    const deletedPost = response.body.post;
-    expect(deletedPost.isDeleted).toEqual(true);
-  });
 });

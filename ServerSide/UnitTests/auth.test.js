@@ -29,7 +29,7 @@ afterAll((done) => {
 });
 
 describe("Testing Auth API", () => {
-  test("test registration", async () => {
+  test("Authentication test - registration", async () => {
     const response = await request(app).post("/auth/register").send({
       email: email,
       password: pwd,
@@ -39,7 +39,7 @@ describe("Testing Auth API", () => {
     expect(response.statusCode).toEqual(200);
   });
 
-  test("test login", async () => {
+  test("Authentication test - login", async () => {
     const response = await request(app).post("/auth/login").send({
       email: email,
       password: pwd,

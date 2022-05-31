@@ -61,7 +61,7 @@ public interface RetrofitInterface {
     /*------------------------------------------Users----------------------------------------*/
 
     @GET("/user/getFeed/{id}")
-    Call<JsonArray> getMyRelatedPosts(@Query("id") String userId);
+    Call<JsonArray> getMyRelatedPosts(@Header("authorization") String accessToken, @Path("id") String userId);
 
     @GET("/user/getFriendsList")
     Call<JsonArray> getFriendsList(@Query("id") String userID, @Query("circle") Integer circleNumber);
@@ -83,8 +83,6 @@ public interface RetrofitInterface {
 
     @GET("/post/allPosts")
     Call<JsonArray> getAllPosts(@Header("authorization") String accessToken);
-//    @GET("/post/allPosts")
-//    Call<JsonArray> getAllPosts();
 
     @POST("/post/add")
     Call<JsonObject> addPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map);

@@ -4,12 +4,12 @@ const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 const { object } = require("mongoose/lib/utils");
 
-const getAllComments = async (req, res, next) => {
-  Comment.find({}, function (err, docs) {
-    if (err) console.log(err);
-    else res.status(200).send(docs);
-  });
-};
+// const getAllComments = async (req, res, next) => {
+//   Comment.find({}, function (err, docs) {
+//     if (err) console.log(err);
+//     else res.status(200).send(docs);
+//   });
+// };
 
 const getPostComments = async (req, res, next) => {
   Post.findById(req.params.id)
@@ -22,7 +22,7 @@ const getPostComments = async (req, res, next) => {
 const getCommentById = async (req, res, next) => {
   try {
     const comment = await Comment.findById(req.params.id);
-    res.status(200).send(comment);
+    if (comment != null) res.status(200).send(comment);
   } catch (err) {
     res.status(400).send({
       status: "fail",
@@ -130,7 +130,7 @@ const deleteComment = async (req, res, next) => {
 
 //## the function increase the user rating value,
 //## insert the user to comment.report_positive list,
-//## if the user is the post sender, comment.IsCorrect become true 
+//## if the user is the post sender, comment.IsCorrect become true
 
 const negativeComment = async (req, res, next) => {
   try {
@@ -143,26 +143,27 @@ const negativeComment = async (req, res, next) => {
       });
     }
 
-    Comment.findById({ _id: req.params.id }).populate({
-      path: 'post',
-      populate: {
-        path: 'sender',
-        model: 'User'
-      }
-    }).
-      populate({
-        path: 'report_positive',
-        model: 'User'
-      }).
-      populate({
-        path: 'report_negative',
-        model: 'User'
-      }).
-      populate({
-        path: 'sender',
-        model: 'User'
-      }).
-      exec(function (err, comment) {
+    Comment.findById({ _id: req.params.id })
+      .populate({
+        path: "post",
+        populate: {
+          path: "sender",
+          model: "User",
+        },
+      })
+      .populate({
+        path: "report_positive",
+        model: "User",
+      })
+      .populate({
+        path: "report_negative",
+        model: "User",
+      })
+      .populate({
+        path: "sender",
+        model: "User",
+      })
+      .exec(function (err, comment) {
         if (err) {
           res.status(400).send({
             status: "fail",
@@ -190,11 +191,8 @@ const negativeComment = async (req, res, next) => {
               status: "fail",
               error: err.message,
             });
-
           }
         });
-
-
 
         comment.sender.rating -= 0.1;
         comment.sender.save(function (err) {
@@ -203,22 +201,16 @@ const negativeComment = async (req, res, next) => {
               status: "fail",
               error: err.message,
             });
-
           }
         });
       });
-
-  }
-
-
-  catch (err) {
+  } catch (err) {
     res.status(400).send({
       status: "fail",
       error: err.message,
     });
-
   }
-}
+};
 
 const positiveComment = async (req, res, next) => {
   try {
@@ -231,26 +223,27 @@ const positiveComment = async (req, res, next) => {
       });
     }
 
-    Comment.findById({ _id: req.params.id }).populate({
-      path: 'post',
-      populate: {
-        path: 'sender',
-        model: 'User'
-      }
-    }).
-      populate({
-        path: 'report_positive',
-        model: 'User'
-      }).
-      populate({
-        path: 'report_negative',
-        model: 'User'
-      }).
-      populate({
-        path: 'sender',
-        model: 'User'
-      }).
-      exec(function (err, comment) {
+    Comment.findById({ _id: req.params.id })
+      .populate({
+        path: "post",
+        populate: {
+          path: "sender",
+          model: "User",
+        },
+      })
+      .populate({
+        path: "report_positive",
+        model: "User",
+      })
+      .populate({
+        path: "report_negative",
+        model: "User",
+      })
+      .populate({
+        path: "sender",
+        model: "User",
+      })
+      .exec(function (err, comment) {
         if (err) {
           res.status(400).send({
             status: "fail",
@@ -275,7 +268,6 @@ const positiveComment = async (req, res, next) => {
               status: "fail",
               error: err.message,
             });
-
           }
         });
         comment.sender.rating += 0.1;
@@ -285,24 +277,19 @@ const positiveComment = async (req, res, next) => {
               status: "fail",
               error: err.message,
             });
-
           }
         });
       });
-
-  }
-  catch (err) {
+  } catch (err) {
     res.status(400).send({
       status: "fail",
       error: err.message,
     });
-
   }
-}
-
+};
 
 module.exports = {
-  getAllComments,
+  // getAllComments,
   getPostComments,
   getCommentById,
   addComment,

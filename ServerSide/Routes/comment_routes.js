@@ -42,7 +42,7 @@ const authenticate = require("../Common/auth_middleware");
  *          isCorrect: 'true'
  */
 
-router.get("/allComments", authenticate, Comment.getAllComments);
+// router.get("/allComments", authenticate, Comment.getAllComments);
 router.get("/:id/allComments", authenticate, Comment.getPostComments);
 router.get("/:id", authenticate, Comment.getCommentById);
 router.post("/add", authenticate, Comment.addComment);

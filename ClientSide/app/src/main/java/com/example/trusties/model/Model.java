@@ -260,9 +260,9 @@ public class Model {
         void onComplete(List<Comment> commentsList);
     }
 
-    public void getAllComments(allCommentsListener listener) {
-        modelServer.getAllComments(listener);
-    }
+//    public void getAllComments(allCommentsListener listener) {
+//        modelServer.getAllComments(listener);
+//    }
 
 
     /* ---------------------------------------------------------------------------- */
