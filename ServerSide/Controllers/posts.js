@@ -117,8 +117,7 @@ const addPosts = async (req, res, next) => {
         console.log("post added!");
         res.status(200).send({
           status: "OK",
-          post: newPost,
-          // _id: post._id,
+          _id: post._id,
         });
       }
     });
@@ -179,8 +178,7 @@ const editPost = async (req, res, next) => {
       console.log("post edited!");
       res.status(200).send({
         status: "OK",
-        // _id: updatePost._id,
-        post: updatePost,
+        _id: updatePost._id,
       });
     }
   } catch (err) {

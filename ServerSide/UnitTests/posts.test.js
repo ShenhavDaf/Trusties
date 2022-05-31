@@ -79,8 +79,14 @@ describe("Testing Post API", () => {
       });
 
     expect(response.statusCode).toEqual(200);
-    const newPost = response.body.post;
-    postID = newPost._id;
+    postID = response.body._id;
+
+    const newPost = (
+      await request(app)
+        .get("/post/" + postID)
+        .set({ authorization: "JWT " + accessToken })
+    ).body;
+
     expect(newPost.description).toEqual(postMessage);
     // expect(newPost.sender).toEqual(sender);
   });
@@ -110,7 +116,13 @@ describe("Testing Post API", () => {
         description: "after edit - " + postMessage,
       });
     expect(response.statusCode).toEqual(200);
-    const updatePost = response.body.post;
+
+    const updatePost = (
+      await request(app)
+        .get("/post/" + response.body._id)
+        .set({ authorization: "JWT " + accessToken })
+    ).body;
+
     expect(updatePost.description).toEqual("after edit - " + postMessage);
   });
 

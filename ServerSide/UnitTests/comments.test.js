@@ -67,7 +67,7 @@ describe("Testing Comment API", () => {
         category: postCategory,
       });
     expect(response.statusCode).toEqual(200);
-    postID = response.body.post._id;
+    postID = response.body._id;
   });
 
   /* ******************************************** */
