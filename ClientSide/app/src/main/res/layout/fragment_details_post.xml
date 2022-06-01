@@ -238,7 +238,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.259" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/postdetails_imgUser_img"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -246,6 +246,9 @@
             android:layout_marginTop="10dp"
             android:src="@drawable/avatar"
             app:layout_constraintStart_toStartOf="parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintVertical_bias="0.03"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:layout_constraintTop_toBottomOf="@+id/postdetails_address_tv" />
 
         <EditText

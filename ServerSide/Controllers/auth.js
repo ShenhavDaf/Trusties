@@ -359,6 +359,7 @@ const findUserById = async (req, res, next) => {
       phone: user.phone,
       raiting: user.raiting,
       photo: user.photo,
+      friends: user.friends,
     });
   } catch (err) {
     res.status(400).send({
