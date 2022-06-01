@@ -74,7 +74,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     CarouselView carouselView;
     Bitmap[] sampleImages;
     String location = null;
-    int isSOS =0;
+    int isSOS = 0;
 
 
     @Override
@@ -136,8 +136,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                     closeBtn.setVisibility(View.VISIBLE);
 
 
-                }
-                else{ // in post we don't have location
+                } else { // in post we don't have location
                     mapView.setVisibility(View.GONE);
                     addressEt.setVisibility(View.GONE);
                 }
@@ -162,10 +161,23 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 displayPost(title, description, time, senderId, status, role, sampleImages, address);
                 progressBar.setVisibility(View.GONE);
 
+                Model.instance.findUserById(currUser.getId(), new Model.findUserByIdListener() {
+                    @Override
+                    public void onComplete(JsonObject user) {
+                        if (user.get("photo") != null) {
+                            String photoBase64 = user.get("photo").getAsString();
+                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            imgUser.setImageBitmap(decodedByte);
+                        }
+                    }
+                });
+
                 //Checking if the Current user is the sender of the post for enabling the - EditBtn and DeleteBtn-
                 Model.instance.findUserById(post.get("sender").toString().replace("\"", ""), new Model.findUserByIdListener() {
                     @Override
                     public void onComplete(JsonObject user) {
+
                         if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
                             deleteBtn.setVisibility(View.VISIBLE);
                             editBtn.setVisibility(View.VISIBLE);
@@ -232,29 +244,27 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         requestsBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailPostFragmentToVolunteersFragment(postId));
         });
-        closeBtn.setOnClickListener(v->{
+        closeBtn.setOnClickListener(v -> {
 
-                Model.instance.closeSos(postId, () -> {
-                });
+            Model.instance.closeSos(postId, () -> {
+            });
 
-                Model.instance.getApprovedVolunteer(postId,(volunteer)->{
+            Model.instance.getApprovedVolunteer(postId, (volunteer) -> {
 
-                    if(volunteer!=null){
-                        String id=volunteer.get("_id").toString().replace("\"", "");
-                        Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToFeedbackFragment(id));
-                    }
-                    else{
-                        Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionGlobalNavigationHome(Model.instance.getCurrentUserModel().getFullName()));
+                if (volunteer != null) {
+                    String id = volunteer.get("_id").toString().replace("\"", "");
+                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToFeedbackFragment(id));
+                } else {
+                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionGlobalNavigationHome(Model.instance.getCurrentUserModel().getFullName()));
 
 
-                    }
+                }
                 refresh();
 
             });
 
 
         });
-
 
 
         swipeRefresh = view.findViewById(R.id.comment_swiperefresh);
@@ -291,9 +301,9 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 //                swipeRefresh.setVisibility(View.GONE);
 //
 //            else {
-                System.out.println("Comments" + commentsList.size());
-                postViewModel.data = commentsList;
-                adapter.notifyDataSetChanged();
+            System.out.println("Comments" + commentsList.size());
+            postViewModel.data = commentsList;
+            adapter.notifyDataSetChanged();
 //            }
         });
         swipeRefresh.setRefreshing(false);
@@ -345,7 +355,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
-        if(isSOS == 1) {
+        if (isSOS == 1) {
             String str = location.substring(10, location.length() - 1);
             String[] latLong = str.split(",");
             Log.d("TAG", "latttt " + latLong[0] + " " + latLong[1]);
@@ -365,6 +375,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         }
 
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -414,6 +425,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         TextView username, time, rate, correct;
         EditText content;
         Button delete, edit, editsave, positive, negative;
+        ImageView userImage;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -429,6 +441,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             negative = itemView.findViewById(R.id.coomentListRow_downBtn);
             rate = itemView.findViewById(R.id.coomentListRow_rateTv);
             correct = itemView.findViewById(R.id.coomentListRow_approvedTv);
+            userImage = itemView.findViewById(R.id.commentListRow_userImg_img);
 
             edit.setOnClickListener(v -> {
                 //TODO: ADD REFRESH
@@ -506,6 +519,12 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
                 public void onComplete(JsonObject user) {
                     username.setText(user.get("name").toString().replace("\"", ""));
+                    if (user.get("photo") != null) {
+                        String photoBase64 = user.get("photo").getAsString();
+                        byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        userImage.setImageBitmap(decodedByte);
+                    }
 
                     /*  ## if login user is the same as the comment.sender user
                         ## hide the ability to rate the comment
@@ -559,6 +578,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         OnItemClickListener listener;
+
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
 

@@ -18,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/connectionListRow_userImg_img"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/commentListRow_userImg_img"
         android:layout_width="56dp"
         android:layout_height="61dp"
         android:layout_marginStart="4dp"
@@ -28,6 +28,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
         app:srcCompat="@drawable/avatar" />
 
     <EditText
@@ -44,7 +46,7 @@
         app:layout_constraintBottom_toTopOf="@+id/coomentListRow_downBtn"
         app:layout_constraintEnd_toStartOf="@+id/coomentListRow_deleteBtn"
         app:layout_constraintHorizontal_bias="0.034"
-        app:layout_constraintStart_toEndOf="@+id/connectionListRow_userImg_img"
+        app:layout_constraintStart_toEndOf="@+id/commentListRow_userImg_img"
         app:layout_constraintTop_toBottomOf="@+id/connectionListRow_userName_tv"
         app:layout_constraintVertical_bias="0.45" />
 
@@ -56,7 +58,7 @@
         android:layout_marginTop="8dp"
         android:text="TextView"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/connectionListRow_userImg_img"
+        app:layout_constraintStart_toEndOf="@+id/commentListRow_userImg_img"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

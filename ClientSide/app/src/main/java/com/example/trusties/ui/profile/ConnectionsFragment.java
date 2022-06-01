@@ -2,7 +2,8 @@ package com.example.trusties.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.nfc.Tag;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -13,14 +14,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.trusties.CommonFunctions;
@@ -47,6 +49,7 @@ public class ConnectionsFragment extends Fragment {
     ImageButton searchBtn, refreshBtn;
     TextView searchBar;
     User currUser;
+    Bitmap decodedByte;
 
     String userId;
     int flagSecond = 0;
@@ -369,12 +372,14 @@ public class ConnectionsFragment extends Fragment {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, numberConnections;
+        ImageView userImage;
 
         public MyViewHolder(@NonNull View itemView, ConnectionsFragment.OnItemClickListener listener) {
             super(itemView);
 
             userName = itemView.findViewById(R.id.connectionListRow_userName_tv);
             numberConnections = itemView.findViewById(R.id.connectionListRow_mutual);
+            userImage = itemView.findViewById(R.id.commentListRow_userImg_img);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -387,6 +392,12 @@ public class ConnectionsFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(JsonObject user) {
             userName.setText(user.get("name").toString().replace("\"", ""));
+//            if (user.get("photo") != null) {
+//                String photoBase64 = user.get("photo").getAsString();
+//                byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+//                decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+//                userImage.setImageBitmap(decodedByte);
+//            }
             Model.instance.findUserByEmail(user.get("email").toString().replace("\"", ""), new Model.findUserByEmailListener() {
                 @Override
                 public void onComplete(JsonObject user) {

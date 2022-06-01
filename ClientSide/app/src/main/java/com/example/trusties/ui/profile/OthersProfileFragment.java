@@ -265,7 +265,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
             }
         }
         //TODO: change userName from post title to author name
-        Model.instance.findUserById(post.getAuthorID(), user -> {
+        Model.instance.findUserById(userId, user -> {
                     userName.setText(user.get("name").getAsString());
 
                     if (user.get("photo") != null) {
