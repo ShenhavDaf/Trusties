@@ -58,14 +58,19 @@ async function findFriends(list, currID) {
 const getSecondCircleOnly = async (req, res) => {
   try {
     const user = await User.findById(req.query.id);
-    const currID = req.query.id;
-    const firstList = user.friends;
+    console.log(user.name + "--- is the connected user (2)");
+    const currID = req.query.id; //A
+    const firstList = user.friends; // Shenhav, c
     const temp = new Array();
 
     for (let i = 0; i < firstList.length; i++) {
       const friend = await User.findById(firstList[i]);
       for (let j = 0; j < friend.friends.length; j++) {
-        if (friend.friends[j] != currID) temp.push(friend.friends[j]);
+        if (
+          friend.friends[j] != currID &&
+          !firstList.includes(friend.friends[j])
+        )
+          temp.push(friend.friends[j]);
       }
     }
     // Remove duplicates
@@ -77,6 +82,13 @@ const getSecondCircleOnly = async (req, res) => {
     // return self.indexOf(item) == pos;
     // })
 
+    for (let i = 0; i < unique.length; i++) {
+      console.log((await User.findById(unique[i])).name + "--- friend (2)");
+    }
+
+    console.log(
+      "-------------------------------------------------------------------------"
+    );
     res.status(200).send(unique);
 
     //
@@ -91,6 +103,7 @@ const getSecondCircleOnly = async (req, res) => {
 const getThirdCircleOnly = async (req, res) => {
   try {
     const user = await User.findById(req.query.id);
+    console.log(user.name + "--- is the connected user (3)");
     const currID = req.query.id;
     const firstList = user.friends;
     const temp = new Array();
@@ -98,7 +111,8 @@ const getThirdCircleOnly = async (req, res) => {
     for (let i = 0; i < firstList.length; i++) {
       const friend = await User.findById(firstList[i]);
       for (let j = 0; j < friend.friends.length; j++) {
-        if (friend.friends[j] != currID) temp.push(friend.friends[j]);
+        if (friend.friends[j] != currID /*&& list.includes(friend.friends[j])*/)
+          temp.push(friend.friends[j]);
       }
     }
     for (let i = 0; i < temp.length; i++) {
@@ -120,6 +134,14 @@ const getThirdCircleOnly = async (req, res) => {
         i--;
       }
     }
+
+    for (let i = 0; i < unique.length; i++) {
+      console.log((await User.findById(unique[i])).name + "--- friend (3)");
+    }
+    console.log(
+      "-------------------------------------------------------------------------"
+    );
+
     res.status(200).send(unique);
   } catch (err) {
     res.status(400).send({
