@@ -32,6 +32,7 @@ import com.example.trusties.model.Model;
 import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 
@@ -51,6 +52,7 @@ public class OthersProfileFragment extends Fragment {
     ImageView userImage;
     Bitmap decodedByte;
     RatingBar ratingBar;
+    TextView disableView;
 
 
 
@@ -73,9 +75,11 @@ public class OthersProfileFragment extends Fragment {
         userImage = root.findViewById(R.id.Othersprofile_image);
         unFriend = root.findViewById(R.id.othersProfile_unfriend_btn);
         ratingBar=root.findViewById(R.id.otherProfile_ratingBar);
+        disableView = root.findViewById(R.id.other_profile_disable_txt);
+        RecyclerView postsList = root.findViewById(R.id.profile_postlist_rv);
 
 
-
+        currUser = Model.instance.getCurrentUserModel();
 
         Model.instance.findUserById(userId, new Model.findUserByIdListener() {
             @Override
@@ -84,14 +88,22 @@ public class OthersProfileFragment extends Fragment {
                 profileUser = user;
 
                 if (user.get("photo") != null) {
+
+                    Log.d("TAG","photototot###");
                     String photoBase64 = user.get("photo").getAsString();
                     byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
                     decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     userImage.setImageBitmap(decodedByte);
                 }
+                Log.d("TAG",user.get("friends") + "");
+                String friends = user.get("friends") + "";
+                if( !friends.contains(currUser.getId())){
+                    disableView.setVisibility(View.VISIBLE);
+                    postsList.setVisibility(View.GONE);
+                }
             }
         });
-        currUser = Model.instance.getCurrentUserModel();
+
 
         //## Set rating bar
         Model.instance.getRating(currUser.getId(), new Model.getRatingListener() {
@@ -126,6 +138,8 @@ public class OthersProfileFragment extends Fragment {
                     public void onComplete() {
                         unFriend.setVisibility(View.VISIBLE);
                         add.setVisibility(View.GONE);
+                        disableView.setVisibility(View.GONE);
+                        postsList.setVisibility(View.VISIBLE);
                         refresh();
                     }
                 });
@@ -140,6 +154,8 @@ public class OthersProfileFragment extends Fragment {
                     public void onComplete() {
                         unFriend.setVisibility(View.GONE);
                         add.setVisibility(View.VISIBLE);
+                        disableView.setVisibility(View.VISIBLE);
+                        postsList.setVisibility(View.GONE);
                         refresh();
                     }
                 });

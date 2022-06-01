@@ -2,6 +2,7 @@ package com.example.trusties.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -222,6 +223,7 @@ public class ConnectionsFragment extends Fragment {
                         Model.instance.findUserById(elem.toString().replace("\"", ""), new Model.findUserByIdListener() {
                             @Override
                             public void onComplete(JsonObject user) {
+                                Log.d("TAG", "user222%%%% conn ++++  " + user);
                                 adapter.notifyDataSetChanged();
                                 if(!lst.contains(user))
                                     lst.add(user);
@@ -242,6 +244,7 @@ public class ConnectionsFragment extends Fragment {
                         Model.instance.findUserById(elem.toString().replace("\"", ""), new Model.findUserByIdListener() {
                             @Override
                             public void onComplete(JsonObject user) {
+                                Log.d("TAG", "user222%%%% conn -----  " + user);
                                 adapter.notifyDataSetChanged();
                                 lst.remove(user);
 
