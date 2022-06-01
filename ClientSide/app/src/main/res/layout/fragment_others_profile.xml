@@ -21,6 +21,7 @@
             android:id="@+id/profile_postlist_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <View
@@ -129,6 +130,22 @@
         app:layout_constraintHorizontal_bias="0.782"
         app:layout_constraintStart_toEndOf="@+id/Othersprofile_image"
         app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
-        app:layout_constraintStart_toEndOf="@+id/Othersprofile_name" />
+
+    <TextView
+        android:id="@+id/other_profile_disable_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Only friends can see this content!"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
+    app:layout_constraintStart_toEndOf="@+id/Othersprofile_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
