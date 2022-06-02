@@ -392,15 +392,19 @@ public class ConnectionsFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(JsonObject user) {
             userName.setText(user.get("name").toString().replace("\"", ""));
-//            if (user.get("photo") != null) {
-//                String photoBase64 = user.get("photo").getAsString();
-//                byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
-//                decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//                userImage.setImageBitmap(decodedByte);
-//            }
+
             Model.instance.findUserByEmail(user.get("email").toString().replace("\"", ""), new Model.findUserByEmailListener() {
                 @Override
                 public void onComplete(JsonObject user) {
+                    if (user.get("photo") != null) {
+                        String photoBase64 = user.get("photo").getAsString();
+                        byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        userImage.setImageBitmap(decodedByte);
+                    }
+                    else{
+                        userImage.setImageResource(R.drawable.avatar);
+                    }
                     Model.instance.getFriendsList(user.get("_id").toString().replace("\"", ""), 1, new Model.friendsListListener() {
                         @Override
                         public void onComplete(JsonArray friendsList) {

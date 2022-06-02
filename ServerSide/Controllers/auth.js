@@ -338,6 +338,7 @@ const findUserByEmail = async (req, res, next) => {
       email: user.email,
       phone: user.phone,
       raiting: user.raiting,
+      photo: user.photo,
     });
   } catch (err) {
     res.status(400).send({

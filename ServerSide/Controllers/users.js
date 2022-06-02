@@ -111,16 +111,28 @@ const getThirdCircleOnly = async (req, res) => {
     for (let i = 0; i < firstList.length; i++) {
       const friend = await User.findById(firstList[i]);
       for (let j = 0; j < friend.friends.length; j++) {
-        if (friend.friends[j] != currID /*&& list.includes(friend.friends[j])*/)
+        if (
+          friend.friends[j] != currID &&
+          !firstList.includes(friend.friends[j])
+        ) {
           temp.push(friend.friends[j]);
+        }
       }
     }
+    console.log(temp + "--- TMP LIST");
+
     for (let i = 0; i < temp.length; i++) {
       const friend = await User.findById(temp[i]);
       for (let j = 0; j < friend.friends.length; j++) {
-        if (friend.friends[j] != currID) list.push(friend.friends[j]);
+        if (
+          friend.friends[j] != currID &&
+          !temp.includes(friend.friends[j].String)
+        ) {
+          list.push(friend.friends[j]);
+        }
       }
     }
+
     // Remove duplicates
     const unique = list.filter(
       (value, index, self) =>
@@ -134,6 +146,16 @@ const getThirdCircleOnly = async (req, res) => {
         i--;
       }
     }
+
+    // for (let k = 0; k < unique.length; k++) {
+    //   for (let u = 0; u < temp.length; u++) {
+    //     if (unique[k].String == temp[u].String) {
+    //       console.log((await User.findById(unique[k])).name + "inside!");
+    //       unique.splice(k, 1);
+    //       // k++;
+    //     }
+    //   }
+    // }
 
     for (let i = 0; i < unique.length; i++) {
       console.log((await User.findById(unique[i])).name + "--- friend (3)");
