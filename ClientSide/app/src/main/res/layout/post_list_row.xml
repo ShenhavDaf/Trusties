@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
     app:cardBackgroundColor="@android:color/white"
@@ -35,14 +34,15 @@
                 android:id="@+id/listrow_post_title_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="1dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="7dp"
                 android:text="Title"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/listrow_category_tv"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/listrow_post_status_tv"
+                app:layout_constraintStart_toEndOf="@+id/listrow_category_tv"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -51,19 +51,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2dp"
                 android:text="Status"
-                app:layout_constraintBaseline_toBaselineOf="@+id/listrow_category_tv"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="#000000"
+                app:strokeWidth="1dp"
                 tools:ignore="NotSibling" />
 
             <TextView
                 android:id="@+id/listrow_category_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="6dp"
-                android:text="Category"
-                app:layout_constraintEnd_toStartOf="@+id/listrow_post_status_tv"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -160,7 +164,7 @@
             android:textColor="#A53232"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:visibility="visible"
+            android:visibility="gone"
             app:backgroundTint="#FFFFFF"
             app:cornerRadius="13dp"
             app:iconGravity="textStart"
