@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
@@ -267,7 +268,21 @@ public class HomeFragment extends Fragment {
                     if (status.getText().equals("OPEN")) {
                         status.setBackgroundColor(status.getContext().getColor(R.color.green));
                     }
-                    category.setText(post.get("category").getAsString());
+
+                    String currCategory = post.get("category").getAsString();
+                    Drawable categoryImg = null;
+
+                    if(currCategory.equals("Tools")) {
+                        categoryImg = getContext().getResources().getDrawable(R.drawable.tools);
+                    } else if(currCategory.equals("Delivery")) {
+                        categoryImg = getContext().getResources().getDrawable(R.drawable.delivery);
+                    } else if(currCategory.equals("House")) {
+                        categoryImg = getContext().getResources().getDrawable(R.drawable.house);
+                    } else if(currCategory.equals("Car")) {
+                        categoryImg = getContext().getResources().getDrawable(R.drawable.car);
+                    }
+
+                    category.setBackground(categoryImg);
 
                     if (post.get("photo").getAsJsonArray().size() > 0) {// CHANGED
                         if (post.get("photo").getAsJsonArray().size() == 2)
