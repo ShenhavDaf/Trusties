@@ -59,7 +59,7 @@
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@android:drawable/btn_star_big_on" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/commentListRow_userImg_img"
             android:layout_width="55dp"
             android:layout_height="55dp"
@@ -67,6 +67,9 @@
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.03"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/avatar" />
 
         <TextView
