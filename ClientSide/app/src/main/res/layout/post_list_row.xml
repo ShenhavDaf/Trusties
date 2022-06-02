@@ -9,7 +9,7 @@
     android:clickable="true"
     android:focusable="true"
     app:cardBackgroundColor="@android:color/white"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="8dp"
     app:cardPreventCornerOverlap="true"
     app:checkedIcon="@drawable/ic_add_black_24dp"
@@ -19,12 +19,59 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/listrow_top_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postrv_line">
+
+            <TextView
+                android:id="@+id/listrow_post_title_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="10dp"
+                android:text="Title"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/listrow_category_tv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/listrow_post_status_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:text="Status"
+                app:layout_constraintBaseline_toBaselineOf="@+id/listrow_category_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="NotSibling" />
+
+            <TextView
+                android:id="@+id/listrow_category_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="6dp"
+                android:text="Category"
+                app:layout_constraintEnd_toStartOf="@+id/listrow_post_status_tv"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/listrow_avatar_imv"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="6dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="8dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -38,28 +85,29 @@
             android:id="@+id/listrow_username_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/hint_full_name"
-            android:textColor="@color/hyperlinkColor"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/listrow_sos_btn"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imv"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/listrow_date_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="80dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
             android:hint="@string/hint_date"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/listrow_sos_btn"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imv"
             app:layout_constraintTop_toBottomOf="@+id/listrow_username_tv" />
@@ -83,41 +131,44 @@
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_date_tv"
+            app:layout_constraintTop_toBottomOf="@+id/listrow_post_description_tv"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"
             app:srcCompat="@drawable/image_place" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/listrow_sos_btn"
-            android:layout_width="55dp"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="7dp"
-            android:backgroundTint="#F10A12"
+            android:layout_width="57dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="28dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
+            android:padding="1dp"
+            android:paddingStart="1dp"
+            android:paddingLeft="1dp"
+            android:paddingTop="1dp"
             android:text="SOS"
-            android:textSize="10sp"
+            android:textColor="#A53232"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:visibility="invisible"
-            app:cornerRadius="50dp"
+            android:visibility="visible"
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="13dp"
             app:iconGravity="textStart"
-            app:iconPadding="0dp"
             app:iconSize="35dp"
-            app:layout_constraintBottom_toTopOf="@+id/listrow_post_img"
+            app:layout_constraintBottom_toTopOf="@+id/postrv_line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="#A60D0D"
+            app:strokeColor="#A53232"
             app:strokeWidth="1dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -144,38 +195,26 @@
             app:strokeWidth="1dp" />
 
         <TextView
-            android:id="@+id/listrow_post_title_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:text="Title"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_post_img" />
-
-        <TextView
             android:id="@+id/listrow_post_description_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="15dp"
             android:text="Description"
+            android:textColor="#000000"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_post_title_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/listrow_top_layout" />
 
         <View
             android:id="@+id/postrv_line"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="15dp"
             android:background="#A3A1A1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -232,41 +271,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_post_description_tv"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintTop_toBottomOf="@+id/listrow_post_img">
 
-
-            <TextView
-                android:id="@+id/listrow_post_status_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/listrow_comment_num_tv"
-                app:layout_constraintHorizontal_bias="0.515"
-                app:layout_constraintStart_toEndOf="@+id/listrow_category_tv"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                tools:ignore="NotSibling"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/listrow_category_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="2dp"
-                android:text="Category"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/listrow_comment_num_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginEnd="9dp"
-                android:text="Comments"
+                android:layout_marginEnd="15dp"
+                android:drawableLeft="@drawable/comment_icon"
+                android:drawablePadding="5dp"
+                android:text="10 Comments"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints" />
