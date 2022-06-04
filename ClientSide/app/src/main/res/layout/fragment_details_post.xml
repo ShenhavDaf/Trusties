@@ -165,7 +165,7 @@
             app:layout_constraintTop_toBottomOf="@+id/postdetails_description_tv">
 
             <com.google.android.gms.maps.MapView
-                android:id="@+id/post_edit_map"
+                android:id="@+id/post_details_map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
