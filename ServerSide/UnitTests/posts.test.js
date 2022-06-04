@@ -27,6 +27,8 @@ describe("Testing Post API", () => {
   const postMessage = "this is my test post (from unittest)";
   const postCategory = "Car";
   const sender = "Adi";
+  const postPhoto =
+    "https://play-lh.googleusercontent.com/V_P-I-UENK93ahkQgOWel8X8yFxjhOOfMAZjxXrqp311Gm_RBtlDXHLQhwFZN8n4aIQ";
   let accessToken = "";
   let userId = "";
   let postID;
@@ -39,7 +41,7 @@ describe("Testing Post API", () => {
       phone: phone,
     });
     expect(response.statusCode).toEqual(200);
-    userId = response.body._id;
+    userId = response.body.newUser._id;
   });
 
   /* ******************************************** */
@@ -94,12 +96,41 @@ describe("Testing Post API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
+  // test("posts test - add photo to post", async () => {
+  //   const response = await request(app)
+  //     .post("/post/addPhotosToPost" + postID)
+  //     .set({ authorization: "JWT " + accessToken })
+  //     .send({
+  //       photo: postPhoto,
+  //     });
+  //   expect(response.statusCode).toEqual(200);
+  //   const post = response.body.post;
+  //   expect(post.title).toEqual(postTitle);
+  //   expect(post.photo).toEqual(postPhoto);
+  // });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
   test("posts test - get post by id", async () => {
     const response = await request(app)
       .get("/post/" + postID)
       .set({ authorization: "JWT " + accessToken });
     expect(response.statusCode).toEqual(200);
     const post = response.body;
+    expect(post.title).toEqual(postTitle);
+    expect(post.description).toEqual(postMessage);
+  });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  test("posts test - getMyPosts", async () => {
+    const response = await request(app)
+      .get("/post/MyPosts/" + userId)
+      .set({ authorization: "JWT " + accessToken });
+    expect(response.statusCode).toEqual(200);
+    const post = response.body[0];
     expect(post.title).toEqual(postTitle);
     expect(post.description).toEqual(postMessage);
   });

@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
         /*HIDES THE TOP ACTION BAR*/
-          getSupportActionBar().hide();
+        getSupportActionBar().hide();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+//        binding.navView.setOnItemSelectedListener(item -> {
+//            navController.navigate(item.getItemId());
+//            return true;
+//        });
     }
 
     @Override

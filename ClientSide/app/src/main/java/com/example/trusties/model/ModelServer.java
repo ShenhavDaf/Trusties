@@ -316,7 +316,7 @@ public class ModelServer {
 
     public void addPhotosToPost(ArrayList<String> photos, String id, Model.addPhotosToPostListener listener) {
 
-        Call<Void> add = retrofitInterface.addPhotosToPost(/*accessToken,*/ photos, id);
+        Call<Void> add = retrofitInterface.addPhotosToPost(accessToken, photos, id);
 
         add.enqueue(new Callback<Void>() {
             @Override

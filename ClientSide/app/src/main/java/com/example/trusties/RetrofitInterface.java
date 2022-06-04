@@ -103,7 +103,7 @@ public interface RetrofitInterface {
     Call<JsonArray> getMyPosts(@Header("authorization") String accessToken, @Path("id") String id);
 
     @POST("/post/addPhotosToPost/{id}")
-    Call<Void> addPhotosToPost(/*@Header("authorization") String accessToken,*/ @Body ArrayList<String> photos, @Query("id") String id);
+    Call<Void> addPhotosToPost(@Header("authorization") String accessToken, @Body ArrayList<String> photos, @Path("id") String id);
 
     /*------------------------------------------Comments----------------------------------------*/
 

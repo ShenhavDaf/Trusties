@@ -3,13 +3,9 @@ const User = require("../Models/user_model");
 const Sos = require("../Models/sos_model");
 const Comment = require("../Models/comment_model");
 const Category = require("../Models/category_model");
-
-// const UserController = require("../Controllers/users");
-// const { route } = require("../Routes/post_routes");
 const router = require("../Routes/post_routes");
 
 const getAllPosts = async (req, res, next) => {
-  console.log("inside getAllPosts");
   Post.find({}, function (err, docs) {
     if (err) console.log(err);
     else {
@@ -19,20 +15,6 @@ const getAllPosts = async (req, res, next) => {
 };
 
 /* ********************************************************** */
-
-// const getQuestions = async (req, res, next) => {
-//   Post.find({ role: "QUESTION" }, function (err, docs) {
-//     if (err) console.log(err);
-//     else res.status(200).send(docs);
-//   });
-// };
-
-// const getSOSs = async (req, res, next) => {
-//   Post.find({ role: "SOS" }, function (err, docs) {
-//     if (err) console.log(err);
-//     else res.status(200).send(docs);
-//   });
-// };
 
 const getPostsById = async (req, res, next) => {
   try {
@@ -59,16 +41,12 @@ const addPosts = async (req, res, next) => {
   var category = req.body.category;
   var photo = req.body.photo;
   // if (req.queryMap.photos == null) {
-  //   console.log("in");
   photo = req.body.photo;
   // } else photo = req.queryMap.photos;
 
   const findCategory = await Category.findOne({ name: category });
 
-  if (findCategory == null) {
-    console.log(`Category name "${category}" not found`);
-  } //
-  else {
+  if (findCategory != null) {
     var friendsCircle;
     if (role == "SOS") friendsCircle = Number(req.body.circle);
     // else friendsCircle = 1;
@@ -112,7 +90,6 @@ const addPosts = async (req, res, next) => {
           status: "fail",
           error: error.message,
         });
-        console.log(error.message);
       } else {
         console.log("post added!");
         res.status(200).send({
@@ -125,17 +102,15 @@ const addPosts = async (req, res, next) => {
 };
 
 const addPhotosToPost = async (req, res, next) => {
-  console.log("size" + req.query.id);
-  // console.log("body- " + req.body);
   try {
     const exists = await Post.updateOne(
-      { _id: req.query.id },
+      { _id: req.params.id },
       {
         $set: { photo: [] },
       }
     );
     exists = await Post.updateOne(
-      { _id: req.query.id },
+      { _id: req.params.id },
       {
         $push: { photo: req.body },
       }
@@ -237,27 +212,8 @@ const deletePost = async (req, res, next) => {
 
 /* ********************************************************** */
 
-// const getMyPosts = async (req, res, next) => {
-//   // User.find({ id: req.user.id }, function (err, docs) {
-//   //     if (err) {
-//   //         console.log(err);
-//   //     }
-//   //     else {
-//   //         Post.find({ sender: docs }, function (err, docs_post) {
-//   //             if (err) {
-//   //                 console.log(err);
-//   //             }
-//   //             else {
-//   //                 res.status(200).send(docs_post);
-//   //             }
-//   //         });
-//   //     }
-//   // });
-// };
-
 const getMyPosts = async (req, res, next) => {
   var sender = req.params.id;
-  console.log(sender);
   Post.find({ sender: sender }, function (err, docs) {
     if (err) console.log(err);
     else {
@@ -268,8 +224,6 @@ const getMyPosts = async (req, res, next) => {
 
 module.exports = {
   getAllPosts,
-  // getQuestions,
-  // getSOSs,
   getPostsById,
   addPosts,
   getMyPosts,
