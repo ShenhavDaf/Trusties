@@ -346,7 +346,7 @@ const getMyRelatedPosts = async (req, res) => {
           //SOS
           if (post.role == "SOS") {
             if (circle == 1) {
-              if (user.myFirstCircle_str.includes(senderId)) {
+              if (myFirstCircle_str.includes(senderId)) {
                 myFeed.push(post);
               }
             }
