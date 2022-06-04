@@ -226,7 +226,7 @@ public class HomeFragment extends Fragment {
                             volunteer_txt.setVisibility(View.VISIBLE);
                         }
                     }
-                    volunteer_count.setText(list.size() + "Volunteers");
+                    volunteer_count.setText(list.size() + " Volunteers");
                     volunteer_count.setVisibility(View.VISIBLE);
                 });
 
@@ -266,7 +266,13 @@ public class HomeFragment extends Fragment {
 
                     status.setText(post.get("status").getAsString());
                     if (status.getText().equals("OPEN")) {
-                        status.setBackgroundColor(status.getContext().getColor(R.color.green));
+                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
+//                        status.setBackgroundColor(status.getContext().getColor(R.color.green));
+                    } else if(status.getText().equals("WAITING")) {
+                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
+                    } else if(status.getText().equals("CLOSE")) {
+                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
+
                     }
 
                     String currCategory = post.get("category").getAsString();
