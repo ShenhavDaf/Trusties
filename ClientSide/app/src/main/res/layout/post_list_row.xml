@@ -20,10 +20,119 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/listrow_top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/listrow_avatar_imv"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:srcCompat="@drawable/profile_pic" />
+
+            <TextView
+                android:id="@+id/listrow_date_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:hint="@string/hint_date"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/postListRow_volunteer"
+                app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imv"
+                app:layout_constraintTop_toBottomOf="@+id/listrow_username_tv" />
+
+            <TextView
+                android:id="@+id/listrow_username_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginEnd="5dp"
+                android:hint="@string/hint_full_name"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/postListRow_volunteer"
+                app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imv"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/postListRow_volunteer"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="28dp"
+                android:drawableLeft="@drawable/life_server"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:padding="5dp"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="50dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="35dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/listrow_sos_btn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/white"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/listrow_sos_btn"
+                android:layout_width="57dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="28dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:padding="1dp"
+                android:paddingStart="1dp"
+                android:paddingLeft="1dp"
+                android:paddingTop="1dp"
+                android:text="SOS"
+                android:textColor="#F2705B"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="#FFFFFF"
+                app:cornerRadius="13dp"
+                app:iconGravity="textStart"
+                app:iconSize="35dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="#F2705B"
+                app:strokeWidth="1dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/listrow_title_row_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -50,7 +159,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2dp"
+                android:padding="5dp"
                 android:text="Status"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -69,52 +180,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/listrow_avatar_imv"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="8dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.03"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-            app:srcCompat="@drawable/profile_pic" />
-
-        <TextView
-            android:id="@+id/listrow_username_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/hint_full_name"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/listrow_sos_btn"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imv"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/listrow_date_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/hint_date"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/listrow_sos_btn"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imv"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_username_tv" />
 
         <!--        <TextView-->
         <!--            android:id="@+id/listrow_comment_num_tv"-->
@@ -145,59 +210,6 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"
             app:srcCompat="@drawable/image_place" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/listrow_sos_btn"
-            android:layout_width="57dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="28dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            android:padding="1dp"
-            android:paddingStart="1dp"
-            android:paddingLeft="1dp"
-            android:paddingTop="1dp"
-            android:text="SOS"
-            android:textColor="#A53232"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:backgroundTint="#FFFFFF"
-            app:cornerRadius="13dp"
-            app:iconGravity="textStart"
-            app:iconSize="35dp"
-            app:layout_constraintBottom_toTopOf="@+id/postrv_line"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="#A53232"
-            app:strokeWidth="1dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/postListRow_volunteer"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
-            android:backgroundTint="#B4BCB5"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            android:text="Volunteer"
-            android:textSize="9sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:cornerRadius="50dp"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconSize="35dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/listrow_sos_btn"
-            app:layout_constraintEnd_toStartOf="@+id/listrow_sos_btn"
-            app:strokeColor="#9E565956"
-            app:strokeWidth="1dp" />
-
         <TextView
             android:id="@+id/listrow_post_description_tv"
             android:layout_width="0dp"
@@ -210,20 +222,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_top_layout" />
-
-        <View
-            android:id="@+id/postrv_line"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="15dp"
-            android:background="#A3A1A1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listrow_date_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/listrow_title_row_layout" />
 
         <!--        <Button-->
         <!--            android:id="@+id/postListRow_volunteer"-->
@@ -238,17 +237,18 @@
         <!--            app:layout_constraintEnd_toStartOf="@+id/listrow_sos_btn"-->
         <!--            tools:ignore="NotSibling" />-->
 
-        <TextView
-            android:id="@+id/post_listRow_volunteer_Tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Waiting to volunteer"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/post_listRow_volunteerCount_Tv"
-            app:layout_constraintHorizontal_bias="0.145"
-            app:layout_constraintStart_toStartOf="parent" />
+        <View
+            android:id="@+id/postrv_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="15dp"
+            android:background="#A3A1A1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listrow_top_layout" />
 
         <!--        <RatingBar-->
         <!--            android:id="@+id/listrow_ratingBar"-->
@@ -269,7 +269,9 @@
             android:id="@+id/listrow_bottom_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -279,11 +281,22 @@
 
 
             <TextView
+                android:id="@+id/post_listRow_volunteer_Tv"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/person_icon"
+                android:drawablePadding="2dp"
+                android:text="Waiting to volunteer"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/listrow_comment_num_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginEnd="15dp"
                 android:drawableLeft="@drawable/comment_icon"
                 android:drawablePadding="5dp"
                 android:text="10 Comments"
@@ -293,10 +306,11 @@
 
             <TextView
                 android:id="@+id/post_listRow_volunteerCount_Tv"
-                android:layout_width="68dp"
-                android:layout_height="19dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/person_icon"
+                android:drawablePadding="2dp"
                 android:text="Volunteers"
                 android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@+id/listrow_category_tv"
@@ -307,13 +321,14 @@
 
         <ImageView
             android:id="@+id/listrow_plus_one_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="-35dp"
+            android:layout_marginEnd="6dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/listrow_post_img"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintEnd_toEndOf="@+id/listrow_post_img"
+            app:layout_constraintTop_toBottomOf="@+id/listrow_post_img"
             app:srcCompat="@drawable/plus_one_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
