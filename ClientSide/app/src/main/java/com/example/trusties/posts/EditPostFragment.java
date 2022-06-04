@@ -52,7 +52,6 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +63,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
     TextView descriptionEt;
     TextView titleTv;
     TextView descriptionTv;
-    TextView tagsTv;
+    TextView addressTv;
     TextView picturesTv;
     ProgressBar progressBar;
     ImageView image, image2;
@@ -117,6 +116,9 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
         picturesTv = view.findViewById(R.id.editpost_pictures_tv);
         image = view.findViewById(R.id.editpost_image_show);
         image2 = view.findViewById(R.id.editpost_image2_show);
+        addressTv = view.findViewById(R.id.post_edit_address);
+        addressTv.setVisibility(View.GONE);
+
         updateUI(View.INVISIBLE);
 
         postId = DetailsPostFragmentArgs.fromBundle(getArguments()).getPostId();
@@ -134,6 +136,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                 Log.d("TAG",post.get("role").toString());
                 if (post.get("role").toString().replace("\"", "").equals("SOS")) {
                     mapView.setVisibility(View.VISIBLE);
+                    addressTv.setVisibility(View.VISIBLE);
                     Log.d("TAG","yesyesyes");
                     isSOS = 1;
                     address = post.get("address").toString().replace("\"", "");
@@ -407,6 +410,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                             addresses = geocoder.getFromLocation(myLocation.latitude, myLocation.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                             address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                             fullAddress = address;
+                            addressTv.setText(fullAddress);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -423,6 +427,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                                     address = addresses.get(0).getAddressLine(0);
                                     fullAddress = address;
                                     Log.d("TAG", fullAddress);
+                                    addressTv.setText(fullAddress);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

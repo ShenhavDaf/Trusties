@@ -4,9 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.ClipData;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -36,17 +34,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trusties.CommonFunctions;
-import com.example.trusties.MyApplication;
 import com.example.trusties.R;
-import com.example.trusties.login.LoginActivity;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -70,7 +64,7 @@ import java.util.Locale;
 public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     EditText postTitle, description;
-    TextView detailsTV;
+    TextView detailsTV, addressTv;
     ImageView image, image2;
     ImageButton cameraBtn, galleryBtn, carBtn, deliveryBtn, toolsBtn, houseBtn;
     Button firstCircleBtn, secondCircleBtn, thirdCircleBtn, postBtn, sosBtn;
@@ -113,7 +107,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         description = view.findViewById(R.id.newpost_description_et);
         image = view.findViewById(R.id.newpost_post_image);
         image2 = view.findViewById(R.id.newpost_post_image2);
-        mapView = view.findViewById(R.id.post_edit_map);
+        mapView = view.findViewById(R.id.post_add_map);
         carBtn = view.findViewById(R.id.newpost_car_btn);
         toolsBtn = view.findViewById(R.id.newpost_tools_btn);
         deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
@@ -130,6 +124,9 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         detailsTV = view.findViewById(R.id.newpost_details_tv);
         detailsTV.setVisibility(View.GONE);
+
+        addressTv = view.findViewById(R.id.addpost_address);
+        addressTv.setVisibility(View.GONE);
 
 //        mapView.getMapAsync(this);
 //        mapView.onCreate(savedInstanceState);
@@ -331,6 +328,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         detailsTV.setVisibility(View.VISIBLE);
         location_layout.setVisibility(View.VISIBLE);
         circle_layout.setVisibility(View.VISIBLE);
+        addressTv.setVisibility(View.VISIBLE);
         postBtn.setEnabled(false);
         sosBtn.setOnClickListener(v -> {
             if (circle != null)
@@ -504,6 +502,8 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                         addresses = geocoder.getFromLocation(myLocation.latitude, myLocation.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                         address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                         fullAddress = address;
+                        addressTv.setText(fullAddress);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -520,6 +520,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                                 address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                                 fullAddress = address;
                                 Log.d("TAG", fullAddress);
+                                addressTv.setText(fullAddress);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
