@@ -5,8 +5,8 @@ const User = require("../Models/user_model");
 
 const email = "ortallik@gmail.com";
 const pwd = "123456";
-const name = "test username (from unittest)";
-const phone = "test phone (from unittest)";
+const name = "test username (from comments)";
+const phone = "test phone (from comments)";
 
 beforeAll((done) => {
   User.deleteOne({ email: email }, (err) => {
@@ -22,9 +22,9 @@ afterAll((done) => {
 });
 
 describe("Testing Comment API", () => {
-  const postDescription = "post message (from comments test)";
-  const postTitle = "post title (from comments test)";
-  const commentMessage = "comment text (from comment test)";
+  const postDescription = "post text (from comments)";
+  const postTitle = "title test (from comments)";
+  const commentMessage = "comment test (from comments)";
   const postCategory = "Car";
   let accessToken = "";
   let userId = "";

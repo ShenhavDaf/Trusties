@@ -8,8 +8,8 @@ const res = require("express/lib/response");
 
 const email = "test@test.com";
 const pwd = "123456";
-const name = "test username (from unittest)";
-const phone = "test phone (from unittest)";
+const name = "test username (from categories)";
+const phone = "test phone (from categories)";
 
 beforeAll((done) => {
   User.deleteOne({ email: email }, (err) => {
