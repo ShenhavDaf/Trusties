@@ -22,20 +22,19 @@ public class CommonFunctions {
             String msg = "You need to add title/description first";
             new CommonFunctions().myPopup(context, "Error", msg);
             return 0;
-        }
-        else
+        } else
             return 1;
 
     }
 
     public int CheckLocation(String address, Context context) {
-        if (address == null ) {
+        if (address == null) {
             String msg = "You need to add location";
             new CommonFunctions().myPopup(context, "Error", msg);
             return 0;
-        }
-        else
+        } else
             return 1;
 
     }
+
 }

@@ -205,7 +205,7 @@ public class HomeFragment extends Fragment {
         @SuppressLint("SimpleDateFormat")
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Post post) {
-
+            sos.setVisibility(View.GONE);
             // ##TYPE :SOS
             if (post.getRole().equals("SOS")) {
                 sos.setVisibility(View.VISIBLE);
