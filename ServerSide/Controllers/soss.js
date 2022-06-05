@@ -50,15 +50,13 @@ const addSos = async (req, res, next) => {
 
   sos.save((error, newPost) => {
     if (error) {
-      console.log("error");
       res.status(400).send({
         status: "fail",
         error: error.message,
       });
-      console.log(error.message);
+      console.log("error!!!!! " + error.message);
     } else {
       console.log("sos added!");
-      console.log(newPost);
 
       res.status(200).send({
         status: "OK",
@@ -68,15 +66,15 @@ const addSos = async (req, res, next) => {
   });
 };
 
-const getSoss = async (req, res, next) => {
-  Post.find({ role: "SOS" }, function (err, docs) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.status(200).send(docs);
-    }
-  });
-};
+// const getSoss = async (req, res, next) => {
+//   Post.find({ role: "SOS" }, function (err, docs) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       res.status(200).send(docs);
+//     }
+//   });
+// };
 
 //# PARAMS
 // req.params.id -sos
@@ -304,7 +302,7 @@ const getApprovedVolunteer = async (req, res, next) => {
 
 module.exports = {
   addSos,
-  getSoss,
+  // getSoss,
   volunteer,
   approveVolunteer,
   cancelVolunteer,
