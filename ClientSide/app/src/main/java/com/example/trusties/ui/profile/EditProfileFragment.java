@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import com.example.trusties.model.User;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 
 public class EditProfileFragment extends Fragment {
@@ -220,7 +222,11 @@ public class EditProfileFragment extends Fragment {
             String msg = "You need to add name/phone";
             new CommonFunctions().myPopup(getContext(), "Error", msg);
             return 0;
-        } else
+        } else   if ((!Patterns.PHONE.matcher(phone).matches()) || (!Pattern.matches("(050|052|054|057)[0-9]{7}", phone)|| phone.length() != 10)) {
+            String msg = "Phone is not valid";
+            new CommonFunctions().myPopup(getContext(), "Error", msg);
+            return 0;
+        }else
             return 1;
 
     }

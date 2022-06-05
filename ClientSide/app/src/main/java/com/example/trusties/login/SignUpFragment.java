@@ -32,6 +32,7 @@ import com.google.gson.JsonObject;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class SignUpFragment extends Fragment {
 
@@ -110,11 +111,11 @@ public class SignUpFragment extends Fragment {
             return;
         }
 
-        if (!Patterns.PHONE.matcher(localPhone).matches()) {
-            phone.setError("Please provide valid phone number");
-            phone.requestFocus();
-            return;
-        }
+            if ((!Patterns.PHONE.matcher(localPhone).matches()) || (!Pattern.matches("(050|052|054|057)[0-9]{7}", localPhone)|| localPhone.length() != 10)) {
+                phone.setError("Please provide valid phone number");
+                phone.requestFocus();
+                return;
+            }
         if (localPhone.isEmpty()) {
             phone.setError("Please enter your phone number");
             phone.requestFocus();
