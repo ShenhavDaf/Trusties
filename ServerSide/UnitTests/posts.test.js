@@ -99,10 +99,9 @@ describe("Testing Post API", () => {
   // test("posts test - add photo to post", async () => {
   //   const response = await request(app)
   //     .post("/post/addPhotosToPost" + postID)
-  //     .set({ authorization: "JWT " + accessToken })
-  //     .send({
-  //       photo: postPhoto,
-  //     });
+  //     .query({ id: postID })
+  //     .send({ photo: postPhoto })
+  //     .set({ authorization: "JWT " + accessToken });
   //   expect(response.statusCode).toEqual(200);
   //   const post = response.body.post;
   //   expect(post.title).toEqual(postTitle);

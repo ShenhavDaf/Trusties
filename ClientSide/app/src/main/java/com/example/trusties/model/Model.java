@@ -205,14 +205,7 @@ public class Model {
                 postsListLoadingState.setValue(LoadingState.loaded);
             }
         });
-
-//        modelServer.getAllPosts(new ModelServer.allPostsListener() {
-//            @Override
-//            public void onComplete(List<Post> postsList) {
-//                mutablePostsList.postValue(postsList);
-//                postsListLoadingState.setValue(LoadingState.loaded);
-//            }
-//        });
+        
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -309,8 +302,8 @@ public class Model {
         void onComplete();
     }
 
-    public void editUser(HashMap<String, String> map, String id,Context context, editUserListener listener) {
-        modelServer.editUser(map, id,context, listener);
+    public void editUser(HashMap<String, String> map, String id, Context context, editUserListener listener) {
+        modelServer.editUser(map, id, context, listener);
     }
 
 
@@ -514,8 +507,9 @@ public class Model {
     public interface signOutListener {
         void onComplete();
     }
+
     public void signOut(String userId, signOutListener listener) {
-        modelServer.signOut(userId,listener);
+        modelServer.signOut(userId, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -523,6 +517,7 @@ public class Model {
     public interface isSignedInListener {
         void onComplete(int flag);
     }
+
     public void isSignedIn(isSignedInListener listener) {
         modelServer.isSignedIn(listener);
     }
@@ -536,6 +531,7 @@ public class Model {
     public interface getRatingListener {
         void onComplete(JsonObject obj);
     }
+
     public void getRating(String id, getRatingListener listener) {
         modelServer.getRating(id, listener);
     }
