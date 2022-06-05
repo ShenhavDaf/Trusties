@@ -9,7 +9,7 @@
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="#EEEEEE"
+    app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="8dp"
     app:cardElevation="1dp"
     app:cardPreventCornerOverlap="true"
@@ -60,16 +60,18 @@
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@android:drawable/btn_star_big_on" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/volunteerListRow_userImg_img"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@+id/volunteerListRow_userName_tv"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+
             app:srcCompat="@drawable/avatar" />
 
         <TextView
@@ -104,6 +106,7 @@
             android:layout_marginEnd="268dp"
             android:text="Dr. Eliav"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
