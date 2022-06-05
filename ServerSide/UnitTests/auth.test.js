@@ -29,6 +29,9 @@ afterAll((done) => {
 });
 
 describe("Testing Auth API", () => {
+  let accessToken = "";
+  let userID = "";
+
   test("Authentication test - registration", async () => {
     const response = await request(app).post("/auth/register").send({
       email: email,
@@ -37,7 +40,11 @@ describe("Testing Auth API", () => {
       phone: phone,
     });
     expect(response.statusCode).toEqual(200);
+    userID = response.body.newUser._id;
   });
+
+  /* ******************************************** */
+  /* ******************************************** */
 
   test("Authentication test - login", async () => {
     const response = await request(app).post("/auth/login").send({
@@ -45,5 +52,69 @@ describe("Testing Auth API", () => {
       password: pwd,
     });
     expect(response.statusCode).toEqual(200);
+    accessToken = response.body.accessToken;
   });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  test("Authentication test - getCurrUser", async () => {
+    const response = await request(app).get("/auth/getCurrUser");
+    expect(response.statusCode).toEqual(200);
+    expect(response.body.id).toEqual(userID);
+  });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  test("Authentication test - resend email", async () => {
+    const response = await request(app).post("/auth/resendEmail");
+    expect(response.statusCode).toEqual(200);
+  });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  test("Authentication test - get all users", async () => {
+    const response = await request(app).get("/auth/allUsers");
+    expect(response.statusCode).toEqual(200);
+  });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  test("Authentication test - find user by email", async () => {
+    const response = await request(app)
+      .get("/auth/findByEmail")
+      .query({ emailAddress: email });
+    expect(response.statusCode).toEqual(200);
+    expect(response.body._id).toEqual(userID);
+  });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  test("Authentication test - find user by ID", async () => {
+    const response = await request(app)
+      .get("/auth/findById")
+      .query({ id: userID });
+    expect(response.statusCode).toEqual(200);
+    expect(response.body.name).toEqual(name);
+  });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  // test("Authentication test - refresh token", async () => {
+  //   const response = await request(app).get("/auth/refreshToken");
+  //   expect(response.statusCode).toEqual(200);
+  // });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  // test("Authentication test - logout", async () => {
+  //   const response = await request(app).get("/auth/logout");
+  //   expect(response.statusCode).toEqual(200);
+  // });
 });
