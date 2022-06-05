@@ -16,4 +16,26 @@ public class CommonFunctions {
         alert.setMessage("\n" + msg + "\n");
         alert.show();
     }
+
+    public int CheckTitleAndDescription(String title, String description, Context context) {
+        if (title.equals("") || description.equals("")) {
+            String msg = "You need to add title/description first";
+            new CommonFunctions().myPopup(context, "Error", msg);
+            return 0;
+        }
+        else
+            return 1;
+
+    }
+
+    public int CheckLocation(String address, Context context) {
+        if (address == null ) {
+            String msg = "You need to add location";
+            new CommonFunctions().myPopup(context, "Error", msg);
+            return 0;
+        }
+        else
+            return 1;
+
+    }
 }
