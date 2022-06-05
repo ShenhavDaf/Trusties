@@ -58,7 +58,6 @@ async function findFriends(list, currID) {
 const getSecondCircleOnly = async (req, res) => {
   try {
     const user = await User.findById(req.query.id);
-    console.log(user.name + "--- is the connected user (2)");
     const currID = req.query.id; //A
     const firstList = user.friends; // Shenhav, c
     const temp = new Array();
@@ -82,13 +81,6 @@ const getSecondCircleOnly = async (req, res) => {
     // return self.indexOf(item) == pos;
     // })
 
-    for (let i = 0; i < unique.length; i++) {
-      console.log((await User.findById(unique[i])).name + "--- friend (2)");
-    }
-
-    console.log(
-      "-------------------------------------------------------------------------"
-    );
     res.status(200).send(unique);
 
     //
@@ -103,7 +95,6 @@ const getSecondCircleOnly = async (req, res) => {
 const getThirdCircleOnly = async (req, res) => {
   try {
     const user = await User.findById(req.query.id);
-    console.log(user.name + "--- is the connected user (3)");
     const currID = req.query.id;
     const firstList = user.friends;
     const temp = new Array();
@@ -119,7 +110,6 @@ const getThirdCircleOnly = async (req, res) => {
         }
       }
     }
-    console.log(temp + "--- TMP LIST");
 
     for (let i = 0; i < temp.length; i++) {
       const friend = await User.findById(temp[i]);
@@ -157,13 +147,6 @@ const getThirdCircleOnly = async (req, res) => {
     //   }
     // }
 
-    for (let i = 0; i < unique.length; i++) {
-      console.log((await User.findById(unique[i])).name + "--- friend (3)");
-    }
-    console.log(
-      "-------------------------------------------------------------------------"
-    );
-
     res.status(200).send(unique);
   } catch (err) {
     res.status(400).send({
@@ -174,8 +157,6 @@ const getThirdCircleOnly = async (req, res) => {
 };
 
 const addFriendToMyContacts = async (req, res, next) => {
-  console.log("add new friend ");
-
   const me = await User.findOne({ _id: req.query.myId });
   const otherUser = await User.findOne({ _id: req.query.hisId });
 
@@ -216,13 +197,10 @@ const addFriendToMyContacts = async (req, res, next) => {
   });
   myPromise.then((alert) => {
     res.status(200).send(me);
-    console.log(alert);
   });
 };
 
 const removeFriendFromMyContacts = async (req, res, next) => {
-  console.log("remove this friend ");
-
   const me = await User.findOne({ _id: req.query.myId });
   const otherUser = await User.findOne({ _id: req.query.hisId });
 
@@ -263,7 +241,6 @@ const removeFriendFromMyContacts = async (req, res, next) => {
   });
   myPromise.then((alert) => {
     res.status(200).send(me);
-    console.log(alert);
   });
 };
 
@@ -271,11 +248,7 @@ const removeFriendFromMyContacts = async (req, res, next) => {
 // req.params.id -user
 //req.body.stars -stars number
 const rateMyHelp = async (req, res, next) => {
-  console.log("## RATE MY HELP");
-
   var stars_raitng = parseFloat(req.body.stars) * 0.5;
-  console.log("## STARS RATING NUMBER");
-  console.log(stars_raitng);
 
   User.findById({ _id: req.params.id }).exec((err, user) => {
     if (err) {
@@ -291,15 +264,10 @@ const rateMyHelp = async (req, res, next) => {
 
     user.save(function (err) {
       if (err) {
-        console.log("ERROR!");
-        console.log(err.message);
-
         res.status(400).send({
           status: "fail",
           error: err.message,
         });
-      } else {
-        console.log("USER SAVED!");
       }
     });
   });
@@ -309,8 +277,6 @@ const rateMyHelp = async (req, res, next) => {
 // req.query.id -user
 const getMyRelatedPosts = async (req, res) => {
   try {
-    console.log("## Params -- " + req.params.id);
-
     const user = await User.findById(req.params.id);
     var myFirstCircle = user.friends;
     var mySecondCircle = await findFriends(myFirstCircle, user.id);

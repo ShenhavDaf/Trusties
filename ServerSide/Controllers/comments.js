@@ -31,8 +31,6 @@ const getCommentById = async (req, res, next) => {
   }
 };
 const addComment = async (req, res, next) => {
-  console.log("add new comment ");
-
   const user = await User.findOne({ email: req.body.sender });
   const post = await Post.findOne({ _id: req.body.postId });
   const message = req.body.content;
@@ -59,7 +57,6 @@ const addComment = async (req, res, next) => {
         }
       );
 
-      console.log("Comment Saved");
       res.status(200).send({
         status: "OK",
         comment: comment,
@@ -79,7 +76,6 @@ const editComment = async (req, res, next) => {
     const updateComment = await Comment.findById(req.params.id);
     if (exists == null) return sendError(res, 400, "comment does not exist");
     else {
-      console.log("comment edited!");
       res.status(200).send({
         status: "OK",
         comment: updateComment,
@@ -111,7 +107,6 @@ const deleteComment = async (req, res, next) => {
         { $pull: { comments: req.params.id } },
         (err) => {
           if (err) console.log(err);
-          else console.log("comment deleted!");
         }
       );
 
@@ -136,7 +131,6 @@ const negativeComment = async (req, res, next) => {
   try {
     const reporter = await User.findById(req.body.user_rate);
     if (!reporter) {
-      console.log("400: User not found!");
       res.status(400).send({
         status: "fail",
         error: "User not found!",
@@ -174,7 +168,6 @@ const negativeComment = async (req, res, next) => {
         //Checking if the reporter already report positive
         for (var i = 0; i < comment.report_positive.length; i++) {
           if (comment.report_positive[i].email == reporter.email) {
-            console.log("Include in report_positive");
             comment.report_positive.splice(i, 1);
           }
         }
@@ -216,7 +209,6 @@ const positiveComment = async (req, res, next) => {
   try {
     const reporter = await User.findById(req.body.user_rate);
     if (!reporter) {
-      console.log("400: User not found!");
       res.status(400).send({
         status: "fail",
         error: "User not found!",

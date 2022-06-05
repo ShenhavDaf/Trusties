@@ -156,10 +156,7 @@ module.exports = async (email, subject, text) => {
       </html> `,
       text: "Welcome to trusties! your verification code is: " + text,
     });
-    console.log("email sent successfully");
   } catch (error) {
-    console.log("email not sent!");
-    console.log(error);
     return error;
   }
 };

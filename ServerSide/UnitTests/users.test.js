@@ -68,8 +68,6 @@ describe("Testing User API", () => {
         category: postCategory,
       });
     expect(response.statusCode).toEqual(200);
-    // postID = response.body.post._id;
-    console.log("*************** " + response.body._id);
   });
 
   /* ******************************************** */
