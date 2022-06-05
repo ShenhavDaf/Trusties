@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -128,9 +129,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         addressTv = view.findViewById(R.id.addpost_address);
         addressTv.setVisibility(View.GONE);
 
-//        mapView.getMapAsync(this);
-//        mapView.onCreate(savedInstanceState);
-
         carBtn.setOnClickListener(v -> {
             category = "Car";
             setColorsBtn(1, 0, 0, 0);
@@ -149,7 +147,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             setColorsBtn(0, 0, 1, 0);
 
         });
-
 
         cameraBtn = view.findViewById(R.id.newpost_camera_btn);
         galleryBtn = view.findViewById(R.id.newpost_gallery_btn);
@@ -175,7 +172,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         houseBtn = view.findViewById(R.id.newpost_house_damage_btn);
 
         mapView.getMapAsync(this);
-        mapView.onCreate(savedInstanceState); //NEED?
+        mapView.onCreate(savedInstanceState);
 
         return view;
     }
@@ -244,9 +241,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         else if (requestCode == REQUEST_IMAGE_GALLERY) {
             if (resultCode == RESULT_OK) {
                 // Get the Image from data
-                Log.d("TAG", 0 + "");
                 if (data.getClipData() != null) { // multi pics
-                    Log.d("TAG", 1 + "");
                     ClipData mClipData = data.getClipData();
                     int count = data.getClipData().getItemCount();
                     if (count > 2) {
@@ -274,13 +269,11 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                             image2.setImageURI(mArrayUri.get(1));
                     }
                 } else if (data.getData() != null) { //only one pic
-                    Log.d("TAG", 4 + "");
                     Uri imageurl = data.getData();
                     mArrayUri.add(imageurl);
                     image.setImageURI(mArrayUri.get(0));
                     postBtn.setEnabled(true);
                     sosBtn.setEnabled(true);
-//                    position = 0;
                 }
             }
         } else {
@@ -346,6 +339,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+
     private void createPost(View view, String type) {
 
         String currUserID = Model.instance.getCurrentUserModel().getId();
@@ -359,88 +353,91 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         String title = postTitle.getText().toString();
         String message = description.getText().toString();
         User user = Model.instance.getCurrentUserModel();
-        Log.d("TAG", "user%%%% - " + user.getEmail());
+        Log.d("TAG", "user%%%% - " + title + message);
         String email = user.getEmail().replace("\"", "");
 
         if (category != null) {
+            int isGood = new CommonFunctions().CheckTitleAndDescription(title, message, getContext());
 
-            map = new HashMap<>();
+            if (isGood == 1) {
+                map = new HashMap<>();
 //        map.put("sender",currUserID);
-            map.put("category", category);
-            map.put("title", title);
-            map.put("description", message);
-            map.put("email", email);
-            map.put("role", type);
-            if (type.equals("SOS"))
-                map.put("circle", circle.toString());
+                map.put("category", category);
+                map.put("title", title);
+                map.put("description", message);
+                map.put("email", email);
+                map.put("role", type);
+                if (type.equals("SOS"))
+                    map.put("circle", circle.toString());
 
-            ArrayList<String> photos = new ArrayList<>();
+                ArrayList<String> photos = new ArrayList<>();
 
-            if (imageBitmap != null) {
-//            Log.d("TAG", imageBitmap.toString());
-                Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
-                    @Override
-                    public void onComplete(String url) {
-                        photos.add(url);
-                        map.put("photo", url);
+                if (imageBitmap != null) {
+                    Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
+                        @Override
+                        public void onComplete(String url) {
+                            photos.add(url);
+                            map.put("photo", url);
+                        }
+                    });
+
+                }
+                if (mArrayUri != null) {
+                    flag = 1;
+                    for (int i = 0; i < mArrayUri.size(); i++) {
+                        try {
+                            Model.instance.encodeBitMapImg(BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(mArrayUri.get(i))), new Model.encodeBitMapImgListener() {
+                                @Override
+                                public void onComplete(String url) {
+                                    photos.add(url);
+                                }
+                            });
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     }
-                });
 
-            }
-            if (mArrayUri != null) {
-                flag = 1;
-                for (int i = 0; i < mArrayUri.size(); i++) {
-                    try {
-                        Model.instance.encodeBitMapImg(BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(mArrayUri.get(i))), new Model.encodeBitMapImgListener() {
+                    if (type.equals("SOS")) {
+                        int addressIsFine = new CommonFunctions().CheckLocation(address,getContext());
+                        if(addressIsFine == 1) {
+                            map.put("location", locationOnMap.toString());
+                            map.put("address", fullAddress);
+
+                            Model.instance.addSos(map, new Model.addSosListener() {
+                                @Override
+                                public void onComplete(JsonObject res) {
+                                    Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
+                                    Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                                        @Override
+                                        public void onComplete() {
+
+                                        }
+                                    });
+                                    Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
+
+                                }
+
+                            });
+                        }
+                    } else {
+
+                        Model.instance.addPost(map, new Model.addPostListener() {
                             @Override
-                            public void onComplete(String url) {
-                                photos.add(url);
+                            public void onComplete(JsonObject res) {
+                                Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
+                                Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                                    @Override
+                                    public void onComplete() {
+                                    }
+                                });
+
+
+                                Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
                             }
                         });
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
                     }
+
                 }
-
-                if (type.equals("SOS")) {
-                    map.put("location", locationOnMap.toString());
-                    map.put("address", fullAddress);
-
-                    Model.instance.addSos(map, new Model.addSosListener() {
-                        @Override
-                        public void onComplete(JsonObject res) {
-                            Log.d("TAG", "photossssss" + photos.toString());
-                            Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
-                            Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
-                                @Override
-                                public void onComplete() {
-                                    Log.d("TAG", "stopppppppppp");
-                                }
-                            });
-                            Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
-
-                        }
-
-                    });
-                } else {
-
-                    Model.instance.addPost(map, new Model.addPostListener() {
-                        @Override
-                        public void onComplete(JsonObject res) {
-                            Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
-                            Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
-                                @Override
-                                public void onComplete() {
-                                    Log.d("TAG", "stopppppppppp");
-                                }
-                            });
-
-
-                            Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
-                        }
-                    });
-                }
-
             }
         } else if (category == null) {
             String msg = "You need to select category first";
@@ -489,7 +486,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                     System.out.println("lat " + location.getLatitude() + "\nlong " + location.getLongitude());
                     LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
                     googleMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
-//                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                     float zoomLevel = 16.0f; //This goes up to 21
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel));
                     googleMap.getUiSettings().setZoomControlsEnabled(true);
