@@ -37,7 +37,7 @@ public class EditProfileFragment extends Fragment {
 
     TextView nameEt;
     TextView phoneEt;
-    Button saveBtn, cancelBtn , changePasswordBtn;
+    Button saveBtn, cancelBtn, changePasswordBtn;
     String userId;
 
     ImageButton cameraBtn;
@@ -48,8 +48,8 @@ public class EditProfileFragment extends Fragment {
     static final int REQUEST_IMAGE_GALLERY = 2;
     User user;
 
-    TextView currPassword, newPassword,confirmPassword;
-    int flagPassword=0;
+    TextView currPassword, newPassword, confirmPassword;
+    int flagPassword = 0;
     TextView currTv, newTv, confirmTv;
 
 
@@ -57,7 +57,7 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         userId = EditProfileFragmentArgs.fromBundle(getArguments()).getUserId();
 
         nameEt = view.findViewById(R.id.editProfile_name_tv);
@@ -89,7 +89,7 @@ public class EditProfileFragment extends Fragment {
         changePasswordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flagPassword=1;
+                flagPassword = 1;
                 setVisibility(View.VISIBLE);
 
             }
@@ -97,7 +97,7 @@ public class EditProfileFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flagPassword=0;
+                flagPassword = 0;
                 setVisibility(View.GONE);
 
             }
@@ -148,64 +148,62 @@ public class EditProfileFragment extends Fragment {
         }
     }
 
-    public void save(View view){
-        int inputOk=1;
-        HashMap<String,String> map = new HashMap<>();
-        if(flagPassword == 1) {
+    public void save(View view) {
+        int inputOk = 1;
+        HashMap<String, String> map = new HashMap<>();
+        if (flagPassword == 1) {
 
-            if(!newPassword.getText().toString().equals(confirmPassword.getText().toString()))
-            {
-                inputOk=0;
+            if (!newPassword.getText().toString().equals(confirmPassword.getText().toString())) {
+                inputOk = 0;
                 String msg = "New password and confirm password does not match!";
                 new CommonFunctions().myPopup(getContext(), "Error", msg);
-            }
-            else {
-                if(newPassword.getText().toString().length()<6 || confirmPassword.getText().toString().length() <6)
-                {
-                    inputOk=0;
+            } else {
+                if (newPassword.getText().toString().length() < 6 || confirmPassword.getText().toString().length() < 6) {
+                    inputOk = 0;
                     String msg = "Password must be at least 6 digits!";
                     new CommonFunctions().myPopup(getContext(), "Error", msg);
-                }
-                else {
+                } else {
 
                     map.put("currPassword", currPassword.getText().toString());
                     map.put("newPassword", newPassword.getText().toString());
                 }
             }
         }
+        int isNameAndPhoneOk = CheckNameAndPhone(nameEt.getText().toString(), phoneEt.getText().toString());
+        if (isNameAndPhoneOk == 1) {
 
-        map.put("name",nameEt.getText().toString());
-        map.put("phone",phoneEt.getText().toString());
-        map.put("flag",flagPassword+"");
+            map.put("name", nameEt.getText().toString());
+            map.put("phone", phoneEt.getText().toString());
+            map.put("flag", flagPassword + "");
 
 
-        if (imageBitmap != null) {
-            Log.d("TAG", imageBitmap.toString());
-            Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
-                @Override
-                public void onComplete(String url) {
-                    map.put("photo", url);
-                }
-            });
+            if (imageBitmap != null) {
+                Log.d("TAG", imageBitmap.toString());
+                Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
+                    @Override
+                    public void onComplete(String url) {
+                        map.put("photo", url);
+                    }
+                });
 
-        }
-        Context context = getContext();
-        if(inputOk==1) {
-            Model.instance.editUser(map, userId, context, new Model.editUserListener() {
-                @Override
-                public void onComplete() {
+            }
+            Context context = getContext();
+            if (inputOk == 1) {
+                Model.instance.editUser(map, userId, context, new Model.editUserListener() {
+                    @Override
+                    public void onComplete() {
 
-                    User newUsr = new User(userId, map.get("name"), user.getEmail(), map.get("phone"));
-                    Model.instance.setCurrentUserModel(newUsr);
-                    Navigation.findNavController(view).navigateUp();
-                }
-            });
+                        User newUsr = new User(userId, map.get("name"), user.getEmail(), map.get("phone"));
+                        Model.instance.setCurrentUserModel(newUsr);
+                        Navigation.findNavController(view).navigateUp();
+                    }
+                });
+            }
         }
 
     }
 
-    public void setVisibility(int isVisible)
-    {
+    public void setVisibility(int isVisible) {
         cancelBtn.setVisibility(isVisible);
         currPassword.setVisibility(isVisible);
         newPassword.setVisibility(isVisible);
@@ -214,6 +212,16 @@ public class EditProfileFragment extends Fragment {
         newTv.setVisibility(isVisible);
         currTv.setVisibility(isVisible);
 
+
+    }
+
+    public int CheckNameAndPhone(String name, String phone) {
+        if (name.equals("") || phone.equals("")) {
+            String msg = "You need to add name/phone";
+            new CommonFunctions().myPopup(getContext(), "Error", msg);
+            return 0;
+        } else
+            return 1;
 
     }
 
