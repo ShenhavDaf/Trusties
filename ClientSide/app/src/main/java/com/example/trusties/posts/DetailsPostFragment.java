@@ -59,6 +59,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     ImageView postImg, imgUser, sendCommentBtn;
     View line;
 
+    String currUserId;
+
     String postId, senderId;
     User currUser;
     Bitmap decodedByte;
@@ -90,6 +92,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         // Inflate the layout for this fragment
         binding = FragmentDetailsPostBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        currUserId = Model.instance.getCurrentUserModel().getId();
 
         progressBar = view.findViewById(R.id.postdetails_progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -134,6 +138,13 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                     location = post.get("location").toString().replace("\"", "");
                     requestsBtn.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.VISIBLE);
+                    String approved  = post.get("approved_volunteer").toString().replace("\"", "");
+                    if(!(currUserId.equals(senderId) || currUserId.equals(approved)))
+                    {
+                        mapView.setVisibility(View.GONE);
+                        String area = post.get("address").getAsString().split(",")[1] + ", " + post.get("address").getAsString().split(",")[2];
+                        address = area;
+                    }
 
 
                 } else { // in post we don't have location
