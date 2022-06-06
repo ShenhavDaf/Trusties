@@ -187,7 +187,14 @@ const negativeComment = async (req, res, next) => {
           }
         });
 
-        comment.sender.rating -= 0.1;
+        if (comment.sender.rating * 0.9 < 0) {
+          comment.sender.rating = 0;
+        } else {
+          comment.sender.rating = comment.sender.rating * 0.9;
+        }
+
+        comment.sender.numberReviews += 1;
+
         comment.sender.save(function (err) {
           if (err) {
             res.status(400).send({
@@ -262,7 +269,17 @@ const positiveComment = async (req, res, next) => {
             });
           }
         });
-        comment.sender.rating += 0.1;
+
+        if (comment.sender.rating * 1.1 > 5) {
+          comment.sender.rating = 5;
+        } else if (comment.sender.rating == 0) {
+          comment.sender.rating += 0.1;
+        } else {
+          comment.sender.rating = comment.sender.rating * 1.1;
+        }
+
+        comment.sender.numberReviews += 1;
+
         comment.sender.save(function (err) {
           if (err) {
             res.status(400).send({
