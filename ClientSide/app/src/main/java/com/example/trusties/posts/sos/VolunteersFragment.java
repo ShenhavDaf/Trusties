@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import com.example.trusties.databinding.FragmentVolunteersBinding;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
 import com.example.trusties.ui.home.HomeFragmentDirections;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 
@@ -104,6 +106,7 @@ public class VolunteersFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, numberConnections;
         Button approve;
+        RatingBar ratingBar;
 
         public MyViewHolder(@NonNull View itemView, VolunteersFragment.OnItemClickListener listener) {
             super(itemView);
@@ -112,6 +115,7 @@ public class VolunteersFragment extends Fragment {
             userName = itemView.findViewById(R.id.volunteerListRow_userName_tv);
             numberConnections = itemView.findViewById(R.id.volunteerListRow_mutual);
             approve = itemView.findViewById(R.id.volunteerListRow_approveBtn);
+            ratingBar = itemView.findViewById(R.id.volunteersListRow_ratingBar);
 
             approve.setOnClickListener(v->{
                 approve.setBackgroundColor(Color.parseColor("#FF4CAF50"));
@@ -138,6 +142,16 @@ public class VolunteersFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(User user) {
             userName.setText(user.getFullName());
+            Model.instance.findUserByEmail(user.getEmail(), new Model.findUserByEmailListener() {
+                @Override
+                public void onComplete(JsonObject user) {
+                    String rate = user.get("rating").toString().replace("\"", "");
+                    ratingBar.setRating(Float.parseFloat(rate));
+
+                }
+            });
+
+
             Model.instance.getFriendsList(user.getId(),1, friends -> {
                 System.out.println("friends");
                 System.out.println(friends);
