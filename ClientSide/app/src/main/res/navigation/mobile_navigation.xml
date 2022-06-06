@@ -131,6 +131,9 @@
         <argument
             android:name="postId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_volunteersFragment_to_othersProfileFragment"
+            app:destination="@id/othersProfileFragment" />
     </fragment>
 
 

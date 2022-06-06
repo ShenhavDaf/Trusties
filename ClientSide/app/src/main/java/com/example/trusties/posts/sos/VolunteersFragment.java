@@ -26,6 +26,7 @@ import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentVolunteersBinding;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
+import com.example.trusties.ui.home.HomeFragmentDirections;
 
 import java.util.HashMap;
 
@@ -65,6 +66,12 @@ public class VolunteersFragment extends Fragment {
         adapter = new VolunteersFragment.MyAdapter();
         list.setAdapter(adapter);
         logInUser = Model.instance.getCurrentUserModel();
+
+        adapter.setOnItemClickListener((v, position) -> {
+            String senderId = viewModel.getData().get(position).getId();
+            Log.d("TAG", "SENDER~~~~~~~   "+ senderId);
+            Navigation.findNavController(v).navigate(VolunteersFragmentDirections.actionVolunteersFragmentToOthersProfileFragment(senderId));
+        });
 
 
         refresh();
