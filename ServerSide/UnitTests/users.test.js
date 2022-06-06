@@ -198,4 +198,47 @@ describe("Testing User API", () => {
 
   /* ******************************************** */
   /* ******************************************** */
+
+  test("user test - remove Friend From My Contacts", async () => {
+    const response = await request(app)
+      .get("/user/removeFriendFromMyContacts/" + userId + "/" + friend_1_ID)
+      .query({ myId: userId, hisId: friend_1_ID });
+    // .set({ authorization: "JWT " + accessToken });
+    expect(response.statusCode).toEqual(200);
+    expect(response.body._id).toEqual(userId);
+  });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  // test("user test - rate my help", async () => {
+  //   const response = await request(app)
+  //     .post("/user/rateMyHelp/" + userId)
+  //     .send({ stars: "3" });
+  //   // .set({ authorization: "JWT " + accessToken });
+  //   expect(response.statusCode).toEqual(200);
+  // });
+
+  /* ******************************************** */
+  /* ******************************************** */
+
+  test("user test - get rating", async () => {
+    const response = await request(app)
+      .get("/user/getRating/" + userId)
+      .query({ id: userId });
+    // .set({ authorization: "JWT " + accessToken });
+    expect(response.statusCode).toEqual(200);
+
+    const currUser = await request(app)
+      .get("/auth/findById")
+      .query({ id: userId });
+    expect(currUser.statusCode).toEqual(200);
+
+    if (currUser.body.rating)
+      expect(currUser.body.rating).toEqual(response.body);
+    else expect(response.body.rating).toEqual(0);
+  });
+
+  /* ******************************************** */
+  /* ******************************************** */
 });
