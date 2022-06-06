@@ -328,7 +328,7 @@ const findUserByEmail = async (req, res, next) => {
       name: user.name,
       email: user.email,
       phone: user.phone,
-      raiting: user.raiting,
+      rating: user.rating,
       photo: user.photo,
     });
   } catch (err) {

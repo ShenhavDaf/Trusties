@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -104,15 +103,24 @@
         android:backgroundTint="#74F63030"
         app:icon="@drawable/ic_baseline_navigate_next_24"
         app:layout_constraintBaseline_toBaselineOf="@+id/profile_edit_btn"
-        app:layout_constraintEnd_toStartOf="@+id/profile_edit_btn" />
+        app:layout_constraintEnd_toStartOf="@+id/profile_edit_btn"
         app:layout_constraintTop_toBottomOf="@+id/ratingBar_dashBoard" />
 
     <RatingBar
         android:id="@+id/ratingBar_dashBoard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:transformPivotX="200dp"
+        android:transformPivotY="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.873"
+        app:layout_constraintHorizontal_bias="1.0"
+        android:progressTint="@color/black"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/profile_line2" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
