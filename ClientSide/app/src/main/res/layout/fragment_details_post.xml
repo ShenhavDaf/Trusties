@@ -17,6 +17,58 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/postdetails_profile_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/postdetails_edit_delete_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/avatar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postdetails_author_tv"
+                android:layout_width="114dp"
+                android:layout_height="23dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/hint_author_name"
+                android:minHeight="48dp"
+                android:textColor="@color/gray"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/postdetails_time_tv"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/postdetails_time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="1dp"
+                android:backgroundTint="#00D56868"
+                android:hint="@string/hint_date"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <ImageButton
             android:id="@+id/postdetails_close_btn"
             android:layout_width="60dp"
@@ -34,31 +86,39 @@
             android:id="@+id/postdetails_edit_delete_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
-                android:id="@+id/postdetails_edit_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#7b9abe"
-                android:src="@drawable/edit_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/postdetails_delete_btn"
-                app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/postdetails_delete_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/TrustiesPrimaryColor"
+                android:src="@drawable/delete_icon"
+                app:cornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/postdetails_delete_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#7b9abe"
-                android:src="@drawable/delete_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/postdetails_edit_btn"
+            <Button
+                android:id="@+id/postdetails_edit_btn"
+                android:layout_width="26dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="3dp"
+                android:backgroundTint="@color/TrustiesPrimaryColor"
+                android:drawableLeft="@drawable/edit_icon"
+                android:padding="2dp"
+                android:paddingStart="3dp"
+                android:paddingLeft="2dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="3dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="3dp"
+                app:iconPadding="5dp"
+                app:layout_constraintEnd_toStartOf="@+id/postdetails_delete_btn"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -176,24 +236,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/postdetails_author_tv"
-            android:layout_width="0dp"
-            android:layout_height="23dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:fontFamily="sans-serif-light"
-            android:hint="@string/hint_author_name"
-            android:minHeight="48dp"
-            android:textColor="@color/gray"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/postdetails_edit_delete_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
 
         <com.synnapps.carouselview.CarouselView
             android:id="@+id/carouselView"
@@ -212,18 +254,6 @@
             app:strokeColor="#FF777777"
             app:strokeWidth="1dp"
             tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/postdetails_time_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:backgroundTint="#00D56868"
-            android:hint="@string/hint_date"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postdetails_author_tv" />
 
         <ProgressBar
             android:id="@+id/postdetails_progressBar"

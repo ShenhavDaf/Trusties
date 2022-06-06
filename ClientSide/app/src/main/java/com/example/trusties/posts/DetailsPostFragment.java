@@ -59,7 +59,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
     TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt, addressEt;
     EditText comment;
-    ImageButton editBtn, deleteBtn, closeBtn;
+    Button editBtn, deleteBtn, closeBtn;
     Button requestsBtn;
     ProgressBar progressBar;
     ImageView postImg, imgUser, sendCommentBtn;

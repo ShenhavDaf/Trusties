@@ -10,6 +10,8 @@
         android:id="@+id/home_logo"
         android:layout_width="165dp"
         android:layout_height="50dp"
+        android:layout_marginStart="-5dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="235dp"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,15 +23,18 @@
 
     <TextView
         android:id="@+id/home_hello_tv"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="6dp"
+        android:layout_marginEnd="5dp"
         android:text="@string/hello"
         android:textColor="@color/TrustiesPrimaryColor"
         android:textSize="19sp"
         app:layout_constraintBottom_toTopOf="@+id/home_search_layout"
         app:layout_constraintEnd_toStartOf="@+id/home_userName_tv"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/home_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.516" />
 
     <TextView
         android:id="@+id/home_userName_tv"
@@ -46,20 +51,20 @@
         android:id="@+id/home_search_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/home_swiperefresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_logo"
         tools:ignore="MissingConstraints">
 
         <SearchView
             android:id="@+id/home_searchView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_corner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
