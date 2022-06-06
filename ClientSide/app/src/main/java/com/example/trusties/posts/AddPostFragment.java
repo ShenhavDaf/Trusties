@@ -514,6 +514,8 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                             try {
                                 addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                                 address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//                                String area = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
+//                                Log.d("TAG", " AREA ~~~~~~~ " + area);
                                 fullAddress = address;
                                 Log.d("TAG", fullAddress);
                                 addressTv.setText(fullAddress);
