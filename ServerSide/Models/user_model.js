@@ -34,6 +34,11 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: 0,
   },
+  numberReviews: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
   friends: {
     type: [mongoose.Schema.Types.ObjectId],
   },

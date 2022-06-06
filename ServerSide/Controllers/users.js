@@ -248,7 +248,7 @@ const removeFriendFromMyContacts = async (req, res, next) => {
 // req.params.id -user
 //req.body.stars -stars number
 const rateMyHelp = async (req, res, next) => {
-  var stars_raitng = parseFloat(req.body.stars) * 0.5;
+  var stars_raitng = parseFloat(req.body.stars);
 
   User.findById({ _id: req.params.id }).exec((err, user) => {
     if (err) {
@@ -257,19 +257,21 @@ const rateMyHelp = async (req, res, next) => {
         error: error.message,
         message: "user not found in DB",
       });
+    } else {
+      user.rating = user.rating * user.numberReviews;
+      user.numberReviews += 1;
+
+      user.rating = (user.rating + stars_raitng) / user.numberReviews;
+
+      user.save(function (err) {
+        if (err) {
+          res.status(400).send({
+            status: "fail",
+            error: err.message,
+          });
+        } else res.status(200).send({ status: "OK" });
+      });
     }
-
-    user.rating += stars_raitng;
-    //user.rating += 1.4;
-
-    user.save(function (err) {
-      if (err) {
-        res.status(400).send({
-          status: "fail",
-          error: err.message,
-        });
-      }
-    });
   });
 };
 
@@ -300,7 +302,11 @@ const getMyRelatedPosts = async (req, res) => {
         });
       } else {
         var myRelatedPosts = docs.filter((post) => {
-          if (myThirdCircle_str.includes(post.sender.valueOf())) {
+          if (
+            myThirdCircle_str != null &&
+            post.sender != null &&
+            myThirdCircle_str.includes(post.sender.valueOf())
+          ) {
             return post;
           }
         });

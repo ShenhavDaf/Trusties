@@ -87,9 +87,11 @@
 
     <RatingBar
         android:id="@+id/feedback_ratingBar"
-        android:layout_width="252dp"
+        android:layout_width="wrap_content"
         android:layout_height="54dp"
         android:layout_marginBottom="16dp"
+        android:numStars="5"
+        android:stepSize="1"
         app:layout_constraintBottom_toTopOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
