@@ -288,7 +288,7 @@
                 android:drawableLeft="@drawable/flag_icon"
                 android:drawablePadding="2dp"
                 android:text="Waiting"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/listrow_comment_num_tv"
                 app:layout_constraintStart_toEndOf="@+id/post_listRow_volunteerCount_Tv"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -313,7 +313,7 @@
                 android:drawableLeft="@drawable/person_icon"
                 android:drawablePadding="2dp"
                 android:text="0 Volunteers"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@+id/listrow_category_tv"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="NotSibling" />
