@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.trusties.CommonFunctions;
@@ -91,7 +92,6 @@ public class ConnectionsFragment extends Fragment {
             });
 
         });
-
 
         searchBar = root.findViewById(R.id.connections_search_tv);
         searchBtn = root.findViewById(R.id.connections_search_btn);
@@ -373,6 +373,7 @@ public class ConnectionsFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, numberConnections;
         ImageView userImage;
+        RatingBar ratingBar;
 
         public MyViewHolder(@NonNull View itemView, ConnectionsFragment.OnItemClickListener listener) {
             super(itemView);
@@ -380,6 +381,7 @@ public class ConnectionsFragment extends Fragment {
             userName = itemView.findViewById(R.id.connectionListRow_userName_tv);
             numberConnections = itemView.findViewById(R.id.connectionListRow_mutual);
             userImage = itemView.findViewById(R.id.commentListRow_userImg_img);
+            ratingBar = itemView.findViewById(R.id.connectionListRow_ratingBar);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -396,6 +398,9 @@ public class ConnectionsFragment extends Fragment {
             Model.instance.findUserByEmail(user.get("email").toString().replace("\"", ""), new Model.findUserByEmailListener() {
                 @Override
                 public void onComplete(JsonObject user) {
+                    String rate = user.get("rating").toString().replace("\"", "");
+                    ratingBar.setRating(Float.parseFloat(rate));
+
                     if (user.get("photo") != null) {
                         String photoBase64 = user.get("photo").getAsString();
                         byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
