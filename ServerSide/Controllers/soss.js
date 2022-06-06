@@ -54,10 +54,7 @@ const addSos = async (req, res, next) => {
         status: "fail",
         error: error.message,
       });
-      console.log("error!!!!! " + error.message);
     } else {
-      console.log("sos added!");
-
       res.status(200).send({
         status: "OK",
         _id: sos._id,
@@ -106,9 +103,7 @@ const volunteer = async (req, res, next) => {
           message: "SOS not found in DB",
         });
       }
-      if (sos.status != "OPEN") {
-        console.log("## Eroor: cant apply request - status is not OPEN");
-      } else {
+      if (sos.status == "OPEN") {
         sos.volunteers.addToSet(user._id);
         sos.save(function (err) {
           if (err) {
@@ -127,7 +122,6 @@ const volunteer = async (req, res, next) => {
 //req.body.vol_id - user
 // req.params.id -sos
 const cancelVolunteer = async (req, res, next) => {
-  console.log(" ## cancelApplyRequest");
   const user = await User.findById(req.body.user_request_id);
 
   Post.findById(req.params.id)
@@ -155,9 +149,6 @@ const cancelVolunteer = async (req, res, next) => {
             message: "the request to an help NOT saved.",
           });
         }
-
-        console.log(" ## cancelApplyRequest saved");
-        console.log(sos);
       });
     });
 };
@@ -234,8 +225,6 @@ const approveVolunteer = async (req, res, next) => {
             message: "the request to help NOT saved.",
           });
         }
-
-        console.log(" ## approveRequest saved");
       });
     });
 };
@@ -272,8 +261,6 @@ const cancelApproveVolunteer = async (req, res, next) => {
             message: "the request to cancelApproveRequest NOT saved.",
           });
         }
-
-        console.log(" ## cancelApproveRequest saved");
       });
     });
 };
@@ -294,7 +281,6 @@ const getApprovedVolunteer = async (req, res, next) => {
           message: "SOS not found in DB",
         });
       } else {
-        console.log("## approved_volunteer");
         res.status(200).send(sos.approved_volunteer);
       }
     });

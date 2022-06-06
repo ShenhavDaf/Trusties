@@ -46,7 +46,6 @@ const getCurrUser = async (req, res, next) => {
       accessToken = null;
     } else {
       idUser = currUser._id;
-      console.log("INNNNN" + currUser.name);
       accessToken = await jwt.sign(
         { id: idUser },
         process.env.ACCESS_TOKEN_SECRET,
@@ -55,7 +54,6 @@ const getCurrUser = async (req, res, next) => {
     }
     res.status(200).send({ accessToken, id: idUser });
   } catch (err) {
-    console.log(err.message);
     res.status(400).send({
       status: "fail",
       error: err.message,
@@ -121,8 +119,6 @@ const register = async (req, res, next) => {
       newUser = await user.save();
       user.isSignedIn = true;
       currUser = user;
-      console.log("currentInRegister" + currUser.name);
-      console.log("currentInRegister" + currUser.isSignedIn);
 
       accessToken = await jwt.sign(
         { id: user._id },
@@ -133,7 +129,6 @@ const register = async (req, res, next) => {
       res.status(200).send({ accessToken, newUser, randomCode });
     }
   } catch (err) {
-    console.log(err.message);
     res.status(400).send({
       status: "fail",
       error: err.message,
@@ -173,8 +168,7 @@ const login = async (req, res, next) => {
     );
     user.isSignedIn = true;
     currUser = user;
-    console.log("currentInLogin" + currUser.name);
-    console.log("currentInLogin" + currUser.isSignedIn);
+
     // const refreshToken = await jwt.sign(
     //   { id: user._id },
     //   process.env.REFRESH_TOKEN_SECRET
@@ -197,7 +191,6 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  console.log("inside logout");
   try {
     const exists = await User.updateOne(
       { _id: req.query.id },
@@ -245,8 +238,6 @@ const logout = async (req, res, next) => {
 };
 
 const refreshToken = async (req, res) => {
-  console.log("refreshToken");
-
   res.status(400).send({
     status: "fail",
     message: "not implemented",
@@ -352,7 +343,7 @@ const findUserByEmail = async (req, res, next) => {
 const findUserById = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.query.id });
-    // console.log(user);
+
     if (user == null) return sendError(res, 400, "user does not exist");
     res.status(200).send({
       name: user.name,
@@ -373,13 +364,9 @@ const findUserById = async (req, res, next) => {
 //GET function
 const forgotPassword = async (req, res) => {
   try {
-    console.log(
-      "--------- user email from adnroid --> " + req.query.emailAddress
-    );
     const currUser = await User.findOne({ email: req.query.emailAddress });
     if (currUser) {
       const randomPass = getRandomPassword();
-      console.log("--------- new password --> " + randomPass);
 
       const salt = await bcrypt.genSalt(10);
       const hashPwd = await bcrypt.hash(randomPass, salt);
@@ -416,13 +403,11 @@ const editUser = async (req, res, next) => {
     const updateUser = await User.findById(req.params.id);
 
     if (flagPassword == "1") {
-      console.log("inside flaG PASSWORD");
       const match = await bcrypt.compare(
         req.body.currPassword,
         updateUser.password
       );
       if (!match) {
-        console.log("~~~~~~~~Incorrect password~~~~~~~~~");
         res.status(400).send({
           status: "cuur password incorrect",
           error: err.message,
@@ -440,7 +425,6 @@ const editUser = async (req, res, next) => {
 
     if (exists == null) return sendError(res, 400, "post does not exist");
     else {
-      console.log("user edited!");
       res.status(200).send({
         status: "OK",
         user: updateUser,

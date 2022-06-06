@@ -7,8 +7,6 @@ const Category = require("../Models/category_model");
 const router = require("../Routes/category_routes");
 
 Category.countDocuments({}, function (err, count) {
-  console.log("Number of users:", count);
-
   // decide ur other logic
 
   // if count is 0 or less

@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 
 module.exports = async (email, subject, text) => {
+  if (String(email).includes("@test.com")) return;
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
@@ -156,10 +157,7 @@ module.exports = async (email, subject, text) => {
       </html> `,
       text: "Welcome to trusties! your verification code is: " + text,
     });
-    console.log("email sent successfully");
   } catch (error) {
-    console.log("email not sent!");
-    console.log(error);
     return error;
   }
 };

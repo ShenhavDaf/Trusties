@@ -78,20 +78,13 @@ const addPosts = async (req, res, next) => {
       }
     });
 
-    // const post = Post({
-    //     message: req.body.message,
-    //     sender: sender
-    // });
-
     post.save((error, newPost) => {
       if (error) {
-        console.log("error");
         res.status(400).send({
           status: "fail",
           error: error.message,
         });
       } else {
-        console.log("post added!");
         res.status(200).send({
           status: "OK",
           _id: post._id,
@@ -119,7 +112,6 @@ const addPhotosToPost = async (req, res, next) => {
     const updatePost = await Post.findById(req.params.id);
     if (exists == null) return sendError(res, 400, "post does not exist");
     else {
-      console.log("post photos!");
       res.status(200).send({
         status: "OK",
         post: updatePost,
@@ -150,7 +142,6 @@ const editPost = async (req, res, next) => {
     const updatePost = await Post.findById(req.params.id);
     if (exists == null) return sendError(res, 400, "post does not exist");
     else {
-      console.log("post edited!");
       res.status(200).send({
         status: "OK",
         _id: updatePost._id,
@@ -177,7 +168,6 @@ const deletePost = async (req, res, next) => {
     const updatePost = await Post.findById(req.params.id);
     if (exists == null) return sendError(res, 400, "post does not exist");
     else {
-      console.log("post deleted!");
       const findCategory = await Category.findOne({
         name: updatePost.category,
       });

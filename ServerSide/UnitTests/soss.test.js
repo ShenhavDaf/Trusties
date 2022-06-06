@@ -6,8 +6,8 @@ const Post = require("../Models/post_model");
 
 const email = "test@test.com";
 const pwd = "123456";
-const name = "test username (from unittest)";
-const phone = "test phone (from unittest)";
+const name = "test username (from sos)";
+const phone = "test phone (from sos)";
 
 beforeAll((done) => {
   User.deleteOne({ email: email }, (err) => {
@@ -23,8 +23,8 @@ afterAll((done) => {
 });
 
 describe("Testing Post API", () => {
-  const postTitle = "test post title (from unittest)";
-  const postMessage = "this is my test post (from unittest)";
+  const postTitle = "title test (from sos)";
+  const postMessage = "text test (from sos)";
   const postCategory = "Car";
   const sender = "Adi";
   const postPhoto =
