@@ -18,49 +18,56 @@ const addSos = async (req, res, next) => {
 
   const findCategory = await Category.findOne({ name: category });
 
-  const sos = await Sos({
-    sender: user,
-    title: title,
-    time: time,
-    description: description,
-    role: role,
-    friends_circle: friendsCircle,
-    category: category,
-    volunteers: [],
-    address: address,
-    approved_volunteer: null,
-    photo: photo,
-    location: location,
-  });
-  findCategory.save(async (error) => {
-    if (error) {
-      res.status(400).send({
-        status: "fail",
-        error: error.message,
-      });
-    } else {
-      await Category.updateOne(
-        { name: category },
-        {
-          $push: { posts: [sos._id] },
-        }
-      );
-    }
-  });
+  if (findCategory != null) {
+    const sos = await Sos({
+      sender: user,
+      title: title,
+      time: time,
+      description: description,
+      role: role,
+      friends_circle: friendsCircle,
+      category: category,
+      volunteers: [],
+      address: address,
+      approved_volunteer: null,
+      photo: photo,
+      location: location,
+    });
+    findCategory.save(async (error) => {
+      if (error) {
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+        });
+      } else {
+        await Category.updateOne(
+          { name: category },
+          {
+            $push: { posts: [sos._id] },
+          }
+        );
+      }
+    });
 
-  sos.save((error, newPost) => {
-    if (error) {
-      res.status(400).send({
-        status: "fail",
-        error: error.message,
-      });
-    } else {
-      res.status(200).send({
-        status: "OK",
-        _id: sos._id,
-      });
-    }
-  });
+    sos.save((error, newPost) => {
+      if (error) {
+        res.status(400).send({
+          status: "fail",
+          error: error.message,
+        });
+      } else {
+        res.status(200).send({
+          status: "OK",
+          _id: sos._id,
+        });
+      }
+    });
+  } else {
+    res.status(400).send({
+      status: "fail",
+      error: error.message,
+    });
+  }
 };
 
 // const getSoss = async (req, res, next) => {
