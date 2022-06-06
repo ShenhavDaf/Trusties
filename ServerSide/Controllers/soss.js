@@ -119,6 +119,10 @@ const volunteer = async (req, res, next) => {
               error: err.message,
               message: "the request to help NOT saved.",
             });
+          } else {
+            res.status(200).send({
+              status: "OK",
+            });
           }
         });
       }
