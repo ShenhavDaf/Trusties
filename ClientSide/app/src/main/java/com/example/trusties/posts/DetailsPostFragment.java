@@ -66,6 +66,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     View line;
 
     String currUserId;
+    JsonObject currPost;
 
     String postId, senderId;
     User currUser;
@@ -129,6 +130,9 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         Model.instance.getPostById(postId, new Model.getPostByIdListener() {
             @Override
             public void onComplete(JsonObject post) {
+
+                currPost = post;
+
                 String address = null;
 
                 String title = post.get("title").toString().replace("\"", "");
@@ -267,39 +271,27 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Close SOS").
                     setMessage("You sure, that you want to close this SOS?");
-            builder.setPositiveButton("Yes",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            Model.instance.closeSos(postId, () -> {
-                            });
-                            Model.instance.getApprovedVolunteer(postId, (volunteer) -> {
+            builder.setPositiveButton("Yes", (dialog, id) -> {
+                // Change to "close"
+                Model.instance.closeSos(postId, () -> {
+                    // if someone approved
+                    if (currPost.get("approved_volunteer").isJsonNull()) {
+                        Navigation.findNavController(v).navigate(
+                                DetailsPostFragmentDirections.actionGlobalNavigationHome(Model.instance.getCurrentUserModel().getFullName()));
+                    } else {
+                        Model.instance.getApprovedVolunteer(postId, (volunteer) -> {
 
-                                if (volunteer != null) {
-                                    String volunteerId = volunteer.get("_id").toString().replace("\"", "");
-                                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToFeedbackFragment(volunteerId));
-                                } else {
-                                    Log.d("TAG", " indise else!!!!!");
-                                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionGlobalNavigationHome(Model.instance.getCurrentUserModel().getFullName()));
-
-                                }
-                                refresh();
-
-                            });
-
-//                            Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionGlobalNavigationHome(Model.instance.getCurrentUserModel().getFullName()));
-
-                        }
-                    });
-            builder.setNegativeButton("No",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
+                            String volunteerId = volunteer.get("_id").toString().replace("\"", "");
+                            Navigation.findNavController(v).navigate(
+                                    DetailsPostFragmentDirections.actionDetailsPostFragmentToFeedbackFragment(volunteerId));
+                            refresh();
+                        });
+                    }
+                });
+            });
+            builder.setNegativeButton("No", (dialog, id) -> dialog.cancel());
             AlertDialog alert11 = builder.create();
             alert11.show();
-
-
         });
 
 
