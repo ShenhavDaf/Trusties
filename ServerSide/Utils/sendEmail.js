@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 
 module.exports = async (email, subject, text) => {
+  if (String(email).includes("@test.com")) return;
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
