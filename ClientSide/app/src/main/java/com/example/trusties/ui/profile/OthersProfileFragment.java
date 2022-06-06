@@ -106,7 +106,7 @@ public class OthersProfileFragment extends Fragment {
 
 
         //## Set rating bar
-        Model.instance.getRating(currUser.getId(), new Model.getRatingListener() {
+        Model.instance.getRating(userId, new Model.getRatingListener() {
             @Override
             public void onComplete(JsonObject obj) {
                 String rating_Str=obj.get("rating").toString().replace("\"", "");

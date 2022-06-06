@@ -2,7 +2,10 @@ package com.example.trusties.posts;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,8 +34,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.trusties.CommonFunctions;
+import com.example.trusties.MyApplication;
 import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentDetailsPostBinding;
+import com.example.trusties.login.LoginActivity;
 import com.example.trusties.model.Comment;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
@@ -138,9 +144,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                     location = post.get("location").toString().replace("\"", "");
                     requestsBtn.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.VISIBLE);
-                    String approved  = post.get("approved_volunteer").toString().replace("\"", "");
-                    if(!(currUserId.equals(senderId) || currUserId.equals(approved)))
-                    {
+                    String approved = post.get("approved_volunteer").toString().replace("\"", "");
+                    if (!(currUserId.equals(senderId) || currUserId.equals(approved))) {
                         mapView.setVisibility(View.GONE);
                         String area = post.get("address").getAsString().split(",")[1] + ", " + post.get("address").getAsString().split(",")[2];
                         address = area;
@@ -151,6 +156,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                     mapView.setVisibility(View.GONE);
                     addressEt.setVisibility(View.GONE);
                 }
+                if (status.equals("CLOSE"))
+                    closeBtn.setVisibility(View.GONE);
 
 
                 if (post.get("photo").getAsJsonArray().size() > 0) { // CHANGED
@@ -193,7 +200,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                             deleteBtn.setVisibility(View.VISIBLE);
                             editBtn.setVisibility(View.VISIBLE);
                             if (role.compareTo("SOS") == 0) {
-                                closeBtn.setVisibility(View.VISIBLE);
+//                                closeBtn.setVisibility(View.VISIBLE);
                                 requestsBtn.setVisibility(View.VISIBLE);
 
 
@@ -257,22 +264,40 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         });
         closeBtn.setOnClickListener(v -> {
 
-            Model.instance.closeSos(postId, () -> {
-            });
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Close SOS").
+                    setMessage("You sure, that you want to close this SOS?");
+            builder.setPositiveButton("Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Model.instance.closeSos(postId, () -> {
+                            });
+                            Model.instance.getApprovedVolunteer(postId, (volunteer) -> {
 
-            Model.instance.getApprovedVolunteer(postId, (volunteer) -> {
+                                if (volunteer != null) {
+                                    String volunteerId = volunteer.get("_id").toString().replace("\"", "");
+                                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToFeedbackFragment(volunteerId));
+                                } else {
+                                    Log.d("TAG", " indise else!!!!!");
+                                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionGlobalNavigationHome(Model.instance.getCurrentUserModel().getFullName()));
 
-                if (volunteer != null) {
-                    String id = volunteer.get("_id").toString().replace("\"", "");
-                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToFeedbackFragment(id));
-                } else {
-                    Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionGlobalNavigationHome(Model.instance.getCurrentUserModel().getFullName()));
+                                }
+                                refresh();
 
+                            });
 
-                }
-                refresh();
+//                            Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionGlobalNavigationHome(Model.instance.getCurrentUserModel().getFullName()));
 
-            });
+                        }
+                    });
+            builder.setNegativeButton("No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert11 = builder.create();
+            alert11.show();
 
 
         });
