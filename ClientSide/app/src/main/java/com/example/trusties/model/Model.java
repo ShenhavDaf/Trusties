@@ -189,9 +189,9 @@ public class Model {
     }
 
     public void refreshPostList() {
-
         postsListLoadingState.setValue(LoadingState.loading);
-        modelServer.getMyRelatedPosts(currentUserModel.getId(), new getMyRelatedPostsListener() {
+//        modelServer.getMyRelatedPosts(currentUserModel.getId(), new getMyRelatedPostsListener() {
+        modelServer.getMyRelatedPosts("629e6feb737c16c6cf4348ca", new getMyRelatedPostsListener() {
             @Override
             public void onComplete(JsonArray posts) {
                 List<Post> list = new ArrayList<>();

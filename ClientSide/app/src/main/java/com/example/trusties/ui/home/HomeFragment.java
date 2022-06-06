@@ -267,12 +267,10 @@ public class HomeFragment extends Fragment {
                     status.setText(post.get("status").getAsString());
                     if (status.getText().equals("OPEN")) {
                         status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
-//                        status.setBackgroundColor(status.getContext().getColor(R.color.green));
                     } else if(status.getText().equals("WAITING")) {
                         status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
                     } else if(status.getText().equals("CLOSE")) {
                         status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
-
                     }
 
                     String currCategory = post.get("category").getAsString();

@@ -33,8 +33,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ModelServer {
 
     private final RetrofitInterface retrofitInterface;
-    final private static String BASE_URL = "http://10.0.2.2:4000";
-    //final private static String BASE_URL = "http://193.106.55.119:4000";
+//    final private static String BASE_URL = "http://10.0.2.2:4000";
+    final private static String BASE_URL = "http://193.106.55.119:4000";
     private String accessToken;
     private String firebaseToken;
 
