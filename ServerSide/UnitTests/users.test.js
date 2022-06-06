@@ -88,7 +88,7 @@ describe("Testing User API", () => {
       .post("/post/add")
       .set({ authorization: "JWT " + accessToken })
       .send({
-        email: email,
+        email: "friend@test.com",
         title: postTitle,
         description: postMessage,
         category: postCategory,
@@ -111,16 +111,15 @@ describe("Testing User API", () => {
   /* ******************************************** */
   /* ******************************************** */
 
-  // test("user test - get friends list", async () => {
-  //   const response = await request(app)
-  //     .get("/user/" + userId)
-  //     .query({ id: userId, circle: 2 });
-  //   // .set({ authorization: "JWT " + accessToken });
-  //   expect(response.statusCode).toEqual(200);
-  //   const friend = response.body;
-  //   console.log("================" + friend);
-  //   expect(firstPost.title).toEqual(postTitle);
-  // });
+  test("user test - get friends list", async () => {
+    const response = await request(app)
+      .get("/user/" + userId)
+      .query({ id: userId, circle: 2 });
+    // .set({ authorization: "JWT " + accessToken });
+    expect(response.statusCode).toEqual(200);
+    const friends = response.body;
+    expect(friends[0]).toEqual(friendID);
+  });
 
   /* ******************************************** */
   /* ******************************************** */
