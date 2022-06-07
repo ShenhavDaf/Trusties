@@ -36,6 +36,8 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
+
 
 public class OthersProfileFragment extends Fragment {
 
@@ -220,7 +222,7 @@ private void refresh(){
 /* *************************************** Holder *************************************** */
 
 class MyViewHolder extends RecyclerView.ViewHolder {
-    TextView userName, title, description, time, commentNumber, category, status;
+    TextView userName, title, description, time, commentNumber, category, status, volunteer_txt, volunteer_count;
     ImageView photo, userImage;
     Button volunteer, sos;
 
@@ -240,10 +242,27 @@ class MyViewHolder extends RecyclerView.ViewHolder {
 
 
         volunteer = itemView.findViewById(R.id.postListRow_volunteer);
+        volunteer_txt = itemView.findViewById(R.id.post_listRow_volunteer_Tv);
+        volunteer_count = itemView.findViewById(R.id.post_listRow_volunteerCount_Tv);
+
 
         itemView.setOnClickListener(v -> {
             int pos = getAdapterPosition();
             listener.onItemClick(v, pos);
+        });
+
+        volunteer.setOnClickListener(v -> {
+            volunteer.setText("Volunteered");
+            int pos = getAdapterPosition();
+            Post post = profileViewModel.getData().get(pos);
+            String id = post.getId();
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("vol_id", Model.instance.getCurrentUserModel().getId());
+
+            Model.instance.volunteer(id, map, () -> {
+                refresh();
+            });
         });
     }
 
@@ -264,6 +283,18 @@ class MyViewHolder extends RecyclerView.ViewHolder {
                     volunteer.setVisibility(View.VISIBLE);
                 }
             }
+
+            Model.instance.getSosVolunteers(post.getId(), list ->
+            {
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getEmail().equals(Model.instance.getCurrentUserModel().getEmail())) {
+                        volunteer.setVisibility(View.GONE);
+                        volunteer_txt.setVisibility(View.VISIBLE);
+                    }
+                }
+                volunteer_count.setText(list.size() + " Volunteers");
+                volunteer_count.setVisibility(View.VISIBLE);
+            });
         }
         //TODO: change userName from post title to author name
         Model.instance.findUserById(userId, user -> {
