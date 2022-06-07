@@ -59,12 +59,10 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
     TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt, addressEt;
     EditText comment;
-    Button editBtn;
-    ImageButton deleteBtn, closeBtn;
+    Button editBtn, deleteBtn, closeBtn;
     Button requestsBtn;
     ProgressBar progressBar;
     ImageView postImg, imgUser, sendCommentBtn;
-    View line;
 
     String currUserId;
     JsonObject currPost;
@@ -117,7 +115,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         deleteBtn = view.findViewById(R.id.postdetails_delete_btn);
 //        postImg = view.findViewById(R.id.postDetails_post_img);
 //        postImg.setVisibility(View.GONE);
-        line = view.findViewById(R.id.postdetails_line);
         comment = view.findViewById(R.id.postdetails_comment_et);
         sendCommentBtn = view.findViewById(R.id.postdetails_sendComment_btn);
         imgUser = view.findViewById(R.id.postdetails_imgUser_img);
@@ -347,6 +344,14 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             statusEt.setText(status);
             roleEt.setText(role);
 
+            if (status.equals("OPEN")) {
+                statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
+            } else if(status.equals("WAITING")) {
+                statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
+            } else if(status.equals("CLOSE")) {
+                statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
+            }
+
             if (address != null) // only if role == SOS
                 addressEt.setText(address);
 
@@ -375,7 +380,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         descriptionEt.setVisibility(type);
         roleEt.setVisibility(type);
         statusEt.setVisibility(type);
-        line.setVisibility(type);
 //        postImg.setVisibility(type);
         sendCommentBtn.setVisibility(type);
         imgUser.setVisibility(type);
