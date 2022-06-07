@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.trusties.CommonFunctions;
@@ -33,7 +34,6 @@ import com.example.trusties.model.Model;
 import com.example.trusties.model.Post;
 import com.example.trusties.model.User;
 import com.google.android.material.card.MaterialCardView;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -51,15 +51,16 @@ public class SearchFragment extends Fragment {
     EditText authorET, descriptionET, newFriendET;
     CheckBox carCB, deliveryCB, toolsCB, houseCB, openCB, waitingCB, closeCB;
 
-    String flag;
     SwipeRefreshLayout swipeRefreshUsers;
-    SwipeRefreshLayout swipeRefreshPosts;
     UserAdapter userAdapter;
     List<User> lst_users = new LinkedList<>();
+
+    SwipeRefreshLayout swipeRefreshPosts;
     PostAdapter postAdapter;
     List<Post> lst_posts = new LinkedList<>();
 
     Bitmap decodedByte;
+    String flag, currUserID;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -73,6 +74,7 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
+        currUserID = Model.instance.getCurrentUserModel().getId();
         /*--------------------------------------View--------------------------------------*/
 
         choiceTV = view.findViewById(R.id.search_textViewChoiceTOP);
@@ -123,7 +125,7 @@ public class SearchFragment extends Fragment {
         userAdapter.setOnItemClickListener((v, position) -> {
             Model.instance.findUserByEmail(searchViewModel.getUsersData().get(position).getEmail(), user -> {
                 String userId = user.get("_id").toString().replace("\"", "");
-                if (userId.equals(Model.instance.getCurrentUserModel().getId())) {
+                if (userId.equals(currUserID)) {
                     Navigation.findNavController(v).navigate(SearchFragmentDirections.actionGlobalNavigationDashboard());
                 } else
                     Navigation.findNavController(v).navigate(SearchFragmentDirections.actionSearchFragmentToOthersProfileFragment(userId));
@@ -335,13 +337,16 @@ public class SearchFragment extends Fragment {
 
     class UserViewHolder extends RecyclerView.ViewHolder {
         TextView userName, numberConnections;
+        ImageView userImage;
+        RatingBar ratingBar;
 
         public UserViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
-            //TODO: user image
+            userImage = itemView.findViewById(R.id.commentListRow_userImg_img);
             userName = itemView.findViewById(R.id.connectionListRow_userName_tv);
             numberConnections = itemView.findViewById(R.id.connectionListRow_mutual);
+            ratingBar = itemView.findViewById(R.id.connectionListRow_ratingBar);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -354,16 +359,24 @@ public class SearchFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(User user) {
             userName.setText(user.getFullName());
-            Model.instance.findUserByEmail(user.getEmail(), new Model.findUserByEmailListener() {
-                @Override
-                public void onComplete(JsonObject freind) {
-                    Model.instance.getFriendsList(freind.get("_id").toString().replace("\"", ""), 1, new Model.friendsListListener() {
-                        @Override
-                        public void onComplete(JsonArray friendsList) {
-                            numberConnections.setText(friendsList.size() + " connections");
-                        }
-                    });
+
+            Model.instance.findUserByEmail(user.getEmail(), friend -> {
+                String friendID = friend.get("_id").toString().replace("\"", "");
+                String rate = friend.get("rating").toString().replace("\"", "");
+                ratingBar.setRating(Float.parseFloat(rate));
+
+
+                userImage.setImageResource(R.drawable.avatar);
+                if (friend.get("photo") != null) {
+                    String photoBase64 = friend.get("photo").getAsString();
+                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    userImage.setImageBitmap(decodedByte);
                 }
+
+                Model.instance.getFriendsList(friendID, 1, friendsList ->
+                        numberConnections.setText(friendsList.size() + " connections")
+                );
             });
         }
     }
@@ -452,7 +465,7 @@ public class SearchFragment extends Fragment {
                 String id = post.getId();
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put("vol_id", Model.instance.getCurrentUserModel().getId());
+                map.put("vol_id", currUserID);
 
                 Model.instance.volunteer(id, map, () -> {
                     refresh();
@@ -469,11 +482,10 @@ public class SearchFragment extends Fragment {
             // ##TYPE :SOS
             if (post.getRole().equals("SOS")) {
                 sos.setVisibility(View.VISIBLE);
-                MaterialCardView card = (MaterialCardView) itemView;
-                int volunteersSize = 0;
-                if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
+
+                if (!currUserID.equals(post.getAuthorID())) {
                     if (post.getStatus().equals("OPEN")) {
-                        //if the status is close & the current user is NOT the post sender
+                        //if the status == "close" & the current user is NOT the post sender
                         volunteer.setVisibility(View.VISIBLE);
                     }
                 }
