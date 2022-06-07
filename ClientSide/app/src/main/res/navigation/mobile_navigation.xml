@@ -134,6 +134,9 @@
         <action
             android:id="@+id/action_volunteersFragment_to_othersProfileFragment"
             app:destination="@id/othersProfileFragment" />
+        <action
+            android:id="@+id/action_volunteersFragment_to_detailsPostFragment"
+            app:destination="@id/detailsPostFragment" />
     </fragment>
 
 
