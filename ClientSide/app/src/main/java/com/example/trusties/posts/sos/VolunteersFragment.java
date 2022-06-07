@@ -3,6 +3,7 @@ package com.example.trusties.posts.sos;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +39,7 @@ public class VolunteersFragment extends Fragment {
     private FragmentVolunteersBinding binding;
     private String postId;
     private User logInUser;
+    private User approveVolunteer_db=null;
 
 
     //TODO:CHANGE IT
@@ -55,7 +57,6 @@ public class VolunteersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding =FragmentVolunteersBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
@@ -69,12 +70,17 @@ public class VolunteersFragment extends Fragment {
         list.setAdapter(adapter);
         logInUser = Model.instance.getCurrentUserModel();
 
+        Model.instance.getApprovedVolunteer(postId,volunteer ->{
+            if(volunteer!=null) {
+                approveVolunteer_db = User.create(volunteer);
+            }
+        });
+
         adapter.setOnItemClickListener((v, position) -> {
             String senderId = viewModel.getData().get(position).getId();
             Log.d("TAG", "SENDER~~~~~~~   "+ senderId);
             Navigation.findNavController(v).navigate(VolunteersFragmentDirections.actionVolunteersFragmentToOthersProfileFragment(senderId));
         });
-
 
         refresh();
         return view;
@@ -90,11 +96,6 @@ public class VolunteersFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-        swipeRefresh.setRefreshing(false);
-
-//
-//        adapter.notifyDataSetChanged();
-//        swipeRefresh.setRefreshing(false);
     }
 
     public VolunteersFragment() {
@@ -105,7 +106,7 @@ public class VolunteersFragment extends Fragment {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, numberConnections;
-        Button approve;
+        Button approve,cancel;
         RatingBar ratingBar;
 
         public MyViewHolder(@NonNull View itemView, VolunteersFragment.OnItemClickListener listener) {
@@ -115,7 +116,9 @@ public class VolunteersFragment extends Fragment {
             userName = itemView.findViewById(R.id.volunteerListRow_userName_tv);
             numberConnections = itemView.findViewById(R.id.volunteerListRow_mutual);
             approve = itemView.findViewById(R.id.volunteerListRow_approveBtn);
+            cancel = itemView.findViewById(R.id.volunteerListRow_cancelBtn);
             ratingBar = itemView.findViewById(R.id.volunteersListRow_ratingBar);
+
 
             approve.setOnClickListener(v->{
                 approve.setBackgroundColor(Color.parseColor("#FF4CAF50"));
@@ -126,11 +129,21 @@ public class VolunteersFragment extends Fragment {
                 map.put("vol_id",vol.getId().toString());
 
                 Model.instance.approveVolunteer(postId,map, () -> {
-                    approve.setVisibility(View.GONE);
-                    refresh();
+
+                    Navigation.findNavController(v).navigate(VolunteersFragmentDirections.actionVolunteersFragmentToDetailsPostFragment(postId));
                 });
             });
+            cancel.setOnClickListener(v->{
+                int pos=getAdapterPosition();
+                User vol=viewModel.getData().get(pos);
 
+                HashMap<String, String> map = new HashMap<>();
+                map.put("vol_id",vol.getId().toString());
+
+                Model.instance.cancelVolunteer(postId,map, () -> {
+                    Navigation.findNavController(v).navigate(VolunteersFragmentDirections.actionVolunteersFragmentToDetailsPostFragment(postId));
+                });
+            });
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -142,12 +155,29 @@ public class VolunteersFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(User user) {
             userName.setText(user.getFullName());
+
+            if(approveVolunteer_db==null) {
+                approve.setVisibility(View.VISIBLE);
+                cancel.setVisibility(View.GONE);
+            }
+            else {
+                if (user.getEmail().compareTo(approveVolunteer_db.getEmail()) == 0) {
+                    approve.setVisibility(View.GONE);
+                    cancel.setVisibility(View.VISIBLE);
+                }
+                else{
+                    approve.setVisibility(View.GONE);
+                    cancel.setVisibility(View.GONE);
+                }
+
+            }
+
+
             Model.instance.findUserByEmail(user.getEmail(), new Model.findUserByEmailListener() {
                 @Override
                 public void onComplete(JsonObject user) {
                     String rate = user.get("rating").toString().replace("\"", "");
                     ratingBar.setRating(Float.parseFloat(rate));
-
                 }
             });
 
@@ -156,10 +186,7 @@ public class VolunteersFragment extends Fragment {
                 System.out.println("friends");
                 System.out.println(friends);
                 numberConnections.setText(friends.size() +" connections");
-//                refresh();
             });
-
-//            numberConnections.setText(user.getFriends().size() + " connections");
 
 
         }

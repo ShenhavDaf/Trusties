@@ -83,6 +83,23 @@
             android:backgroundTint="#AEA8A8"
             android:text="Approve"
             android:textSize="8sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.858"
+            app:layout_constraintStart_toEndOf="@+id/volunteerListRow_mutual"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.491"
+            tools:ignore="DuplicateClickableBoundsCheck" />
+
+        <Button
+            android:id="@+id/volunteerListRow_cancelBtn"
+            android:layout_width="91dp"
+            android:layout_height="36dp"
+            android:backgroundTint="#AEA8A8"
+            android:text="Cancel"
+            android:textSize="8sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.858"
