@@ -89,6 +89,9 @@ public class LogInFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
 
         Model.instance.login(localEmail, localPassword, (statusCode, user) -> {
+//            setConnectedUser(localEmail);
+            Model.instance.setCurrentUserModel(User.create(user));
+
             if (statusCode == 200) {
                 String localName = user.get("name").toString();
                 String localPhone = user.get("phone").toString();
@@ -99,13 +102,12 @@ public class LogInFragment extends Fragment {
                     map.put("password", localPassword);
                     map.put("phone", localPhone);
                     map.put("fragment", "LoginFragment");
+
                     Model.instance.signup(map, randomCodeFromServer -> {
-                        setConnectedUser(localEmail);
                         Navigation.findNavController(view).navigate(
                                 LogInFragmentDirections.actionLogInFragmentToVerificationFragment(localName.replace("\"", ""), localEmail.replace("\"", ""), randomCodeFromServer));
                     }, getContext());
                 } else {
-                    setConnectedUser(localEmail);
                     Intent myIntent = new Intent(getContext(), MainActivity.class);
 //                    myIntent.putExtra("email",localEmail);
                     startActivity(myIntent);
@@ -155,14 +157,18 @@ public class LogInFragment extends Fragment {
 
     }
 
-    void setConnectedUser(String localEmail) {
-        Model.instance.findUserByEmail(localEmail, new Model.findUserByEmailListener() {
-            @Override
-            public void onComplete(JsonObject user) {
+//    void setConnectedUser(String localEmail) {
+//        Model.instance.findUserByEmail(localEmail, user -> {
+//
+//            String u_id = user.get("_id").toString().replace("\"", "");
+//            String u_name = user.get("name").toString().replace("\"", "");
+//            String u_email = user.get("email").toString().replace("\"", "");
+//            String u_phone = user.get("phone").toString().replace("\"", "");
+//
+//            Model.instance.setCurrentUserModel(new User(u_id, u_name, u_email, u_phone));
+//
+//        });
+//    }
 
-                Model.instance.setCurrentUserModel(new User(user.get("_id").toString().replace("\"", ""), user.get("name").toString().replace("\"", ""), user.get("email").toString().replace("\"", ""), user.get("phone").toString().replace("\"", "")));
-            }
-        });
 
-    }
 }

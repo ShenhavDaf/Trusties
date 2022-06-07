@@ -3,6 +3,8 @@ package com.example.trusties;
 import android.app.AlertDialog;
 import android.content.Context;
 
+import com.google.gson.JsonObject;
+
 public class CommonFunctions {
 
     public void myPopup(Context context, String title, String msg) {
@@ -35,6 +37,10 @@ public class CommonFunctions {
         } else
             return 1;
 
+    }
+
+    public String jsonObjToString(JsonObject object, String property){
+        return object.get(property).toString().replace("\"", "");
     }
 
 }
