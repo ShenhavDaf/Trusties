@@ -90,9 +90,10 @@ public class LogInFragment extends Fragment {
 
         Model.instance.login(localEmail, localPassword, (statusCode, user) -> {
 //            setConnectedUser(localEmail);
-            Model.instance.setCurrentUserModel(User.create(user));
+
 
             if (statusCode == 200) {
+                Model.instance.setCurrentUserModel(User.create(user));
                 String localName = user.get("name").toString();
                 String localPhone = user.get("phone").toString();
                 if (user.get("verified").toString().equals("false")) {
