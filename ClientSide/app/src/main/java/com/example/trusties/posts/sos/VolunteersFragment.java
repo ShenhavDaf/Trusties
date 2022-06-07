@@ -1,9 +1,8 @@
 package com.example.trusties.posts.sos;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.ColorSpace;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -28,7 +26,6 @@ import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentVolunteersBinding;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
-import com.example.trusties.ui.home.HomeFragmentDirections;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -39,7 +36,7 @@ public class VolunteersFragment extends Fragment {
     private FragmentVolunteersBinding binding;
     private String postId;
     private User logInUser;
-    private User approveVolunteer_db=null;
+    private User approveVolunteer_db = null;
 
 
     //TODO:CHANGE IT
@@ -57,7 +54,7 @@ public class VolunteersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding =FragmentVolunteersBinding.inflate(inflater, container, false);
+        binding = FragmentVolunteersBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
         swipeRefresh = view.findViewById(R.id.requests_swiperefresh);
@@ -70,15 +67,15 @@ public class VolunteersFragment extends Fragment {
         list.setAdapter(adapter);
         logInUser = Model.instance.getCurrentUserModel();
 
-        Model.instance.getApprovedVolunteer(postId,volunteer ->{
-            if(volunteer!=null) {
+        Model.instance.getApprovedVolunteer(postId, volunteer -> {
+            if (volunteer != null) {
                 approveVolunteer_db = User.create(volunteer);
             }
         });
 
         adapter.setOnItemClickListener((v, position) -> {
             String senderId = viewModel.getData().get(position).getId();
-            Log.d("TAG", "SENDER~~~~~~~   "+ senderId);
+            Log.d("TAG", "SENDER~~~~~~~   " + senderId);
             Navigation.findNavController(v).navigate(VolunteersFragmentDirections.actionVolunteersFragmentToOthersProfileFragment(senderId));
         });
 
@@ -87,12 +84,11 @@ public class VolunteersFragment extends Fragment {
     }
 
     private void refresh() {
-        Model.instance.getSosVolunteers(postId,VolunteersList ->{
-            if(VolunteersList.size() ==0) {
+        Model.instance.getSosVolunteers(postId, VolunteersList -> {
+            if (VolunteersList.size() == 0) {
                 swipeRefresh.setVisibility(View.GONE);
-            }
-            else{
-                viewModel.data =VolunteersList;
+            } else {
+                viewModel.data = VolunteersList;
                 adapter.notifyDataSetChanged();
             }
         });
@@ -106,7 +102,7 @@ public class VolunteersFragment extends Fragment {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, numberConnections;
-        Button approve,cancel;
+        Button approve, cancel;
         RatingBar ratingBar;
 
         public MyViewHolder(@NonNull View itemView, VolunteersFragment.OnItemClickListener listener) {
@@ -119,29 +115,16 @@ public class VolunteersFragment extends Fragment {
             cancel = itemView.findViewById(R.id.volunteerListRow_cancelBtn);
             ratingBar = itemView.findViewById(R.id.volunteersListRow_ratingBar);
 
-
-            approve.setOnClickListener(v->{
-                approve.setBackgroundColor(Color.parseColor("#FF4CAF50"));
-                int pos=getAdapterPosition();
-                User vol=viewModel.getData().get(pos);
+            cancel.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                User vol = viewModel.getData().get(pos);
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put("vol_id",vol.getId().toString());
+                map.put("vol_id", vol.getId());
 
-                Model.instance.approveVolunteer(postId,map, () -> {
-
-                    Navigation.findNavController(v).navigate(VolunteersFragmentDirections.actionVolunteersFragmentToDetailsPostFragment(postId));
-                });
-            });
-            cancel.setOnClickListener(v->{
-                int pos=getAdapterPosition();
-                User vol=viewModel.getData().get(pos);
-
-                HashMap<String, String> map = new HashMap<>();
-                map.put("vol_id",vol.getId().toString());
-
-                Model.instance.cancelVolunteer(postId,map, () -> {
-                    Navigation.findNavController(v).navigate(VolunteersFragmentDirections.actionVolunteersFragmentToDetailsPostFragment(postId));
+                Model.instance.cancelVolunteer(postId, map, () -> {
+                    Navigation.findNavController(v).navigate(
+                            VolunteersFragmentDirections.actionVolunteersFragmentToDetailsPostFragment(postId));
                 });
             });
 
@@ -156,16 +139,14 @@ public class VolunteersFragment extends Fragment {
         public void bind(User user) {
             userName.setText(user.getFullName());
 
-            if(approveVolunteer_db==null) {
+            if (approveVolunteer_db == null) {
                 approve.setVisibility(View.VISIBLE);
                 cancel.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 if (user.getEmail().compareTo(approveVolunteer_db.getEmail()) == 0) {
                     approve.setVisibility(View.GONE);
                     cancel.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     approve.setVisibility(View.GONE);
                     cancel.setVisibility(View.GONE);
                 }
@@ -182,10 +163,33 @@ public class VolunteersFragment extends Fragment {
             });
 
 
-            Model.instance.getFriendsList(user.getId(),1, friends -> {
+            Model.instance.getFriendsList(user.getId(), 1, friends -> {
                 System.out.println("friends");
                 System.out.println(friends);
-                numberConnections.setText(friends.size() +" connections");
+                numberConnections.setText(friends.size() + " connections");
+            });
+
+            approve.setOnClickListener(v -> {
+//                approve.setBackgroundColor(Color.parseColor("#FF4CAF50"));
+                int pos = getAdapterPosition();
+                User vol = viewModel.getData().get(pos);
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("vol_id", vol.getId());
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Approve volunteer").
+                        setMessage("Are you sure you want to approve " + user.getFullName() + " to come and help you?");
+                builder.setPositiveButton("Yes", (dialog, id) -> {
+                    Model.instance.approveVolunteer(postId, map, () -> {
+                        Navigation.findNavController(v).navigate(
+                                VolunteersFragmentDirections.actionVolunteersFragmentToDetailsPostFragment(postId));
+                    });
+                });
+                builder.setNegativeButton("No", (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+
             });
 
 
@@ -195,39 +199,39 @@ public class VolunteersFragment extends Fragment {
     interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
+
     class MyAdapter extends RecyclerView.Adapter<VolunteersFragment.MyViewHolder> {
 
-            VolunteersFragment.OnItemClickListener listener;
+        VolunteersFragment.OnItemClickListener listener;
 
-            public void setOnItemClickListener(VolunteersFragment.OnItemClickListener listener) {
-                this.listener = listener;
-            }
-
-            @NonNull
-            @Override
-            public VolunteersFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-                View view = getLayoutInflater().inflate(R.layout.volunteer_list_row, parent, false);
-                VolunteersFragment.MyViewHolder holder = new VolunteersFragment.MyViewHolder(view, listener);
-                return holder;
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onBindViewHolder(@NonNull VolunteersFragment.MyViewHolder holder, int position) {
-                User user = viewModel.getData().get(position);
-                holder.bind(user);
-            }
-
-            @Override
-            public int getItemCount() {
-                if (viewModel.getData() == null) {
-                    return 0;
-                }
-                return viewModel.getData().size();
-            }
+        public void setOnItemClickListener(VolunteersFragment.OnItemClickListener listener) {
+            this.listener = listener;
         }
 
+        @NonNull
+        @Override
+        public VolunteersFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+            View view = getLayoutInflater().inflate(R.layout.volunteer_list_row, parent, false);
+            VolunteersFragment.MyViewHolder holder = new VolunteersFragment.MyViewHolder(view, listener);
+            return holder;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onBindViewHolder(@NonNull VolunteersFragment.MyViewHolder holder, int position) {
+            User user = viewModel.getData().get(position);
+            holder.bind(user);
+        }
+
+        @Override
+        public int getItemCount() {
+            if (viewModel.getData() == null) {
+                return 0;
+            }
+            return viewModel.getData().size();
+        }
+    }
 
 
 }
