@@ -211,6 +211,7 @@ public class HomeFragment extends Fragment {
                     HashMap<String, String> map = new HashMap<>();
                     map.put("vol_id", Model.instance.getCurrentUserModel().getId());
                     cancelVolunteer.setVisibility(View.GONE);
+                    volunteer_txt.setVisibility(View.GONE);
                     Model.instance.cancelVolunteer(id, map, () -> {
                         refresh();
                     });
