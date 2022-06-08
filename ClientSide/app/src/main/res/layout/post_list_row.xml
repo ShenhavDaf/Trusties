@@ -198,7 +198,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/listrow_post_img"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
