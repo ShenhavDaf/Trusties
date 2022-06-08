@@ -98,6 +98,35 @@
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/postListRow_cancel_volunteer"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="28dp"
+                android:drawableLeft="@drawable/cancel_vol"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:padding="5dp"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="50dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="35dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/listrow_sos_btn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/white"
+                app:strokeWidth="1dp" />
+
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/listrow_sos_btn"
                 android:layout_width="57dp"
                 android:layout_height="30dp"
