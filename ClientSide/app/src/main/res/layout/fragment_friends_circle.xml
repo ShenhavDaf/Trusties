@@ -1,124 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainSlidingUp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
+    android:gravity="bottom"
     tools:context=".FriendsCircleFragment">
 
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
-        android:id="@+id/slidingUp1"
+    <RelativeLayout
+        android:id="@+id/circle_1_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:gravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/circle_1_layout"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:src="@drawable/gradient_background" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/gradient_background" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_launcher_foreground" />
-        </RelativeLayout>
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/from1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:text="Layout 1" />
 
-            <TextView
-                android:id="@+id/from1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|top"
-                android:text="from 1" />
-        </RelativeLayout>
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+    </RelativeLayout>
 
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
-        android:id="@+id/slidingUp2"
+    <RelativeLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:gravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/circle_2_layout"
+        <com.sothree.slidinguppanel.SlidingUpPanelLayout
+            android:id="@+id/secondarySlidingUp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="bottom">
 
-            <ImageView
+            <RelativeLayout
+                android:id="@+id/circle_2_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/gradient_background" />
+                android:layout_height="match_parent">
 
-            <ImageView
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/gradient_2" />
+
+                <TextView
+                    android:id="@+id/from2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Layout 2" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/circle_3_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_launcher_foreground" />
-        </RelativeLayout>
+                android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/gradient_3" />
 
-            <TextView
-                android:id="@+id/from2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|top"
-                android:text="from 2" />
-        </RelativeLayout>
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+                <TextView
+                    android:id="@+id/from3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Layout 3" />
 
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
-        android:id="@+id/slidingUp3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:gravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <RelativeLayout
-            android:id="@+id/circle_3_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/gradient_background" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_launcher_foreground" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/from3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|top"
-                android:text="from 3" />
-        </RelativeLayout>
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+            </RelativeLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+        <!--        end         -->
+
+
+    </RelativeLayout>
+
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout >
