@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -23,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +76,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
     ImageButton cameraBtn;
     ImageButton galleryBtn;
     String postId;
+    Bitmap decodedByte;
 
     Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -140,6 +143,26 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                     isSOS = 1;
                     address = post.get("address").toString().replace("\"", "");
                     locationSOS = post.get("location").toString().replace("\"", "");
+                }
+
+                if (post.get("photo").getAsJsonArray().size() > 0) {// CHANGED
+                    String photoBase64First = post.get("photo").getAsJsonArray().get(0).getAsString();
+
+                    if (photoBase64First != null) {
+                        byte[] decodedString = Base64.decode(photoBase64First, Base64.DEFAULT);
+                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        image.setImageBitmap(decodedByte);
+                    }
+                    if (post.get("photo").getAsJsonArray().size() == 2)
+                    {
+                        String photoBase64Second = post.get("photo").getAsJsonArray().get(1).getAsString();
+                        if (photoBase64Second != null) {
+                            byte[] decodedString = Base64.decode(photoBase64Second, Base64.DEFAULT);
+                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            image2.setImageBitmap(decodedByte);
+                        }
+                    }
+
                 }
             }
         });
@@ -226,6 +249,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
 
         super.onActivityResult(requestCode, resultCode, data);
         mArrayUri = new ArrayList<Uri>();
+        setDeafultPic();
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 image2.setImageResource(R.drawable.image_place);
@@ -315,7 +339,13 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                     }
                 });
 
+            } else{
+                for( int i=0; i< photos.size(); i++)
+                {
+                    photos.remove(i);
+                }
             }
+
             if (mArrayUri != null) {
 
                 flag = 1;
@@ -332,6 +362,13 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
             }
+            else if (mArrayUri == null) {
+                for( int i=0; i< photos.size(); i++)
+                {
+                    photos.remove(i);
+                }
+            }
+
             Model.instance.editPost(map, postId, new Model.editPostListener() {
                 @Override
                 public void onComplete(JsonObject res) {
@@ -483,5 +520,10 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+    }
+
+    public void setDeafultPic(){
+        image.setImageResource(R.drawable.image_place);
+        image2.setImageResource(R.drawable.image_place);
     }
 }
