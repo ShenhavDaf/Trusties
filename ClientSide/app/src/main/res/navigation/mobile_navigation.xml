@@ -166,4 +166,9 @@
             android:id="@+id/action_feedbackFragment_to_othersProfileFragment"
             app:destination="@id/othersProfileFragment" />
     </fragment><action android:id="@+id/action_global_searchFragment" app:destination="@id/searchFragment"/>
+    <fragment
+        android:id="@+id/friendsCircleFragment"
+        android:name="com.example.trusties.FriendsCircleFragment"
+        android:label="fragment_friends_circle"
+        tools:layout="@layout/fragment_friends_circle" />
 </navigation>
