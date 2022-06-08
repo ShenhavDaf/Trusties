@@ -26,86 +26,88 @@
             android:id="@+id/volunteerListRow_userImg_img"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/volunteerListRow_userName_tv"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
 
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/avatar" />
 
         <TextView
             android:id="@+id/volunteerListRow_mutual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
             android:text="121 mutual connections"
             android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/volunteerListRow_userImg_img"
-            app:layout_constraintTop_toBottomOf="@+id/volunteerListRow_userName_tv" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/volunteerListRow_userName_tv"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/volunteerListRow_userName_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="268dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:text="Dr. Eliav"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/volunteerListRow_mutual"
+            app:layout_constraintStart_toEndOf="@+id/volunteerListRow_userImg_img"
             app:layout_constraintTop_toTopOf="parent" />
+
 
         <RatingBar
             android:id="@+id/volunteersListRow_ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="245dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
             android:isIndicator="true"
             android:numStars="5"
-            android:progressTint="@color/black"
+            android:progressTint="@color/ratingBarPrimary"
             android:scaleX="0.6"
             android:scaleY="0.6"
             android:transformPivotX="10dp"
             android:transformPivotY="25dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.476"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/volunteerListRow_mutual" />
-
+            app:layout_constraintStart_toEndOf="@+id/volunteerListRow_userImg_img"
+            app:layout_constraintTop_toBottomOf="@+id/volunteerListRow_userName_tv" />
 
         <Button
             android:id="@+id/volunteerListRow_approveBtn"
-            android:layout_width="91dp"
-            android:layout_height="36dp"
-            android:backgroundTint="#AEA8A8"
-            android:text="Approve"
+            android:layout_width="30dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/TrustiesPrimaryColor"
+            android:drawableLeft="@drawable/v_icon"
+            android:padding="2dp"
+            android:paddingLeft="2dp"
             android:textSize="8sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.858"
-            app:layout_constraintStart_toEndOf="@+id/volunteerListRow_mutual"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.491"
+            app:layout_constraintEnd_toStartOf="@+id/volunteerListRow_cancelBtn"
             tools:ignore="DuplicateClickableBoundsCheck" />
 
         <Button
             android:id="@+id/volunteerListRow_cancelBtn"
-            android:layout_width="91dp"
-            android:layout_height="36dp"
-            android:backgroundTint="#AEA8A8"
-            android:text="Cancel"
+            android:layout_width="30dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/TrustiesPrimaryColor"
+            android:drawableLeft="@drawable/cancel_icon"
+            android:padding="2dp"
+            android:paddingLeft="2dp"
             android:textSize="8sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.858"
-            app:layout_constraintStart_toEndOf="@+id/volunteerListRow_mutual"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.491" />
+            app:layout_constraintTop_toBottomOf="@+id/volunteerListRow_mutual" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
