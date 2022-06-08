@@ -159,6 +159,7 @@ public class HomeFragment extends Fragment {
 
         //        TextView userName, title, description, time, commentNumber,
         Button volunteer, sos;
+        Button cancelVolunteer;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -176,9 +177,11 @@ public class HomeFragment extends Fragment {
             sos = itemView.findViewById(R.id.listrow_sos_btn);
 
 
+
             volunteer = itemView.findViewById(R.id.postListRow_volunteer);
             volunteer_txt = itemView.findViewById(R.id.post_listRow_volunteer_Tv);
             volunteer_count = itemView.findViewById(R.id.post_listRow_volunteerCount_Tv);
+            cancelVolunteer = itemView.findViewById(R.id.postListRow_cancel_volunteer);
 
 
             itemView.setOnClickListener(v -> {
@@ -190,7 +193,7 @@ public class HomeFragment extends Fragment {
                  int pos = getAdapterPosition();
                 Post post = homeViewModel.getData().getValue().get(pos);
                 String id = post.getId();
-
+                cancelVolunteer.setVisibility(View.GONE);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("vol_id", Model.instance.getCurrentUserModel().getId());
 
@@ -198,6 +201,22 @@ public class HomeFragment extends Fragment {
                     refresh();
                 });
             });
+            cancelVolunteer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    Post post = homeViewModel.getData().getValue().get(pos);
+                    String id = post.getId();
+
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("vol_id", Model.instance.getCurrentUserModel().getId());
+                    cancelVolunteer.setVisibility(View.GONE);
+                    Model.instance.cancelVolunteer(id, map, () -> {
+                        refresh();
+                    });
+                }
+            });
+
 
         }
 
@@ -206,6 +225,7 @@ public class HomeFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Post post) {
             sos.setVisibility(View.GONE);
+            cancelVolunteer.setVisibility(View.GONE);
             // ##TYPE :SOS
             if (post.getRole().equals("SOS")) {
                 sos.setVisibility(View.VISIBLE);
@@ -223,6 +243,8 @@ public class HomeFragment extends Fragment {
                     for (int i = 0; i < list.size(); i++) {
                         if (list.get(i).getEmail().equals(Model.instance.getCurrentUserModel().getEmail())) {
                             volunteer.setVisibility(View.GONE);
+                            if(!post.getAuthorID().equals(Model.instance.getCurrentUserModel().getId()))
+                                cancelVolunteer.setVisibility(View.VISIBLE);
                             volunteer_txt.setVisibility(View.VISIBLE);
                         }
                     }
