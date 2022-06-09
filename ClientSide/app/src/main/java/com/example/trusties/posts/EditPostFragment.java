@@ -76,7 +76,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
     ImageButton cameraBtn;
     ImageButton galleryBtn;
     String postId;
-    Bitmap decodedByte;
+    Bitmap decodedByte1, decodedByte2;
 
     Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -96,6 +96,8 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
     String address;
     String locationSOS = null;
     int isSOS = 0;
+    String photoBase64First;
+    String photoBase64Second;
 
 
     @Override
@@ -146,20 +148,20 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                 }
 
                 if (post.get("photo").getAsJsonArray().size() > 0) {// CHANGED
-                    String photoBase64First = post.get("photo").getAsJsonArray().get(0).getAsString();
+                    photoBase64First = post.get("photo").getAsJsonArray().get(0).getAsString();
 
                     if (photoBase64First != null) {
                         byte[] decodedString = Base64.decode(photoBase64First, Base64.DEFAULT);
-                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                        image.setImageBitmap(decodedByte);
+                        decodedByte1 = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        image.setImageBitmap(decodedByte1);
                     }
                     if (post.get("photo").getAsJsonArray().size() == 2)
                     {
-                        String photoBase64Second = post.get("photo").getAsJsonArray().get(1).getAsString();
+                        photoBase64Second = post.get("photo").getAsJsonArray().get(1).getAsString();
                         if (photoBase64Second != null) {
                             byte[] decodedString = Base64.decode(photoBase64Second, Base64.DEFAULT);
-                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            image2.setImageBitmap(decodedByte);
+                            decodedByte2 = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            image2.setImageBitmap(decodedByte2);
                         }
                     }
 
@@ -318,39 +320,21 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                     map.put("address", fullAddress);
                 }
             }
-//        if (imageBitmap != null) {
-//            Log.d("TAG", imageBitmap.toString());
-//            Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
-//                @Override
-//                public void onComplete(String url) {
-//                    map.put("photo", url);
-//                }
-//            });
-//
-//        }
             ArrayList<String> photos = new ArrayList<>();
 
             if (imageBitmap != null) {
-                Log.d("TAG", imageBitmap.toString());
                 Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
                     @Override
                     public void onComplete(String url) {
                         map.put("photo", url);
                     }
                 });
-
-            } else{
-                for( int i=0; i< photos.size(); i++)
-                {
-                    photos.remove(i);
-                }
             }
 
             if (mArrayUri != null) {
-
                 flag = 1;
                 for (int i = 0; i < mArrayUri.size(); i++) {
-                    try {
+                     try {
                         Model.instance.encodeBitMapImg(BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(mArrayUri.get(i))), new Model.encodeBitMapImgListener() {
                             @Override
                             public void onComplete(String url) {
@@ -362,23 +346,33 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
             }
-            else if (mArrayUri == null) {
-                for( int i=0; i< photos.size(); i++)
-                {
-                    photos.remove(i);
+            else {
+                Log.d("TAG","insisisisisiisde");
+                if(photoBase64First!=null) {
+                    image.setImageBitmap(decodedByte1);
+                    photos.add(photoBase64First);
                 }
-            }
+                if(photoBase64Second!=null) {
+                    image2.setImageBitmap(decodedByte2);
+                    photos.add(photoBase64Second);
+                }
 
+            }
             Model.instance.editPost(map, postId, new Model.editPostListener() {
                 @Override
                 public void onComplete(JsonObject res) {
-                    Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                    Log.d("TAG", "stopppppppppp" + photos);
+
+                     Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
                         @Override
                         public void onComplete() {
                             Log.d("TAG", "stopppppppppp");
+
                         }
                     });
-                    Navigation.findNavController(view).navigateUp();
+//                    Navigation.findNavController(view).navigateUp();
+                   Navigation.findNavController(view).navigate(EditPostFragmentDirections.actionEditPostFragmentToDetailsPostFragment(postId));
+
                 }
             });
         }
