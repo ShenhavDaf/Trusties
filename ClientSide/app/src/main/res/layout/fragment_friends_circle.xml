@@ -1,87 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainSlidingUp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="50dp"
-    android:gravity="bottom"
+    android:layout_height="wrap_content"
     tools:context=".FriendsCircleFragment">
 
-    <RelativeLayout
-        android:id="@+id/circle_1_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <!-- ########################################################################### -->
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="24dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="72dp"
+            android:src="@drawable/ic_right_arrow_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_second_tv" />
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/gradient_background" />
+            android:id="@+id/imageView4"
+            android:layout_width="24dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="72dp"
+            android:src="@drawable/ic_right_arrow_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_first_tv" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="24dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="76dp"
+            android:src="@drawable/ic_right_arrow_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_third_tv" />
 
         <TextView
-            android:id="@+id/from1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Layout 1" />
+            android:id="@+id/friendsCircle_first_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/ActionBarColor"
+            android:fontFamily="@font/poppins"
+            android:text="@string/first_circle"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/friendsCircle_first_swipeRefresh"
+            android:layout_width="0dp"
+            android:layout_height="165dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_first_tv">
 
-    <RelativeLayout
-        android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.sothree.slidinguppanel.SlidingUpPanelLayout
-            android:id="@+id/secondarySlidingUp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom">
-
-            <RelativeLayout
-                android:id="@+id/circle_2_layout"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/friendsCircle_first_RecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="76dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/gradient_2" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-                <TextView
-                    android:id="@+id/from2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Layout 2" />
+        <!-- ########################################################################### -->
 
-            </RelativeLayout>
+        <TextView
+            android:id="@+id/friendsCircle_second_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@color/ActionBarColor"
+            android:fontFamily="@font/poppins"
+            android:text="@string/second_circle"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_first_swipeRefresh" />
 
-            <RelativeLayout
-                android:id="@+id/circle_3_layout"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/friendsCircle_second_swipeRefresh"
+            android:layout_width="0dp"
+            android:layout_height="165dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_second_tv">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/friendsCircle_second_RecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="76dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/gradient_3" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-                <TextView
-                    android:id="@+id/from3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Layout 3" />
+        <!-- ########################################################################### -->
 
-            </RelativeLayout>
+        <TextView
+            android:id="@+id/friendsCircle_third_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@color/ActionBarColor"
+            android:fontFamily="@font/poppins"
+            android:text="@string/third_circle"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_second_swipeRefresh" />
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/friendsCircle_third_swipeRefresh"
+            android:layout_width="0dp"
+            android:layout_height="165dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_third_tv">
 
-        </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/friendsCircle_third_RecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="76dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <!--        end         -->
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </RelativeLayout>
-
-
-</com.sothree.slidinguppanel.SlidingUpPanelLayout >
+</ScrollView>

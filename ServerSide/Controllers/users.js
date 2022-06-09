@@ -381,10 +381,89 @@ async function ConvertToStringArr(ObjectIdArr) {
   return StringArr;
 }
 
+const friendsCircleAsObjects = async (req, res) => {
+  try {
+    const user = await User.findById(req.query.id);
+    const circle = req.query.circle;
+    const list = new Array();
+
+    if (user != null) {
+      if (circle == 1) {
+        list = user.friends;
+      } //
+      else if (circle == 2) {
+        for (let i = 0; i < user.friends.length; i++) {
+          const friend = await User.findById(user.friends[i]);
+          for (let j = 0; j < friend.friends.length; j++) {
+            if (
+              friend.friends[j] != currID &&
+              !user.friends.includes(friend.friends[j])
+            )
+              list.push(friend.friends[j]);
+          }
+        }
+      } //
+      else if (circle == 3) {
+        const temp = new Array();
+        for (let i = 0; i < user.friends.length; i++) {
+          const friend = await User.findById(user.friends[i]);
+          for (let j = 0; j < friend.friends.length; j++) {
+            if (
+              friend.friends[j] != currID &&
+              !user.friends.includes(friend.friends[j])
+            ) {
+              temp.push(friend.friends[j]);
+            }
+          }
+        }
+
+        for (let i = 0; i < temp.length; i++) {
+          const friend = await User.findById(temp[i]);
+          for (let j = 0; j < friend.friends.length; j++) {
+            if (
+              friend.friends[j] != currID &&
+              !temp.includes(friend.friends[j].String)
+            ) {
+              list.push(friend.friends[j]);
+            }
+          }
+        }
+      }
+
+      const unique = list.filter(
+        (value, index, self) =>
+          index === self.findIndex((t) => String(t) === String(value))
+      );
+
+      const res = new Array();
+
+      for (let u = 0; u < unique.length; u++) {
+        const curr = User.findById(unique[u]);
+        res.push({ name: curr.name, img: curr.photo });
+      }
+
+      res.status(200).send(res);
+    } //
+    else {
+      res.status(400).send({
+        status: "fail",
+        error: err.message,
+      });
+    }
+  } catch (err) {
+    //
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   getFriendsList,
   getSecondCircleOnly,
   getThirdCircleOnly,
+  friendsCircleAsObjects,
   addFriendToMyContacts,
   removeFriendFromMyContacts,
   rateMyHelp,

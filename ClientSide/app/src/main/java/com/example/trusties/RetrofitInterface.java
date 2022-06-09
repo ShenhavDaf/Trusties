@@ -72,6 +72,9 @@ public interface RetrofitInterface {
     @GET("/user/third/{id}")
     Call<JsonArray> getThirdCircle(@Query("id") String userID);
 
+    @GET("/user/friendsCircleAsObjects")
+    Call<JsonArray> getFriendsCircleAsObjects(@Header("authorization") String accessToken, @Query("id") String userID, @Query("circle") Integer circleNumber);
+
     @GET("/user/addFriendToMyContacts/{myId}/{hisId}")
     Call<Void> addFriendToMyContacts(@Query("myId") String myID, @Query("hisId") String hisID);
 
