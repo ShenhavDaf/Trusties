@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.InputStream;
 import java.util.HashMap;
 
 
@@ -56,6 +58,7 @@ public class OthersProfileFragment extends Fragment {
     Bitmap decodedByte;
     RatingBar ratingBar;
     TextView disableView;
+    View gif;
 
 
 
@@ -80,6 +83,8 @@ public class OthersProfileFragment extends Fragment {
         ratingBar=root.findViewById(R.id.otherProfile_ratingBar);
         disableView = root.findViewById(R.id.other_profile_disable_txt);
         RecyclerView postsList = root.findViewById(R.id.profile_postlist_rv);
+        gif = root.findViewById(R.id.gif);
+        gif.setVisibility(View.GONE);
 
 
         currUser = Model.instance.getCurrentUserModel();
@@ -102,6 +107,8 @@ public class OthersProfileFragment extends Fragment {
                 String friends = user.get("friends") + "";
                 if( !friends.contains(currUser.getId())){
                     disableView.setVisibility(View.VISIBLE);
+                    gif.setVisibility(View.VISIBLE);
+
                     postsList.setVisibility(View.GONE);
                 }
             }
@@ -142,6 +149,7 @@ public class OthersProfileFragment extends Fragment {
                         unFriend.setVisibility(View.VISIBLE);
                         add.setVisibility(View.GONE);
                         disableView.setVisibility(View.GONE);
+                        gif.setVisibility(View.GONE);
                         postsList.setVisibility(View.VISIBLE);
                         refresh();
                     }
@@ -158,6 +166,7 @@ public class OthersProfileFragment extends Fragment {
                         unFriend.setVisibility(View.GONE);
                         add.setVisibility(View.VISIBLE);
                         disableView.setVisibility(View.VISIBLE);
+                        gif.setVisibility(View.VISIBLE);
                         postsList.setVisibility(View.GONE);
                         refresh();
                     }
