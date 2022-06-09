@@ -1,8 +1,6 @@
 package com.example.trusties;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -11,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +23,7 @@ import android.widget.TextView;
 
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
-import com.example.trusties.ui.home.SearchViewModel;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import java.util.LinkedList;
@@ -37,12 +34,15 @@ public class FriendsCircleFragment extends Fragment {
 
     RecyclerView usersListRV_circle_1, usersListRV_circle_2, usersListRV_circle_3;
     SwipeRefreshLayout swipeRefreshUsers_circle_1, swipeRefreshUsers_circle_2, swipeRefreshUsers_circle_3;
+
     UserAdapter_1 userAdapter1;
     UserAdapter_2 userAdapter2;
     UserAdapter_3 userAdapter3;
+
     List<User> lst_users_1 = new LinkedList<>();
     List<User> lst_users_2 = new LinkedList<>();
     List<User> lst_users_3 = new LinkedList<>();
+
     String currUserID;
     Integer circle;
 
@@ -60,13 +60,13 @@ public class FriendsCircleFragment extends Fragment {
         usersListRV_circle_1.setHasFixedSize(true);
         usersListRV_circle_1.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        List<User> list1 = updateFirstFunction();
+        List<User> list1 = getFirstListFunction();
 
         userAdapter1 = new UserAdapter_1(list1);
         usersListRV_circle_1.setAdapter(userAdapter1);
 
         swipeRefreshUsers_circle_1 = view.findViewById(R.id.friendsCircle_first_swipeRefresh);
-//        swipeRefreshUsers_circle_1.setOnRefreshListener(() -> updateFirstFunction());
+//        swipeRefreshUsers_circle_1.setOnRefreshListener(() -> getFirstListFunction());
 
         userAdapter1.setOnItemClickListener((v, position) -> {
             Model.instance.findUserByEmail(list1.get(position).getEmail(), user -> {
@@ -83,13 +83,13 @@ public class FriendsCircleFragment extends Fragment {
         usersListRV_circle_2.setHasFixedSize(true);
         usersListRV_circle_2.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        List<User> list2 = updateSecondFunction();
+        List<User> list2 = getSecondListFunction();
 
         userAdapter2 = new UserAdapter_2(list2);
         usersListRV_circle_2.setAdapter(userAdapter2);
 
         swipeRefreshUsers_circle_2 = view.findViewById(R.id.friendsCircle_second_swipeRefresh);
-//        swipeRefreshUsers_circle_2.setOnRefreshListener(() -> updateSecondFunction());
+//        swipeRefreshUsers_circle_2.setOnRefreshListener(() -> getSecondListFunction());
 
         userAdapter2.setOnItemClickListener((v, position) -> {
             Model.instance.findUserByEmail(list2.get(position).getEmail(), user -> {
@@ -106,12 +106,12 @@ public class FriendsCircleFragment extends Fragment {
         usersListRV_circle_3.setHasFixedSize(true);
         usersListRV_circle_3.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        List<User> list3 = updateThirdFunction();
+        List<User> list3 = getThirdListFunction();
         userAdapter3 = new UserAdapter_3(list3);
         usersListRV_circle_3.setAdapter(userAdapter3);
 
         swipeRefreshUsers_circle_3 = view.findViewById(R.id.friendsCircle_third_swipeRefresh);
-//        swipeRefreshUsers_circle_3.setOnRefreshListener(() -> updateThirdFunction());
+//        swipeRefreshUsers_circle_3.setOnRefreshListener(() -> getThirdListFunction());
 
         userAdapter3.setOnItemClickListener((v, position) -> {
             Model.instance.findUserByEmail(list3.get(position).getEmail(), user -> {
@@ -131,100 +131,73 @@ public class FriendsCircleFragment extends Fragment {
 
     }
 
-    private List<User> updateFirstFunction() {
+    private List<User> getFirstListFunction() {
         lst_users_1.clear();
 
-        User newUser = new User("62a05455abf6f43ad5c28ae5", "Shenhav", "shenhav.dafadi@gmail.com", "0520000000");
-        lst_users_1.add(newUser);
-        newUser = new User("62a11a9eabf6f43ad5c29733", "Adi", "adi@gmail.com", "0520000000");
-        lst_users_1.add(newUser);
-        newUser = new User("62a11b07abf6f43ad5c29758", "Hen", "hen@gmail.com", "0520000000");
-        lst_users_1.add(newUser);
+        Model.instance.findUserById(currUserID, user -> {
+            JsonArray friendsList = user.get("friends").getAsJsonArray();
 
-
-//        Model.instance.findUserById(currUserID, user -> {
-//
-//        });
-
-//        Model.instance.getSecondCircle(currUserID, friendsList -> {
-//            for (JsonElement id : friendsList) {
-//                String friendID = id.toString().replace("\"", "");
-//                Model.instance.findUserById(friendID, user -> {
-//                    if (!lst_users_1.contains(user)) {
-//                        user.addProperty("_id", friendID);
-//                        lst_users_1.add(User.create(user));
-//                        userAdapter1.notifyDataSetChanged();
-//                    }
-//                });
-//            }
-//        });
+            for (JsonElement id : friendsList) {
+                String friendID = id.toString().replace("\"", "");
+                Model.instance.findUserById(friendID, friend -> {
+                    if (!lst_users_1.contains(friend)) {
+                        friend.addProperty("_id", friendID);
+                        lst_users_1.add(User.create(friend));
+                        userAdapter1.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
 
 
         refresh();
-
         return lst_users_1;
     }
 
-    private List<User> updateSecondFunction() {
+    private List<User> getSecondListFunction() {
         lst_users_2.clear();
 
-        User newUser = new User("62a0555eabf6f43ad5c28b11", "Ortal", "ortallik@gmail.com", "0520000000");
-        lst_users_2.add(newUser);
-        newUser = new User("62a11b07abf6f43ad5c29758", "Hen", "hen@gmail.com", "0520000000");
-        lst_users_2.add(newUser);
-        newUser = new User("62a218f934161a351b7fceff", "A", "a@gmail.com", "0520000000");
-        lst_users_2.add(newUser);
-
-
-//
-//        Model.instance.getSecondCircle(currUserID, friendsList -> {
-//            for (JsonElement id : friendsList) {
-//                String friendID = id.toString().replace("\"", "");
-//                Model.instance.findUserById(friendID, user -> {
-//                    if (!lst_users_2.contains(user)) {
-//                        user.addProperty("_id", friendID);
-//                        lst_users_2.add(User.create(user));
-//                        userAdapter2.notifyDataSetChanged();
-//                    }
-//                });
-//            }
-//        });
+        Model.instance.getSecondCircle(currUserID, friendsList -> {
+            for (JsonElement id : friendsList) {
+                String friendID = id.toString().replace("\"", "");
+                Model.instance.findUserById(friendID, user -> {
+                    if (!lst_users_2.contains(user)) {
+                        user.addProperty("_id", friendID);
+                        lst_users_2.add(User.create(user));
+                        userAdapter2.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
 
         refresh();
         return lst_users_2;
     }
 
 
-    private List<User> updateThirdFunction() {
+    private List<User> getThirdListFunction() {
 
         lst_users_3.clear();
 
-        User newUser = new User("62a21b6934161a351b7fcf14", "B", "b@gmail.com", "0520000000");
-        lst_users_3.add(newUser);
+        Model.instance.getThirdCircle(currUserID, friendsList -> {
+            for (JsonElement id : friendsList) {
+                String friendID = id.toString().replace("\"", "");
+                Model.instance.findUserById(friendID, user -> {
+                    if (!lst_users_3.contains(user)) {
+                        user.addProperty("_id", friendID);
+                        lst_users_3.add(User.create(user));
+                        userAdapter3.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
 
-//        Model.instance.getThirdCircle(currUserID, friendsList -> {
-//            for (JsonElement id : friendsList) {
-//                String friendID = id.toString().replace("\"", "");
-//                Model.instance.findUserById(friendID, user -> {
-//                    if (!lst_users_3.contains(user)) {
-//                        user.addProperty("_id", friendID);
-//                        lst_users_3.add(User.create(user));
-//                    }
-//                });
-//            }
-//        });
         refresh();
         return lst_users_3;
     }
 
 
-    /*
-     *
-     *
-     *
-     *
-     * */
-
+    /* *************************************** Holder *************************************** */
 
     class UserViewHolder extends RecyclerView.ViewHolder {
         TextView userName;
@@ -263,7 +236,8 @@ public class FriendsCircleFragment extends Fragment {
     }
 
 
-    /* *************************************** Adapter *************************************** */
+
+    /* *************************************** Adapters *************************************** */
 
     interface OnItemClickListener {
         void onItemClick(View v, int position);
@@ -274,7 +248,7 @@ public class FriendsCircleFragment extends Fragment {
         OnItemClickListener listener;
         List<User> list;
 
-        public UserAdapter_1(List<User> list){
+        public UserAdapter_1(List<User> list) {
             this.list = list;
         }
 
@@ -294,7 +268,6 @@ public class FriendsCircleFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-//            User user = searchViewModel.getUsersData().get(position);
             User user = list.get(position);
             holder.bind(user);
         }
@@ -307,8 +280,6 @@ public class FriendsCircleFragment extends Fragment {
             return list.size();
         }
     }
-
-
 
 
     class UserAdapter_2 extends RecyclerView.Adapter<UserViewHolder> {
@@ -316,7 +287,7 @@ public class FriendsCircleFragment extends Fragment {
         OnItemClickListener listener;
         List<User> list;
 
-        public UserAdapter_2(List<User> list){
+        public UserAdapter_2(List<User> list) {
             this.list = list;
         }
 
@@ -336,7 +307,6 @@ public class FriendsCircleFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-//            User user = searchViewModel.getUsersData().get(position);
             User user = list.get(position);
             holder.bind(user);
         }
@@ -351,13 +321,12 @@ public class FriendsCircleFragment extends Fragment {
     }
 
 
-
     class UserAdapter_3 extends RecyclerView.Adapter<UserViewHolder> {
 
         OnItemClickListener listener;
         List<User> list;
 
-        public UserAdapter_3(List<User> list){
+        public UserAdapter_3(List<User> list) {
             this.list = list;
         }
 
@@ -377,7 +346,6 @@ public class FriendsCircleFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-//            User user = searchViewModel.getUsersData().get(position);
             User user = list.get(position);
             holder.bind(user);
         }
