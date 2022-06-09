@@ -13,12 +13,11 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +41,11 @@ public class FriendsCircleFragment extends Fragment {
     RecyclerView usersListRV_circle_1, usersListRV_circle_2, usersListRV_circle_3;
     SwipeRefreshLayout swipeRefreshUsers_circle_1, swipeRefreshUsers_circle_2, swipeRefreshUsers_circle_3;
     UserAdapter userAdapter;
-    List<User> lst_users = new LinkedList<>();
+    List<User> lst_users_1 = new LinkedList<>();
+    List<User> lst_users_2 = new LinkedList<>();
+    List<User> lst_users_3 = new LinkedList<>();
     String currUserID;
     Integer circle;
-    int columnsNumber;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -73,92 +73,151 @@ public class FriendsCircleFragment extends Fragment {
 
         });
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-            columnsNumber = 5;
-        else columnsNumber = 3;
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
         usersListRV_circle_1 = view.findViewById(R.id.friendsCircle_first_RecyclerView);
         usersListRV_circle_1.setHasFixedSize(true);
-        usersListRV_circle_1.setLayoutManager(new GridLayoutManager(getContext(), columnsNumber));
+        usersListRV_circle_1.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false));
         usersListRV_circle_1.setAdapter(userAdapter);
 
         swipeRefreshUsers_circle_1 = view.findViewById(R.id.friendsCircle_first_swipeRefresh);
-        swipeRefreshUsers_circle_1.setOnRefreshListener(() -> updateFunction());
+        swipeRefreshUsers_circle_1.setOnRefreshListener(() -> updateFirstFunction());
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
         usersListRV_circle_2 = view.findViewById(R.id.friendsCircle_second_RecyclerView);
         usersListRV_circle_2.setHasFixedSize(true);
-        usersListRV_circle_2.setLayoutManager(new GridLayoutManager(getContext(), columnsNumber));
+        usersListRV_circle_2.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false));
         usersListRV_circle_2.setAdapter(userAdapter);
 
         swipeRefreshUsers_circle_2 = view.findViewById(R.id.friendsCircle_second_swipeRefresh);
-        swipeRefreshUsers_circle_2.setOnRefreshListener(() -> updateFunction());
+        swipeRefreshUsers_circle_2.setOnRefreshListener(() -> updateSecondFunction());
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
         usersListRV_circle_3 = view.findViewById(R.id.friendsCircle_third_RecyclerView);
         usersListRV_circle_3.setHasFixedSize(true);
-        usersListRV_circle_3.setLayoutManager(new GridLayoutManager(getContext(), columnsNumber));
+        usersListRV_circle_3.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false));
         usersListRV_circle_3.setAdapter(userAdapter);
 
         swipeRefreshUsers_circle_3 = view.findViewById(R.id.friendsCircle_third_swipeRefresh);
-        swipeRefreshUsers_circle_3.setOnRefreshListener(() -> updateFunction());
+        swipeRefreshUsers_circle_3.setOnRefreshListener(() -> updateThirdFunction());
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-        updateFunction();
+        updateFirstFunction();
         return view;
     }
 
     private void refresh() {
-        searchViewModel.usersData = lst_users;
+
+        if (circle == 1) {
+            searchViewModel.usersData = lst_users_1;
+        } else if (circle == 2) {
+            searchViewModel.usersData = lst_users_2;
+        } else if (circle == 3) {
+            searchViewModel.usersData = lst_users_3;
+        }
+
+//        searchViewModel.usersData = lst_users_1;
         userAdapter.notifyDataSetChanged();
         swipeRefreshUsers_circle_1.setRefreshing(false);
         swipeRefreshUsers_circle_2.setRefreshing(false);
         swipeRefreshUsers_circle_3.setRefreshing(false);
     }
 
-    private void updateFunction() {
-        lst_users.clear();
+    private void updateFirstFunction() {
+        lst_users_1.clear();
 
-        // Hardcoded test
-        /* ******************************* */
+        /*----------------------------------*/
         User newUser = new User("62a05455abf6f43ad5c28ae5", "Shenhav", "shenhav.dafadi@gmail.com", "0520000000");
-        lst_users.add(newUser);
-        newUser = new User("62a0555eabf6f43ad5c28b11", "Ortal", "ortallik@gmail.com", "0520000000");
-        lst_users.add(newUser);
+        lst_users_1.add(newUser);
         newUser = new User("62a11a9eabf6f43ad5c29733", "Adi", "adi@gmail.com", "0520000000");
-        lst_users.add(newUser);
+        lst_users_1.add(newUser);
+        newUser = new User("62a0555eabf6f43ad5c28b11", "Ortal", "ortallik@gmail.com", "0520000000");
+        lst_users_1.add(newUser);
         newUser = new User("62a11b07abf6f43ad5c29758", "Hen", "hen@gmail.com", "0520000000");
-        lst_users.add(newUser);
+        lst_users_1.add(newUser);
+        newUser = new User("62a218f934161a351b7fceff", "A", "a@gmail.com", "0520000000");
+        lst_users_1.add(newUser);
+        newUser = new User("62a21b6934161a351b7fcf14", "B", "b@gmail.com", "0520000000");
+        lst_users_1.add(newUser);
 
         userAdapter.notifyDataSetChanged();
-        /* ******************************* */
+        /*----------------------------------*/
 
 
-        if (circle == 1) {
 
-        } else if (circle == 2) {
+//        Model.instance.findUserById(currUserID, user -> {
+//
+//        });
 
-            Model.instance.getFriendsCircleAsObjects(currUserID, 2, friendsList -> {
-                for (JsonElement user : friendsList) {
-                    Log.d("TAG", "------- " + user);
-//                    lst_users.add(user);
-//                    userAdapter.notifyDataSetChanged();
-                }
-//                searchViewModel.usersData = lst_users;
-            });
+        Model.instance.getSecondCircle(currUserID, friendsList -> {
+            for (JsonElement id : friendsList) {
+                String friendID = id.toString().replace("\"", "");
+                Model.instance.findUserById(friendID, user -> {
+                    if (!lst_users_1.contains(user)) {
+                        user.addProperty("_id", friendID);
+                        lst_users_1.add(User.create(user));
+                        userAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+            searchViewModel.usersData = lst_users_1;
+        });
 
 
-        } else if (circle == 3) {
-
-        }
-
-        searchViewModel.usersData = lst_users;
         refresh();
     }
+
+    private void updateSecondFunction() {
+        lst_users_2.clear();
+
+//        Model.instance.getSecondCircle(currUserID, friendsList -> {
+//            for (JsonElement id : friendsList) {
+//                String friendID = id.toString().replace("\"", "");
+//                Model.instance.findUserById(friendID, user -> {
+//                    if (!lst_users_2.contains(user)) {
+//                        user.addProperty("_id", friendID);
+//                        lst_users_2.add(User.create(user));
+//                        userAdapter.notifyDataSetChanged();
+//                    }
+//                });
+//            }
+//            searchViewModel.usersData = lst_users_2;
+//        });
+
+        refresh();
+    }
+
+
+    private void updateThirdFunction() {
+
+        lst_users_3.clear();
+
+//        Model.instance.getThirdCircle(currUserID, friendsList -> {
+//            for (JsonElement id : friendsList) {
+//                String friendID = id.toString().replace("\"", "");
+//                Model.instance.findUserById(friendID, user -> {
+//                    if (!lst_users_3.contains(user)) {
+//                        user.addProperty("_id", friendID);
+//                        lst_users_3.add(User.create(user));
+//                        userAdapter.notifyDataSetChanged();
+//                    }
+//                });
+//            }
+//            searchViewModel.usersData = lst_users_3;
+//        });
+        refresh();
+    }
+
+
+    /*
+     *
+     *
+     *
+     *
+     * */
 
 
     class UserViewHolder extends RecyclerView.ViewHolder {
