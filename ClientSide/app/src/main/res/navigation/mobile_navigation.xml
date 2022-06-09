@@ -80,6 +80,10 @@
         <argument
             android:name="postId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_editPostFragment_to_detailsPostFragment"
+            app:destination="@id/detailsPostFragment"
+            app:popUpTo="@id/navigation_home" />
     </fragment>
     <action
         android:id="@+id/action_global_navigation_home"
