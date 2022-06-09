@@ -57,7 +57,7 @@ import java.util.HashMap;
 
 public class DetailsPostFragment extends Fragment implements OnMapReadyCallback {
 
-    TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt, addressEt;
+    TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt, addressEt, locationTv;
     EditText comment;
     Button editBtn, deleteBtn, closeBtn;
     Button requestsBtn;
@@ -70,6 +70,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     String postId, senderId;
     User currUser;
     Bitmap decodedByte;
+    View divider, divider2;
 
     private DetailsPostViewModel postViewModel;
     private FragmentDetailsPostBinding binding;
@@ -121,6 +122,9 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         requestsBtn = view.findViewById(R.id.postdetails_view_requests_btn);
         closeBtn = view.findViewById(R.id.postdetails_close_btn);
         mapView = view.findViewById(R.id.post_details_map);
+        locationTv = view.findViewById(R.id.postdetails_location_tv);
+        divider = view.findViewById(R.id.divider_two);
+        divider2 = view.findViewById(R.id.divider_four);
 
         carouselView = view.findViewById(R.id.carouselView);
 
@@ -149,14 +153,17 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                     String approved = post.get("approved_volunteer").toString().replace("\"", "");
                     if (!(currUserId.equals(senderId) || currUserId.equals(approved))) {
                         mapView.setVisibility(View.GONE);
+
                         String area = post.get("address").getAsString().split(",")[1] + ", " + post.get("address").getAsString().split(",")[2];
                         address = area;
                     }
 
 
                 } else { // in post we don't have location
+                    locationTv.setVisibility(View.GONE);
                     mapView.setVisibility(View.GONE);
                     addressEt.setVisibility(View.GONE);
+                    divider2.setVisibility(View.GONE);
                 }
                 if (status.equals("CLOSE"))
                     closeBtn.setVisibility(View.GONE);
@@ -215,6 +222,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                             editBtn.setVisibility(View.GONE);
                             closeBtn.setVisibility(View.GONE);
                             requestsBtn.setVisibility(View.GONE);
+                            divider.setVisibility(View.GONE);
                         }
 
                     }
