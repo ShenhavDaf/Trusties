@@ -210,7 +210,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                             editBtn.setVisibility(View.VISIBLE);
                             if (role.compareTo("SOS") == 0) {
 //                                closeBtn.setVisibility(View.VISIBLE);
-                                requestsBtn.setVisibility(View.VISIBLE);
+//                                requestsBtn.setVisibility(View.VISIBLE);
 
 
                             }
