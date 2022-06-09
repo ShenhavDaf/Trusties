@@ -34,10 +34,7 @@ public class FriendsCircleFragment extends Fragment {
 
     RecyclerView usersListRV_circle_1, usersListRV_circle_2, usersListRV_circle_3;
     SwipeRefreshLayout swipeRefreshUsers_circle_1, swipeRefreshUsers_circle_2, swipeRefreshUsers_circle_3;
-
-    UserAdapter_1 userAdapter1;
-    UserAdapter_2 userAdapter2;
-    UserAdapter_3 userAdapter3;
+    UserAdapter userAdapter1, userAdapter2, userAdapter3;
 
     List<User> lst_users_1 = new LinkedList<>();
     List<User> lst_users_2 = new LinkedList<>();
@@ -56,13 +53,12 @@ public class FriendsCircleFragment extends Fragment {
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
+        List<User> list1 = getFirstListFunction();
+
         usersListRV_circle_1 = view.findViewById(R.id.friendsCircle_first_RecyclerView);
         usersListRV_circle_1.setHasFixedSize(true);
         usersListRV_circle_1.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        List<User> list1 = getFirstListFunction();
-
-        userAdapter1 = new UserAdapter_1(list1);
+        userAdapter1 = new UserAdapter(list1);
         usersListRV_circle_1.setAdapter(userAdapter1);
 
         swipeRefreshUsers_circle_1 = view.findViewById(R.id.friendsCircle_first_swipeRefresh);
@@ -79,13 +75,12 @@ public class FriendsCircleFragment extends Fragment {
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
+        List<User> list2 = getSecondListFunction();
+
         usersListRV_circle_2 = view.findViewById(R.id.friendsCircle_second_RecyclerView);
         usersListRV_circle_2.setHasFixedSize(true);
         usersListRV_circle_2.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        List<User> list2 = getSecondListFunction();
-
-        userAdapter2 = new UserAdapter_2(list2);
+        userAdapter2 = new UserAdapter(list2);
         usersListRV_circle_2.setAdapter(userAdapter2);
 
         swipeRefreshUsers_circle_2 = view.findViewById(R.id.friendsCircle_second_swipeRefresh);
@@ -102,12 +97,12 @@ public class FriendsCircleFragment extends Fragment {
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
+        List<User> list3 = getThirdListFunction();
+
         usersListRV_circle_3 = view.findViewById(R.id.friendsCircle_third_RecyclerView);
         usersListRV_circle_3.setHasFixedSize(true);
         usersListRV_circle_3.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        List<User> list3 = getThirdListFunction();
-        userAdapter3 = new UserAdapter_3(list3);
+        userAdapter3 = new UserAdapter(list3);
         usersListRV_circle_3.setAdapter(userAdapter3);
 
         swipeRefreshUsers_circle_3 = view.findViewById(R.id.friendsCircle_third_swipeRefresh);
@@ -197,6 +192,13 @@ public class FriendsCircleFragment extends Fragment {
     }
 
 
+    /* *************************************** Interface *************************************** */
+
+    interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+
+
     /* *************************************** Holder *************************************** */
 
     class UserViewHolder extends RecyclerView.ViewHolder {
@@ -239,94 +241,12 @@ public class FriendsCircleFragment extends Fragment {
 
     /* *************************************** Adapters *************************************** */
 
-    interface OnItemClickListener {
-        void onItemClick(View v, int position);
-    }
-
-    class UserAdapter_1 extends RecyclerView.Adapter<UserViewHolder> {
+    class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
         OnItemClickListener listener;
         List<User> list;
 
-        public UserAdapter_1(List<User> list) {
-            this.list = list;
-        }
-
-        public void setOnItemClickListener(OnItemClickListener listener) {
-            this.listener = listener;
-        }
-
-        @NonNull
-        @Override
-        public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-            View view = getLayoutInflater().inflate(R.layout.friend_card, parent, false);
-            UserViewHolder holder = new UserViewHolder(view, listener);
-            return holder;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-            User user = list.get(position);
-            holder.bind(user);
-        }
-
-        @Override
-        public int getItemCount() {
-            if (list == null) {
-                return 0;
-            }
-            return list.size();
-        }
-    }
-
-
-    class UserAdapter_2 extends RecyclerView.Adapter<UserViewHolder> {
-
-        OnItemClickListener listener;
-        List<User> list;
-
-        public UserAdapter_2(List<User> list) {
-            this.list = list;
-        }
-
-        public void setOnItemClickListener(OnItemClickListener listener) {
-            this.listener = listener;
-        }
-
-        @NonNull
-        @Override
-        public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-            View view = getLayoutInflater().inflate(R.layout.friend_card, parent, false);
-            UserViewHolder holder = new UserViewHolder(view, listener);
-            return holder;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-            User user = list.get(position);
-            holder.bind(user);
-        }
-
-        @Override
-        public int getItemCount() {
-            if (list == null) {
-                return 0;
-            }
-            return list.size();
-        }
-    }
-
-
-    class UserAdapter_3 extends RecyclerView.Adapter<UserViewHolder> {
-
-        OnItemClickListener listener;
-        List<User> list;
-
-        public UserAdapter_3(List<User> list) {
+        public UserAdapter(List<User> list) {
             this.list = list;
         }
 
