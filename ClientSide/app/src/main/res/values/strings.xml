@@ -66,6 +66,9 @@
     <string name="complete_the_following_details">Complete the following details</string>
     <string name="search">Search</string>
     <string name="hello">Hello</string>
+    <string name="first_circle">First Circle:</string>
+    <string name="second_circle">Second Circle:</string>
+    <string name="third_circle">Third Circle:</string>
 
 
 </resources>
