@@ -136,6 +136,9 @@ public class Model {
         modelServer.getFriendsList(userID, circle, listener);
     }
 
+    public void getFriendsCircleAsObjects(String userID, Integer circle, friendsListListener listener) {
+        modelServer.getFriendsCircleAsObjects(userID, circle, listener);
+    }
     /* ---------------------------------------------------------------------------- */
 
     public interface addPostListener {

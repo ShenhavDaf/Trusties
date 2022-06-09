@@ -170,5 +170,13 @@
         android:id="@+id/friendsCircleFragment"
         android:name="com.example.trusties.FriendsCircleFragment"
         android:label="fragment_friends_circle"
-        tools:layout="@layout/fragment_friends_circle" />
+        tools:layout="@layout/fragment_friends_circle" >
+        <action
+            android:id="@+id/action_friendsCircleFragment_to_othersProfileFragment"
+            app:destination="@id/othersProfileFragment" />
+        <argument
+            android:name="Circle"
+            app:argType="integer"
+            android:defaultValue="3" />
+    </fragment>
 </navigation>
