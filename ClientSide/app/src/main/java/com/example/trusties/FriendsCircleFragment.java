@@ -60,18 +60,10 @@ public class FriendsCircleFragment extends Fragment {
         usersListRV_circle_1.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         userAdapter1 = new UserAdapter(list1);
         usersListRV_circle_1.setAdapter(userAdapter1);
+        adapterListener(userAdapter1, list1);
 
         swipeRefreshUsers_circle_1 = view.findViewById(R.id.friendsCircle_first_swipeRefresh);
 //        swipeRefreshUsers_circle_1.setOnRefreshListener(() -> getFirstListFunction());
-
-        userAdapter1.setOnItemClickListener((v, position) -> {
-            Model.instance.findUserByEmail(list1.get(position).getEmail(), user -> {
-                String userId = user.get("_id").toString().replace("\"", "");
-                Navigation.findNavController(v).navigate(
-                        FriendsCircleFragmentDirections.actionFriendsCircleFragmentToOthersProfileFragment(userId));
-            });
-
-        });
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
@@ -82,18 +74,10 @@ public class FriendsCircleFragment extends Fragment {
         usersListRV_circle_2.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         userAdapter2 = new UserAdapter(list2);
         usersListRV_circle_2.setAdapter(userAdapter2);
+        adapterListener(userAdapter2, list2);
 
         swipeRefreshUsers_circle_2 = view.findViewById(R.id.friendsCircle_second_swipeRefresh);
 //        swipeRefreshUsers_circle_2.setOnRefreshListener(() -> getSecondListFunction());
-
-        userAdapter2.setOnItemClickListener((v, position) -> {
-            Model.instance.findUserByEmail(list2.get(position).getEmail(), user -> {
-                String userId = user.get("_id").toString().replace("\"", "");
-                Navigation.findNavController(v).navigate(
-                        FriendsCircleFragmentDirections.actionFriendsCircleFragmentToOthersProfileFragment(userId));
-            });
-
-        });
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
@@ -104,27 +88,35 @@ public class FriendsCircleFragment extends Fragment {
         usersListRV_circle_3.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         userAdapter3 = new UserAdapter(list3);
         usersListRV_circle_3.setAdapter(userAdapter3);
+        adapterListener(userAdapter3, list3);
 
         swipeRefreshUsers_circle_3 = view.findViewById(R.id.friendsCircle_third_swipeRefresh);
 //        swipeRefreshUsers_circle_3.setOnRefreshListener(() -> getThirdListFunction());
 
-        userAdapter3.setOnItemClickListener((v, position) -> {
-            Model.instance.findUserByEmail(list3.get(position).getEmail(), user -> {
+        /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+        return view;
+    }
+
+    /* ************************************************************************************** */
+
+    private void refresh() {
+    }
+
+    private void adapterListener(UserAdapter adapter, List<User> list) {
+
+        adapter.setOnItemClickListener((v, position) -> {
+            Model.instance.findUserByEmail(list.get(position).getEmail(), user -> {
                 String userId = user.get("_id").toString().replace("\"", "");
                 Navigation.findNavController(v).navigate(
                         FriendsCircleFragmentDirections.actionFriendsCircleFragmentToOthersProfileFragment(userId));
             });
 
         });
-        /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
-        return view;
-    }
-
-
-    private void refresh() {
 
     }
+
+    /* ****************************** Friends lists functions ****************************** */
 
     private List<User> getFirstListFunction() {
         lst_users_1.clear();
@@ -144,10 +136,10 @@ public class FriendsCircleFragment extends Fragment {
             }
         });
 
-
         refresh();
         return lst_users_1;
     }
+
 
     private List<User> getSecondListFunction() {
         lst_users_2.clear();
@@ -192,7 +184,7 @@ public class FriendsCircleFragment extends Fragment {
     }
 
 
-    /* *************************************** Interface *************************************** */
+    /* ************************************* Interface ************************************* */
 
     interface OnItemClickListener {
         void onItemClick(View v, int position);
