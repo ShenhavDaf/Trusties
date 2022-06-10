@@ -167,7 +167,7 @@
                 android:paddingTop="1dp"
                 android:textSize="9sp"
                 android:textStyle="bold"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:backgroundTint="@color/white"
                 app:cornerRadius="110dp"
                 app:iconGravity="textStart"
