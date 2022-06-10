@@ -35,6 +35,7 @@ public class FriendsCircleFragment extends Fragment {
     RecyclerView usersListRV_circle_1, usersListRV_circle_2, usersListRV_circle_3;
     SwipeRefreshLayout swipeRefreshUsers_circle_1, swipeRefreshUsers_circle_2, swipeRefreshUsers_circle_3;
     UserAdapter userAdapter1, userAdapter2, userAdapter3;
+    TextView firstTv, secondTv, thirdTv;
 
     List<User> lst_users_1 = new LinkedList<>();
     List<User> lst_users_2 = new LinkedList<>();
@@ -95,12 +96,29 @@ public class FriendsCircleFragment extends Fragment {
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
+        firstTv = view.findViewById(R.id.friendsCircle_first_tv);
+        secondTv = view.findViewById(R.id.friendsCircle_second_tv);
+        thirdTv = view.findViewById(R.id.friendsCircle_third_tv);
+        DisplayList();
+
         return view;
     }
 
     /* ************************************************************************************** */
 
     private void refresh() {
+    }
+
+    private void DisplayList() {
+        if (circle == 1) {
+            secondTv.setVisibility(View.GONE);
+            thirdTv.setVisibility(View.GONE);
+            usersListRV_circle_2.setVisibility(View.GONE);
+            usersListRV_circle_3.setVisibility(View.GONE);
+        } else if (circle == 2) {
+            thirdTv.setVisibility(View.GONE);
+            usersListRV_circle_3.setVisibility(View.GONE);
+        }
     }
 
     private void adapterListener(UserAdapter adapter, List<User> list) {
