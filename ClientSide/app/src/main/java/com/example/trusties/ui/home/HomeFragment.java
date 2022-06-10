@@ -10,19 +10,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageButton;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -35,18 +29,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.trusties.R;
-import com.example.trusties.model.Comment;
 import com.example.trusties.model.Post;
 import com.example.trusties.databinding.FragmentHomeBinding;
 import com.example.trusties.model.Model;
+import com.example.trusties.model.User;
 import com.google.android.material.card.MaterialCardView;
-import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -55,13 +42,12 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
-    //    String usersEmail;
-//    public static User connectedUser;
+
     SearchView searchView;
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
     Bitmap decodedByte;
-
+    User currUser;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -74,35 +60,21 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        /***********************************/
+        currUser = Model.instance.getCurrentUserModel();
+
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-
         }
-//        usersEmail = MainActivity.usersEmail;
+
         TextView userName = root.findViewById(R.id.home_userName_tv);
-        if (Model.instance.getCurrentUserModel() != null)
-            userName.setText(Model.instance.getCurrentUserModel().getFullName());
+        if (currUser != null)
+            userName.setText(currUser.getFullName());
         else
             userName.setText("Guest");
 
-
-//        Model.instance.findUserByEmail(usersEmail, new Model.findUserByEmailListener() {
-//            @Override
-//            public void onComplete(JsonObject user) {
-//                connectedUser = new User(user.get("name").toString(), user.get("email").toString(), user.get("phone").toString());
-//                userName.setText(connectedUser.getFullName().replace("\"", ""));
-//            }
-//        });
-
-
-        /************************************/
-
         swipeRefresh = root.findViewById(R.id.home_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshPostList());
-//        swipeRefresh.setOnRefreshListener(() -> refresh());
-
 
         RecyclerView list = root.findViewById(R.id.home_postlist_rv);
         list.setHasFixedSize(true);
@@ -143,10 +115,6 @@ public class HomeFragment extends Fragment {
 
 
     private void refresh() {
-//        Model.instance.getAllPosts(postsList -> {
-//            homeViewModel.data = postsList;
-//
-//        });
         adapter.notifyDataSetChanged();
         swipeRefresh.setRefreshing(false);
     }
@@ -156,10 +124,7 @@ public class HomeFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, title, description, time, commentNumber, category, status, volunteer_txt, volunteer_count;
         ImageView photo, userImage, plusOne;
-
-        //        TextView userName, title, description, time, commentNumber,
-        Button volunteer, sos;
-        Button cancelVolunteer;
+        Button volunteer, sos, cancelVolunteer, friendsBtn;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -174,13 +139,12 @@ public class HomeFragment extends Fragment {
             status = itemView.findViewById(R.id.listrow_post_status_tv);
             photo = itemView.findViewById(R.id.listrow_post_img);
             plusOne = itemView.findViewById(R.id.listrow_plus_one_image);
-            sos = itemView.findViewById(R.id.listrow_sos_btn);
-
-
-
-            volunteer = itemView.findViewById(R.id.postListRow_volunteer);
             volunteer_txt = itemView.findViewById(R.id.post_listRow_volunteer_Tv);
             volunteer_count = itemView.findViewById(R.id.post_listRow_volunteerCount_Tv);
+
+            sos = itemView.findViewById(R.id.listrow_sos_btn);
+            friendsBtn = itemView.findViewById(R.id.listrow_friends_btn);
+            volunteer = itemView.findViewById(R.id.postListRow_volunteer);
             cancelVolunteer = itemView.findViewById(R.id.postListRow_cancel_volunteer);
 
 
@@ -188,34 +152,34 @@ public class HomeFragment extends Fragment {
                 int pos = getAdapterPosition();
                 listener.onItemClick(v, pos);
             });
+
             volunteer.setOnClickListener(v -> {
                 volunteer.setText("Volunteered");
-                 int pos = getAdapterPosition();
+                cancelVolunteer.setVisibility(View.GONE);
+
+                int pos = getAdapterPosition();
                 Post post = homeViewModel.getData().getValue().get(pos);
                 String id = post.getId();
-                cancelVolunteer.setVisibility(View.GONE);
+
                 HashMap<String, String> map = new HashMap<>();
-                map.put("vol_id", Model.instance.getCurrentUserModel().getId());
+                map.put("vol_id", currUser.getId());
 
-                Model.instance.volunteer(id, map, () -> {
-                    refresh();
-                });
+                Model.instance.volunteer(id, map, () -> refresh());
             });
-            cancelVolunteer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = getAdapterPosition();
-                    Post post = homeViewModel.getData().getValue().get(pos);
-                    String id = post.getId();
 
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("vol_id", Model.instance.getCurrentUserModel().getId());
-                    cancelVolunteer.setVisibility(View.GONE);
-                    volunteer_txt.setVisibility(View.GONE);
-                    Model.instance.cancelVolunteer(id, map, () -> {
-                        refresh();
-                    });
-                }
+
+            cancelVolunteer.setOnClickListener(v -> {
+                cancelVolunteer.setVisibility(View.GONE);
+                volunteer_txt.setVisibility(View.GONE);
+
+                int pos = getAdapterPosition();
+                Post post = homeViewModel.getData().getValue().get(pos);
+                String id = post.getId();
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("vol_id", currUser.getId());
+
+                Model.instance.cancelVolunteer(id, map, () -> refresh());
             });
 
 
@@ -227,13 +191,22 @@ public class HomeFragment extends Fragment {
         public void bind(Post post) {
             sos.setVisibility(View.GONE);
             cancelVolunteer.setVisibility(View.GONE);
+
+            if (currUser.getId().equals(post.getAuthorID())) {
+                friendsBtn.setVisibility(View.VISIBLE);
+                friendsBtn.setOnClickListener(v ->
+                        Navigation.findNavController(v).navigate
+                                (HomeFragmentDirections.actionGlobalFriendsCircleFragment().setCircle(post.getCircle()))
+                );
+            }
+
+
             // ##TYPE :SOS
             if (post.getRole().equals("SOS")) {
                 sos.setVisibility(View.VISIBLE);
-                MaterialCardView card = (MaterialCardView) itemView;
-                int volunteersSize=0;
-                if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
-                    if (post.getStatus().toString().replace("\"","").equals("OPEN")) {
+
+                if (!currUser.getId().equals(post.getAuthorID())) {
+                    if (post.getStatus().replace("\"", "").equals("OPEN")) {
                         //if the status is close & the current user is NOT the post sender
                         volunteer.setVisibility(View.VISIBLE);
                     }
@@ -242,9 +215,9 @@ public class HomeFragment extends Fragment {
                 Model.instance.getSosVolunteers(post.getId(), list ->
                 {
                     for (int i = 0; i < list.size(); i++) {
-                        if (list.get(i).getEmail().equals(Model.instance.getCurrentUserModel().getEmail())) {
+                        if (list.get(i).getEmail().equals(currUser.getEmail())) {
                             volunteer.setVisibility(View.GONE);
-                            if(!post.getAuthorID().equals(Model.instance.getCurrentUserModel().getId()))
+                            if (!post.getAuthorID().equals(currUser.getId()))
                                 cancelVolunteer.setVisibility(View.VISIBLE);
                             volunteer_txt.setVisibility(View.VISIBLE);
                         }
@@ -255,7 +228,6 @@ public class HomeFragment extends Fragment {
 
             }
             // ##TYPE :SOS+QUES
-
 
             Model.instance.findUserById(post.getAuthorID(), user -> {
                 userName.setText(user.get("name").getAsString());
@@ -281,8 +253,6 @@ public class HomeFragment extends Fragment {
             });
 
 
-            /* TODO: Update the "Post" model and use getters & setters instead of using getPostById
-                Unnecessary server calls */
             Model.instance.getPostById(post.getId(), new Model.getPostByIdListener() {
                 @Override
                 public void onComplete(JsonObject post) {
@@ -290,22 +260,22 @@ public class HomeFragment extends Fragment {
                     status.setText(post.get("status").getAsString());
                     if (status.getText().equals("OPEN")) {
                         status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
-                    } else if(status.getText().equals("WAITING")) {
+                    } else if (status.getText().equals("WAITING")) {
                         status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
-                    } else if(status.getText().equals("CLOSE")) {
+                    } else if (status.getText().equals("CLOSE")) {
                         status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
                     }
 
                     String currCategory = post.get("category").getAsString();
                     Drawable categoryImg = null;
 
-                    if(currCategory.equals("Tools")) {
+                    if (currCategory.equals("Tools")) {
                         categoryImg = getContext().getResources().getDrawable(R.drawable.tools);
-                    } else if(currCategory.equals("Delivery")) {
+                    } else if (currCategory.equals("Delivery")) {
                         categoryImg = getContext().getResources().getDrawable(R.drawable.delivery);
-                    } else if(currCategory.equals("House")) {
+                    } else if (currCategory.equals("House")) {
                         categoryImg = getContext().getResources().getDrawable(R.drawable.house);
-                    } else if(currCategory.equals("Car")) {
+                    } else if (currCategory.equals("Car")) {
                         categoryImg = getContext().getResources().getDrawable(R.drawable.car);
                     }
 
@@ -326,21 +296,6 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-            // implement the ViewFactory interface and implement
-            // unimplemented method that returns an imageView
-
-
-//            comment.setOnClickListener(v -> {
-//                HashMap<String,String> map = new HashMap<>();
-//                map.put("email", "shenhav.dafadi@gmail.com");
-//                map.put("postID", post.getId());
-//                map.put("time", "123");
-//                map.put("message", "new comment");
-//
-//                Model.instance.addComment(map, () -> {
-//                    System.out.println("----------------------- blablka");
-//                });
-//            });
         }
     }
 
