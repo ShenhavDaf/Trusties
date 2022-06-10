@@ -59,6 +59,7 @@ public class OthersProfileFragment extends Fragment {
     RatingBar ratingBar;
     TextView disableView;
     View gif;
+    View line;
 
 
 
@@ -82,6 +83,7 @@ public class OthersProfileFragment extends Fragment {
         unFriend = root.findViewById(R.id.othersProfile_unfriend_btn);
         ratingBar=root.findViewById(R.id.otherProfile_ratingBar);
         disableView = root.findViewById(R.id.other_profile_disable_txt);
+        line = root.findViewById(R.id.Othersprofile_line);
         RecyclerView postsList = root.findViewById(R.id.profile_postlist_rv);
         gif = root.findViewById(R.id.gif);
         gif.setVisibility(View.GONE);
@@ -151,6 +153,7 @@ public class OthersProfileFragment extends Fragment {
                         disableView.setVisibility(View.GONE);
                         gif.setVisibility(View.GONE);
                         postsList.setVisibility(View.VISIBLE);
+                        line.setVisibility(View.VISIBLE);
                         refresh();
                     }
                 });
@@ -167,6 +170,7 @@ public class OthersProfileFragment extends Fragment {
                         add.setVisibility(View.VISIBLE);
                         disableView.setVisibility(View.VISIBLE);
                         gif.setVisibility(View.VISIBLE);
+                        line.setVisibility(View.GONE);
                         postsList.setVisibility(View.GONE);
                         refresh();
                     }
