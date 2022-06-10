@@ -30,7 +30,7 @@
             android:id="@+id/inputpopup_email_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="350dp"
-            android:layout_height="55dp"
+            android:layout_height="95dp"
             android:layout_marginTop="20dp"
             android:textAlignment="center"
             app:boxBackgroundMode="outline"
