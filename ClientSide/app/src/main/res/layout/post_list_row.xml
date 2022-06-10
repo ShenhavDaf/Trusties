@@ -39,7 +39,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                app:srcCompat="@drawable/profile_pic" />
+                app:srcCompat="@drawable/avatar" />
 
             <TextView
                 android:id="@+id/listrow_date_tv"
