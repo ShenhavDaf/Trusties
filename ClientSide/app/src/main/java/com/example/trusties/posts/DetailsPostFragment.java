@@ -4,8 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,16 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.trusties.CommonFunctions;
-import com.example.trusties.MyApplication;
 import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentDetailsPostBinding;
-import com.example.trusties.login.LoginActivity;
 import com.example.trusties.model.Comment;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
@@ -62,7 +56,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     Button editBtn, deleteBtn, closeBtn;
     Button requestsBtn;
     ProgressBar progressBar;
-    ImageView postImg, imgUser, sendCommentBtn;
+    ImageView postImg, imgUser, sendCommentBtn, postAuthorImg;
+
 
     String currUserId;
     JsonObject currPost;
@@ -125,6 +120,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         locationTv = view.findViewById(R.id.postdetails_location_tv);
         divider = view.findViewById(R.id.divider_two);
         divider2 = view.findViewById(R.id.divider_four);
+        postAuthorImg = view.findViewById(R.id.details_post_author_img);
 
         carouselView = view.findViewById(R.id.carouselView);
 
@@ -144,6 +140,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 senderId = post.get("sender").toString().replace("\"", "");
                 String status = post.get("status").toString().replace("\"", "");
                 String role = post.get("role").toString().replace("\"", "");
+
+
                 if (role.equals("SOS")) {
                     isSOS = 1;
                     address = post.get("address").toString().replace("\"", "");
@@ -204,6 +202,13 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 Model.instance.findUserById(post.get("sender").toString().replace("\"", ""), new Model.findUserByIdListener() {
                     @Override
                     public void onComplete(JsonObject user) {
+
+                        if (user.get("photo") != null) {
+                            String photoBase64 = user.get("photo").getAsString();
+                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            postAuthorImg.setImageBitmap(decodedByte);
+                        }
 
                         if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
                             deleteBtn.setVisibility(View.VISIBLE);
@@ -530,6 +535,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 Model.instance.upComment(id, map, () -> {
                     positive.setVisibility(View.GONE);
                     negative.setVisibility(View.VISIBLE);
+
                     refresh();
                 });
             });

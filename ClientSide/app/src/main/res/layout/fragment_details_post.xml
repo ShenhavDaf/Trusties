@@ -23,7 +23,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/details_post_author_img"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -356,13 +356,15 @@
                 tools:ignore="SpeakableTextPresentCheck" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-            android:id="@+id/imageView"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/details_post_author_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/avatar"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
