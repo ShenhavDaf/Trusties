@@ -30,7 +30,7 @@
             android:id="@+id/inputpopup_email_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
             android:layout_marginTop="20dp"
             android:textAlignment="center"
             app:boxBackgroundMode="outline"
@@ -50,14 +50,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputpopup_email_et"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:hint="Email address"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:textColorHighlight="@color/TrustiesPrimaryColor"
                 android:textColorLink="@color/TrustiesPrimaryColor"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 tools:layout_editor_absoluteX="53dp"
                 tools:layout_editor_absoluteY="214dp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -65,7 +65,7 @@
         <Button
             android:id="@+id/inputpopup_send_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="100dp"
             android:backgroundTint="@color/TrustiesPrimaryColor"
@@ -81,10 +81,10 @@
         <Button
             android:id="@+id/inputpopup_cancel_btn"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginStart="100dp"
             android:layout_marginEnd="10dp"
-            android:backgroundTint="#46FF4C4C"
+            android:backgroundTint="#DDEF5B5B"
             android:fontFamily="@font/poppins"
             android:text="Cancel"
             android:textStyle="bold"
