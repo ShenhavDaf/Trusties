@@ -47,7 +47,7 @@ public class SearchFragment extends Fragment {
 
     TextView choiceTV, choiceFriend, choicePost, postTopTV, categoriesBtn, statusBtn, authorBtn, descriptionBtn;
     Button searchBtn;
-    ConstraintLayout categoriesLayout, statusLayout;
+    ConstraintLayout categoriesLayout, statusLayout, categoriesLayout2, postStatusLayout;
     EditText authorET, descriptionET, newFriendET;
     CheckBox carCB, deliveryCB, toolsCB, houseCB, openCB, waitingCB, closeCB;
 
@@ -84,10 +84,12 @@ public class SearchFragment extends Fragment {
         postTopTV = view.findViewById(R.id.search_textViewPostsTOP);
         categoriesBtn = view.findViewById(R.id.search_categories_tv);
         categoriesLayout = view.findViewById(R.id.search_categories_layout);
+        categoriesLayout2 = view.findViewById(R.id.search_categories_layout2);
         carCB = view.findViewById(R.id.search_car_cb);
         deliveryCB = view.findViewById(R.id.search_delivery_cb);
         toolsCB = view.findViewById(R.id.search_tools_cb);
         houseCB = view.findViewById(R.id.search_house_cb);
+        postStatusLayout = view.findViewById(R.id.search_post_status_layout);
 
 
         statusBtn = view.findViewById(R.id.search_status_tv);
@@ -161,6 +163,8 @@ public class SearchFragment extends Fragment {
         choicePost.setOnClickListener(v -> {
             flag = "post";
             switchVisibility(categoriesBtn);
+            switchVisibility(categoriesLayout2);
+            switchVisibility(postStatusLayout);
             switchVisibility(statusBtn);
             switchVisibility(authorBtn);
             switchVisibility(descriptionBtn);

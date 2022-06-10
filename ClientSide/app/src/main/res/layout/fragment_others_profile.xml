@@ -9,12 +9,14 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/Othersprofile_swiperefresh"
         android:layout_width="404dp"
-        android:layout_height="461dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line">
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/profile_postlist_rv"
@@ -26,10 +28,14 @@
     <View
         android:id="@+id/Othersprofile_line2"
         android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:background="#C5E3EC"
+        android:layout_height="235dp"
+        android:layout_marginStart="-20dp"
+        android:layout_marginTop="-20dp"
+        android:layout_marginEnd="-20dp"
+        android:background="@color/ActionBarColor"
+        android:rotation="5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +44,7 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="12dp"
         android:background="#808080"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,12 +54,12 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/Othersprofile_image"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="10dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/avatar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
@@ -62,62 +68,42 @@
         android:id="@+id/Othersprofile_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="140dp"
+        android:layout_marginTop="7dp"
+        android:gravity="center"
         android:text="TextView"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/Othersprofile_image"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_image" />
+
 
     <Button
         android:id="@+id/Othersprofile_add_btn"
-        android:layout_width="127dp"
+        android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:backgroundTint="#7393B3"
+        android:layout_marginEnd="5dp"
+        android:backgroundTint="@color/StatusBarColor"
+        android:drawableLeft="@drawable/plus_icon"
+        android:drawablePadding="0dp"
         android:includeFontPadding="false"
-        android:padding="5dp"
+        android:padding="4dp"
         android:text="Add me"
-        app:icon="@drawable/ic_add_black_24dp"
+        app:cornerRadius="10dp"
         app:iconPadding="0dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/Othersprofile_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/Othersprofile_name"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
 
     <TextView
         android:id="@+id/Othersprofile_connections"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
         android:clickable="false"
         android:text="30 connections"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/otherProfile_ratingBar" />
-
-
-    <Button
-        android:id="@+id/othersProfile_unfriend_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_marginEnd="3dp"
-        android:backgroundTint="@color/red"
-        android:includeFontPadding="false"
-        android:padding="5dp"
-        android:text="UnFriend"
-        android:visibility="gone"
-        app:iconPadding="0dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/Othersprofile_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/Othersprofile_add_btn"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--    <RatingBar-->
     <!--        android:id="@+id/otherProfile_ratingBar"-->
@@ -132,6 +118,21 @@
     <!--        app:layout_constraintStart_toEndOf="@+id/Othersprofile_image"-->
     <!--        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />-->
 
+    <Button
+        android:id="@+id/othersProfile_unfriend_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="5dp"
+        android:backgroundTint="@color/red"
+        android:includeFontPadding="false"
+        android:padding="4dp"
+        android:text="UnFriend"
+        android:visibility="gone"
+        app:iconPadding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
+
     <RatingBar
         android:id="@+id/otherProfile_ratingBar"
         android:layout_width="wrap_content"
@@ -144,37 +145,39 @@
         android:transformPivotX="200dp"
         android:transformPivotY="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/Othersprofile_image"
-        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
+        app:layout_constraintHorizontal_bias="0.374"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_name" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/gif"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:src="@drawable/lock_no_access"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@+id/other_profile_disable_txt"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/other_profile_disable_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="10dp"
         android:text="Only friends can see this content!"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/gif"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line"
+        tools:visibility="visible" />
     app:layout_constraintStart_toEndOf="@+id/Othersprofile_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
