@@ -136,9 +136,6 @@ public class Model {
         modelServer.getFriendsList(userID, circle, listener);
     }
 
-    public void getFriendsCircleAsObjects(String userID, Integer circle, friendsListListener listener) {
-        modelServer.getFriendsCircleAsObjects(userID, circle, listener);
-    }
     /* ---------------------------------------------------------------------------- */
 
     public interface addPostListener {
@@ -194,7 +191,7 @@ public class Model {
     public void refreshPostList() {
         postsListLoadingState.setValue(LoadingState.loading);
         modelServer.getMyRelatedPosts(currentUserModel.getId(), new getMyRelatedPostsListener() {
-//        modelServer.getMyRelatedPosts("629e6feb737c16c6cf4348ca", new getMyRelatedPostsListener() {
+            //        modelServer.getMyRelatedPosts("629e6feb737c16c6cf4348ca", new getMyRelatedPostsListener() {
             @Override
             public void onComplete(JsonArray posts) {
                 List<Post> list = new ArrayList<>();
@@ -208,7 +205,7 @@ public class Model {
                 postsListLoadingState.setValue(LoadingState.loaded);
             }
         });
-        
+
     }
 
     /* ---------------------------------------------------------------------------- */

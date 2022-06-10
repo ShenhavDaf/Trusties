@@ -12,18 +12,7 @@
 
         <!-- ########################################################################### -->
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="24dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="72dp"
-            android:src="@drawable/ic_right_arrow_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_second_tv" />
-
-        <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/arrow1"
             android:layout_width="24dp"
             android:layout_height="45dp"
             android:layout_marginTop="72dp"
@@ -34,7 +23,18 @@
             app:layout_constraintTop_toBottomOf="@+id/friendsCircle_first_tv" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/arrow2"
+            android:layout_width="24dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="72dp"
+            android:src="@drawable/ic_right_arrow_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendsCircle_second_tv" />
+
+        <ImageView
+            android:id="@+id/arrow3"
             android:layout_width="24dp"
             android:layout_height="45dp"
             android:layout_marginTop="76dp"

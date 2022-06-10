@@ -58,8 +58,8 @@ async function findFriends(list, currID) {
 const getSecondCircleOnly = async (req, res) => {
   try {
     const user = await User.findById(req.query.id);
-    const currID = req.query.id; //A
-    const firstList = user.friends; // Shenhav, c
+    const currID = req.query.id;
+    const firstList = user.friends;
     const temp = new Array();
 
     for (let i = 0; i < firstList.length; i++) {
@@ -72,14 +72,12 @@ const getSecondCircleOnly = async (req, res) => {
           temp.push(friend.friends[j]);
       }
     }
+    
     // Remove duplicates
     const unique = temp.filter(
       (value, index, self) =>
         index === self.findIndex((t) => String(t) === String(value))
     );
-    // uniqueArray = a.filter(function(item, pos, self) {
-    // return self.indexOf(item) == pos;
-    // })
 
     res.status(200).send(unique);
 
@@ -136,16 +134,6 @@ const getThirdCircleOnly = async (req, res) => {
         i--;
       }
     }
-
-    // for (let k = 0; k < unique.length; k++) {
-    //   for (let u = 0; u < temp.length; u++) {
-    //     if (unique[k].String == temp[u].String) {
-    //       console.log((await User.findById(unique[k])).name + "inside!");
-    //       unique.splice(k, 1);
-    //       // k++;
-    //     }
-    //   }
-    // }
 
     res.status(200).send(unique);
   } catch (err) {
@@ -381,89 +369,10 @@ async function ConvertToStringArr(ObjectIdArr) {
   return StringArr;
 }
 
-const friendsCircleAsObjects = async (req, res) => {
-  try {
-    const user = await User.findById(req.query.id);
-    const circle = req.query.circle;
-    const list = new Array();
-
-    if (user != null) {
-      if (circle == 1) {
-        list = user.friends;
-      } //
-      else if (circle == 2) {
-        for (let i = 0; i < user.friends.length; i++) {
-          const friend = await User.findById(user.friends[i]);
-          for (let j = 0; j < friend.friends.length; j++) {
-            if (
-              friend.friends[j] != currID &&
-              !user.friends.includes(friend.friends[j])
-            )
-              list.push(friend.friends[j]);
-          }
-        }
-      } //
-      else if (circle == 3) {
-        const temp = new Array();
-        for (let i = 0; i < user.friends.length; i++) {
-          const friend = await User.findById(user.friends[i]);
-          for (let j = 0; j < friend.friends.length; j++) {
-            if (
-              friend.friends[j] != currID &&
-              !user.friends.includes(friend.friends[j])
-            ) {
-              temp.push(friend.friends[j]);
-            }
-          }
-        }
-
-        for (let i = 0; i < temp.length; i++) {
-          const friend = await User.findById(temp[i]);
-          for (let j = 0; j < friend.friends.length; j++) {
-            if (
-              friend.friends[j] != currID &&
-              !temp.includes(friend.friends[j].String)
-            ) {
-              list.push(friend.friends[j]);
-            }
-          }
-        }
-      }
-
-      const unique = list.filter(
-        (value, index, self) =>
-          index === self.findIndex((t) => String(t) === String(value))
-      );
-
-      const res = new Array();
-
-      for (let u = 0; u < unique.length; u++) {
-        const curr = User.findById(unique[u]);
-        res.push({ name: curr.name, img: curr.photo });
-      }
-
-      res.status(200).send(res);
-    } //
-    else {
-      res.status(400).send({
-        status: "fail",
-        error: err.message,
-      });
-    }
-  } catch (err) {
-    //
-    res.status(400).send({
-      status: "fail",
-      error: err.message,
-    });
-  }
-};
-
 module.exports = {
   getFriendsList,
   getSecondCircleOnly,
   getThirdCircleOnly,
-  friendsCircleAsObjects,
   addFriendToMyContacts,
   removeFriendFromMyContacts,
   rateMyHelp,

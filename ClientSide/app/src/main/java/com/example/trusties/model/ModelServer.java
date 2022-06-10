@@ -714,25 +714,6 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void getFriendsCircleAsObjects(String userID, Integer circle, Model.friendsListListener listener) {
-        retrofitInterface
-                .getFriendsCircleAsObjects(accessToken, userID, circle)
-                .enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        Log.d("TAG", "-- getFriendsCircleAsObjects === "+response.body());
-                        listener.onComplete(response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-
-                    }
-                });
-    }
-
-    /* ------------------------------------------------------------------------- */
-
     public void addFriendToMyContacts(String myID, String hisID, Model.addFriendListener listener) {
 
         retrofitInterface.addFriendToMyContacts(myID, hisID).enqueue(new Callback<Void>() {

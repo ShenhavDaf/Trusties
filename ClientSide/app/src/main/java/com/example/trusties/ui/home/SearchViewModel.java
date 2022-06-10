@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SearchViewModel extends ViewModel {
 
-    public List<User> usersData;
+    List<User> usersData;
 
     public List<User> getUsersData() {
         return usersData;
