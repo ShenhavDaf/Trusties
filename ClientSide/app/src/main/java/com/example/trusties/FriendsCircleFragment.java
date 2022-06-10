@@ -1,6 +1,7 @@
 package com.example.trusties;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -32,10 +34,12 @@ import java.util.List;
 
 public class FriendsCircleFragment extends Fragment {
 
+    TextView secondTitle, thirdTitle;
+    ImageView secondArrow, thirdArrow;
+
     RecyclerView usersListRV_circle_1, usersListRV_circle_2, usersListRV_circle_3;
     SwipeRefreshLayout swipeRefreshUsers_circle_1, swipeRefreshUsers_circle_2, swipeRefreshUsers_circle_3;
     UserAdapter userAdapter1, userAdapter2, userAdapter3;
-    TextView firstTv, secondTv, thirdTv;
 
     List<User> lst_users_1 = new LinkedList<>();
     List<User> lst_users_2 = new LinkedList<>();
@@ -54,19 +58,38 @@ public class FriendsCircleFragment extends Fragment {
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
+        swipeRefreshUsers_circle_1 = view.findViewById(R.id.friendsCircle_first_swipeRefresh);
+//        swipeRefreshUsers_circle_1.setOnRefreshListener(() -> getFirstListFunction());
+
         List<User> list1 = getFirstListFunction();
 
         usersListRV_circle_1 = view.findViewById(R.id.friendsCircle_first_RecyclerView);
         usersListRV_circle_1.setHasFixedSize(true);
-        usersListRV_circle_1.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         userAdapter1 = new UserAdapter(list1);
         usersListRV_circle_1.setAdapter(userAdapter1);
         adapterListener(userAdapter1, list1);
 
-        swipeRefreshUsers_circle_1 = view.findViewById(R.id.friendsCircle_first_swipeRefresh);
-//        swipeRefreshUsers_circle_1.setOnRefreshListener(() -> getFirstListFunction());
+        if (circle == 1) {
+
+            int colNUmber;
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                colNUmber = 5;
+            else colNUmber = 3;
+
+            usersListRV_circle_1.setLayoutManager(new GridLayoutManager(getContext(), colNUmber));
+            view.findViewById(R.id.arrow1).setVisibility(View.GONE);
+            ViewGroup.LayoutParams params = swipeRefreshUsers_circle_1.getLayoutParams();
+            params.height = 1800;
+            swipeRefreshUsers_circle_1.setLayoutParams(params);
+        }//
+        else {
+            usersListRV_circle_1.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        }
 
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+        swipeRefreshUsers_circle_2 = view.findViewById(R.id.friendsCircle_second_swipeRefresh);
+//        swipeRefreshUsers_circle_2.setOnRefreshListener(() -> getSecondListFunction());
 
         List<User> list2 = getSecondListFunction();
 
@@ -77,10 +100,10 @@ public class FriendsCircleFragment extends Fragment {
         usersListRV_circle_2.setAdapter(userAdapter2);
         adapterListener(userAdapter2, list2);
 
-        swipeRefreshUsers_circle_2 = view.findViewById(R.id.friendsCircle_second_swipeRefresh);
-//        swipeRefreshUsers_circle_2.setOnRefreshListener(() -> getSecondListFunction());
-
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+        swipeRefreshUsers_circle_3 = view.findViewById(R.id.friendsCircle_third_swipeRefresh);
+//        swipeRefreshUsers_circle_3.setOnRefreshListener(() -> getThirdListFunction());
 
         List<User> list3 = getThirdListFunction();
 
@@ -91,14 +114,12 @@ public class FriendsCircleFragment extends Fragment {
         usersListRV_circle_3.setAdapter(userAdapter3);
         adapterListener(userAdapter3, list3);
 
-        swipeRefreshUsers_circle_3 = view.findViewById(R.id.friendsCircle_third_swipeRefresh);
-//        swipeRefreshUsers_circle_3.setOnRefreshListener(() -> getThirdListFunction());
-
         /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
 
-        firstTv = view.findViewById(R.id.friendsCircle_first_tv);
-        secondTv = view.findViewById(R.id.friendsCircle_second_tv);
-        thirdTv = view.findViewById(R.id.friendsCircle_third_tv);
+        secondTitle = view.findViewById(R.id.friendsCircle_second_tv);
+        thirdTitle = view.findViewById(R.id.friendsCircle_third_tv);
+        secondArrow = view.findViewById(R.id.arrow2);
+        thirdArrow = view.findViewById(R.id.arrow3);
         DisplayList();
 
         return view;
@@ -111,12 +132,18 @@ public class FriendsCircleFragment extends Fragment {
 
     private void DisplayList() {
         if (circle == 1) {
-            secondTv.setVisibility(View.GONE);
-            thirdTv.setVisibility(View.GONE);
+            secondTitle.setVisibility(View.GONE);
+            thirdTitle.setVisibility(View.GONE);
+
+            secondArrow.setVisibility(View.GONE);
+            thirdArrow.setVisibility(View.GONE);
+
             usersListRV_circle_2.setVisibility(View.GONE);
             usersListRV_circle_3.setVisibility(View.GONE);
-        } else if (circle == 2) {
-            thirdTv.setVisibility(View.GONE);
+        } //
+        else if (circle == 2) {
+            thirdTitle.setVisibility(View.GONE);
+            thirdArrow.setVisibility(View.GONE);
             usersListRV_circle_3.setVisibility(View.GONE);
         }
     }
