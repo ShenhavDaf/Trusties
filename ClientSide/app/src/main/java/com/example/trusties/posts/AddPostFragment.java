@@ -96,7 +96,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         View view = inflater.inflate(R.layout.fragment_add_post, container, false);
 
-//        mArrayUri = new ArrayList<Uri>();
         postTitle = view.findViewById(R.id.newpost_title_et);
         description = view.findViewById(R.id.newpost_description_et);
         image = view.findViewById(R.id.newpost_post_image);
@@ -185,7 +184,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.ActionBarColor));
         if (flagTools == 0)
             toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
-        if (flagHouse == 1)
         if (flagHouse == 1)
             houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.ActionBarColor));
         if (flagHouse == 0)

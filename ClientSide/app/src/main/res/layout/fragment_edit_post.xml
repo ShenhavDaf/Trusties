@@ -100,7 +100,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editpost_pictures_tv">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/editpost_image_show"
                 style="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"
                 android:layout_width="70dp"
@@ -110,9 +110,10 @@
                 android:src="@drawable/image_place"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/editpost_image2_show"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"/>
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/editpost_image2_show"
                 style="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"
                 android:layout_width="70dp"
@@ -121,7 +122,8 @@
                 android:src="@drawable/image_place"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"/>
 
             <ImageButton
                 android:id="@+id/editpost_camera_btn"
