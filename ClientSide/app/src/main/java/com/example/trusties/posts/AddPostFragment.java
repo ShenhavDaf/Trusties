@@ -167,8 +167,10 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
         mapView.onCreate(savedInstanceState);
 
+        mySaveState();
         return view;
-    }
+    }/* ********** End of onCreateView ********** */
+
 
     public void setColorsBtn(int flagCar, int flagDelivery, int flagTools, int flagHouse) {
         if (flagCar == 1)
@@ -190,15 +192,13 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    /* *********************************** Images *********************************** */
     private void OpenCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     private void OpenGallery() {
-//        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//        photoPickerIntent.setType("image/*");
-//        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -277,15 +277,14 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+    /* *********************************** Circles *********************************** */
+
     private void FindFirstCircle() {
 
         circle = 1;
         friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            firstCircleBtn.setBackgroundColor(firstCircleBtn.getContext().getColor(R.color.titleColor));
-//            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.lightGray));
-//            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
             firstCircleBtn.setTextColor(firstCircleBtn.getContext().getColor(R.color.hintColor));
             secondCircleBtn.setTextColor(secondCircleBtn.getContext().getColor(R.color.white));
             thirdCircleBtn.setTextColor(thirdCircleBtn.getContext().getColor(R.color.white));
@@ -298,8 +297,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.titleColor));
-//            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
             secondCircleBtn.setTextColor(secondCircleBtn.getContext().getColor(R.color.hintColor));
             thirdCircleBtn.setTextColor(thirdCircleBtn.getContext().getColor(R.color.white));
         }
@@ -311,162 +308,12 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.titleColor));
             thirdCircleBtn.setTextColor(thirdCircleBtn.getContext().getColor(R.color.hintColor));
-
         }
     }
 
-    private void PostQuestion(View view) {
-        createPost(view, "QUESTION");
-    }
 
-    private void postSOSCall(View view) {
-
-        detailsTV.setVisibility(View.VISIBLE);
-        location_layout.setVisibility(View.VISIBLE);
-        circle_layout.setVisibility(View.VISIBLE);
-        addressTv.setVisibility(View.VISIBLE);
-
-        postBtn.setEnabled(false);
-        sosBtn.setOnClickListener(v -> {
-            if (circle != null)
-                createPost(v, "SOS");
-            else {
-                String msg = "You need to select a circle of friends to which you want to share your SOS call";
-                new CommonFunctions().myPopup(getContext(), "Error", msg);
-                postSOSCall(view);
-            }
-            if (category == null) {
-                String msg = "You need to select category first";
-                new CommonFunctions().myPopup(getContext(), "Error", msg);
-            }
-
-        });
-    }
-
-
-    private void createPost(View view, String type) {
-
-        String currUserID = Model.instance.getCurrentUserModel().getId();
-
-        if (circle == null) circle = 1;
-
-        Model.instance.getFriendsList(currUserID, circle, friendsList -> {
-            System.out.println(circle + "--> " + friendsList);
-        });
-
-        String title = postTitle.getText().toString();
-        String message = description.getText().toString();
-        User user = Model.instance.getCurrentUserModel();
-        Log.d("TAG", "user%%%% - " + title + message);
-        String email = user.getEmail().replace("\"", "");
-
-        if (category != null) {
-            int isGood = new CommonFunctions().CheckTitleAndDescription(title, message, getContext());
-
-            if (isGood == 1) {
-                map = new HashMap<>();
-//        map.put("sender",currUserID);
-                map.put("category", category);
-                map.put("title", title);
-                map.put("description", message);
-                map.put("email", email);
-                map.put("role", type);
-                if (type.equals("SOS"))
-                    map.put("circle", circle.toString());
-
-                ArrayList<String> photos = new ArrayList<>();
-
-                if (imageBitmap != null) {
-                    Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
-                        @Override
-                        public void onComplete(String url) {
-                            photos.add(url);
-                            map.put("photo", url);
-                        }
-                    });
-
-                }
-                if (mArrayUri != null) {
-                    flag = 1;
-                    for (int i = 0; i < mArrayUri.size(); i++) {
-                        try {
-                            Model.instance.encodeBitMapImg(BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(mArrayUri.get(i))), new Model.encodeBitMapImgListener() {
-                                @Override
-                                public void onComplete(String url) {
-                                    photos.add(url);
-                                }
-                            });
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    if (type.equals("SOS")) {
-                        int addressIsFine = new CommonFunctions().CheckLocation(address, getContext());
-                        if (addressIsFine == 1) {
-                            map.put("location", locationOnMap.toString());
-                            map.put("address", fullAddress);
-
-                            Model.instance.addSos(map, new Model.addSosListener() {
-                                @Override
-                                public void onComplete(JsonObject res) {
-                                    Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
-                                    Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
-                                        @Override
-                                        public void onComplete() {
-
-                                        }
-                                    });
-                                    Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
-
-                                }
-
-                            });
-                        }
-                    } else {
-
-                        Model.instance.addPost(map, new Model.addPostListener() {
-                            @Override
-                            public void onComplete(JsonObject res) {
-                                Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
-                                Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
-                                    @Override
-                                    public void onComplete() {
-                                    }
-                                });
-
-
-                                Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
-                            }
-                        });
-                    }
-
-                }
-            }
-        } else if (category == null) {
-            String msg = "You need to select category first";
-            new CommonFunctions().myPopup(getContext(), "Error", msg);
-        }
-
-
-//        Model.instance.addPost(map, () ->        Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
-
-//        /* ------ Add Notification ------ */
-//        HashMap<String, String> notification = new HashMap<>();
-//        notification.put("sender", user.getEmail());
-//        notification.put("post", postId);
-//        notification.put("time", (new Long(0)).toString());
-//        notification.put("type", "post");
-//
-//        Model.instance.addNotification(notification, () -> {
-//
-//        });
-//        String token = Model.getToken();
-//        Model.instance.sendNotification(notification, token, () -> {
-//        });
-    }
+    /* *********************************** Google Maps *********************************** */
 
     @SuppressLint("MissingPermission")
     @Override
@@ -588,6 +435,209 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+    }
+
+
+    /* ********************************************************************************* */
+
+    private void mySaveState() {
+        if (category != null) {
+
+            int flagCar = 0, flagDelivery = 0, flagTools = 0, flagHouse = 0;
+
+            switch (category) {
+                case "Car":
+                    flagCar = 1;
+                    break;
+                case "Delivery":
+                    flagDelivery = 1;
+                    break;
+                case "Tools":
+                    flagTools = 1;
+                    break;
+                case "House":
+                    flagHouse = 1;
+                    break;
+            }
+
+            setColorsBtn(flagCar, flagDelivery, flagTools, flagHouse);
+        }
+
+        if (locationOnMap != null) {
+            location_layout.setVisibility(View.VISIBLE);
+            addressTv.setVisibility(View.VISIBLE);
+
+//            try {
+//                geocoder.getFromLocation(locationOnMap.latitude, locationOnMap.longitude, 1);
+//                addressTv.setText(fullAddress);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+        }
+
+//        if(image != null){
+//            if(image2 != null){
+//
+//            }
+//        }
+
+
+        if (circle != null) {
+            circle_layout.setVisibility(View.VISIBLE);
+            if (circle == 1) FindFirstCircle();
+            else if (circle == 2) FindSecondCircle();
+            else if (circle == 3) FindThirdCircle();
+        }
+    }
+
+    private void PostQuestion(View view) {
+        createPost(view, "QUESTION");
+    }
+
+    private void postSOSCall(View view) {
+
+        detailsTV.setVisibility(View.VISIBLE);
+        location_layout.setVisibility(View.VISIBLE);
+        circle_layout.setVisibility(View.VISIBLE);
+        addressTv.setVisibility(View.VISIBLE);
+
+        postBtn.setEnabled(false);
+        sosBtn.setOnClickListener(v -> {
+            if (circle != null) {
+                createPost(v, "SOS");
+            } else {
+                String msg = "You need to select a circle of friends to which you want to share your SOS call";
+                new CommonFunctions().myPopup(getContext(), "Error", msg);
+                postSOSCall(view);
+            }
+            if (category == null) {
+                String msg = "You need to select category first";
+                new CommonFunctions().myPopup(getContext(), "Error", msg);
+            }
+
+        });
+    }
+
+    private void createPost(View view, String type) {
+
+        String currUserID = Model.instance.getCurrentUserModel().getId();
+
+        if (circle == null) circle = 1;
+
+        Model.instance.getFriendsList(currUserID, circle, friendsList -> {
+            System.out.println(circle + "--> " + friendsList);
+        });
+
+        String title = postTitle.getText().toString();
+        String message = description.getText().toString();
+        User user = Model.instance.getCurrentUserModel();
+        Log.d("TAG", "user%%%% - " + title + message);
+        String email = user.getEmail().replace("\"", "");
+
+        if (category != null) {
+            int isGood = new CommonFunctions().CheckTitleAndDescription(title, message, getContext());
+
+            if (isGood == 1) {
+                map = new HashMap<>();
+                map.put("category", category);
+                map.put("title", title);
+                map.put("description", message);
+                map.put("email", email);
+                map.put("role", type);
+                if (type.equals("SOS"))
+                    map.put("circle", circle.toString());
+
+                ArrayList<String> photos = new ArrayList<>();
+
+                if (imageBitmap != null) {
+                    Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
+                        @Override
+                        public void onComplete(String url) {
+                            photos.add(url);
+                            map.put("photo", url);
+                        }
+                    });
+
+                }
+                if (mArrayUri != null) {
+                    flag = 1;
+                    for (int i = 0; i < mArrayUri.size(); i++) {
+                        try {
+                            Model.instance.encodeBitMapImg(BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(mArrayUri.get(i))), new Model.encodeBitMapImgListener() {
+                                @Override
+                                public void onComplete(String url) {
+                                    photos.add(url);
+                                }
+                            });
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (type.equals("SOS")) {
+                        int addressIsFine = new CommonFunctions().CheckLocation(address, getContext());
+                        if (addressIsFine == 1) {
+                            map.put("location", locationOnMap.toString());
+                            map.put("address", fullAddress);
+
+                            Model.instance.addSos(map, new Model.addSosListener() {
+                                @Override
+                                public void onComplete(JsonObject res) {
+                                    Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
+                                    Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                                        @Override
+                                        public void onComplete() {
+
+                                        }
+                                    });
+                                    Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
+
+                                }
+
+                            });
+                        }
+                    } else {
+
+                        Model.instance.addPost(map, new Model.addPostListener() {
+                            @Override
+                            public void onComplete(JsonObject res) {
+                                Log.d("TAG", "idddddd + " + res.get("_id").toString().replace("\"", ""));
+                                Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                                    @Override
+                                    public void onComplete() {
+                                    }
+                                });
+
+
+                                Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
+                            }
+                        });
+                    }
+
+                }
+            }
+        } else if (category == null) {
+            String msg = "You need to select category first";
+            new CommonFunctions().myPopup(getContext(), "Error", msg);
+        }
+
+
+//        Model.instance.addPost(map, () ->        Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName())));
+
+//        /* ------ Add Notification ------ */
+//        HashMap<String, String> notification = new HashMap<>();
+//        notification.put("sender", user.getEmail());
+//        notification.put("post", postId);
+//        notification.put("time", (new Long(0)).toString());
+//        notification.put("type", "post");
+//
+//        Model.instance.addNotification(notification, () -> {
+//
+//        });
+//        String token = Model.getToken();
+//        Model.instance.sendNotification(notification, token, () -> {
+//        });
     }
 
 }
