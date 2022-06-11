@@ -56,8 +56,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/Othersprofile_image"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/avatar"

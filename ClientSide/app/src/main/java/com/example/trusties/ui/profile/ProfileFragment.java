@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment {
     TextView connections;
     SwipeRefreshLayout swipeRefresh;
     User currUser;
-    Button edit, logout;
+    TextView editTv, logoutTv;
     ImageView userImage;
     Bitmap decodedByte;
     RatingBar ratingBar;
@@ -70,9 +70,8 @@ public class ProfileFragment extends Fragment {
         userImage = root.findViewById(R.id.profile_image);
         ratingBar = root.findViewById(R.id.ratingBar_dashBoard);
         connections = root.findViewById(R.id.profile_connections);
-        edit = root.findViewById(R.id.profile_edit_btn);
-        logout = root.findViewById(R.id.profile_logout_btn);
-
+        editTv = root.findViewById(R.id.profile_edit_tv);
+        logoutTv = root.findViewById(R.id.profile_logout_tv);
 
         Model.instance.findUserById(currUser.getId(), user -> {
             userName.setText(user.get("name").toString().replace("\"", ""));
@@ -109,11 +108,10 @@ public class ProfileFragment extends Fragment {
         connections.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToConnectionsFragment()));
 
-        edit.setOnClickListener(v ->
+        editTv.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(ProfileFragmentDirections.actionNavigationDashboardToEditProfileFragment(currUser.getId())));
 
-
-        logout.setOnClickListener(v -> {
+        logoutTv.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Logout").setMessage("You sure, that you want to logout?");
             builder.setPositiveButton("Yes", (dialog, id) ->
