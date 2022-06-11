@@ -283,9 +283,12 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            firstCircleBtn.setBackgroundColor(firstCircleBtn.getContext().getColor(R.color.titleColor));
-            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.lightGray));
-            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
+//            firstCircleBtn.setBackgroundColor(firstCircleBtn.getContext().getColor(R.color.titleColor));
+//            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.lightGray));
+//            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
+            firstCircleBtn.setTextColor(firstCircleBtn.getContext().getColor(R.color.hintColor));
+            secondCircleBtn.setTextColor(secondCircleBtn.getContext().getColor(R.color.white));
+            thirdCircleBtn.setTextColor(thirdCircleBtn.getContext().getColor(R.color.white));
         }
     }
 
@@ -295,8 +298,10 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.titleColor));
-            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
+//            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.titleColor));
+//            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
+            secondCircleBtn.setTextColor(secondCircleBtn.getContext().getColor(R.color.hintColor));
+            thirdCircleBtn.setTextColor(thirdCircleBtn.getContext().getColor(R.color.white));
         }
     }
 
@@ -306,7 +311,9 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.titleColor));
+//            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.titleColor));
+            thirdCircleBtn.setTextColor(thirdCircleBtn.getContext().getColor(R.color.hintColor));
+
         }
     }
 
@@ -320,6 +327,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         location_layout.setVisibility(View.VISIBLE);
         circle_layout.setVisibility(View.VISIBLE);
         addressTv.setVisibility(View.VISIBLE);
+
         postBtn.setEnabled(false);
         sosBtn.setOnClickListener(v -> {
             if (circle != null)
