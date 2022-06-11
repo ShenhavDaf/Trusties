@@ -41,11 +41,10 @@ public class EditProfileFragment extends Fragment {
 
     TextView nameEt;
     TextView phoneEt;
-    Button saveBtn, cancelBtn, changePasswordBtn;
+    Button saveBtn, cancelBtn;
     String userId;
 
-    ImageButton cameraBtn;
-    ImageButton galleryBtn;
+    TextView cameraTv, galleryTv, changePasswordTv;
     ImageView image;
     Bitmap imageBitmap;
     Bitmap decodedByte;
@@ -69,13 +68,13 @@ public class EditProfileFragment extends Fragment {
         nameEt = view.findViewById(R.id.editProfile_name_tv);
         phoneEt = view.findViewById(R.id.editProfile_phone_tv);
         saveBtn = view.findViewById(R.id.editProfile_save_btn);
-        cameraBtn = view.findViewById(R.id.editProfile_camera_btn);
-        galleryBtn = view.findViewById(R.id.editProfile_gallery_btn);
+        cameraTv = view.findViewById(R.id.editProfile_camera_tv);
+        galleryTv = view.findViewById(R.id.editProfile_gallery_tv);
         image = view.findViewById(R.id.editProfile_image);
         currPassword = view.findViewById(R.id.edit_profile_curr_password);
         newPassword = view.findViewById(R.id.edit_profile_new_password);
         confirmPassword = view.findViewById(R.id.edit_profile_confirm_password);
-        changePasswordBtn = view.findViewById(R.id.edit_profile_change_password_btn);
+        changePasswordTv = view.findViewById(R.id.edit_profile_change_password_tv);
         cancelBtn = view.findViewById(R.id.editProfile_cancel_btn);
         currTv = view.findViewById(R.id.edit_profile_curr_tv);
         newTv = view.findViewById(R.id.edit_profile_new_tv);
@@ -106,7 +105,7 @@ public class EditProfileFragment extends Fragment {
                 save(v);
             }
         });
-        changePasswordBtn.setOnClickListener(new View.OnClickListener() {
+        changePasswordTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 flagPassword = 1;
@@ -124,8 +123,8 @@ public class EditProfileFragment extends Fragment {
         });
 
 
-        cameraBtn.setOnClickListener(v -> OpenCamera());
-        galleryBtn.setOnClickListener(v -> OpenGallery());
+        cameraTv.setOnClickListener(v -> OpenCamera());
+        galleryTv.setOnClickListener(v -> OpenGallery());
 
         return view;
     }
