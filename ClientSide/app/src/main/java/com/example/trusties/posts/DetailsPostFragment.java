@@ -165,8 +165,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 }
                 if (status.equals("CLOSE"))
                     closeBtn.setVisibility(View.GONE);
-
-
                 if (post.get("photo").getAsJsonArray().size() > 0) { // CHANGED
                     if (post.get("photo").getAsJsonArray().size() == 1)
                         sampleImages = new Bitmap[1];
@@ -267,10 +265,14 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
             Model.instance.addNotification(notification, () -> {
 
+                System.out.println("## Back from server :: addNotification");
             });
 
-            Model.instance.sendNotification(notification, () -> {
+            Model.instance.sendNotification(notification,()->{
+                System.out.println("## Back from server :: sendNotification");
+
             });
+
 
         });
 
@@ -336,15 +338,17 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
     private void refresh() {
         Model.instance.getPostComments(postId, commentsList -> {
-//            if (commentsList.size() == 0)
-//                swipeRefresh.setVisibility(View.GONE);
-//
-//            else {
             System.out.println("Comments" + commentsList.size());
             postViewModel.data = commentsList;
             adapter.notifyDataSetChanged();
-//            }
         });
+
+        Model.instance.getPostById(postId, post-> {
+                    String status = post.get("status").toString().replace("\"", "");
+                    statusEt.setText(status);
+                });
+
+
         swipeRefresh.setRefreshing(false);
     }
 

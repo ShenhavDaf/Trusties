@@ -140,6 +140,7 @@ const negativeComment = async (req, res, next) => {
     Comment.findById({ _id: req.params.id })
       .populate({
         path: "post",
+        model: "Post",
         populate: {
           path: "sender",
           model: "User",
@@ -176,6 +177,7 @@ const negativeComment = async (req, res, next) => {
         //If user reporter is the post sender-> IsCorrect:true
         if (reporter.email == comment.post.sender.email) {
           comment.isCorrect = false;
+          comment.post.status = "OPEN";
         }
 
         comment.save(function (err) {
@@ -196,6 +198,15 @@ const negativeComment = async (req, res, next) => {
         comment.sender.numberReviews += 1;
 
         comment.sender.save(function (err) {
+          if (err) {
+            res.status(400).send({
+              status: "fail",
+              error: err.message,
+            });
+          }
+        });
+
+        comment.post.save(function (err) {
           if (err) {
             res.status(400).send({
               status: "fail",
@@ -225,6 +236,7 @@ const positiveComment = async (req, res, next) => {
     Comment.findById({ _id: req.params.id })
       .populate({
         path: "post",
+        model: "Post",
         populate: {
           path: "sender",
           model: "User",
@@ -260,6 +272,7 @@ const positiveComment = async (req, res, next) => {
         comment.report_positive.addToSet(reporter._id);
         if (reporter.email == comment.post.sender.email) {
           comment.isCorrect = true;
+          comment.post.status = "CLOSE";
         }
         comment.save(function (err) {
           if (err) {
@@ -281,6 +294,16 @@ const positiveComment = async (req, res, next) => {
         comment.sender.numberReviews += 1;
 
         comment.sender.save(function (err) {
+          if (err) {
+            res.status(400).send({
+              status: "fail",
+              error: err.message,
+            });
+          }
+        });
+
+
+        comment.post.save(function (err) {
           if (err) {
             res.status(400).send({
               status: "fail",

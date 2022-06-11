@@ -326,17 +326,6 @@ public class Model {
     }
 
     /* ---------------------------------------------------------------------------- */
-//    public interface getCommentRate {
-//        void onComplete(JsonObject comment);
-//    }
-//
-//    public void getCommentRate(String id,getCommentRate listener) {
-//        modelServer.getCommentRate(id,listener);
-//    }
-
-
-
-    /* ---------------------------------------------------------------------------- */
 
     public interface allUsersListener {
         void onComplete(List<User> usersList);
@@ -386,8 +375,6 @@ public class Model {
         modelServer.removeFriendFromMyContacts(myID, hisID, listener);
     }
 
-
-
     /* ---------------------------------------------------------------------------- */
 
     public interface encodeBitMapImgListener {
@@ -398,7 +385,6 @@ public class Model {
 
         modelServer.encodeBitMapImg(imageBitmap, listener);
     }
-
 
     /* ---------------------------------------------------------------------------- */
 
@@ -411,6 +397,8 @@ public class Model {
         modelServer.addNotification(map, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
     public interface allNotificationsListener {
         void onComplete(List<Notification> notificationsList);
     }
@@ -419,6 +407,8 @@ public class Model {
         Log.d("TAG", "Model --> getAllNotifications");
         modelServer.getAllNotifications(listener);
     }
+
+    /* ---------------------------------------------------------------------------- */
 
     public interface sendNotificationListener {
         void onComplete();
@@ -438,6 +428,8 @@ public class Model {
         modelServer.approveVolunteer(id, map, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
     public interface cancelVolunteerListener {
         void onComplete();
     }
@@ -446,6 +438,8 @@ public class Model {
         modelServer.cancelVolunteer(id, map, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
+
     public interface volunteerListener {
         void onComplete();
     }
@@ -453,6 +447,8 @@ public class Model {
     public void volunteer(String id, HashMap<String, String> map, volunteerListener listener) {
         modelServer.volunteer(id, map, listener);
     }
+
+    /* ---------------------------------------------------------------------------- */
 
     public interface getSosVolunteersListener {
         void onComplete(List<User> volunteers);
@@ -463,6 +459,7 @@ public class Model {
         modelServer.getSosVolunteers(id, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
 
     public interface closeSosListener {
         void onComplete();
@@ -473,6 +470,7 @@ public class Model {
         modelServer.closeSos(id, listener);
     }
 
+    /* ---------------------------------------------------------------------------- */
 
     public interface getApprovedVolunteerListener {
         void onComplete(JsonObject volunteer);
@@ -492,6 +490,7 @@ public class Model {
         modelServer.rateMyHelp(userId, map, listener);
 
     }
+
     /* ---------------------------------------------------------------------------- */
 
     public interface getMyRelatedPostsListener {
@@ -501,8 +500,8 @@ public class Model {
     public void getMyRelatedPosts(String id, getMyRelatedPostsListener listener) {
         modelServer.getMyRelatedPosts(id, listener);
     }
-    /* ---------------------------------------------------------------------------- */
 
+    /* ---------------------------------------------------------------------------- */
 
     public interface signOutListener {
         void onComplete();
@@ -522,10 +521,6 @@ public class Model {
         modelServer.isSignedIn(listener);
     }
 
-
-
-    /* ---------------------------------------------------------------------------- */
-
     /* ---------------------------------------------------------------------------- */
 
     public interface getRatingListener {
@@ -535,4 +530,7 @@ public class Model {
     public void getRating(String id, getRatingListener listener) {
         modelServer.getRating(id, listener);
     }
+
+    /* ---------------------------------------------------------------------------- */
+
 }

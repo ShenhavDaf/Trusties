@@ -293,7 +293,6 @@ public class ModelServer {
         });
     }
 
-
     /* ------------------------------------------------------------------------- */
 
     public void addPost(HashMap<String, String> map, Model.addPostListener listener) {
@@ -484,30 +483,6 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-//    public void getAllComments(Model.allCommentsListener listener) {
-//
-//        retrofitInterface.getAllComments(accessToken).enqueue(new Callback<JsonArray>() {
-//            @Override
-//            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-//
-//                List<Comment> list = new ArrayList<>();
-//                for (JsonElement element : response.body()) {
-//                    if (!element.getAsJsonObject().get("isDeleted").getAsBoolean())
-//                        list.add(Comment.create(element.getAsJsonObject()));
-//                }
-//
-//                Collections.reverse(list);
-//                listener.onComplete(list);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JsonArray> call, Throwable t) {
-//            }
-//        });
-//    }
-
-    /* ------------------------------------------------------------------------- */
-
     public void getPostComments(String postId, Model.allCommentsListener listener) {
 
         retrofitInterface.getPostComments(accessToken, postId).enqueue(new Callback<JsonArray>() {
@@ -656,7 +631,6 @@ public class ModelServer {
 
     }
 
-
     /* ------------------------------------------------------------------------- */
 
     public void getAllUsers(Model.allUsersListener listener) {
@@ -747,6 +721,7 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
+
     public void encodeBitMapImg(Bitmap imageBitmap, Model.encodeBitMapImgListener listener) {
 
         Bitmap scaledBitmap = getScaledBitmap(imageBitmap, 450, 450);
@@ -759,6 +734,7 @@ public class ModelServer {
 
     }
 
+    /* ------------------------------------------------------------------------- */
     private Bitmap getScaledBitmap(Bitmap b, int reqWidth, int reqHeight) {
         int bWidth = b.getWidth();
         int bHeight = b.getHeight();
@@ -786,27 +762,6 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
-
-    public void addNotification(HashMap<String, String> map, Model.addNotificationListener listener) {
-        Log.d("TAG", "ModelServer --> add notification");
-        Call<Void> notification = retrofitInterface.addNotification(accessToken, map);
-
-        notification.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                listener.onComplete();
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-
-            }
-
-        });
-    }
-    /* ------------------------------------------------------------------------- */
-
-
     public void approveVolunteer(String id, HashMap<String, String> map, Model.approveVolunteerListener listener) {
 
         Call<Void> approveVolunteer_retrofit = retrofitInterface.approveVolunteer(accessToken, id, map);
@@ -823,7 +778,6 @@ public class ModelServer {
             }
         });
     }
-
 
     /* ------------------------------------------------------------------------- */
 
@@ -850,9 +804,8 @@ public class ModelServer {
             }
         });
     }
+
     /* ------------------------------------------------------------------------- */
-
-
     public void cancelVolunteer(String id, HashMap<String, String> map, Model.cancelVolunteerListener listener) {
 
         Call<Void> cancelVolunteer_retrofit = retrofitInterface.cancelVolunteer(accessToken, id, map);
@@ -888,66 +841,8 @@ public class ModelServer {
             }
         });
     }
-    /* ------------------------------------------------------------------------- */
-
-    public void getAllNotifications(Model.allNotificationsListener listener) {
-        String currentUserModel = Model.instance.getCurrentUserModel().userID;
-        List<Notification> filteredList = new ArrayList<>();
-
-        retrofitInterface.getAllNotifications(accessToken).enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-
-                List<Notification> list = new ArrayList<>();
-                for (JsonElement element : response.body()) {
-                    list.add(Notification.create(element.getAsJsonObject()));
-                }
-
-                for (Notification notification : list) {
-                    if (notification.getAuthorID().equals(currentUserModel) &&
-                            (notification.getType().equals("comment") || notification.getType().equals("like")))
-                        filteredList.add(notification);
-                    else {
-                        getFriendsList(notification.getAuthorID(), Integer.valueOf(notification.getCircle()), friendsList -> {
-                            for (JsonElement friend : friendsList) {
-                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
-                                    filteredList.add(notification);
-                                }
-                            }
-                        });
-                    }
-
-                }
-                Collections.reverse(list);
-                listener.onComplete(list);
-            }
-
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-            }
-        });
-
-    }
-    /* ------------------------------------------------------------------------- */
-
-    public void sendNotification(HashMap<String, String> map, Model.sendNotificationListener listener) {
-        retrofitInterface.sendNotification(accessToken, map).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("TAG", "send notification successfully");
-                listener.onComplete();
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.d("TAG", t.getMessage());
-                Log.d("TAG", "send notification failed");
-            }
-        });
-    }
 
     /* ------------------------------------------------------------------------- */
-
     public void closeSos(String id, Model.closeSosListener listener) {
 
 
@@ -966,8 +861,8 @@ public class ModelServer {
             }
         });
     }
-    /* ------------------------------------------------------------------------- */
 
+    /* ------------------------------------------------------------------------- */
     public void getApprovedVolunteer(String id, Model.getApprovedVolunteerListener listener) {
 
         Call<JsonObject> retrofit = retrofitInterface.getApprovedVolunteer(accessToken, id);
@@ -1023,6 +918,122 @@ public class ModelServer {
     }
     /* ------------------------------------------------------------------------- */
 
+
+//    public void sendNotification(HashMap<String, String> map, Model.sendNotificationListener listener) {
+//        retrofitInterface.sendNotification(accessToken, map).enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                Log.d("TAG", "send notification successfully");
+//                listener.onComplete();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                Log.d("TAG", t.getMessage());
+//                Log.d("TAG", "send notification failed");
+//            }
+//        });
+//    }
+
+    public void sendNotification(HashMap<String, String> map, Model.sendNotificationListener listener) {
+
+        Call<Void> sendNotification_retrofit = retrofitInterface.sendNotification(accessToken, map);
+//                System.out.println("Notification:: Sucsses!");
+        //                System.out.println("Notification:: Something Went worng!");
+        sendNotification_retrofit.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+                System.out.println("sendNotification_retrofit");
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void addNotification(HashMap<String, String> map, Model.sendNotificationListener listener) {
+
+        Call<Void> addNotification_retrofit = retrofitInterface.addNotification(accessToken, map);
+
+        addNotification_retrofit.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                System.out.println("## Sucsses :: addNotification");
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                System.out.println("## Fail :: addNotification");
+
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void getAllNotifications(Model.allNotificationsListener listener) {
+        String currentUserModel = Model.instance.getCurrentUserModel().userID;
+        List<Notification> filteredList = new ArrayList<>();
+
+        retrofitInterface.getAllNotifications(accessToken).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                List<Notification> list = new ArrayList<>();
+                for (JsonElement element : response.body()) {
+                    list.add(Notification.create(element.getAsJsonObject()));
+                }
+
+                for (Notification notification : list) {
+                    if (notification.getAuthorID().equals(currentUserModel) &&
+                            (notification.getType().equals("comment") || notification.getType().equals("like")))
+                        filteredList.add(notification);
+                    else {
+                        getFriendsList(notification.getAuthorID(), Integer.valueOf(notification.getCircle()), friendsList -> {
+                            for (JsonElement friend : friendsList) {
+                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+                                    filteredList.add(notification);
+                                }
+                            }
+                        });
+                    }
+
+                }
+                Collections.reverse(list);
+                listener.onComplete(list);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+
+    }
+    /* ------------------------------------------------------------------------- */
+
+    public void addNotification(HashMap<String, String> map, Model.addNotificationListener listener) {
+        Log.d("TAG", "ModelServer --> add notification");
+        Call<Void> notification = retrofitInterface.addNotification(accessToken, map);
+
+        notification.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+
+        });
+    }
+    /* ------------------------------------------------------------------------- */
 
     public void signOut(String userId, Model.signOutListener listener) {
         Call<Void> signOut = retrofitInterface.logout(userId);
