@@ -40,7 +40,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeWidth="1dp"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <ImageButton
                 android:id="@+id/newpost_delivery_btn"
@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 app:strokeWidth="1dp"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <ImageButton
                 android:id="@+id/newpost_tools_btn"
@@ -79,7 +79,7 @@
                 app:layout_constraintStart_toEndOf="@+id/newpost_delivery_btn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeWidth="1dp"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <ImageButton
                 android:id="@+id/newpost_house_damage_btn"
@@ -98,7 +98,7 @@
                 app:layout_constraintStart_toEndOf="@+id/newpost_tools_btn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeWidth="1dp"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -165,8 +165,8 @@
                 android:ems="10"
                 android:fontFamily="@font/poppins"
                 android:hint="@string/hint_post_description"
-                android:lines="5"
                 android:inputType="textMultiLine"
+                android:lines="5"
                 android:maxLines="10"
                 android:textColor="@color/disabledInputFieldTextColor"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -177,7 +177,7 @@
             android:layout_width="400dp"
             android:layout_height="140dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -192,14 +192,15 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/newpost_image_layout"
             android:layout_width="400dp"
-            android:layout_height="140dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="5dp"
@@ -210,10 +211,10 @@
 
             <TextView
                 android:id="@+id/newpost_image_tv"
-                android:layout_width="0dp"
+                android:layout_width="69dp"
                 android:layout_height="27dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="2dp"
                 android:fontFamily="@font/poppins"
                 android:text="@string/image_text_view"
@@ -221,6 +222,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/newpost_post_image"
+                app:layout_constraintHorizontal_bias="0.107"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -228,14 +230,14 @@
                 android:id="@+id/newpost_post_image"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="28dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="12dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/image_place"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/newpost_camera_btn"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.578"
+                app:layout_constraintVertical_bias="0.0"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8Percent" />
 
             <ImageButton
@@ -251,7 +253,7 @@
                 android:src="@android:drawable/ic_menu_camera"
                 app:layout_constraintEnd_toStartOf="@+id/newpost_gallery_btn"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <ImageButton
                 android:id="@+id/newpost_gallery_btn"
@@ -267,18 +269,21 @@
                 android:src="@android:drawable/ic_menu_gallery"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <ImageView
                 android:id="@+id/newpost_post_image2"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="10dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/image_place"
                 app:layout_constraintEnd_toStartOf="@+id/newpost_post_image"
-                app:layout_constraintTop_toBottomOf="@+id/newpost_image_tv" />
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/newpost_image_tv"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -299,8 +304,7 @@
                 android:layout_width="0dp"
                 android:layout_height="27dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="2dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins"
                 android:text="@string/circle_text_view"
                 android:textColor="@color/titleColor"
@@ -308,6 +312,23 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/newpost_friends_btn"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:drawableLeft="@drawable/group_icon"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="10dp"
+                app:iconGravity="textStart"
+                app:layout_constraintBottom_toTopOf="@+id/newpost_firstcircle_btn"
+                app:layout_constraintStart_toEndOf="@+id/newpost_circle_tv"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlHardcoded,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <Button
                 android:id="@+id/newpost_firstcircle_btn"
@@ -366,14 +387,14 @@
             android:layout_width="120dp"
             android:layout_height="48dp"
             android:layout_marginTop="30dp"
-            android:layout_marginBottom="100dp"
-            app:cornerRadius="15dp"
+            android:layout_marginBottom="30dp"
             android:backgroundTint="@color/TrustiesPrimaryColor"
             android:text="@string/post_btn"
+            app:cornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.097"
-            app:layout_constraintStart_toEndOf="@+id/newpost_sos_btn"
+            app:layout_constraintHorizontal_bias="0.714"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/newpost_circle_layout"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -381,13 +402,17 @@
             android:id="@+id/newpost_sos_btn"
             android:layout_width="120dp"
             android:layout_height="48dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
             android:backgroundTint="#8DDC2424"
-            app:cornerRadius="15dp"
             android:text="@string/sos_btn"
-            app:layout_constraintBaseline_toBaselineOf="@+id/newpost_post_btn"
+            app:cornerRadius="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.272"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.243"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newpost_circle_layout"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ProgressBar
             android:id="@+id/newpost_progressBar"
@@ -406,7 +431,7 @@
             android:id="@+id/newpost_details_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="35dp"
             android:text="@string/complete_the_following_details"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -420,7 +445,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:text="TextView"
+            android:hint="Jerusalem, Israel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editpost_location_layout" />
 
