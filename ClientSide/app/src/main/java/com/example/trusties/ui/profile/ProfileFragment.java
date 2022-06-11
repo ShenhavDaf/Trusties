@@ -37,6 +37,8 @@ import com.example.trusties.model.User;
 import com.example.trusties.ui.home.HomeFragmentDirections;
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
+
 public class ProfileFragment extends Fragment {
 
     private ProfileViewModel profileViewModel;
@@ -148,9 +150,9 @@ public class ProfileFragment extends Fragment {
     /* *************************************** Holder *************************************** */
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView userName, title, description, time, commentNumber, category, status;
+        TextView userName, title, description, time, commentNumber, category, status, volunteer_txt, volunteer_count;
         ImageView photo, userImage;
-        Button sos, friendsBtn;
+        Button sos, volunteer, friendsBtn;
 
 
         public MyViewHolder(@NonNull View itemView, ProfileFragment.OnItemClickListener listener) {
@@ -167,10 +169,27 @@ public class ProfileFragment extends Fragment {
             photo = itemView.findViewById(R.id.listrow_post_img);
             sos = itemView.findViewById(R.id.listrow_sos_btn);
             friendsBtn = itemView.findViewById(R.id.listrow_friends_btn);
+            volunteer = itemView.findViewById(R.id.postListRow_volunteer);
+            volunteer_txt = itemView.findViewById(R.id.post_listRow_volunteer_Tv);
+            volunteer_count = itemView.findViewById(R.id.post_listRow_volunteerCount_Tv);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(v, pos);
+            });
+
+            volunteer.setOnClickListener(v -> {
+                volunteer.setText("Volunteered");
+                int pos = getAdapterPosition();
+                Post post = profileViewModel.getData().get(pos);
+                String id = post.getId();
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("vol_id", Model.instance.getCurrentUserModel().getId());
+
+                Model.instance.volunteer(id, map, () -> {
+                    refresh();
+                });
             });
         }
 
@@ -189,6 +208,27 @@ public class ProfileFragment extends Fragment {
                     userImage.setImageBitmap(decodedByte);
                 }
             });
+
+            if (post.getRole().equals("sos")) {
+                sos.setVisibility(View.VISIBLE);
+                if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
+                    if (post.getStatus().replace("\"", "").equals("OPEN")) {
+                        volunteer.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                Model.instance.getSosVolunteers(post.getId(), list ->
+                {
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).getEmail().equals(Model.instance.getCurrentUserModel().getEmail())) {
+                            volunteer.setVisibility(View.GONE);
+                            volunteer_txt.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    volunteer_count.setText(list.size() + " Volunteers");
+                    volunteer_count.setVisibility(View.VISIBLE);
+                });
+            }
 
             title.setText(post.getTitle());
 
