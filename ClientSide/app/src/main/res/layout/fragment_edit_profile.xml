@@ -157,9 +157,11 @@
 
         <ImageView
             android:id="@+id/editProfile_image"
+            style="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_marginTop="15dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/image_place"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

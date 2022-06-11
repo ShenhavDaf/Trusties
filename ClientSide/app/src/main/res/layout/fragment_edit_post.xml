@@ -102,9 +102,11 @@
 
             <ImageView
                 android:id="@+id/editpost_image_show"
+                style="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="15dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/image_place"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/editpost_image2_show"
@@ -112,8 +114,10 @@
 
             <ImageView
                 android:id="@+id/editpost_image2_show"
+                style="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/image_place"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
