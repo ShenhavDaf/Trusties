@@ -186,6 +186,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         if (flagTools == 0)
             toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
         if (flagHouse == 1)
+        if (flagHouse == 1)
             houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.ActionBarColor));
         if (flagHouse == 0)
             houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
@@ -502,6 +503,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         location_layout.setVisibility(View.VISIBLE);
         circle_layout.setVisibility(View.VISIBLE);
         addressTv.setVisibility(View.VISIBLE);
+        postBtn.setVisibility(View.GONE);
 
         postBtn.setEnabled(false);
         sosBtn.setOnClickListener(v -> {
