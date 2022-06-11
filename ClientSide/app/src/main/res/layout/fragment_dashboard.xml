@@ -10,7 +10,9 @@
         android:id="@+id/profile_swiperefresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,10 +27,14 @@
     <View
         android:id="@+id/profile_line2"
         android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:background="#C5E3EC"
+        android:layout_height="255dp"
+        android:layout_marginStart="-20dp"
+        android:layout_marginTop="-18dp"
+        android:layout_marginEnd="-20dp"
+        android:background="@color/ActionBarColor"
+        android:rotation="5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,7 +43,7 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="12dp"
         android:background="#808080"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,12 +53,12 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile_image"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="18dp"
         android:scaleType="centerCrop"
         android:src="@drawable/avatar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
@@ -62,48 +68,27 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center"
         android:text="TextView"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/profile_edit_btn"
-        android:layout_width="48dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="10dp"
-        android:backgroundTint="#7393B3"
-        app:cornerRadius="15dp"
-        app:icon="@drawable/edit_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
     <TextView
         android:id="@+id/profile_connections"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:text="365 connections"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar_dashBoard" />
-
-    <Button
-        android:id="@+id/profile_logout_btn"
-        android:layout_width="48dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="10dp"
-        android:backgroundTint="#74F63030"
-        app:icon="@drawable/ic_baseline_navigate_next_24"
-        app:layout_constraintBaseline_toBaselineOf="@+id/profile_edit_btn"
-        app:layout_constraintEnd_toStartOf="@+id/profile_edit_btn"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar_dashBoard" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_line2" />
 
     <RatingBar
         android:id="@+id/ratingBar_dashBoard"
@@ -111,15 +96,48 @@
         android:layout_height="wrap_content"
         android:isIndicator="true"
         android:numStars="5"
+        android:progressTint="@color/ratingBarPrimary"
         android:scaleX="0.7"
         android:scaleY="0.7"
         android:transformPivotX="200dp"
         android:transformPivotY="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        android:progressTint="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/profile_line2" />
+        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_tv" />
+
+    <TextView
+        android:id="@+id/profile_edit_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="15dp"
+        android:drawableLeft="@drawable/editt_icon"
+        android:drawablePadding="5dp"
+        android:text="Edit profile"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/profile_logout_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/profile_line2"
+        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
+
+    <TextView
+        android:id="@+id/profile_logout_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:drawableLeft="@drawable/logout_icon"
+        android:drawablePadding="1dp"
+        android:text="Logout"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/profile_line2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/profile_edit_tv"
+        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
