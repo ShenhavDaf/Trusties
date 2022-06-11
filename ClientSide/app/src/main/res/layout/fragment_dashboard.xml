@@ -27,7 +27,7 @@
     <View
         android:id="@+id/profile_line2"
         android:layout_width="0dp"
-        android:layout_height="255dp"
+        android:layout_height="260dp"
         android:layout_marginStart="-20dp"
         android:layout_marginTop="-18dp"
         android:layout_marginEnd="-20dp"
@@ -83,7 +83,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="2dp"
         android:clickable="true"
         android:fontFamily="@font/poppins"
         android:text="365 connections"
