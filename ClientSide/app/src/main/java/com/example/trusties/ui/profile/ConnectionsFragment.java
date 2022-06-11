@@ -47,7 +47,6 @@ public class ConnectionsFragment extends Fragment {
     private FragmentConnectionsBinding binding;
     MyAdapter adapter;
     Button firstCircle, secondCircle, thirdCircle;
-    TextView firstCircleTv, secondCircleTv, thirdCircleTv;
     ImageButton searchBtn, refreshBtn;
     TextView searchBar;
     User currUser;
@@ -106,53 +105,47 @@ public class ConnectionsFragment extends Fragment {
 
         firstCircle = root.findViewById(R.id.connections_firstcircle_btn);
         firstCircle.setOnClickListener(v -> {
-            refreshFirstCircle(1);
-        });
-
-        firstCircleTv = root.findViewById(R.id.connection_1st_tv);
-        firstCircleTv.setOnClickListener(v -> {
-            firstCircleTv.setTextColor(R.color.hintColor);
-            secondCircleTv.setTextColor(R.color.white);
-            thirdCircleTv.setTextColor(R.color.white);
+            firstCircle.setTextColor(firstCircle.getContext().getColor(R.color.hintColor));
+            secondCircle.setTextColor(firstCircle.getContext().getColor(R.color.white));
+            thirdCircle.setTextColor(firstCircle.getContext().getColor(R.color.white));
+            firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.ActionBarColor));
+            secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.ActionBarColor));
+            thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.ActionBarColor));
             refreshFirstCircle(1);
         });
 
         secondCircle = root.findViewById(R.id.connections_secondcircle_btn);
         secondCircle.setOnClickListener(v -> {
+            firstCircle.setTextColor(firstCircle.getContext().getColor(R.color.white));
+            secondCircle.setTextColor(firstCircle.getContext().getColor(R.color.hintColor));
+            thirdCircle.setTextColor(firstCircle.getContext().getColor(R.color.white));
+            firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.ActionBarColor));
+            secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.ActionBarColor));
+            thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.ActionBarColor));
             adapter.notifyDataSetChanged();
-            getSecondCircle();
-        });
-
-        secondCircleTv = root.findViewById(R.id.connection_2nd_tv);
-        secondCircleTv.setOnClickListener(v -> {
-            secondCircleTv.setTextColor(R.color.hintColor);
-            firstCircleTv.setTextColor(R.color.whiteColor);
-            thirdCircleTv.setTextColor(R.color.whiteColor);
             getSecondCircle();
         });
 
         thirdCircle = root.findViewById(R.id.connections_thirdcircle_btn);
         thirdCircle.setOnClickListener(v -> {
+            firstCircle.setTextColor(firstCircle.getContext().getColor(R.color.white));
+            secondCircle.setTextColor(firstCircle.getContext().getColor(R.color.white));
+            thirdCircle.setTextColor(firstCircle.getContext().getColor(R.color.hintColor));
+            firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.ActionBarColor));
+            secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.ActionBarColor));
+            thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.ActionBarColor));
             getThirdCircle();
             adapter.notifyDataSetChanged();
-
         });
 
-        thirdCircleTv = root.findViewById(R.id.connection_3rd_tv);
-        thirdCircleTv.setOnClickListener(v -> {
-            thirdCircleTv.setTextColor(R.color.hintColor);
-            firstCircleTv.setTextColor(R.color.white);
-            secondCircleTv.setTextColor(R.color.white);
-            getThirdCircle();
-        });
-
-        firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.lightGray));
-        secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.lightGray));
-        thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.lightGray));
+        firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.ActionBarColor));
+        secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.ActionBarColor));
+        thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.ActionBarColor));
 
         refreshFirstCircle(1);
         return root;
     }
+
 
 
     private void searchFunction() {
