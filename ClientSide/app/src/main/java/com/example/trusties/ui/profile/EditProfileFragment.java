@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import com.example.trusties.CommonFunctions;
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
+import com.google.gson.JsonObject;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -39,16 +41,17 @@ public class EditProfileFragment extends Fragment {
 
     TextView nameEt;
     TextView phoneEt;
-    Button saveBtn, cancelBtn, changePasswordBtn;
+    Button saveBtn, cancelBtn;
     String userId;
 
-    ImageButton cameraBtn;
-    ImageButton galleryBtn;
+    TextView cameraTv, galleryTv, changePasswordTv;
     ImageView image;
     Bitmap imageBitmap;
+    Bitmap decodedByte;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
     User user;
+    String photoBase64;
 
     TextView currPassword, newPassword, confirmPassword;
     int flagPassword = 0;
@@ -65,18 +68,32 @@ public class EditProfileFragment extends Fragment {
         nameEt = view.findViewById(R.id.editProfile_name_tv);
         phoneEt = view.findViewById(R.id.editProfile_phone_tv);
         saveBtn = view.findViewById(R.id.editProfile_save_btn);
-        cameraBtn = view.findViewById(R.id.editProfile_camera_btn);
-        galleryBtn = view.findViewById(R.id.editProfile_gallery_btn);
+        cameraTv = view.findViewById(R.id.editProfile_camera_tv);
+        galleryTv = view.findViewById(R.id.editProfile_gallery_tv);
         image = view.findViewById(R.id.editProfile_image);
         currPassword = view.findViewById(R.id.edit_profile_curr_password);
         newPassword = view.findViewById(R.id.edit_profile_new_password);
         confirmPassword = view.findViewById(R.id.edit_profile_confirm_password);
-        changePasswordBtn = view.findViewById(R.id.edit_profile_change_password_btn);
+        changePasswordTv = view.findViewById(R.id.edit_profile_change_password_tv);
         cancelBtn = view.findViewById(R.id.editProfile_cancel_btn);
         currTv = view.findViewById(R.id.edit_profile_curr_tv);
         newTv = view.findViewById(R.id.edit_profile_new_tv);
         confirmTv = view.findViewById(R.id.edit_profile_confirm_tv);
         setVisibility(View.GONE);
+
+        Model.instance.findUserById(Model.instance.getCurrentUserModel().getId(), new Model.findUserByIdListener() {
+            @Override
+            public void onComplete(JsonObject user) {
+
+                if (user.get("photo") != null) {
+                    photoBase64 = user.get("photo").getAsString();
+                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    image.setImageBitmap(decodedByte);
+                }
+
+            }
+        });
 
 
         user = Model.instance.getCurrentUserModel();
@@ -88,7 +105,7 @@ public class EditProfileFragment extends Fragment {
                 save(v);
             }
         });
-        changePasswordBtn.setOnClickListener(new View.OnClickListener() {
+        changePasswordTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 flagPassword = 1;
@@ -106,8 +123,8 @@ public class EditProfileFragment extends Fragment {
         });
 
 
-        cameraBtn.setOnClickListener(v -> OpenCamera());
-        galleryBtn.setOnClickListener(v -> OpenGallery());
+        cameraTv.setOnClickListener(v -> OpenCamera());
+        galleryTv.setOnClickListener(v -> OpenGallery());
 
         return view;
     }
@@ -188,6 +205,9 @@ public class EditProfileFragment extends Fragment {
                     }
                 });
 
+            }
+            else{
+                map.put("photo",photoBase64);
             }
             Context context = getContext();
             if (inputOk == 1) {

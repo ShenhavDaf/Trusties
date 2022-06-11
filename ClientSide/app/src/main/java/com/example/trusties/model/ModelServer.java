@@ -34,7 +34,7 @@ public class ModelServer {
 
     private final RetrofitInterface retrofitInterface;
     final private static String BASE_URL = "http://10.0.2.2:4000";
-//    final private static String BASE_URL = "http://193.106.55.119:4000";
+//        final private static String BASE_URL = "http://193.106.55.119:4000";
     private String accessToken;
     private String firebaseToken;
 
@@ -280,7 +280,7 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
     public void getMyRelatedPosts(String userID, Model.getMyRelatedPostsListener listener) {
-        retrofitInterface.getMyRelatedPosts(accessToken,userID).enqueue(new Callback<JsonArray>() {
+        retrofitInterface.getMyRelatedPosts(accessToken, userID).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 listener.onComplete(response.body());
@@ -605,7 +605,7 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
-    public void editUser(HashMap<String, String> map, String id,Context context, Model.editUserListener listener) {
+    public void editUser(HashMap<String, String> map, String id, Context context, Model.editUserListener listener) {
         String userId = Model.instance.getCurrentUserModel().userID;
         Call<Void> editUser = retrofitInterface.editUser(accessToken, map, userId);
 
@@ -613,13 +613,11 @@ public class ModelServer {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
 
-                if(response.code()== 400)
-                {
-                    Log.d("TAG","inside wrong curr password");
+                if (response.code() == 400) {
+                    Log.d("TAG", "inside wrong curr password");
                     String msg = "current password is not right!";
                     new CommonFunctions().myPopup(context, "Error", msg);
-                }
-                else {
+                } else {
                     listener.onComplete();
                 }
             }
@@ -1042,7 +1040,7 @@ public class ModelServer {
         signOut.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("TAG"," inside logout - client side");
+                Log.d("TAG", " inside logout - client side");
                 listener.onComplete();
             }
 
@@ -1062,18 +1060,19 @@ public class ModelServer {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                 Log.d("TAG", response.body().toString());
-                if(!response.body().get("id").toString().replace("\"","").equals("null")) {
-                    Log.d("TAG", response.body().get("id").toString().replace("\"",""));
+                if (!response.body().get("id").toString().replace("\"", "").equals("null")) {
+                    Log.d("TAG", response.body().get("id").toString().replace("\"", ""));
                     Log.d("TAG", "yes! signed in!");
-                    retrofitInterface.findUserById(response.body().get("id").toString().replace("\"","")).enqueue(new Callback<JsonObject>() {
+                    retrofitInterface.findUserById(response.body().get("id").toString().replace("\"", "")).enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response2) {
                             Log.d("TAG", "bodyydydy" + response2.body());
-                            User usr = new User(response.body().get("id").toString().replace("\"",""), response2.body().get("name").toString().replace("\"",""), response2.body().get("email").toString().replace("\"",""),
-                                    response2.body().get("phone").toString().replace("\"",""));
+                            User usr = new User(response.body().get("id").toString().replace("\"", ""), response2.body().get("name").toString().replace("\"", ""), response2.body().get("email").toString().replace("\"", ""),
+                                    response2.body().get("phone").toString().replace("\"", ""));
                             Model.instance.setCurrentUserModel(usr);
                             accessToken = "JWT " + response.body().get("accessToken").getAsString();
                         }
+
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
 

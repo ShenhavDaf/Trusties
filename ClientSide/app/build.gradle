@@ -70,5 +70,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
-
 }

@@ -80,6 +80,10 @@
         <argument
             android:name="postId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_editPostFragment_to_detailsPostFragment"
+            app:destination="@id/detailsPostFragment"
+            app:popUpTo="@id/navigation_home" />
     </fragment>
     <action
         android:id="@+id/action_global_navigation_home"
@@ -140,12 +144,11 @@
     </fragment>
 
 
-
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.trusties.ui.home.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_othersProfileFragment"
             app:destination="@id/othersProfileFragment" />
@@ -158,12 +161,31 @@
         android:id="@+id/feedbackFragment"
         android:name="com.example.trusties.posts.sos.FeedbackFragment"
         android:label="fragment_feedback"
-        tools:layout="@layout/fragment_feedback" >
+        tools:layout="@layout/fragment_feedback">
         <argument
             android:name="userId"
             app:argType="string" />
         <action
             android:id="@+id/action_feedbackFragment_to_othersProfileFragment"
             app:destination="@id/othersProfileFragment" />
-    </fragment><action android:id="@+id/action_global_searchFragment" app:destination="@id/searchFragment"/>
+    </fragment>
+    <action
+        android:id="@+id/action_global_searchFragment"
+        app:destination="@id/searchFragment" />
+    <fragment
+        android:id="@+id/friendsCircleFragment"
+        android:name="com.example.trusties.FriendsCircleFragment"
+        android:label="fragment_friends_circle"
+        tools:layout="@layout/fragment_friends_circle">
+        <action
+            android:id="@+id/action_friendsCircleFragment_to_othersProfileFragment"
+            app:destination="@id/othersProfileFragment" />
+        <argument
+            android:name="Circle"
+            android:defaultValue="3"
+            app:argType="integer" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_friendsCircleFragment"
+        app:destination="@id/friendsCircleFragment" />
 </navigation>

@@ -58,8 +58,8 @@ async function findFriends(list, currID) {
 const getSecondCircleOnly = async (req, res) => {
   try {
     const user = await User.findById(req.query.id);
-    const currID = req.query.id; //A
-    const firstList = user.friends; // Shenhav, c
+    const currID = req.query.id;
+    const firstList = user.friends;
     const temp = new Array();
 
     for (let i = 0; i < firstList.length; i++) {
@@ -72,14 +72,12 @@ const getSecondCircleOnly = async (req, res) => {
           temp.push(friend.friends[j]);
       }
     }
+    
     // Remove duplicates
     const unique = temp.filter(
       (value, index, self) =>
         index === self.findIndex((t) => String(t) === String(value))
     );
-    // uniqueArray = a.filter(function(item, pos, self) {
-    // return self.indexOf(item) == pos;
-    // })
 
     res.status(200).send(unique);
 
@@ -136,16 +134,6 @@ const getThirdCircleOnly = async (req, res) => {
         i--;
       }
     }
-
-    // for (let k = 0; k < unique.length; k++) {
-    //   for (let u = 0; u < temp.length; u++) {
-    //     if (unique[k].String == temp[u].String) {
-    //       console.log((await User.findById(unique[k])).name + "inside!");
-    //       unique.splice(k, 1);
-    //       // k++;
-    //     }
-    //   }
-    // }
 
     res.status(200).send(unique);
   } catch (err) {

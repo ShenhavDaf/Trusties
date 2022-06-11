@@ -5,7 +5,6 @@ import static android.app.Activity.RESULT_OK;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -42,7 +41,6 @@ import com.example.trusties.CommonFunctions;
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -64,40 +62,35 @@ import java.util.Locale;
 
 public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
-    EditText postTitle, description;
-    TextView detailsTV, addressTv;
-    ImageView image, image2;
-    ImageButton cameraBtn, galleryBtn, carBtn, deliveryBtn, toolsBtn, houseBtn;
-    Button firstCircleBtn, secondCircleBtn, thirdCircleBtn, postBtn, sosBtn;
-    ProgressBar progressBar;
-    int flag = 0;
-    int picFlag = 1;
-    ConstraintLayout location_layout, circle_layout;
-    MapView mapView;
-    HashMap<String, String> map;
-    GoogleMap mGoogleMap;
-    String fullAddress;
-    private GoogleApiClient googleApiClient;
-    String address;
-
-    private FusedLocationProviderClient fusedLocationProviderClientLocationClient;
-
-    String category;
-
-    Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
-    int PICK_IMAGE_MULTIPLE = 1;
-    ArrayList<Uri> mArrayUri;
+
+    EditText postTitle, description;
+    TextView detailsTV, addressTv;
+    ImageButton cameraBtn, galleryBtn, carBtn, deliveryBtn, toolsBtn, houseBtn;
+    Button friendBtn, firstCircleBtn, secondCircleBtn, thirdCircleBtn, postBtn, sosBtn;
+    ProgressBar progressBar;
+    ConstraintLayout location_layout, circle_layout;
+
+    MapView mapView;
     LatLng locationOnMap;
     Geocoder geocoder;
     List<Address> addresses;
 
+    ImageView image, image2;
+    ArrayList<Uri> mArrayUri;
+    Bitmap imageBitmap;
+
+    HashMap<String, String> map;
+    String category, address, fullAddress;
     Integer circle;
+    int flag = 0;
+    int picFlag = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint("ResourceAsColor")
     @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -109,10 +102,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         image = view.findViewById(R.id.newpost_post_image);
         image2 = view.findViewById(R.id.newpost_post_image2);
         mapView = view.findViewById(R.id.post_add_map);
-        carBtn = view.findViewById(R.id.newpost_car_btn);
-        toolsBtn = view.findViewById(R.id.newpost_tools_btn);
-        deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
-        houseBtn = view.findViewById(R.id.newpost_house_damage_btn);
+
 
         progressBar = view.findViewById(R.id.newpost_progressBar);
         progressBar.setVisibility(View.GONE);
@@ -128,6 +118,33 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         addressTv = view.findViewById(R.id.addpost_address);
         addressTv.setVisibility(View.GONE);
+
+        cameraBtn = view.findViewById(R.id.newpost_camera_btn);
+        galleryBtn = view.findViewById(R.id.newpost_gallery_btn);
+        friendBtn = view.findViewById(R.id.newpost_friends_btn);
+        firstCircleBtn = view.findViewById(R.id.newpost_firstcircle_btn);
+        secondCircleBtn = view.findViewById(R.id.newpost_secondcircle_btn);
+        thirdCircleBtn = view.findViewById(R.id.newpost_thirdcircle_btn);
+        postBtn = view.findViewById(R.id.newpost_post_btn);
+        sosBtn = view.findViewById(R.id.newpost_sos_btn);
+
+        cameraBtn.setOnClickListener(v -> OpenCamera());
+        galleryBtn.setOnClickListener(v -> OpenGallery());
+
+        firstCircleBtn.setOnClickListener(v -> FindFirstCircle());
+        secondCircleBtn.setOnClickListener(v -> FindSecondCircle());
+        thirdCircleBtn.setOnClickListener(v -> FindThirdCircle());
+        friendBtn.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(AddPostFragmentDirections.actionGlobalFriendsCircleFragment().setCircle(circle)));
+
+        postBtn.setOnClickListener(v -> PostQuestion(v));
+        sosBtn.setOnClickListener(v -> postSOSCall(v));
+
+        /*--------------------------categories---------------------------*/
+        carBtn = view.findViewById(R.id.newpost_car_btn);
+        deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
+        toolsBtn = view.findViewById(R.id.newpost_tools_btn);
+        houseBtn = view.findViewById(R.id.newpost_house_damage_btn);
 
         carBtn.setOnClickListener(v -> {
             category = "Car";
@@ -145,31 +162,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         toolsBtn.setOnClickListener(v -> {
             category = "Tools";
             setColorsBtn(0, 0, 1, 0);
-
         });
-
-        cameraBtn = view.findViewById(R.id.newpost_camera_btn);
-        galleryBtn = view.findViewById(R.id.newpost_gallery_btn);
-        firstCircleBtn = view.findViewById(R.id.newpost_firstcircle_btn);
-        secondCircleBtn = view.findViewById(R.id.newpost_secondcircle_btn);
-        thirdCircleBtn = view.findViewById(R.id.newpost_thirdcircle_btn);
-        postBtn = view.findViewById(R.id.newpost_post_btn);
-        sosBtn = view.findViewById(R.id.newpost_sos_btn);
-
-        cameraBtn.setOnClickListener(v -> OpenCamera());
-        galleryBtn.setOnClickListener(v -> OpenGallery());
-        firstCircleBtn.setOnClickListener(v -> FindFirstCircle());
-        secondCircleBtn.setOnClickListener(v -> FindSecondCircle());
-        thirdCircleBtn.setOnClickListener(v -> FindThirdCircle());
-
-        postBtn.setOnClickListener(v -> PostQuestion(v));
-        sosBtn.setOnClickListener(v -> postSOSCall(v));
-
-        /*--------------------------categories---------------------------*/
-        carBtn = view.findViewById(R.id.newpost_car_btn);
-        deliveryBtn = view.findViewById(R.id.newpost_delivery_btn);
-        toolsBtn = view.findViewById(R.id.newpost_tools_btn);
-        houseBtn = view.findViewById(R.id.newpost_house_damage_btn);
 
         mapView.getMapAsync(this);
         mapView.onCreate(savedInstanceState);
@@ -283,9 +276,11 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+
     private void FindFirstCircle() {
 
         circle = 1;
+        friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             firstCircleBtn.setBackgroundColor(firstCircleBtn.getContext().getColor(R.color.titleColor));
@@ -297,6 +292,8 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     private void FindSecondCircle() {
         FindFirstCircle();
         circle = 2;
+        friendBtn.setVisibility(View.VISIBLE);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.titleColor));
             thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
@@ -306,6 +303,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     private void FindThirdCircle() {
         FindSecondCircle();
         circle = 3;
+        friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.titleColor));
@@ -398,8 +396,8 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                     }
 
                     if (type.equals("SOS")) {
-                        int addressIsFine = new CommonFunctions().CheckLocation(address,getContext());
-                        if(addressIsFine == 1) {
+                        int addressIsFine = new CommonFunctions().CheckLocation(address, getContext());
+                        if (addressIsFine == 1) {
                             map.put("location", locationOnMap.toString());
                             map.put("address", fullAddress);
 
@@ -477,61 +475,61 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                System.out.println("------------------3------------------");
-                // GPS location can be null if GPS is switched off
-                if (location != null) {
+                    @Override
+                    public void onSuccess(Location location) {
+                        System.out.println("------------------3------------------");
+                        // GPS location can be null if GPS is switched off
+                        if (location != null) {
 //                    Toast.makeText(getContext(), "lat " + location.getLatitude() + "\nlong " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-                    System.out.println("lat " + location.getLatitude() + "\nlong " + location.getLongitude());
-                    LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    googleMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
-                    float zoomLevel = 16.0f; //This goes up to 21
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel));
-                    googleMap.getUiSettings().setZoomControlsEnabled(true);
-                    googleMap.getUiSettings().setCompassEnabled(true);
-                    googleMap.getUiSettings().setScrollGesturesEnabled(true);
-                    googleMap.setMyLocationEnabled(true);
-                    locationOnMap = myLocation;
-                    geocoder = new Geocoder(getContext(), Locale.getDefault());
-                    try {
-                        addresses = geocoder.getFromLocation(myLocation.latitude, myLocation.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                        address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                        fullAddress = address;
-                        addressTv.setText(fullAddress);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                        @Override
-                        public void onMapClick(@NonNull LatLng latLng) {
-                            Log.d("TAG", latLng.toString());
-                            googleMap.clear();
-                            googleMap.addMarker(new MarkerOptions().position(latLng));
+                            System.out.println("lat " + location.getLatitude() + "\nlong " + location.getLongitude());
+                            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            googleMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
+                            float zoomLevel = 16.0f; //This goes up to 21
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel));
+                            googleMap.getUiSettings().setZoomControlsEnabled(true);
+                            googleMap.getUiSettings().setCompassEnabled(true);
+                            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+                            googleMap.setMyLocationEnabled(true);
+                            locationOnMap = myLocation;
                             geocoder = new Geocoder(getContext(), Locale.getDefault());
                             try {
-                                addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                addresses = geocoder.getFromLocation(myLocation.latitude, myLocation.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                                 address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//                                String area = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
-//                                Log.d("TAG", " AREA ~~~~~~~ " + area);
                                 fullAddress = address;
-                                Log.d("TAG", fullAddress);
                                 addressTv.setText(fullAddress);
+
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
 
+                            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                                @Override
+                                public void onMapClick(@NonNull LatLng latLng) {
+                                    Log.d("TAG", latLng.toString());
+                                    googleMap.clear();
+                                    googleMap.addMarker(new MarkerOptions().position(latLng));
+                                    geocoder = new Geocoder(getContext(), Locale.getDefault());
+                                    try {
+                                        addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                        address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//                                String area = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
+//                                Log.d("TAG", " AREA ~~~~~~~ " + area);
+                                        fullAddress = address;
+                                        Log.d("TAG", fullAddress);
+                                        addressTv.setText(fullAddress);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
 
-                            locationOnMap = latLng;
+
+                                    locationOnMap = latLng;
+
+                                }
+                            });
 
                         }
-                    });
-
-                }
-            }
-        })
+                    }
+                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {

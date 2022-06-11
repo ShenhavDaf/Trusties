@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -23,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +76,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
     ImageButton cameraBtn;
     ImageButton galleryBtn;
     String postId;
+    Bitmap decodedByte1, decodedByte2;
 
     Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -93,6 +96,8 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
     String address;
     String locationSOS = null;
     int isSOS = 0;
+    String photoBase64First;
+    String photoBase64Second;
 
 
     @Override
@@ -140,6 +145,26 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                     isSOS = 1;
                     address = post.get("address").toString().replace("\"", "");
                     locationSOS = post.get("location").toString().replace("\"", "");
+                }
+
+                if (post.get("photo").getAsJsonArray().size() > 0) {// CHANGED
+                    photoBase64First = post.get("photo").getAsJsonArray().get(0).getAsString();
+
+                    if (photoBase64First != null) {
+                        byte[] decodedString = Base64.decode(photoBase64First, Base64.DEFAULT);
+                        decodedByte1 = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        image.setImageBitmap(decodedByte1);
+                    }
+                    if (post.get("photo").getAsJsonArray().size() == 2)
+                    {
+                        photoBase64Second = post.get("photo").getAsJsonArray().get(1).getAsString();
+                        if (photoBase64Second != null) {
+                            byte[] decodedString = Base64.decode(photoBase64Second, Base64.DEFAULT);
+                            decodedByte2 = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            image2.setImageBitmap(decodedByte2);
+                        }
+                    }
+
                 }
             }
         });
@@ -226,6 +251,7 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
 
         super.onActivityResult(requestCode, resultCode, data);
         mArrayUri = new ArrayList<Uri>();
+        setDeafultPic();
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 image2.setImageResource(R.drawable.image_place);
@@ -294,33 +320,21 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                     map.put("address", fullAddress);
                 }
             }
-//        if (imageBitmap != null) {
-//            Log.d("TAG", imageBitmap.toString());
-//            Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
-//                @Override
-//                public void onComplete(String url) {
-//                    map.put("photo", url);
-//                }
-//            });
-//
-//        }
             ArrayList<String> photos = new ArrayList<>();
 
             if (imageBitmap != null) {
-                Log.d("TAG", imageBitmap.toString());
                 Model.instance.encodeBitMapImg(imageBitmap, new Model.encodeBitMapImgListener() {
                     @Override
                     public void onComplete(String url) {
                         map.put("photo", url);
                     }
                 });
-
             }
-            if (mArrayUri != null) {
 
+            if (mArrayUri != null) {
                 flag = 1;
                 for (int i = 0; i < mArrayUri.size(); i++) {
-                    try {
+                     try {
                         Model.instance.encodeBitMapImg(BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(mArrayUri.get(i))), new Model.encodeBitMapImgListener() {
                             @Override
                             public void onComplete(String url) {
@@ -332,16 +346,33 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
             }
+            else {
+                Log.d("TAG","insisisisisiisde");
+                if(photoBase64First!=null) {
+                    image.setImageBitmap(decodedByte1);
+                    photos.add(photoBase64First);
+                }
+                if(photoBase64Second!=null) {
+                    image2.setImageBitmap(decodedByte2);
+                    photos.add(photoBase64Second);
+                }
+
+            }
             Model.instance.editPost(map, postId, new Model.editPostListener() {
                 @Override
                 public void onComplete(JsonObject res) {
-                    Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
+                    Log.d("TAG", "stopppppppppp" + photos);
+
+                     Model.instance.addPhotosToPost(photos, res.get("_id").toString().replace("\"", ""), new Model.addPhotosToPostListener() {
                         @Override
                         public void onComplete() {
                             Log.d("TAG", "stopppppppppp");
+
                         }
                     });
-                    Navigation.findNavController(view).navigateUp();
+//                    Navigation.findNavController(view).navigateUp();
+                   Navigation.findNavController(view).navigate(EditPostFragmentDirections.actionEditPostFragmentToDetailsPostFragment(postId));
+
                 }
             });
         }
@@ -483,5 +514,10 @@ public class EditPostFragment extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+    }
+
+    public void setDeafultPic(){
+        image.setImageResource(R.drawable.image_place);
+        image2.setImageResource(R.drawable.image_place);
     }
 }

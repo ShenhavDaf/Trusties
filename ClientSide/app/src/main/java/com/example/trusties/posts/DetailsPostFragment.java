@@ -4,8 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,16 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.trusties.CommonFunctions;
-import com.example.trusties.MyApplication;
 import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentDetailsPostBinding;
-import com.example.trusties.login.LoginActivity;
 import com.example.trusties.model.Comment;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
@@ -57,12 +51,13 @@ import java.util.HashMap;
 
 public class DetailsPostFragment extends Fragment implements OnMapReadyCallback {
 
-    TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt, addressEt;
+    TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt, addressEt, locationTv;
     EditText comment;
     Button editBtn, deleteBtn, closeBtn;
     Button requestsBtn;
     ProgressBar progressBar;
-    ImageView postImg, imgUser, sendCommentBtn;
+    ImageView postImg, imgUser, sendCommentBtn, postAuthorImg;
+
 
     String currUserId;
     JsonObject currPost;
@@ -70,6 +65,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     String postId, senderId;
     User currUser;
     Bitmap decodedByte;
+    View divider, divider2;
 
     private DetailsPostViewModel postViewModel;
     private FragmentDetailsPostBinding binding;
@@ -121,6 +117,10 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         requestsBtn = view.findViewById(R.id.postdetails_view_requests_btn);
         closeBtn = view.findViewById(R.id.postdetails_close_btn);
         mapView = view.findViewById(R.id.post_details_map);
+        locationTv = view.findViewById(R.id.postdetails_location_tv);
+        divider = view.findViewById(R.id.divider_two);
+        divider2 = view.findViewById(R.id.divider_four);
+        postAuthorImg = view.findViewById(R.id.details_post_author_img);
 
         carouselView = view.findViewById(R.id.carouselView);
 
@@ -140,6 +140,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 senderId = post.get("sender").toString().replace("\"", "");
                 String status = post.get("status").toString().replace("\"", "");
                 String role = post.get("role").toString().replace("\"", "");
+
+
                 if (role.equals("SOS")) {
                     isSOS = 1;
                     address = post.get("address").toString().replace("\"", "");
@@ -149,14 +151,17 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                     String approved = post.get("approved_volunteer").toString().replace("\"", "");
                     if (!(currUserId.equals(senderId) || currUserId.equals(approved))) {
                         mapView.setVisibility(View.GONE);
+
                         String area = post.get("address").getAsString().split(",")[1] + ", " + post.get("address").getAsString().split(",")[2];
                         address = area;
                     }
 
 
                 } else { // in post we don't have location
+                    locationTv.setVisibility(View.GONE);
                     mapView.setVisibility(View.GONE);
                     addressEt.setVisibility(View.GONE);
+                    divider2.setVisibility(View.GONE);
                 }
                 if (status.equals("CLOSE"))
                     closeBtn.setVisibility(View.GONE);
@@ -196,12 +201,19 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                     @Override
                     public void onComplete(JsonObject user) {
 
+                        if (user.get("photo") != null) {
+                            String photoBase64 = user.get("photo").getAsString();
+                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            postAuthorImg.setImageBitmap(decodedByte);
+                        }
+
                         if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
                             deleteBtn.setVisibility(View.VISIBLE);
                             editBtn.setVisibility(View.VISIBLE);
                             if (role.compareTo("SOS") == 0) {
 //                                closeBtn.setVisibility(View.VISIBLE);
-                                requestsBtn.setVisibility(View.VISIBLE);
+//                                requestsBtn.setVisibility(View.VISIBLE);
 
 
                             }
@@ -213,6 +225,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                             editBtn.setVisibility(View.GONE);
                             closeBtn.setVisibility(View.GONE);
                             requestsBtn.setVisibility(View.GONE);
+                            divider.setVisibility(View.GONE);
                         }
 
                     }
@@ -526,6 +539,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 Model.instance.upComment(id, map, () -> {
                     positive.setVisibility(View.GONE);
                     negative.setVisibility(View.VISIBLE);
+
                     refresh();
                 });
             });
