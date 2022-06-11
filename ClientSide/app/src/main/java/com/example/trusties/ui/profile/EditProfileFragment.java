@@ -41,7 +41,7 @@ public class EditProfileFragment extends Fragment {
 
     TextView nameEt;
     TextView phoneEt;
-    Button saveBtn, cancelBtn;
+    Button saveBtn, cancelBtn, cancelPassword;
     String userId;
 
     TextView cameraTv, galleryTv, changePasswordTv;
@@ -79,6 +79,7 @@ public class EditProfileFragment extends Fragment {
         currTv = view.findViewById(R.id.edit_profile_curr_tv);
         newTv = view.findViewById(R.id.edit_profile_new_tv);
         confirmTv = view.findViewById(R.id.edit_profile_confirm_tv);
+        cancelPassword = view.findViewById(R.id.editProfile_cancel_password);
         setVisibility(View.GONE);
 
         Model.instance.findUserById(Model.instance.getCurrentUserModel().getId(), new Model.findUserByIdListener() {
@@ -110,22 +111,27 @@ public class EditProfileFragment extends Fragment {
             public void onClick(View v) {
                 flagPassword = 1;
                 setVisibility(View.VISIBLE);
-
             }
         });
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
+
+        cancelPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 flagPassword = 0;
                 setVisibility(View.GONE);
-
             }
         });
 
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flagPassword = 0;
+                Navigation.findNavController(v).navigateUp();
+            }
+        });
 
         cameraTv.setOnClickListener(v -> OpenCamera());
         galleryTv.setOnClickListener(v -> OpenGallery());
-
         return view;
     }
 
@@ -190,11 +196,9 @@ public class EditProfileFragment extends Fragment {
         }
         int isNameAndPhoneOk = CheckNameAndPhone(nameEt.getText().toString(), phoneEt.getText().toString());
         if (isNameAndPhoneOk == 1) {
-
             map.put("name", nameEt.getText().toString());
             map.put("phone", phoneEt.getText().toString());
             map.put("flag", flagPassword + "");
-
 
             if (imageBitmap != null) {
                 Log.d("TAG", imageBitmap.toString());
@@ -204,17 +208,17 @@ public class EditProfileFragment extends Fragment {
                         map.put("photo", url);
                     }
                 });
-
             }
+
             else{
                 map.put("photo",photoBase64);
             }
+
             Context context = getContext();
             if (inputOk == 1) {
                 Model.instance.editUser(map, userId, context, new Model.editUserListener() {
                     @Override
                     public void onComplete() {
-
                         User newUsr = new User(userId, map.get("name"), user.getEmail(), map.get("phone"));
                         Model.instance.setCurrentUserModel(newUsr);
                         Navigation.findNavController(view).navigateUp();
@@ -222,19 +226,16 @@ public class EditProfileFragment extends Fragment {
                 });
             }
         }
-
     }
 
     public void setVisibility(int isVisible) {
-        cancelBtn.setVisibility(isVisible);
+        cancelPassword.setVisibility(isVisible);
         currPassword.setVisibility(isVisible);
         newPassword.setVisibility(isVisible);
         confirmPassword.setVisibility(isVisible);
         confirmTv.setVisibility(isVisible);
         newTv.setVisibility(isVisible);
         currTv.setVisibility(isVisible);
-
-
     }
 
     public int CheckNameAndPhone(String name, String phone) {

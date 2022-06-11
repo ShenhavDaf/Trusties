@@ -110,7 +110,7 @@ public class OthersProfileFragment extends Fragment {
                 if( !friends.contains(currUser.getId())){
                     disableView.setVisibility(View.VISIBLE);
                     gif.setVisibility(View.VISIBLE);
-
+                    line.setVisibility(View.GONE);
                     postsList.setVisibility(View.GONE);
                 }
             }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -539,9 +540,27 @@ public class SearchFragment extends Fragment {
 
                     status.setText(post.get("status").getAsString());
                     if (status.getText().equals("OPEN")) {
-                        status.setBackgroundColor(status.getContext().getColor(R.color.green));
+                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
+                    } else if (status.getText().equals("WAITING")) {
+                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
+                    } else if (status.getText().equals("CLOSE")) {
+                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
                     }
-                    category.setText(post.get("category").getAsString());
+
+                    String currCategory = post.get("category").getAsString();
+                    Drawable categoryImg = null;
+
+                    if (currCategory.equals("Tools")) {
+                        categoryImg = getContext().getResources().getDrawable(R.drawable.tools);
+                    } else if (currCategory.equals("Delivery")) {
+                        categoryImg = getContext().getResources().getDrawable(R.drawable.delivery);
+                    } else if (currCategory.equals("House")) {
+                        categoryImg = getContext().getResources().getDrawable(R.drawable.house);
+                    } else if (currCategory.equals("Car")) {
+                        categoryImg = getContext().getResources().getDrawable(R.drawable.car);
+                    }
+
+                    category.setBackground(categoryImg);
 
                     if (post.get("photo").getAsJsonArray().size() > 0) {// CHANGED
                         if (post.get("photo").getAsJsonArray().size() == 2)
