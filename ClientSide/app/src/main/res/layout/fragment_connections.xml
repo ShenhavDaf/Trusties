@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.ConnectionsFragment">
 
+    <View
+        android:id="@+id/connections_line"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/ActionBarColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/connections_firstcircle_btn"
         android:layout_width="wrap_content"
@@ -16,6 +26,7 @@
         android:textColor="#000000"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBaseline_toBaselineOf="@+id/connections_secondcircle_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeWidth="1dp" />
@@ -26,12 +37,12 @@
         android:layout_height="50dp"
         android:layout_marginStart="45dp"
         android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp"
         android:backgroundTint="#0CFFFFFF"
         android:text="2ND"
         android:textColor="#000000"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/connections_firstcircle_btn"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeWidth="1dp" />
@@ -46,29 +57,17 @@
         android:textColor="#000000"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBaseline_toBaselineOf="@+id/connections_secondcircle_btn"
         app:layout_constraintStart_toEndOf="@+id/connections_secondcircle_btn"
         app:strokeWidth="1dp" />
-
-    <View
-        android:id="@+id/connections_line1"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="12dp"
-        android:background="#808080"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connections_secondcircle_btn" />
 
     <EditText
         android:id="@+id/connections_search_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_corner"
         android:ems="10"
@@ -77,28 +76,35 @@
         android:padding="5dp"
         android:paddingStart="11dp"
         app:layout_constraintEnd_toStartOf="@+id/connections_search_btn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connections_line1" />
+        app:layout_constraintTop_toBottomOf="@+id/connections_line" />
 
     <ImageButton
         android:id="@+id/connections_search_btn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="13dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/send_icon"
+        android:backgroundTint="@color/StatusBarColor"
         app:layout_constraintEnd_toStartOf="@+id/connections_refresh_btn"
-        app:layout_constraintTop_toBottomOf="@+id/connections_line1" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/connections_search_tv"
+        app:layout_constraintTop_toBottomOf="@+id/connections_line" />
 
     <ImageButton
         android:id="@+id/connections_refresh_btn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="13dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/ic_refresh_24"
+        android:backgroundTint="@color/StatusBarColor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connections_line1" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/connections_search_btn"
+        app:layout_constraintTop_toBottomOf="@+id/connections_line" />
 
 
     <View
@@ -106,7 +112,7 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="12dp"
         android:background="#808080"
         app:layout_constraintEnd_toEndOf="parent"
@@ -118,13 +124,51 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/connectionListRow_mutual"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="115dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/connections_line2">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/connection_1st_tv"
+        android:layout_width="137dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1ST"
+        android:textColor="@color/hintColor"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <TextView
+        android:id="@+id/connection_2nd_tv"
+        android:layout_width="137dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="2ND"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="137dp"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <TextView
+        android:id="@+id/connection_3rd_tv"
+        android:layout_width="137dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="3RD"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="274dp"
+        tools:layout_editor_absoluteY="10dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

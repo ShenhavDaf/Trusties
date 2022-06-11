@@ -7,7 +7,7 @@
     android:layout_margin="2dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="#F3F3F3"
+    app:cardBackgroundColor="#FAFAFA"
     app:cardCornerRadius="8dp"
     app:cardElevation="1dp"
     app:cardPreventCornerOverlap="true"
@@ -21,13 +21,11 @@
             android:id="@+id/commentListRow_userImg_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@+id/coomentListRow_upBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/avatar" />
 
@@ -35,9 +33,9 @@
             android:id="@+id/coomentListRow_content_ev"
             android:layout_width="0dp"
             android:layout_height="38dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:editable="true"
             android:ems="10"
             android:enabled="false"
@@ -46,34 +44,33 @@
             android:textColor="@android:color/primary_text_light"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/coomentListRow_downBtn"
-            app:layout_constraintEnd_toStartOf="@+id/coomentListRow_deleteBtn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/connectionListRow_userName_tv"
-            app:layout_constraintVertical_bias="0.45" />
+            app:layout_constraintTop_toBottomOf="@+id/commentListRow_userImg_img" />
 
         <TextView
             android:id="@+id/connectionListRow_userName_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:text="TextView"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/coomentListRow_time_tv"
-            app:layout_constraintStart_toEndOf="@+id/commentListRow_userImg_img"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/coomentListRow_deleteBtn"
+            app:layout_constraintEnd_toStartOf="@+id/coomentListRow_deleteBtn"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/commentListRow_userImg_img" />
 
         <TextView
             android:id="@+id/coomentListRow_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:text="TextView"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/coomentListRow_saveEditBtn"
@@ -102,44 +99,39 @@
             android:id="@+id/coomentListRow_editBtn"
             android:layout_width="30dp"
             android:layout_height="35dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="10dp"
             android:backgroundTint="@color/TrustiesPrimaryColor"
             android:padding="3dp"
             android:paddingLeft="2dp"
             android:textSize="12sp"
             app:icon="@drawable/edit_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/connectionListRow_userName_tv" />
+            tools:layout_editor_absoluteY="5dp" />
 
         <Button
             android:id="@+id/coomentListRow_deleteBtn"
             android:layout_width="30dp"
             android:layout_height="35dp"
-            android:layout_marginTop="15dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="32dp"
             android:backgroundTint="@color/TrustiesPrimaryColor"
             android:padding="3dp"
             android:textSize="12sp"
             app:icon="@drawable/delete_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/coomentListRow_editBtn"
-            app:layout_constraintTop_toBottomOf="@+id/connectionListRow_userName_tv" />
+            tools:layout_editor_absoluteY="5dp" />
 
         <Button
             android:id="@+id/coomentListRow_downBtn"
             android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="4dp"
             android:backgroundTint="@color/TrustiesPrimaryColor"
             android:drawableLeft="@drawable/minus_icon"
-            android:padding="2dp"
+            android:padding="3dp"
             android:textSize="8sp"
+            app:cornerRadius="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/coomentListRow_rateTv"
             app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_ev" />
@@ -147,18 +139,18 @@
         <Button
             android:id="@+id/coomentListRow_upBtn"
             android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
             android:backgroundTint="@color/TrustiesPrimaryColor"
             android:drawableLeft="@drawable/plus_icon"
             android:drawablePadding="1dp"
-            android:padding="2dp"
+            android:padding="3dp"
             android:textColor="#FFFFFF"
             android:textSize="8sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_ev" />
+            app:cornerRadius="40dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/coomentListRow_downBtn"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/coomentListRow_approvedTv"
@@ -178,17 +170,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="5dp"
             android:gravity="center"
             android:padding="4dp"
             android:paddingBottom="5dp"
             android:text="0"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/coomentListRow_upBtn"
-            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_ev"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/coomentListRow_downBtn"
+            app:layout_constraintStart_toEndOf="@+id/coomentListRow_upBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
