@@ -47,6 +47,7 @@ public class ConnectionsFragment extends Fragment {
     private FragmentConnectionsBinding binding;
     MyAdapter adapter;
     Button firstCircle, secondCircle, thirdCircle;
+    TextView firstCircleTv, secondCircleTv, thirdCircleTv;
     ImageButton searchBtn, refreshBtn;
     TextView searchBar;
     User currUser;
@@ -64,6 +65,7 @@ public class ConnectionsFragment extends Fragment {
         connectionsViewModel = new ViewModelProvider(this).get(ConnectionsViewModel.class);
     }
 
+    @SuppressLint("ResourceAsColor")
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,9 +109,25 @@ public class ConnectionsFragment extends Fragment {
             refreshFirstCircle(1);
         });
 
+        firstCircleTv = root.findViewById(R.id.connection_1st_tv);
+        firstCircleTv.setOnClickListener(v -> {
+            firstCircleTv.setTextColor(R.color.hintColor);
+            secondCircleTv.setTextColor(R.color.white);
+            thirdCircleTv.setTextColor(R.color.white);
+            refreshFirstCircle(1);
+        });
+
         secondCircle = root.findViewById(R.id.connections_secondcircle_btn);
         secondCircle.setOnClickListener(v -> {
             adapter.notifyDataSetChanged();
+            getSecondCircle();
+        });
+
+        secondCircleTv = root.findViewById(R.id.connection_2nd_tv);
+        secondCircleTv.setOnClickListener(v -> {
+            secondCircleTv.setTextColor(R.color.hintColor);
+            firstCircleTv.setTextColor(R.color.whiteColor);
+            thirdCircleTv.setTextColor(R.color.whiteColor);
             getSecondCircle();
         });
 
@@ -119,6 +137,15 @@ public class ConnectionsFragment extends Fragment {
             adapter.notifyDataSetChanged();
 
         });
+
+        thirdCircleTv = root.findViewById(R.id.connection_3rd_tv);
+        thirdCircleTv.setOnClickListener(v -> {
+            thirdCircleTv.setTextColor(R.color.hintColor);
+            firstCircleTv.setTextColor(R.color.white);
+            secondCircleTv.setTextColor(R.color.white);
+            getThirdCircle();
+        });
+
         firstCircle.setBackgroundColor(firstCircle.getContext().getColor(R.color.lightGray));
         secondCircle.setBackgroundColor(secondCircle.getContext().getColor(R.color.lightGray));
         thirdCircle.setBackgroundColor(thirdCircle.getContext().getColor(R.color.lightGray));

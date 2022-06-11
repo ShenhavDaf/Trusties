@@ -228,7 +228,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_categories_layout2">
+            app:layout_constraintTop_toBottomOf="@+id/search_categories_layout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/search_status_layout"
@@ -310,114 +310,101 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/search_categories_layout2"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/search_categories_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/StatusBarColor"
+            android:clickable="true"
+            android:fontFamily="@font/poppins"
+            android:padding="5dp"
+            android:text="CATEGORIES"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_textViewPostsTOP" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/search_categories_layout"
+            android:layout_width="0dp"
+            android:layout_height="57dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_textViewPostsTOP">
+            app:layout_constraintTop_toBottomOf="@+id/search_categories_tv">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/search_categories_layout"
-                android:layout_width="0dp"
-                android:layout_height="57dp"
-                android:layout_marginStart="2dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/search_categories_tv"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <CheckBox
-                    android:id="@+id/search_car_cb"
-                    android:layout_width="55dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:fontFamily="@font/poppins"
-                    android:text="Car"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/search_delivery_cb"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <CheckBox
-                    android:id="@+id/search_delivery_cb"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:fontFamily="@font/poppins"
-                    android:text="Delivery"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/search_tools_cb"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/search_car_cb"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <CheckBox
-                    android:id="@+id/search_tools_cb"
-                    android:layout_width="65dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:fontFamily="@font/poppins"
-                    android:text="Tools"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/search_house_cb"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/search_delivery_cb"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <CheckBox
-                    android:id="@+id/search_house_cb"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:fontFamily="@font/poppins"
-                    android:text="House"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/search_tools_cb"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/search_categories_tv"
-                android:layout_width="wrap_content"
+            <CheckBox
+                android:id="@+id/search_car_cb"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="15dp"
-                android:background="@color/StatusBarColor"
-                android:clickable="true"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="1dp"
                 android:fontFamily="@font/poppins"
-                android:padding="5dp"
-                android:text="CATEGORIES"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:visibility="gone"
+                android:text="Car"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/search_delivery_cb"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/search_delivery_cb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="1dp"
+                android:fontFamily="@font/poppins"
+                android:text="Delivery"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/search_tools_cb"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/search_car_cb"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/search_tools_cb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="1dp"
+                android:fontFamily="@font/poppins"
+                android:text="Tools"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/search_house_cb"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/search_delivery_cb"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/search_house_cb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:fontFamily="@font/poppins"
+                android:text="House"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/search_tools_cb"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
