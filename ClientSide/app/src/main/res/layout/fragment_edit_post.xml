@@ -18,8 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="30dp"
+            android:fontFamily="@font/poppins"
             android:text="Title"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,35 +28,40 @@
         <EditText
             android:id="@+id/editpost_title_show"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_corner"
             android:ems="10"
             android:inputType="textPersonName"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editpost_title_tv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editpost_title_tv" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editpost_title_tv" />
 
         <TextView
             android:id="@+id/editpost_description_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Description"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_title_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/editpost_title_show" />
 
 
         <EditText
             android:id="@+id/editpost_description_show"
             android:layout_width="0dp"
-            android:layout_height="66dp"
+            android:layout_height="30dp"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_corner"
             android:focusable="true"
             android:gravity="start"
             android:inputType="textMultiLine"
@@ -64,46 +70,94 @@
             android:paddingTop="0dp"
             android:scrollbars="vertical"
             android:textColor="@android:color/black"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editpost_description_tv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.157"
-            app:layout_constraintStart_toEndOf="@+id/editpost_description_tv" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editpost_description_tv" />
 
         <TextView
             android:id="@+id/editpost_pictures_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Pictures"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editpost_description_show" />
 
-        <ImageButton
-            android:id="@+id/editpost_camera_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/editprofile_edit_photos_layout"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editpost_pictures_tv">
 
-            android:layout_marginTop="52dp"
-            android:layout_marginEnd="14dp"
-            android:src="@android:drawable/ic_menu_camera"
-            app:layout_constraintEnd_toStartOf="@+id/editpost_gallery_btn"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_description_show" />
+            <ImageView
+                android:id="@+id/editpost_image_show"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/image_place"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/editpost_image2_show"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/editpost_image2_show"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/image_place"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/editpost_camera_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/camera_icon"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toStartOf="@+id/editpost_gallery_btn"
+                tools:ignore="SpeakableTextPresentCheck"
+                tools:layout_editor_absoluteY="30dp" />
+
+            <ImageButton
+                android:id="@+id/editpost_gallery_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ic_baseline_photo_library_24"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editpost_location_layout"
-            android:layout_width="400dp"
+            android:layout_width="0dp"
             android:layout_height="140dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.137"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_image_show"
+            app:layout_constraintTop_toBottomOf="@+id/textView5"
             tools:visibility="visible">
 
             <com.google.android.gms.maps.MapView
@@ -123,28 +177,42 @@
             android:id="@+id/editpost_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="85dp"
             android:backgroundTint="#7b9abe"
+            android:drawableLeft="@drawable/save_icon"
+            android:fontFamily="@font/poppins"
+            android:padding="7dp"
+            android:paddingStart="15dp"
             android:text="SAVE"
-            android:textSize="16sp"
-            app:cornerRadius="15dp"
-            app:icon="@drawable/save_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/editpost_cancel_btn"
+            app:layout_constraintTop_toBottomOf="@+id/post_edit_address" />
 
         <Button
             android:id="@+id/editpost_cancel_btn"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="85dp"
             android:backgroundTint="#7b9abe"
-            app:cornerRadius="15dp"
+            android:drawableLeft="@drawable/cancel_icon"
+            android:drawablePadding="0dp"
+            android:fontFamily="@font/poppins"
+            android:padding="7dp"
+            android:paddingStart="8dp"
             android:text="CANCEL"
-            android:textSize="16sp"
-            app:icon="@drawable/cancel_icon"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:iconPadding="0dp"
             app:layout_constraintBaseline_toBaselineOf="@+id/editpost_save_btn"
-            app:layout_constraintEnd_toStartOf="@+id/editpost_save_btn" />
+            app:layout_constraintEnd_toStartOf="@+id/editpost_save_btn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ProgressBar
             android:id="@+id/editpost_progressBar"
@@ -158,44 +226,31 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.397" />
 
-        <ImageButton
-            android:id="@+id/editpost_gallery_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
-            android:layout_marginEnd="23dp"
-            android:src="@android:drawable/ic_menu_gallery"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_description_show" />
-
-        <ImageView
-            android:id="@+id/editpost_image_show"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="168dp"
-            android:src="@drawable/image_place"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_pictures_tv" />
-
-        <ImageView
-            android:id="@+id/editpost_image2_show"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/image_place"
-            app:layout_constraintEnd_toStartOf="@+id/editpost_image_show"
-            app:layout_constraintTop_toBottomOf="@+id/editpost_pictures_tv" />
-
         <TextView
             android:id="@+id/post_edit_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
             android:text="TextView"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editpost_location_layout" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="Location"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editprofile_edit_photos_layout" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
