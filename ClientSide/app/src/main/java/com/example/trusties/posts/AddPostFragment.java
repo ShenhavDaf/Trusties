@@ -172,19 +172,19 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     public void setColorsBtn(int flagCar, int flagDelivery, int flagTools, int flagHouse) {
         if (flagCar == 1)
-            carBtn.setBackgroundTintList(carBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
+            carBtn.setBackgroundTintList(carBtn.getContext().getResources().getColorStateList(R.color.ActionBarColor));
         if (flagCar == 0)
             carBtn.setBackgroundTintList(carBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
         if (flagDelivery == 1)
-            deliveryBtn.setBackgroundTintList(deliveryBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
+            deliveryBtn.setBackgroundTintList(deliveryBtn.getContext().getResources().getColorStateList(R.color.ActionBarColor));
         if (flagDelivery == 0)
             deliveryBtn.setBackgroundTintList(deliveryBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
         if (flagTools == 1)
-            toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
+            toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.ActionBarColor));
         if (flagTools == 0)
             toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
         if (flagHouse == 1)
-            houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.btnClicked));
+            houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.ActionBarColor));
         if (flagHouse == 0)
             houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
 
