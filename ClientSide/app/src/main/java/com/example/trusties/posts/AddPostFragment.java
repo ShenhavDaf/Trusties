@@ -96,7 +96,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         View view = inflater.inflate(R.layout.fragment_add_post, container, false);
 
-        mArrayUri = new ArrayList<Uri>();
+//        mArrayUri = new ArrayList<Uri>();
         postTitle = view.findViewById(R.id.newpost_title_et);
         description = view.findViewById(R.id.newpost_description_et);
         image = view.findViewById(R.id.newpost_post_image);
@@ -441,6 +441,8 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     /* ********************************************************************************* */
 
     private void mySaveState() {
+
+        //Categories
         if (category != null) {
 
             int flagCar = 0, flagDelivery = 0, flagTools = 0, flagHouse = 0;
@@ -463,26 +465,25 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             setColorsBtn(flagCar, flagDelivery, flagTools, flagHouse);
         }
 
-        if (locationOnMap != null) {
-            location_layout.setVisibility(View.VISIBLE);
-            addressTv.setVisibility(View.VISIBLE);
-
-//            try {
-//                geocoder.getFromLocation(locationOnMap.latitude, locationOnMap.longitude, 1);
-//                addressTv.setText(fullAddress);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
+        // Camera
+        if (imageBitmap != null) {
+            image.setImageBitmap(imageBitmap);
         }
 
-//        if(image != null){
-//            if(image2 != null){
-//
-//            }
-//        }
+        //Gallery
+        if (mArrayUri != null) {
+            image.setImageURI(mArrayUri.get(0));
+            if (mArrayUri.size() == 2)
+                image2.setImageURI(mArrayUri.get(1));
+        }
 
+        //Map
+        if (fullAddress != null) {
+            location_layout.setVisibility(View.VISIBLE);
+            addressTv.setVisibility(View.VISIBLE);
+        }
 
+        //Friends Circle
         if (circle != null) {
             circle_layout.setVisibility(View.VISIBLE);
             if (circle == 1) FindFirstCircle();
