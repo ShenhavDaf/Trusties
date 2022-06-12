@@ -352,6 +352,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         });
 
 
+
         swipeRefresh.setRefreshing(false);
     }
 
@@ -616,12 +617,38 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             });
 
 
-            // # check if the login user already rated
-            if (comment.IsUserRated_negative(Model.instance.getCurrentUserModel().getId())) {
-                negative.setVisibility(View.GONE);
-            } else if (comment.IsUserRated_positive(Model.instance.getCurrentUserModel().getId())) {
-                positive.setVisibility(View.GONE);
-            }
+            Model.instance.isUserRatedNegative(comment.getCommentId(),currUserId,Obj -> {
+
+                System.out.println("isUserRatedNegative");
+
+                if(Obj.get("flag").getAsBoolean()){
+                    System.out.println("flag=true");
+                    negative.setEnabled(false);
+
+                }
+            });
+
+            Model.instance.isUserRatedPositive(comment.getCommentId(),currUserId,Obj -> {
+
+                System.out.println("isUserRatedPositive");
+                System.out.println(Obj);
+
+
+                if(Obj.get("flag").getAsBoolean()){
+                    System.out.println("flag=true");
+                    positive.setEnabled(false);
+
+                }
+
+            });
+
+
+//            // # check if the login user already rated
+//            if (comment.IsUserRated_negative(Model.instance.getCurrentUserModel().getId())) {
+//                negative.setVisibility(View.GONE);
+//            } else if (comment.IsUserRated_positive(Model.instance.getCurrentUserModel().getId())) {
+//                positive.setVisibility(View.GONE);
+//            }
 
             //# check what is the rate of the comment - calc in model
             int rate_val = comment.getCommentRate();

@@ -50,5 +50,6 @@ router.post("/edit/:id", authenticate, Comment.editComment);
 router.post("/delete/:id", authenticate, Comment.deleteComment);
 router.post("/up/:id", authenticate, Comment.positiveComment);
 router.post("/down/:id", authenticate, Comment.negativeComment);
-
+router.get("/isUserRatedNegative/:id", authenticate, Comment.isUserRatedNegative);
+router.get("/isUserRatedPositive/:id", authenticate, Comment.isUserRatedPositive);
 module.exports = router;
