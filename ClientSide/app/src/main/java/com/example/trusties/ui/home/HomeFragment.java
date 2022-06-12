@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,6 +168,18 @@ public class HomeFragment extends Fragment {
                 map.put("vol_id", currUser.getId());
 
                 Model.instance.volunteer(id, map, () -> refresh());
+
+                /* ------ Add Notification ------ */
+                HashMap<String, String> notification = new HashMap<>();
+                notification.put("sender", currUser.getId());
+                notification.put("post", post.getId());
+                notification.put("time", (new Long(0)).toString());
+                notification.put("type", "volunteer");
+                notification.put("circle", "0");
+                Model.instance.addNotification(notification, () -> {
+
+                    System.out.println("## Back from server :: addNotification");
+                });
             });
 
 

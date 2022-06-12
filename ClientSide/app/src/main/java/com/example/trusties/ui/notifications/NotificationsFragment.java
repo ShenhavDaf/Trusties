@@ -25,7 +25,9 @@ import com.example.trusties.databinding.FragmentNotificationsBinding;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.Notification;
 import com.example.trusties.model.Post;
+import com.example.trusties.model.User;
 import com.example.trusties.posts.AddPostFragmentDirections;
+import com.example.trusties.ui.profile.OthersProfileFragmentArgs;
 import com.google.android.material.card.MaterialCardView;
 
 public class NotificationsFragment extends Fragment {
@@ -35,6 +37,8 @@ public class NotificationsFragment extends Fragment {
 
     NotificationsFragment.MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
+
+    User user;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -49,6 +53,8 @@ public class NotificationsFragment extends Fragment {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        user = Model.instance.getCurrentUserModel();
+
         swipeRefresh = root.findViewById(R.id.notification_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> refresh());
 
@@ -57,7 +63,6 @@ public class NotificationsFragment extends Fragment {
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new NotificationsFragment.MyAdapter();
         list.setAdapter(adapter);
-
 
         adapter.setOnItemClickListener((v, position) -> {
             System.out.println("the POSITION is:  " + position);
@@ -79,7 +84,7 @@ public class NotificationsFragment extends Fragment {
 
 
     private void refresh() {
-        Model.instance.getAllNotifications(notificationsList -> {
+        Model.instance.getAllNotificationsById(user.getId(), notificationsList -> {
             notificationsViewModel.data = notificationsList;
             adapter.notifyDataSetChanged();
         });
@@ -121,14 +126,17 @@ public class NotificationsFragment extends Fragment {
                     if(type.equals("sos")) {
                         description.setText(userName + " shared a SOS call");
                     }
-                    else if(type.equals("post")) {
-                        description.setText(userName + " shared a post");
+                    else if(type.equals("friendRequest")) {
+                        description.setText(userName + " sent you a friend request");
                     }
                     else if(type.equals("comment")) {
-                        description.setText(userName + " commented on post");
+                        description.setText(userName + " commented on your post");
                     }
-                    else if(type.equals("like")) {
-                        description.setText(userName + " liked a post");
+                    else if(type.equals("volunteer")) {
+                        description.setText(userName + " volunteered to help you");
+                    }
+                    else if(type.equals("approveFriendRequest")) {
+                        description.setText(userName + " approve your friend request");
                     }
                 }
             );

@@ -58,6 +58,7 @@ const authenticate = require("../Common/auth_middleware");
  */
 
 router.get("/allNotifications", authenticate, Notification.getAllNotifications);
+router.get("/allNotificationsByID/:id", authenticate, Notification.getAllNotificationsByID);
 
 /**
  * @swagger

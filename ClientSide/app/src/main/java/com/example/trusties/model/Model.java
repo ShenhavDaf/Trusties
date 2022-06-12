@@ -430,6 +430,15 @@ public class Model {
         modelServer.getAllNotifications(listener);
     }
 
+    public interface allNotificationsByIdListener {
+        void onComplete(List<Notification> notificationsList);
+    }
+
+    public void getAllNotificationsById(String userId, allNotificationsListener listener) {
+        Log.d("TAG", "Model --> getAllNotificationsById");
+        modelServer.getAllNotificationsById(userId, listener);
+    }
+
     /* ---------------------------------------------------------------------------- */
 
     public interface sendNotificationListener {
