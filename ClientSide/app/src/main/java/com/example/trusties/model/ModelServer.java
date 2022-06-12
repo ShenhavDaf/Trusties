@@ -99,6 +99,7 @@ public class ModelServer {
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
                     new CommonFunctions().myPopup(context, "Error", t.getMessage());
+                    listener.onComplete(404, null);
                 }
             });
         });
