@@ -125,6 +125,12 @@ public interface RetrofitInterface {
     @GET("/comment/{id}")
     Call<Void> getCommentById(@Header("authorization") String accessToken);
 
+    @GET("/comment/isUserRatedNegative/{commentId}")
+    Call<JsonObject> isUserRatedNegative(@Header("authorization") String accessToken,@Query("commentId") String commentId,@Query("userId") String userId);
+
+    @GET("/comment/isUserRatedPositive/{commentId}")
+    Call<JsonObject> isUserRatedPositive(@Header("authorization") String accessToken,@Query("commentId") String commentId,@Query("userId") String userId);
+
     @POST("/comment/edit/{id}")
     Call<Void> editComment(@Header("authorization") String accessToken, @Body HashMap<String, String> map, @Path("id") String id);
 
