@@ -145,6 +145,41 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
 
+    <Button
+        android:id="@+id/othersProfile_Waiting_friend_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/red"
+        android:fontFamily="@font/poppins"
+        android:includeFontPadding="false"
+        android:padding="4dp"
+        android:text="Waiting"
+        android:visibility="gone"
+        app:iconPadding="0dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/Othersprofile_connections"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
+
+    <Button
+        android:id="@+id/othersProfile_Accept_friend_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/green"
+        android:fontFamily="@font/poppins"
+        android:includeFontPadding="false"
+        android:padding="4dp"
+        android:text="Accept"
+        android:visibility="gone"
+        app:iconPadding="0dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/Othersprofile_connections"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Othersprofile_line2" />
+
+
     <RatingBar
         android:id="@+id/otherProfile_ratingBar"
         android:layout_width="wrap_content"

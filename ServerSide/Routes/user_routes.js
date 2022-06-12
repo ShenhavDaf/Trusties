@@ -15,5 +15,7 @@ router.get(
 );
 router.post("/rateMyHelp/:id", User.rateMyHelp);
 router.get("/getRating/:id", User.getRating);
+router.post("/approveFriend/:myId/:hisId", User.approveFriend);
+router.get("/getWaitingList/:id", User.getWaitingList);
 
 module.exports = router;

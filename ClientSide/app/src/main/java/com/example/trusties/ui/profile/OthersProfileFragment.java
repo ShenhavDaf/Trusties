@@ -49,7 +49,7 @@ public class OthersProfileFragment extends Fragment {
     Button add;
     String userId;
     User currUser;
-    Button unFriend;
+    Button unFriend,acceptFriend,waitingFriend;
     ImageView userImage;
     Bitmap decodedByte;
     RatingBar ratingBar;
@@ -76,6 +76,8 @@ public class OthersProfileFragment extends Fragment {
         userName = root.findViewById(R.id.Othersprofile_name);
         userImage = root.findViewById(R.id.Othersprofile_image);
         unFriend = root.findViewById(R.id.othersProfile_unfriend_btn);
+        acceptFriend = root.findViewById(R.id.othersProfile_Accept_friend_btn);
+        waitingFriend= root.findViewById(R.id.othersProfile_Waiting_friend_btn);
         ratingBar = root.findViewById(R.id.otherProfile_ratingBar);
         disableView = root.findViewById(R.id.other_profile_disable_txt);
         line = root.findViewById(R.id.Othersprofile_line);
@@ -124,25 +126,73 @@ public class OthersProfileFragment extends Fragment {
                     Log.d("TAG", friendsList.get(i).toString());
                     unFriend.setVisibility(View.VISIBLE);
                     unFriend.setClickable(true);
+                    acceptFriend.setVisibility(View.GONE);
+                    waitingFriend.setVisibility(View.GONE);
+                    add.setVisibility(View.GONE);
+                    postsList.setVisibility(View.VISIBLE);
+                    line.setVisibility(View.VISIBLE);
+                    disableView.setVisibility(View.GONE);
+                    gif.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        //Waiting
+        Model.instance.getWaitingList(userId,waitingList -> {
+            System.out.println("## getWaitingList :: Waiting "+waitingList.size());
+            for (int i = 0; i < waitingList.size(); i++) {
+                if (waitingList.get(i).toString().replace("\"", "").equals(currUser.getId())) {
+
+                    waitingFriend.setVisibility(View.VISIBLE);
+                    acceptFriend.setVisibility(View.GONE);
+                    unFriend.setVisibility(View.GONE);
                     add.setVisibility(View.GONE);
                 }
             }
         });
 
+        //Accept
+        Model.instance.getWaitingList(currUser.getId(),waitingList -> {
+            System.out.println("## getWaitingList :: Accept "+waitingList.size());
+            for (int i = 0; i < waitingList.size(); i++) {
+                if (waitingList.get(i).toString().replace("\"", "").equals(userId)) {
+
+                    acceptFriend.setVisibility(View.VISIBLE);
+                    waitingFriend.setVisibility(View.GONE);
+                    unFriend.setVisibility(View.GONE);
+                    add.setVisibility(View.GONE);
+                }
+            }
+        });
 
         add = root.findViewById(R.id.Othersprofile_add_btn);
         add.setOnClickListener(v -> {
             Model.instance.addFriendToMyContacts(currUser.getId(), userId, () -> {
-                unFriend.setVisibility(View.VISIBLE);
+                //##change1
+                //unFriend.setVisibility(View.VISIBLE);
+                waitingFriend.setVisibility(View.VISIBLE);
+                gif.setVisibility(View.VISIBLE);
                 add.setVisibility(View.GONE);
                 disableView.setVisibility(View.GONE);
-                gif.setVisibility(View.GONE);
-                postsList.setVisibility(View.VISIBLE);
-                line.setVisibility(View.VISIBLE);
-                refresh();
+                postsList.setVisibility(View.GONE);
+                line.setVisibility(View.GONE);
             });
         });
 
+        acceptFriend.setOnClickListener(v->{
+            Model.instance.approveFriend(currUser.getId(), userId, () -> {
+
+                unFriend.setVisibility(View.VISIBLE);
+                postsList.setVisibility(View.VISIBLE);
+                line.setVisibility(View.VISIBLE);
+                disableView.setVisibility(View.GONE);
+                gif.setVisibility(View.GONE);
+                acceptFriend.setVisibility(View.GONE);
+                waitingFriend.setVisibility(View.GONE);
+                add.setVisibility(View.GONE);
+                refresh();
+            });
+        });
         unFriend.setOnClickListener(v -> {
             Model.instance.removeFriendFromMyContacts(currUser.getId(), userId, () -> {
                 unFriend.setVisibility(View.GONE);

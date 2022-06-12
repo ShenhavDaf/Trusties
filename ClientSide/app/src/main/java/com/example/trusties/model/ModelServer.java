@@ -280,6 +280,21 @@ public class ModelServer {
     }
     /* ------------------------------------------------------------------------- */
 
+    public void getWaitingList(String userID, Model.getWaitingListListener listener) {
+        retrofitInterface.getWaitingList(userID).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                System.out.println("--- failed\n" + t.getMessage());
+            }
+        });
+    }
+    /* ------------------------------------------------------------------------- */
+
     public void getMyRelatedPosts(String userID, Model.getMyRelatedPostsListener listener) {
         retrofitInterface.getMyRelatedPosts(accessToken, userID).enqueue(new Callback<JsonArray>() {
             @Override
@@ -692,6 +707,23 @@ public class ModelServer {
     public void addFriendToMyContacts(String myID, String hisID, Model.addFriendListener listener) {
 
         retrofitInterface.addFriendToMyContacts(myID, hisID).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                listener.onComplete();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void approveFriend(String myID, String hisID, Model.approveFriendListener listener) {
+
+        retrofitInterface.approveFriend(myID, hisID).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 listener.onComplete();
