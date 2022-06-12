@@ -65,11 +65,15 @@ public class NotificationsFragment extends Fragment {
         list.setAdapter(adapter);
 
         adapter.setOnItemClickListener((v, position) -> {
-            System.out.println("the POSITION is:  " + position);
+            String type = notificationsViewModel.getData().get(position).getType();
 
-            String postId = notificationsViewModel.getData().get(position).getPostID();
-            System.out.println("the postID is:  " + postId);
-            Navigation.findNavController(v).navigate(NotificationsFragmentDirections.actionNavigationNotificationsToDetailsPostFragment(postId));
+            if(type.equals("friendRequest") || type.equals("approveFriendRequest")) {
+                String authorId = notificationsViewModel.getData().get(position).getAuthorID();
+                Navigation.findNavController(v).navigate(NotificationsFragmentDirections.actionNavigationNotificationsToOthersProfileFragment(authorId));
+            } else {
+                String postId = notificationsViewModel.getData().get(position).getPostID();
+                Navigation.findNavController(v).navigate(NotificationsFragmentDirections.actionNavigationNotificationsToDetailsPostFragment(postId));
+            }
         });
 
         refresh();

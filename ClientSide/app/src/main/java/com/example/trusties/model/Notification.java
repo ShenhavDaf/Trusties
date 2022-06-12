@@ -71,13 +71,13 @@ public class Notification {
     public static Notification create(JsonObject json) {
         String notificationId = json.get("_id").getAsString();
         String author = json.get("sender").getAsString();
+        String postId = json.get("post").getAsString();
         String time = json.get("time").getAsString();
         String type = json.get("type").getAsString();
         String circle = json.get("circle").getAsString();
-        String postId = "";
-        if(!type.equals("sos")) {
-            postId = json.get("post").getAsString();
-        }
+//        if(!type.equals("sos")) {
+//            postId = json.get("post").getAsString();
+//        }
 
         Notification notification = new Notification(notificationId, postId, author, time, type, circle);
         return notification;

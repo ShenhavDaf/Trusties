@@ -90,8 +90,6 @@ const addNotification = async (req, res, next) => {
   let post;
   if(req.body.type === "friendRequest" || req.body.type === "approveFriendRequest") {
     post = await User.findOne({ _id: req.body.post });
-  } else if(req.body.type === "sos") {
-    post = null;
   } else {
     post = await Post.findOne({ _id: req.body.post });
   }
