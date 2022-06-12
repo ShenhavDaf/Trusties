@@ -270,13 +270,10 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 System.out.println("## Back from server :: addNotification");
             });
 
-
-            Model.instance.sendNotification(notification, () -> {
-                System.out.println("## Back from server :: sendNotification");
-
-            });
-
-
+//            Model.instance.sendNotification(notification, () -> {
+//                System.out.println("## Back from server :: sendNotification");
+//
+//            });
         });
 
         requestsBtn.setOnClickListener(v -> {
@@ -284,7 +281,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         });
 
         closeBtn.setOnClickListener(v -> {
-
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Close SOS").
                     setMessage("You sure, that you want to close this SOS?");

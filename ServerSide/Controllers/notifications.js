@@ -5,8 +5,11 @@ const Comment = require("../Models/comment_model");
 const Notification = require("../Models/notification_model");
 const { object, getValue } = require("mongoose/lib/utils");
 const request = require("request");
-const admin = require("firebase-admin");
-const serviceAccount = require("../trusties-firebase-adminsdk.json");
+const { ObjectId } = require('mongodb');
+var mongoose = require('mongoose');
+// const admin = require("firebase-admin");
+// const serviceAccount = require("../trusties-firebase-adminsdk.json");
+// const { FIREBASE_CONFIG_VAR } = require("firebase-admin/lib/app/lifecycle");
 
 
 const getAllNotifications = async (req, res, next) => {
@@ -18,22 +21,46 @@ const getAllNotifications = async (req, res, next) => {
 };
 
 const getAllNotificationsByID = async (req, res, next) => {
-  console.log("get all notifications by ID");
   try {
     Post.find({ sender: req.params.id }, function (err, postDocs) {
       if (err) console.log(err);
       else {
-        Notification.find({}, function (err, notificationDocs) {
+        Notification.find({}, async function (err, notificationDocs) {
           const resList = [];
           for (let i = 0; i < notificationDocs.length; i++) { 
-            if(notificationDocs[i]["type"] === "friendRequest") {
+            if(notificationDocs[i]["type"] === "friendRequest" || 
+            notificationDocs[i]["type"] === "approveFriendRequest") {
               const post = notificationDocs[i]["post"];
               if(req.params.id === post.toString()) {
                 resList.push(notificationDocs[i]);
                 continue;
               }
-            } if(notificationDocs[i]["type"] === "sos") {
-              console.log("SOS -- Notification");
+            } else if(notificationDocs[i]["type"] === "sos") {
+              const user = await User.findOne({ _id: notificationDocs[i]["sender"] });
+              const friendsList = user.friends
+              for (let j = 0; j < friendsList.length; j++) {
+                if(friendsList[j]._id.toString() === req.params.id) {
+                  resList.push(notificationDocs[i]);
+                } else if(notificationDocs[i]["circle"] !== "1") {
+                  for (let h = 0; h < friendsList.length; h++) {
+                    const friend = await User.findOne({ _id: friendsList[h] });
+                    for(let r = 0; r < friend.friends.length; r++) {
+                      if(friend.friends[r]._id.toString() === req.params.id) {
+                      resList.push(notificationDocs[i]);
+                      continue;
+                      } else if(notificationDocs[i]["circle"] === "3") {
+                        const friend2 = await User.findOne({ _id: friend.friends[r] });
+                        for (let h = 0; h < friend2.friends.length; h++) {
+                          if(friend2.friends[h]._id.toString() === req.params.id) {
+                            resList.push(notificationDocs[i]);
+                            continue;
+                          }
+                        }
+                      }
+                    }
+                }
+              }
+            }
               continue;
             } else {
               const post = notificationDocs[i]["post"];
@@ -60,12 +87,11 @@ const getAllNotificationsByID = async (req, res, next) => {
 };
 
 const addNotification = async (req, res, next) => {
-  console.log("add new notification ");
   let post;
-  if(req.body.type === "friendRequest") {
+  if(req.body.type === "friendRequest" || req.body.type === "approveFriendRequest") {
     post = await User.findOne({ _id: req.body.post });
   } else if(req.body.type === "sos") {
-    post = "";
+    post = null;
   } else {
     post = await Post.findOne({ _id: req.body.post });
   }
@@ -77,7 +103,7 @@ const addNotification = async (req, res, next) => {
 
   const notification = Notification({
     sender: user,
-    post: null,
+    post: post,
     time: Date.now(),
     type: type,
     circle: circle
@@ -144,10 +170,8 @@ const addNotification = async (req, res, next) => {
 
 const sendNotification = async (req, res, next) => {
   console.log("Send notification");
-  console.log(req.body);
   const post = await Post.findOne({ _id: req.body.post });
   const token = (await User.findOne({ _id: post.sender })).firebaseToken;
-  console.log("token: " + token);
 
   const payload = {
     to: token,

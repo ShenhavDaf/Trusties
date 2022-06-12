@@ -57,7 +57,6 @@ public class OthersProfileFragment extends Fragment {
     View gif;
     View line;
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -71,7 +70,6 @@ public class OthersProfileFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_others_profile, container, false);
 
         /**********************************/
-
 
         userName = root.findViewById(R.id.Othersprofile_name);
         userImage = root.findViewById(R.id.Othersprofile_image);
@@ -95,14 +93,11 @@ public class OthersProfileFragment extends Fragment {
                 profileUser = user;
 
                 if (user.get("photo") != null) {
-
-                    Log.d("TAG", "photototot###");
                     String photoBase64 = user.get("photo").getAsString();
                     byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
                     decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     userImage.setImageBitmap(decodedByte);
                 }
-                Log.d("TAG", user.get("friends") + "");
                 String friends = user.get("friends") + "";
                 if (!friends.contains(currUser.getId())) {
                     disableView.setVisibility(View.VISIBLE);
@@ -166,34 +161,6 @@ public class OthersProfileFragment extends Fragment {
         });
 
         add = root.findViewById(R.id.Othersprofile_add_btn);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Model.instance.addFriendToMyContacts(currUser.getId(), userId, new Model.addFriendListener() {
-                    @Override
-                    public void onComplete() {
-                        unFriend.setVisibility(View.VISIBLE);
-                        add.setVisibility(View.GONE);
-                        disableView.setVisibility(View.GONE);
-                        gif.setVisibility(View.GONE);
-                        postsList.setVisibility(View.VISIBLE);
-                        line.setVisibility(View.VISIBLE);
-
-                        /* ------ Add Notification ------ */
-                        HashMap<String, String> notification = new HashMap<>();
-                        notification.put("sender", currUser.getId());
-                        notification.put("post", userId);
-                        notification.put("time", (new Long(0)).toString());
-                        notification.put("type", "friendRequest");
-                        notification.put("circle", "0");
-                        Model.instance.addNotification(notification, () -> {
-                            System.out.println("## Back from server :: addNotification");
-                        });
-
-                        refresh();
-                    }
-                });
-            }
         add.setOnClickListener(v -> {
             Model.instance.addFriendToMyContacts(currUser.getId(), userId, () -> {
                 //##change1
@@ -204,10 +171,23 @@ public class OthersProfileFragment extends Fragment {
                 disableView.setVisibility(View.GONE);
                 postsList.setVisibility(View.GONE);
                 line.setVisibility(View.GONE);
+
+                /* ------ Add Notification ------ */
+                HashMap<String, String> notification = new HashMap<>();
+                notification.put("sender", currUser.getId());
+                notification.put("post", userId);
+                notification.put("time", (new Long(0)).toString());
+                notification.put("type", "friendRequest");
+                notification.put("circle", "0");
+
+                Model.instance.addNotification(notification, () -> {
+                    System.out.println("## Back from server :: addNotification");
+                });
+
             });
         });
 
-        acceptFriend.setOnClickListener(v->{
+        acceptFriend.setOnClickListener(v-> {
             Model.instance.approveFriend(currUser.getId(), userId, () -> {
 
                 unFriend.setVisibility(View.VISIBLE);
@@ -218,6 +198,19 @@ public class OthersProfileFragment extends Fragment {
                 acceptFriend.setVisibility(View.GONE);
                 waitingFriend.setVisibility(View.GONE);
                 add.setVisibility(View.GONE);
+
+                /* ------ Add Notification ------ */
+                HashMap<String, String> notification = new HashMap<>();
+                notification.put("sender", currUser.getId());
+                notification.put("post", userId);
+                notification.put("time", (new Long(0)).toString());
+                notification.put("type", "approveFriendRequest");
+                notification.put("circle", "0");
+
+                Model.instance.addNotification(notification, () -> {
+                    System.out.println("## Back from server :: addNotification");
+                });
+
                 refresh();
             });
         });

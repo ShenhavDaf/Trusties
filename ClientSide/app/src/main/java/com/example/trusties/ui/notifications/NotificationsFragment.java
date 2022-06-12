@@ -135,6 +135,9 @@ public class NotificationsFragment extends Fragment {
                     else if(type.equals("volunteer")) {
                         description.setText(userName + " volunteered to help you");
                     }
+                    else if(type.equals("approveFriendRequest")) {
+                        description.setText(userName + " approve your friend request");
+                    }
                 }
             );
 

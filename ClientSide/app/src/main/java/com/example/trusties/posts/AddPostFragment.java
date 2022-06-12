@@ -593,10 +593,9 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                                     notification.put("post", "");
                                     notification.put("time", (new Long(0)).toString());
                                     notification.put("type", "sos");
-                                    notification.put("circle", "0");
+                                    notification.put("circle", circle.toString());
 
                                     Model.instance.addNotification(notification, () -> {
-
                                         System.out.println("## Back from server :: addNotification");
                                     });
                                     Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
