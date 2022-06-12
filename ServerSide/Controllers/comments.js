@@ -320,8 +320,137 @@ const positiveComment = async (req, res, next) => {
   }
 };
 
+
+//# PARAMS
+//req.query.id - user
+//req.query.commentId - comment
+const isUserRatedPositive = async (req, res, next) => {
+  try {
+    console.log(req.query.userId);
+    const user = await User.findById(req.query.userId);
+
+    if (!user) {
+      res.status(400).send({
+        status: "fail",
+        error: "User not found!",
+      });
+    }
+
+    Comment.findById({ _id: req.query.commentId })
+      .populate({
+        path: "report_positive",
+        model: "User",
+      })
+      .populate({
+        path: "sender",
+        model: "User",
+      })
+      .exec(function (err, comment) {
+        if (err) {
+          res.status(400).send({
+            status: "fail",
+            error: err.message,
+          });
+        }
+
+        console.log("isUserRatedPositive");
+
+        var flag_val = false;
+        //Checking if the reporter already report positive
+        for (var i = 0; i < comment.report_positive.length; i++) {
+          console.log("isUserRatedPositive :: Inside Loop");
+
+          console.log(req.query.userId);
+          console.log(comment.report_positive[i].id);
+
+          if (comment.report_positive[i].id == req.query.userId) {
+
+            console.log("isUserRatedPositive :: Equal");
+            flag_val = true;
+
+          }
+        }
+        var obj = {
+          flag: flag_val
+        }
+
+        res.status(200).send(obj);
+      });
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
+
+
+//# PARAMS
+//req.query.id - user
+//req.query.commentId - comment
+//# PARAMS
+//req.query.id - user
+//req.query.commentId - comment
+const isUserRatedNegative = async (req, res, next) => {
+  try {
+    console.log(req.query.userId);
+    const user = await User.findById(req.query.userId);
+
+    if (!user) {
+      res.status(400).send({
+        status: "fail",
+        error: "User not found!",
+      });
+    }
+
+    Comment.findById({ _id: req.query.commentId })
+      .populate({
+        path: "report_negative",
+        model: "User",
+      })
+      .populate({
+        path: "sender",
+        model: "User",
+      })
+      .exec(function (err, comment) {
+        if (err) {
+          res.status(400).send({
+            status: "fail",
+            error: err.message,
+          });
+        }
+
+        console.log("isUserRatedPositive");
+
+        var flag_val = false;
+        //Checking if the reporter already report positive
+        for (var i = 0; i < comment.report_negative.length; i++) {
+          console.log("isUserRatedPositive :: Inside Loop");
+
+          console.log(req.query.userId);
+          console.log(comment.report_negative[i].id);
+
+          if (comment.report_negative[i].id == req.query.userId) {
+
+            console.log("isUserRatedreport_negative :: Equal");
+            flag_val = true;
+
+          }
+        }
+        var obj = {
+          flag: flag_val
+        }
+
+        res.status(200).send(obj);
+      });
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
 module.exports = {
-  // getAllComments,
   getPostComments,
   getCommentById,
   addComment,
@@ -329,5 +458,6 @@ module.exports = {
   deleteComment,
   positiveComment,
   negativeComment,
-  // getCommentRate,
+  isUserRatedNegative,
+  isUserRatedPositive,
 };
