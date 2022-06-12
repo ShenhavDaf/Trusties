@@ -42,6 +42,9 @@ const userSchema = new mongoose.Schema({
   friends: {
     type: [mongoose.Schema.Types.ObjectId],
   },
+  waitingList: {
+    type: [mongoose.Schema.Types.ObjectId],
+  },
   firebaseToken: {
     type: String,
     required: false,
