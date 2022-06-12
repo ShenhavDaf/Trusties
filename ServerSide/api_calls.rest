@@ -19,6 +19,8 @@ Content-Type: application/json
 Authorization: key=AAAAlfsoPls:APA91bE85fVLatAbcylkZT4nD-FGFAaF-bae2pXlpS5lQv6BPzFL1Lap3SHV7rSNqq619Z3Bk0jIfvxCPcJOxxzbk7kO9EmrI1Fv4CnUO_yOMyuVxE3fYImYs-Ayegh-5wL53hEg0huK
 
 {
+    "content-available": true,
+    "priority": "high",
     "to": "frChth5zQOWbv_qWy3YTnh:APA91bG7Zs7yA0SWyMFEDydOwkwuWsi1xY-nRliK5N-goObH48h_4N9rUyDBo4cn79GzmWhxiIt4-HCVknygtAqy4gQWlCtlnubVXLF5Oa39qLyU59lMgQJH7-3Y7ElIVAcQuomgb5RR",
     "notification": {
       "title": "Test Notification",
