@@ -177,7 +177,7 @@ const negativeComment = async (req, res, next) => {
         //If user reporter is the post sender-> IsCorrect:true
         if (reporter.email == comment.post.sender.email) {
           comment.isCorrect = false;
-          comment.post.status = "OPEN";
+          // comment.post.status = "OPEN";
         }
 
         comment.save(function (err) {
@@ -213,6 +213,9 @@ const negativeComment = async (req, res, next) => {
               error: err.message,
             });
           }
+        });
+        res.status(200).send({
+          status: "OK",
         });
       });
   } catch (err) {
@@ -272,7 +275,7 @@ const positiveComment = async (req, res, next) => {
         comment.report_positive.addToSet(reporter._id);
         if (reporter.email == comment.post.sender.email) {
           comment.isCorrect = true;
-          comment.post.status = "CLOSE";
+          // comment.post.status = "CLOSE";
         }
         comment.save(function (err) {
           if (err) {
@@ -302,7 +305,6 @@ const positiveComment = async (req, res, next) => {
           }
         });
 
-
         comment.post.save(function (err) {
           if (err) {
             res.status(400).send({
@@ -310,6 +312,9 @@ const positiveComment = async (req, res, next) => {
               error: err.message,
             });
           }
+        });
+        res.status(200).send({
+          status: "OK",
         });
       });
   } catch (err) {
