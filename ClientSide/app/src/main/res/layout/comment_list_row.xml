@@ -32,17 +32,21 @@
         <EditText
             android:id="@+id/coomentListRow_content_ev"
             android:layout_width="0dp"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="4dp"
             android:editable="true"
             android:ems="10"
             android:enabled="false"
             android:fontFamily="@font/poppins"
             android:text="Name"
+            android:inputType="textMultiLine"
             android:textColor="@android:color/primary_text_light"
             android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/coomentListRow_time_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/commentListRow_userImg_img" />
@@ -74,7 +78,7 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_ev" />
+            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_tv" />
 
         <Button
             android:id="@+id/coomentListRow_saveEditBtn"
@@ -136,7 +140,7 @@
             app:cornerRadius="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/coomentListRow_rateTv"
-            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_ev" />
+            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_tv" />
 
         <Button
             android:id="@+id/coomentListRow_upBtn"
@@ -179,6 +183,19 @@
             android:textSize="12sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/coomentListRow_downBtn"
             app:layout_constraintStart_toEndOf="@+id/coomentListRow_upBtn" />
+
+        <TextView
+            android:id="@+id/coomentListRow_content_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="TextView"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/commentListRow_userImg_img" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

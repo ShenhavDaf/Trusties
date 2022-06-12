@@ -474,6 +474,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView username, time, rate, correct;
         EditText content;
+        TextView contentTv;
         Button delete, edit, editsave, positive, negative;
         ImageView userImage;
 
@@ -492,9 +493,13 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             rate = itemView.findViewById(R.id.coomentListRow_rateTv);
             correct = itemView.findViewById(R.id.coomentListRow_approvedTv);
             userImage = itemView.findViewById(R.id.commentListRow_userImg_img);
+            contentTv = itemView.findViewById(R.id.coomentListRow_content_tv);
 
             edit.setOnClickListener(v -> {
                 //TODO: ADD REFRESH
+                contentTv.setVisibility(View.GONE);
+                content.setVisibility(View.VISIBLE);
+
                 content.setEnabled(true);
                 edit.setVisibility(View.GONE);
                 delete.setVisibility(View.GONE);
@@ -565,6 +570,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         @SuppressLint("SimpleDateFormat")
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Comment comment) {
+            content.setVisibility(View.GONE);
+            contentTv.setVisibility(View.VISIBLE);
             Model.instance.findUserById(comment.getSender(), new Model.findUserByIdListener() {
                 @Override
 
@@ -614,7 +621,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 correct.setVisibility(View.GONE);
             }
 
-
+            contentTv.setText(comment.getContent());
             content.setText(comment.getContent());
             String newTime = comment.getCurrentTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
