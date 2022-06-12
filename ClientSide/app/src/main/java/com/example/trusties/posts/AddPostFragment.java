@@ -49,7 +49,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.JsonObject;
 
@@ -265,8 +264,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                     image.setImageURI(mArrayUri.get(0));
                     postBtn.setEnabled(true);
                     sosBtn.setEnabled(true);
-
-                    System.out.println("---------------------- (4) 'new array'   " + mArrayUri.size());
                 }
             }
         } else {
@@ -377,14 +374,14 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                                     @Override
                                     public void onMapClick(@NonNull LatLng latLng) {
-                                        Log.d("TAG", latLng.toString());
+
                                         googleMap.clear();
                                         googleMap.addMarker(new MarkerOptions().position(latLng));
                                         geocoder = new Geocoder(getContext(), Locale.getDefault());
                                         try {
                                             addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                                             address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()                            fullAddress = address;
-                                            Log.d("TAG", fullAddress);
+                                            fullAddress = address;
                                             addressTv.setText(fullAddress);
                                         } catch (IOException e) {
                                             e.printStackTrace();
@@ -519,13 +516,13 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     private void createPost(View view, String type) {
 
-        String currUserID = Model.instance.getCurrentUserModel().getId();
+//        String currUserID = Model.instance.getCurrentUserModel().getId();
 
         if (circle == null) circle = 1;
 
-        Model.instance.getFriendsList(currUserID, circle, friendsList -> {
-            System.out.println(circle + "--> " + friendsList);
-        });
+//        Model.instance.getFriendsList(currUserID, circle, friendsList -> {
+//            System.out.println(circle + "--> " + friendsList);
+//        });
 
         String title = postTitle.getText().toString();
         String message = description.getText().toString();
