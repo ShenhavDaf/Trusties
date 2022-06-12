@@ -121,9 +121,9 @@ public class FriendsCircleFragment extends Fragment {
         firstArrow = view.findViewById(R.id.arrow1);
         secondArrow = view.findViewById(R.id.arrow2);
         thirdArrow = view.findViewById(R.id.arrow3);
-        empty_list1_msg = view.findViewById(R.id.empty_list1);
-        empty_list2_msg = view.findViewById(R.id.empty_list2);
-        empty_list3_msg = view.findViewById(R.id.empty_list3);
+//        empty_list1_msg = view.findViewById(R.id.empty_list1);
+//        empty_list2_msg = view.findViewById(R.id.empty_list2);
+//        empty_list3_msg = view.findViewById(R.id.empty_list3);
         DisplayList();
 
         return view;
