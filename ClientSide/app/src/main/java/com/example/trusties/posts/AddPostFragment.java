@@ -590,7 +590,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                                     HashMap<String, String> notification = new HashMap<>();
                                     Log.d("TAG", user.getId());
                                     notification.put("sender", user.getId());
-                                    notification.put("post", "");
+                                    notification.put("post", res.get("_id").toString().replace("\"", ""));
                                     notification.put("time", (new Long(0)).toString());
                                     notification.put("type", "sos");
                                     notification.put("circle", circle.toString());
