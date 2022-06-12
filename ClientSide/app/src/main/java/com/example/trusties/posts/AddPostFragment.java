@@ -318,9 +318,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-
         System.out.println("------------------1------------------");
-
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
@@ -328,71 +326,79 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         }
         System.out.println("------------------2------------------");
 
-        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                System.out.println("------------------3------------------");
-                // GPS location can be null if GPS is switched off
-                if (location != null) {
-//                    Toast.makeText(getContext(), "lat " + location.getLatitude() + "\nlong " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-                    System.out.println("lat " + location.getLatitude() + "\nlong " + location.getLongitude());
-                    LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    googleMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
-                    float zoomLevel = 16.0f; //This goes up to 21
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel));
-                    googleMap.getUiSettings().setZoomControlsEnabled(true);
-                    googleMap.getUiSettings().setCompassEnabled(true);
-                    googleMap.getUiSettings().setScrollGesturesEnabled(true);
-                    googleMap.setMyLocationEnabled(true);
-                    locationOnMap = myLocation;
-                    geocoder = new Geocoder(getContext(), Locale.getDefault());
-                    try {
-                        addresses = geocoder.getFromLocation(myLocation.latitude, myLocation.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                        address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                        fullAddress = address;
-                        addressTv.setText(fullAddress);
+        if (fullAddress != null) {
+            location_layout.setVisibility(View.VISIBLE);
+            addressTv.setVisibility(View.VISIBLE);
+            addressTv.setText(fullAddress);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            googleMap.addMarker(new MarkerOptions().position(locationOnMap).title("here!"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(locationOnMap));
+            float zoomLevel = 16.0f; //This goes up to 21
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationOnMap, zoomLevel));
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+            googleMap.setMyLocationEnabled(true);
 
-                    googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                        @Override
-                        public void onMapClick(@NonNull LatLng latLng) {
-                            Log.d("TAG", latLng.toString());
-                            googleMap.clear();
-                            googleMap.addMarker(new MarkerOptions().position(latLng));
-                            geocoder = new Geocoder(getContext(), Locale.getDefault());
-                            try {
-                                addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                                address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//                                String area = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
-//                                Log.d("TAG", " AREA ~~~~~~~ " + area);
-                                fullAddress = address;
-                                Log.d("TAG", fullAddress);
-                                addressTv.setText(fullAddress);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-
-                            locationOnMap = latLng;
-
+            fullAddress = null;
+            onMapReady(googleMap);
+        } else {
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    System.out.println("------------------3------------------");
+                    // GPS location can be null if GPS is switched off
+                    if (location != null) {//                    Toast.makeText(getContext(), "lat " + location.getLatitude() + "\nlong " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+                        System.out.println("------------- lat " + location.getLatitude() + "        long " + location.getLongitude());
+                        LatLng myLocation;
+                        if (locationOnMap == null)
+                            myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                        else {
+                            myLocation = locationOnMap;
                         }
-                    });
+                        googleMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
+                        float zoomLevel = 16.0f; //This goes up to 21
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel));
+                        googleMap.getUiSettings().setZoomControlsEnabled(true);
+                        googleMap.getUiSettings().setCompassEnabled(true);
+                        googleMap.getUiSettings().setScrollGesturesEnabled(true);
+                        googleMap.setMyLocationEnabled(true);
 
-                }
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
+                        locationOnMap = myLocation;
+                        geocoder = new Geocoder(getContext(), Locale.getDefault());
+                        try {
+                            addresses = geocoder.getFromLocation(myLocation.latitude, myLocation.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                            fullAddress = address;
+                            addressTv.setText(fullAddress);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                            @Override
+                            public void onMapClick(@NonNull LatLng latLng) {
+                                Log.d("TAG", latLng.toString());
+                                googleMap.clear();
+                                googleMap.addMarker(new MarkerOptions().position(latLng));
+                                geocoder = new Geocoder(getContext(), Locale.getDefault());
+                                try {
+                                    addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                    address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()                            fullAddress = address;
+                                    Log.d("TAG", fullAddress);
+                                    addressTv.setText(fullAddress);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                locationOnMap = latLng;
+                            }
+                        });
                     }
-                });
-
-
+                }
+            })
+                    .addOnFailureListener(e -> e.printStackTrace());
+        }
     }
 
     @Override
@@ -463,25 +469,21 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             setColorsBtn(flagCar, flagDelivery, flagTools, flagHouse);
         }
 
-        if (locationOnMap != null) {
-            location_layout.setVisibility(View.VISIBLE);
-            addressTv.setVisibility(View.VISIBLE);
+//        if (locationOnMap != null) {
+//            location_layout.setVisibility(View.VISIBLE);
+//            addressTv.setVisibility(View.VISIBLE);
+//    }
 
-//            try {
-//                geocoder.getFromLocation(locationOnMap.latitude, locationOnMap.longitude, 1);
-//                addressTv.setText(fullAddress);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
 
+        if (imageBitmap != null) {
+            image.setImageBitmap(imageBitmap);
         }
 
-//        if(image != null){
-//            if(image2 != null){
-//
-//            }
+//        if (mArrayUri != null) {
+//            image.setImageURI(mArrayUri.get(0));
+//            if (mArrayUri.size() == 2)
+//                image2.setImageURI(mArrayUri.get(1));
 //        }
-
 
         if (circle != null) {
             circle_layout.setVisibility(View.VISIBLE);
@@ -501,6 +503,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         location_layout.setVisibility(View.VISIBLE);
         circle_layout.setVisibility(View.VISIBLE);
         addressTv.setVisibility(View.VISIBLE);
+//        postBtn.setVisibility(View.GONE);
 
         postBtn.setEnabled(false);
         sosBtn.setOnClickListener(v -> {
