@@ -3,14 +3,12 @@ package com.example.trusties.login;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.text.InputType;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,6 @@ import com.example.trusties.MainActivity;
 import com.example.trusties.R;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
-import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 
@@ -35,7 +32,7 @@ public class LogInFragment extends Fragment {
     EditText email, password;
     TextView joinBtn, forgotPassword;
     Button loginBtn;
-    ProgressBar progressBar;
+    public ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,8 +59,6 @@ public class LogInFragment extends Fragment {
     /* ------------------------------- Functions ------------------------------------- */
 
     private void Login(View view) {
-//        progressBar.setVisibility(View.VISIBLE);
-//        loginBtn.setEnabled(false);
 
         String localEmail = email.getText().toString().trim().toLowerCase();
         String localPassword = password.getText().toString();
@@ -89,8 +84,6 @@ public class LogInFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
 
         Model.instance.login(localEmail, localPassword, (statusCode, user) -> {
-//            setConnectedUser(localEmail);
-
 
             if (statusCode == 200) {
                 Model.instance.setCurrentUserModel(User.create(user));
@@ -110,14 +103,15 @@ public class LogInFragment extends Fragment {
                     }, getContext());
                 } else {
                     Intent myIntent = new Intent(getContext(), MainActivity.class);
-//                    myIntent.putExtra("email",localEmail);
                     startActivity(myIntent);
                     getActivity().finish();
                 }
             } else if (statusCode == 400) {
-                new CommonFunctions().myPopup(getContext(), "Error", user.get("message").toString());
+                new CommonFunctions().myPopup(getContext(), "Error", user.get("message").toString().replace("\"", ""));
                 progressBar.setVisibility(View.GONE);
                 loginBtn.setEnabled(true);
+            } else if (statusCode == 404) {
+                progressBar.setVisibility(View.GONE);
             }
         }, getContext());
     }
@@ -157,19 +151,5 @@ public class LogInFragment extends Fragment {
         alert.show();
 
     }
-
-//    void setConnectedUser(String localEmail) {
-//        Model.instance.findUserByEmail(localEmail, user -> {
-//
-//            String u_id = user.get("_id").toString().replace("\"", "");
-//            String u_name = user.get("name").toString().replace("\"", "");
-//            String u_email = user.get("email").toString().replace("\"", "");
-//            String u_phone = user.get("phone").toString().replace("\"", "");
-//
-//            Model.instance.setCurrentUserModel(new User(u_id, u_name, u_email, u_phone));
-//
-//        });
-//    }
-
 
 }

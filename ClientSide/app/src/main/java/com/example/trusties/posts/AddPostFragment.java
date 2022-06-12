@@ -49,7 +49,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.JsonObject;
 
@@ -78,7 +77,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     List<Address> addresses;
 
     ImageView image, image2;
-    ArrayList<Uri> mArrayUri;
+    ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
     Bitmap imageBitmap;
 
     HashMap<String, String> map;
@@ -208,14 +207,12 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mArrayUri = new ArrayList<Uri>();
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 image2.setImageResource(R.drawable.image_place);
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
                 image.setImageBitmap(imageBitmap);
-
             }
         }
 //         else if (requestCode == REQUEST_IMAGE_GALLERY) {
@@ -237,16 +234,15 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                     ClipData mClipData = data.getClipData();
                     int count = data.getClipData().getItemCount();
                     if (count > 2) {
-                        Log.d("TAG", 2 + "");
-                        mArrayUri = new ArrayList<Uri>();
+                        mArrayUri.clear();
                         picFlag = 0;
                         Toast.makeText(getContext(), "you can upload 1 or 2 photos only!", Toast.LENGTH_LONG).show();
                         postBtn.setEnabled(false);
                         sosBtn.setEnabled(false);
                         image.setImageResource(R.drawable.image_place);
                         image2.setImageResource(R.drawable.image_place);
-                        mArrayUri = new ArrayList<Uri>();
                     } else {
+                        mArrayUri.clear();
                         for (int i = 0; i < count; i++) {
                             imageBitmap = null;
                             // adding imageuri in array
@@ -257,10 +253,12 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                         }
                         //setting 1st selected image into image switcher
                         image.setImageURI(mArrayUri.get(0));
-                        if (count == 2)
+                        if (count == 2) {
                             image2.setImageURI(mArrayUri.get(1));
+                        }
                     }
                 } else if (data.getData() != null) { //only one pic
+                    mArrayUri.clear();
                     Uri imageurl = data.getData();
                     mArrayUri.add(imageurl);
                     image.setImageURI(mArrayUri.get(0));
@@ -317,15 +315,11 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-
-        System.out.println("------------------1------------------");
-
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
             return;
         }
-        System.out.println("------------------2------------------");
 
         if (fullAddress != null) {
             location_layout.setVisibility(View.VISIBLE);
@@ -343,16 +337,15 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
             fullAddress = null;
             onMapReady(googleMap);
-        } else {
+        } //
+        else {
             FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
             mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            System.out.println("------------------3------------------");
+
                             // GPS location can be null if GPS is switched off
-                            if (location != null) {
-//                    Toast.makeText(getContext(), "lat " + location.getLatitude() + "\nlong " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-                                System.out.println("------------- lat " + location.getLatitude() + "        long " + location.getLongitude());
+                            if (location != null) {//                    Toast.makeText(getContext(), "lat " + location.getLatitude() + "\nlong " + location.getLongitude(), Toast.LENGTH_SHORT).show();
                                 LatLng myLocation;
                                 if (locationOnMap == null)
                                     myLocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -378,29 +371,22 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-
                                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                                     @Override
                                     public void onMapClick(@NonNull LatLng latLng) {
-                                        Log.d("TAG", latLng.toString());
+
                                         googleMap.clear();
                                         googleMap.addMarker(new MarkerOptions().position(latLng));
                                         geocoder = new Geocoder(getContext(), Locale.getDefault());
                                         try {
                                             addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                                            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//                                String area = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
-//                                Log.d("TAG", " AREA ~~~~~~~ " + area);
+                                            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()                            fullAddress = address;
                                             fullAddress = address;
-                                            Log.d("TAG", fullAddress);
                                             addressTv.setText(fullAddress);
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-
-
                                         locationOnMap = latLng;
-
                                     }
                                 });
                             }
@@ -408,7 +394,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
                     })
                     .addOnFailureListener(e -> e.printStackTrace());
         }
-
     }
 
     @Override
@@ -457,8 +442,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     /* ********************************************************************************* */
 
     private void mySaveState() {
-
-        //Categories
         if (category != null) {
 
             int flagCar = 0, flagDelivery = 0, flagTools = 0, flagHouse = 0;
@@ -481,27 +464,25 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
             setColorsBtn(flagCar, flagDelivery, flagTools, flagHouse);
         }
 
-        // Camera
         if (imageBitmap != null) {
             image.setImageBitmap(imageBitmap);
         }
 
-        //Gallery
-        if (mArrayUri != null) {
+        if (mArrayUri.size() != 0) {
             image.setImageURI(mArrayUri.get(0));
             if (mArrayUri.size() == 2)
                 image2.setImageURI(mArrayUri.get(1));
         }
 
-        //Map case in onMapReady function
+        // Map case at onMapReady function
 
-        //Friends Circle
         if (circle != null) {
             circle_layout.setVisibility(View.VISIBLE);
             if (circle == 1) FindFirstCircle();
             else if (circle == 2) FindSecondCircle();
             else if (circle == 3) FindThirdCircle();
         }
+
     }
 
     private void PostQuestion(View view) {
@@ -514,7 +495,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         location_layout.setVisibility(View.VISIBLE);
         circle_layout.setVisibility(View.VISIBLE);
         addressTv.setVisibility(View.VISIBLE);
-        postBtn.setVisibility(View.GONE);
+//        postBtn.setVisibility(View.GONE);
 
         postBtn.setEnabled(false);
         sosBtn.setOnClickListener(v -> {
@@ -535,13 +516,13 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
     private void createPost(View view, String type) {
 
-        String currUserID = Model.instance.getCurrentUserModel().getId();
+//        String currUserID = Model.instance.getCurrentUserModel().getId();
 
         if (circle == null) circle = 1;
 
-        Model.instance.getFriendsList(currUserID, circle, friendsList -> {
-            System.out.println(circle + "--> " + friendsList);
-        });
+//        Model.instance.getFriendsList(currUserID, circle, friendsList -> {
+//            System.out.println(circle + "--> " + friendsList);
+//        });
 
         String title = postTitle.getText().toString();
         String message = description.getText().toString();

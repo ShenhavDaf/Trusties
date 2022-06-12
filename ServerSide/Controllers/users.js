@@ -72,7 +72,7 @@ const getSecondCircleOnly = async (req, res) => {
           temp.push(friend.friends[j]);
       }
     }
-    
+
     // Remove duplicates
     const unique = temp.filter(
       (value, index, self) =>
@@ -144,49 +144,136 @@ const getThirdCircleOnly = async (req, res) => {
   }
 };
 
+
+// //# PARAMS
+// // req.params.myId -the user that ask for friendship
+// //req.query.hisId - the one that need to approve
 const addFriendToMyContacts = async (req, res, next) => {
+  console.log("His: " + req.query.hisId);
+  console.log("My: " + req.query.myId);
+
+  // const his = await User.findOne({ _id: req.query.hisId });
+  const me = await User.findOne({ _id: req.query.myId });
+
+
+  console.log("## addFriendToMyContacts ");
+  User.findById({ _id: req.query.hisId }).populate({
+    path: "waitingList",
+    model: "User",
+  })
+    .exec((err, other) => {
+      if (err) {
+        res.status(400).send({
+          status: "fail",
+          error: err.message,
+          message: "user not found in DB",
+        });
+      } else {
+        other.waitingList.addToSet(me._id);
+        other.save(function (err) {
+          if (err) {
+            res.status(400).send({
+              status: "fail",
+              err: err.message,
+            });
+          } else res.status(200).send({ status: "OK" });
+        });
+      }
+    });
+};
+
+// //# PARAMS
+// // req.query.id -user
+// //req.query.hisId -the user that ask for friendship.
+const approveFriend = async (req, res, next) => {
+
+  console.log("## approveFriend");
+
   const me = await User.findOne({ _id: req.query.myId });
   const otherUser = await User.findOne({ _id: req.query.hisId });
 
-  const myPromise = new Promise((resolve, reject) => {
-    me.save(async (error) => {
-      if (error) {
+  User.findById({ _id: req.query.myId }).populate({
+    path: "waitingList",
+    model: "User",
+  }).populate({
+    path: "friends",
+    model: "User",
+  }).exec((err, me) => {
+    if (err) {
+      res.status(400).send({
+        status: "fail",
+        error: err.message,
+        message: "user not found in DB",
+      });
+    } else {
+
+      for (var i = 0; i < me.waitingList.length; i++) {
+
+        if (me.waitingList[i]._id.valueOf() == otherUser._id.valueOf()) {
+          console.log("Equal");
+
+          me.waitingList.splice(i, 1);
+          me.friends.addToSet(otherUser._id);
+        }
+      }
+      me.save(function (err) {
+        if (err) {
+          res.status(400).send({
+            status: "fail",
+            error: err.message,
+          });
+        }
+      });
+    }
+  });
+
+
+  User.findById({ _id: req.query.hisId }).populate({
+    path: "friends",
+    model: "User",
+  })
+    .exec((err, other) => {
+      if (err) {
         res.status(400).send({
           status: "fail",
-          error: error.message,
+          error: err.message,
+          message: "user not found in DB",
         });
       } else {
-        await User.updateOne(
-          { _id: me._id },
-          {
-            $push: { friends: otherUser._id },
-          }
-        );
-        resolve("done");
+
+
+        other.friends.addToSet(me._id);
       }
+
+      other.save(function (err) {
+        if (err) {
+          res.status(400).send({
+            status: "fail",
+            error: err.message,
+          });
+        } else res.status(200).send({ status: "OK" });
+      });
     });
 
-    otherUser.save(async (error) => {
-      if (error) {
-        res.status(400).send({
-          status: "fail",
-          error: error.message,
-        });
-      } else {
-        await User.updateOne(
-          { _id: otherUser._id },
-          {
-            $push: { friends: me._id },
-          }
-        );
-      }
-      resolve("done");
-    });
-  });
-  myPromise.then((alert) => {
-    res.status(200).send(me);
-  });
 };
+
+// //# PARAMS
+// // req.params.id -user
+const getWaitingList = async (req, res) => {
+  try {
+    const user = await User.findById(req.query.id);
+    console.log("user.waitingList");
+    console.log(user.waitingList);
+
+    res.status(200).send(user.waitingList);
+  } catch (err) {
+    res.status(400).send({
+      status: "fail",
+      error: err.message,
+    });
+  }
+};
+
 
 const removeFriendFromMyContacts = async (req, res, next) => {
   const me = await User.findOne({ _id: req.query.myId });
@@ -378,4 +465,6 @@ module.exports = {
   rateMyHelp,
   getRating,
   getMyRelatedPosts,
+  getWaitingList,
+  approveFriend,
 };

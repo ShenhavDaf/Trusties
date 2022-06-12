@@ -66,6 +66,9 @@ public interface RetrofitInterface {
     @GET("/user/getFriendsList")
     Call<JsonArray> getFriendsList(@Query("id") String userID, @Query("circle") Integer circleNumber);
 
+    @GET("/user/getWaitingList/{id}")
+    Call<JsonArray> getWaitingList(@Query("id") String userID);
+
     @GET("/user/second/{id}")
     Call<JsonArray> getSecondCircle(@Query("id") String userID);
 
@@ -74,6 +77,9 @@ public interface RetrofitInterface {
 
     @GET("/user/addFriendToMyContacts/{myId}/{hisId}")
     Call<Void> addFriendToMyContacts(@Query("myId") String myID, @Query("hisId") String hisID);
+
+    @POST("/user/approveFriend/{myId}/{hisId}")
+    Call<Void> approveFriend(@Query("myId") String myID, @Query("hisId") String hisID);
 
     @GET("/user/removeFriendFromMyContacts/{myId}/{hisId}")
     Call<Void> removeFriendFromMyContacts(@Query("myId") String myID, @Query("hisId") String hisID);

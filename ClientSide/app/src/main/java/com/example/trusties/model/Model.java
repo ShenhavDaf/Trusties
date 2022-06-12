@@ -42,6 +42,7 @@ public class Model {
         this.currentUserModel = currentUserModel;
     }
 
+
     /* ---------------------------------------------------------------------------- */
     public enum LoadingState {loading, loaded}
 
@@ -134,6 +135,16 @@ public class Model {
 
     public void getFriendsList(String userID, Integer circle, friendsListListener listener) {
         modelServer.getFriendsList(userID, circle, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface getWaitingListListener {
+        void onComplete(JsonArray waitingList);
+    }
+
+    public void getWaitingList(String userID, getWaitingListListener listener) {
+        modelServer.getWaitingList(userID,listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -364,6 +375,17 @@ public class Model {
     public void addFriendToMyContacts(String myID, String hisID, addFriendListener listener) {
         modelServer.addFriendToMyContacts(myID, hisID, listener);
     }
+
+    /* ---------------------------------------------------------------------------- */
+
+    public interface approveFriendListener {
+        void onComplete();
+    }
+
+    public void approveFriend(String myID, String hisID, approveFriendListener listener) {
+        modelServer.approveFriend(myID, hisID, listener);
+    }
+
 
     /* ---------------------------------------------------------------------------- */
 
