@@ -499,6 +499,8 @@ public class ModelServer {
 
     /* ------------------------------------------------------------------------- */
 
+
+
     public void getPostComments(String postId, Model.allCommentsListener listener) {
 
         retrofitInterface.getPostComments(accessToken, postId).enqueue(new Callback<JsonArray>() {
@@ -520,7 +522,47 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
+    public void isUserRatedNegative(String commentId,String userId, Model.isUserRatedNegativeListener listener) {
+
+        Call<JsonObject> isUserRatedNegative = retrofitInterface.isUserRatedNegative(accessToken, commentId,userId);
+
+        isUserRatedNegative.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+    /* ------------------------------------------------------------------------- */
+    public void isUserRatedPositive(String commentId,String userId, Model.isUserRatedPositiveListener listener) {
+
+        Call<JsonObject> isUserRatedPositive = retrofitInterface.isUserRatedPositive(accessToken, commentId,userId);
+
+        isUserRatedPositive.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                listener.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+    /* ------------------------------------------------------------------------- */
+
     public void editComment(HashMap<String, String> map, String id, Model.editCommentListener listener) {
+
 
         Call<Void> editComment = retrofitInterface.editComment(accessToken, map, id);
 

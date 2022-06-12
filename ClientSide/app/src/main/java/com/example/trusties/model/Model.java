@@ -279,6 +279,24 @@ public class Model {
     }
 
     /* ---------------------------------------------------------------------------- */
+    public interface isUserRatedNegativeListener {
+        void onComplete(JsonObject obj);
+    }
+
+    public void isUserRatedNegative(String commentId,String userId,isUserRatedNegativeListener listener) {
+        modelServer.isUserRatedNegative(commentId,userId, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+    public interface isUserRatedPositiveListener {
+        void onComplete(JsonObject obj);
+    }
+
+    public void isUserRatedPositive(String commentId,String userId,isUserRatedPositiveListener listener) {
+        modelServer.isUserRatedPositive(commentId,userId, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
     public interface editCommentListener {
         void onComplete();
     }

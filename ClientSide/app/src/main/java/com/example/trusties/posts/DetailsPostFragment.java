@@ -269,7 +269,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
                 System.out.println("## Back from server :: addNotification");
             });
-
 //            Model.instance.sendNotification(notification, () -> {
 //                System.out.println("## Back from server :: sendNotification");
 //
@@ -344,13 +343,14 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         });
 
         Model.instance.getPostById(postId, post -> {
-            if (post.get("role").toString().replace("\"","").equals("SOS")) {
+            if (post.get("role").toString().replace("\"", "").equals("SOS")) {
                 String status = post.get("status").toString().replace("\"", "");
                 statusEt.setText(status);
             } else
                 statusEt.setVisibility(View.GONE);
 
         });
+
 
 
         swipeRefresh.setRefreshing(false);
@@ -368,7 +368,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             Model.instance.getPostById(postId, new Model.getPostByIdListener() {
                 @Override
                 public void onComplete(JsonObject post) {
-                    if (post.get("role").toString().replace("\"","").equals("SOS")) {
+                    if (post.get("role").toString().replace("\"", "").equals("SOS")) {
                         if (status.equals("OPEN")) {
                             statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
                         } else if (status.equals("WAITING")) {
@@ -376,7 +376,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                         } else if (status.equals("CLOSE")) {
                             statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
                         }
-                    }else
+                    } else
                         statusEt.setVisibility(View.GONE);
 
                 }
@@ -617,12 +617,38 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             });
 
 
-            // # check if the login user already rated
-            if (comment.IsUserRated_negative(Model.instance.getCurrentUserModel().getId())) {
-                negative.setVisibility(View.GONE);
-            } else if (comment.IsUserRated_positive(Model.instance.getCurrentUserModel().getId())) {
-                positive.setVisibility(View.GONE);
-            }
+            Model.instance.isUserRatedNegative(comment.getCommentId(),currUserId,Obj -> {
+
+                System.out.println("isUserRatedNegative");
+
+                if(Obj.get("flag").getAsBoolean()){
+                    System.out.println("flag=true");
+                    negative.setEnabled(false);
+
+                }
+            });
+
+            Model.instance.isUserRatedPositive(comment.getCommentId(),currUserId,Obj -> {
+
+                System.out.println("isUserRatedPositive");
+                System.out.println(Obj);
+
+
+                if(Obj.get("flag").getAsBoolean()){
+                    System.out.println("flag=true");
+                    positive.setEnabled(false);
+
+                }
+
+            });
+
+
+//            // # check if the login user already rated
+//            if (comment.IsUserRated_negative(Model.instance.getCurrentUserModel().getId())) {
+//                negative.setVisibility(View.GONE);
+//            } else if (comment.IsUserRated_positive(Model.instance.getCurrentUserModel().getId())) {
+//                positive.setVisibility(View.GONE);
+//            }
 
             //# check what is the rate of the comment - calc in model
             int rate_val = comment.getCommentRate();

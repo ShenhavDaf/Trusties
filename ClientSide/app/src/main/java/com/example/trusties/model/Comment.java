@@ -86,6 +86,11 @@ public class Comment {
 
     public boolean IsUserRated_negative(String user_id){
 
+        System.out.println("IsUserRated_negative");
+        System.out.println(user_id);
+        System.out.println("this.report_negative");
+        System.out.println(this.report_negative);
+
         return this.report_negative.contains(user_id);
     }
     public boolean IsUserRated_positive(String user_id){
