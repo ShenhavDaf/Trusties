@@ -154,6 +154,18 @@ public class OthersProfileFragment extends Fragment {
                         gif.setVisibility(View.GONE);
                         postsList.setVisibility(View.VISIBLE);
                         line.setVisibility(View.VISIBLE);
+
+                        /* ------ Add Notification ------ */
+                        HashMap<String, String> notification = new HashMap<>();
+                        notification.put("sender", currUser.getId());
+                        notification.put("post", userId);
+                        notification.put("time", (new Long(0)).toString());
+                        notification.put("type", "friendRequest");
+                        notification.put("circle", "0");
+                        Model.instance.addNotification(notification, () -> {
+                            System.out.println("## Back from server :: addNotification");
+                        });
+
                         refresh();
                     }
                 });

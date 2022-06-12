@@ -945,6 +945,7 @@ public class ModelServer {
             public void onResponse(Call<Void> call, Response<Void> response) {
 
                 System.out.println("sendNotification_retrofit");
+                System.out.println(response.message());
                 listener.onComplete();
             }
 
@@ -989,14 +990,52 @@ public class ModelServer {
                     list.add(Notification.create(element.getAsJsonObject()));
                 }
 
+//                for (Notification notification : list) {
+//                    if (notification.getAuthorID().equals(currentUserModel) &&
+//                            (notification.getType().equals("comment") || notification.getType().equals("like")))
+//                        filteredList.add(notification);
+//                    else {
+//                        getFriendsList(notification.getAuthorID(), Integer.valueOf(notification.getCircle()), friendsList -> {
+//                            for (JsonElement friend : friendsList) {
+//                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+//                                    filteredList.add(notification);
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+                Collections.reverse(list);
+                listener.onComplete(list);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+
+    }
+
+    public void getAllNotificationsById(String userId, Model.allNotificationsListener listener) {
+        List<Notification> filteredList = new ArrayList<>();
+
+        retrofitInterface.getAllNotificationsByID(accessToken, userId).enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                List<Notification> list = new ArrayList<>();
+                for (JsonElement element : response.body()) {
+                    list.add(Notification.create(element.getAsJsonObject()));
+                }
+
                 for (Notification notification : list) {
-                    if (notification.getAuthorID().equals(currentUserModel) &&
+//                    Log.d("TAG", "Idddddd -->  " + notification.);
+                    if (notification.getAuthorID().equals(userId) &&
                             (notification.getType().equals("comment") || notification.getType().equals("like")))
                         filteredList.add(notification);
                     else {
                         getFriendsList(notification.getAuthorID(), Integer.valueOf(notification.getCircle()), friendsList -> {
                             for (JsonElement friend : friendsList) {
-                                if (friend.toString().replace("\"", "").equals(currentUserModel)) {
+                                if (friend.toString().replace("\"", "").equals(userId)) {
                                     filteredList.add(notification);
                                 }
                             }

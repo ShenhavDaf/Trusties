@@ -421,8 +421,20 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
                                         }
                                     });
-                                    Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
+                                    /* ------ Add Notification ------ */
+                                    HashMap<String, String> notification = new HashMap<>();
+                                    Log.d("TAG", user.getId());
+                                    notification.put("sender", user.getId());
+                                    notification.put("post", "");
+                                    notification.put("time", (new Long(0)).toString());
+                                    notification.put("type", "sos");
+                                    notification.put("circle", "0");
 
+                                    Model.instance.addNotification(notification, () -> {
+
+                                        System.out.println("## Back from server :: addNotification");
+                                    });
+                                    Navigation.findNavController(view).navigate(AddPostFragmentDirections.actionGlobalNavigationHome(user.getFullName()));
                                 }
 
                             });

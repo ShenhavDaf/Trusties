@@ -256,6 +256,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
             /* ------ Add Notification ------ */
             HashMap<String, String> notification = new HashMap<>();
+            Log.d("TAG", user.getId());
             notification.put("sender", user.getId());
             notification.put("post", postId);
             notification.put("time", (new Long(0)).toString());
@@ -279,6 +280,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         requestsBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailPostFragmentToVolunteersFragment(postId));
         });
+
         closeBtn.setOnClickListener(v -> {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
