@@ -155,7 +155,7 @@
             app:layout_constraintEnd_toStartOf="@+id/editProfile_save_btn"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/editProfile_image"
             style="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             android:layout_width="110dp"
@@ -165,7 +165,8 @@
             android:src="@drawable/image_place"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8Percent"/>
 
         <TextView
             android:id="@+id/edit_profile_curr_tv"

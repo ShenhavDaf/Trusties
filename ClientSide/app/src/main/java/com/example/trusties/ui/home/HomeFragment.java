@@ -74,6 +74,8 @@ public class HomeFragment extends Fragment {
         else
             userName.setText("Guest");
 
+        userName.setOnClickListener(v -> Navigation.findNavController(v).navigate(HomeFragmentDirections.actionGlobalNavigationDashboard()));
+
         swipeRefresh = root.findViewById(R.id.home_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshPostList());
 
@@ -198,6 +200,15 @@ public class HomeFragment extends Fragment {
 
         }
 
+        private void navigationToProfiles(View v, String authorID) {
+            if (currUser.getId().equals(authorID)) {
+                Navigation.findNavController(v).navigate(HomeFragmentDirections.actionGlobalNavigationDashboard());
+            }//
+            else {
+                Navigation.findNavController(v).navigate(HomeFragmentDirections.actionNavigationHomeToOthersProfileFragment(authorID));
+            }
+        }
+
 
         @SuppressLint("SimpleDateFormat")
         @RequiresApi(api = Build.VERSION_CODES.M)
@@ -212,6 +223,9 @@ public class HomeFragment extends Fragment {
                                 (HomeFragmentDirections.actionGlobalFriendsCircleFragment().setCircle(post.getCircle()))
                 );
             }
+
+            userName.setOnClickListener(v -> navigationToProfiles(v, post.getAuthorID()));
+            userImage.setOnClickListener(v -> navigationToProfiles(v, post.getAuthorID()));
 
 
             // ##TYPE :SOS

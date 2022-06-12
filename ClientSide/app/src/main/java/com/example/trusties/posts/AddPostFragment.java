@@ -96,7 +96,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         View view = inflater.inflate(R.layout.fragment_add_post, container, false);
 
-        mArrayUri = new ArrayList<Uri>();
         postTitle = view.findViewById(R.id.newpost_title_et);
         description = view.findViewById(R.id.newpost_description_et);
         image = view.findViewById(R.id.newpost_post_image);
@@ -167,8 +166,10 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
         mapView.onCreate(savedInstanceState);
 
+        mySaveState();
         return view;
-    }
+    }/* ********** End of onCreateView ********** */
+
 
     public void setColorsBtn(int flagCar, int flagDelivery, int flagTools, int flagHouse) {
         if (flagCar == 1)
@@ -184,22 +185,19 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         if (flagTools == 0)
             toolsBtn.setBackgroundTintList(toolsBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
         if (flagHouse == 1)
-        if (flagHouse == 1)
             houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.ActionBarColor));
         if (flagHouse == 0)
             houseBtn.setBackgroundTintList(houseBtn.getContext().getResources().getColorStateList(R.color.whiteColor));
 
     }
 
+    /* *********************************** Images *********************************** */
     private void OpenCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     private void OpenGallery() {
-//        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//        photoPickerIntent.setType("image/*");
-//        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_GALLERY);
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -278,15 +276,14 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+    /* *********************************** Circles *********************************** */
+
     private void FindFirstCircle() {
 
         circle = 1;
         friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            firstCircleBtn.setBackgroundColor(firstCircleBtn.getContext().getColor(R.color.titleColor));
-//            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.lightGray));
-//            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
             firstCircleBtn.setTextColor(firstCircleBtn.getContext().getColor(R.color.hintColor));
             secondCircleBtn.setTextColor(secondCircleBtn.getContext().getColor(R.color.white));
             thirdCircleBtn.setTextColor(thirdCircleBtn.getContext().getColor(R.color.white));
@@ -299,8 +296,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            secondCircleBtn.setBackgroundColor(secondCircleBtn.getContext().getColor(R.color.titleColor));
-//            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.lightGray));
             secondCircleBtn.setTextColor(secondCircleBtn.getContext().getColor(R.color.hintColor));
             thirdCircleBtn.setTextColor(thirdCircleBtn.getContext().getColor(R.color.white));
         }
@@ -312,9 +307,200 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         friendBtn.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            thirdCircleBtn.setBackgroundColor(thirdCircleBtn.getContext().getColor(R.color.titleColor));
             thirdCircleBtn.setTextColor(thirdCircleBtn.getContext().getColor(R.color.hintColor));
+        }
+    }
 
+
+    /* *********************************** Google Maps *********************************** */
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+        System.out.println("------------------1------------------");
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            return;
+        }
+        System.out.println("------------------2------------------");
+
+        if (fullAddress != null) {
+            location_layout.setVisibility(View.VISIBLE);
+            addressTv.setVisibility(View.VISIBLE);
+            addressTv.setText(fullAddress);
+
+            googleMap.addMarker(new MarkerOptions().position(locationOnMap).title("here!"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(locationOnMap));
+            float zoomLevel = 16.0f; //This goes up to 21
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationOnMap, zoomLevel));
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+            googleMap.setMyLocationEnabled(true);
+
+            fullAddress = null;
+            onMapReady(googleMap);
+        } else {
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            System.out.println("------------------3------------------");
+                            // GPS location can be null if GPS is switched off
+                            if (location != null) {
+//                    Toast.makeText(getContext(), "lat " + location.getLatitude() + "\nlong " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+                                System.out.println("------------- lat " + location.getLatitude() + "        long " + location.getLongitude());
+                                LatLng myLocation;
+                                if (locationOnMap == null)
+                                    myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                                else {
+                                    myLocation = locationOnMap;
+                                }
+                                googleMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
+                                float zoomLevel = 16.0f; //This goes up to 21
+                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel));
+                                googleMap.getUiSettings().setZoomControlsEnabled(true);
+                                googleMap.getUiSettings().setCompassEnabled(true);
+                                googleMap.getUiSettings().setScrollGesturesEnabled(true);
+                                googleMap.setMyLocationEnabled(true);
+
+                                locationOnMap = myLocation;
+                                geocoder = new Geocoder(getContext(), Locale.getDefault());
+                                try {
+                                    addresses = geocoder.getFromLocation(myLocation.latitude, myLocation.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                    address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                                    fullAddress = address;
+                                    addressTv.setText(fullAddress);
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                                    @Override
+                                    public void onMapClick(@NonNull LatLng latLng) {
+                                        Log.d("TAG", latLng.toString());
+                                        googleMap.clear();
+                                        googleMap.addMarker(new MarkerOptions().position(latLng));
+                                        geocoder = new Geocoder(getContext(), Locale.getDefault());
+                                        try {
+                                            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//                                String area = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
+//                                Log.d("TAG", " AREA ~~~~~~~ " + area);
+                                            fullAddress = address;
+                                            Log.d("TAG", fullAddress);
+                                            addressTv.setText(fullAddress);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+
+                                        locationOnMap = latLng;
+
+                                    }
+                                });
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> e.printStackTrace());
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        mapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mapView.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+
+    /* ********************************************************************************* */
+
+    private void mySaveState() {
+
+        //Categories
+        if (category != null) {
+
+            int flagCar = 0, flagDelivery = 0, flagTools = 0, flagHouse = 0;
+
+            switch (category) {
+                case "Car":
+                    flagCar = 1;
+                    break;
+                case "Delivery":
+                    flagDelivery = 1;
+                    break;
+                case "Tools":
+                    flagTools = 1;
+                    break;
+                case "House":
+                    flagHouse = 1;
+                    break;
+            }
+
+            setColorsBtn(flagCar, flagDelivery, flagTools, flagHouse);
+        }
+
+        // Camera
+        if (imageBitmap != null) {
+            image.setImageBitmap(imageBitmap);
+        }
+
+        //Gallery
+        if (mArrayUri != null) {
+            image.setImageURI(mArrayUri.get(0));
+            if (mArrayUri.size() == 2)
+                image2.setImageURI(mArrayUri.get(1));
+        }
+
+        //Map case in onMapReady function
+
+        //Friends Circle
+        if (circle != null) {
+            circle_layout.setVisibility(View.VISIBLE);
+            if (circle == 1) FindFirstCircle();
+            else if (circle == 2) FindSecondCircle();
+            else if (circle == 3) FindThirdCircle();
         }
     }
 
@@ -332,9 +518,9 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         postBtn.setEnabled(false);
         sosBtn.setOnClickListener(v -> {
-            if (circle != null)
+            if (circle != null) {
                 createPost(v, "SOS");
-            else {
+            } else {
                 String msg = "You need to select a circle of friends to which you want to share your SOS call";
                 new CommonFunctions().myPopup(getContext(), "Error", msg);
                 postSOSCall(view);
@@ -346,7 +532,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
         });
     }
-
 
     private void createPost(View view, String type) {
 
@@ -369,7 +554,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 
             if (isGood == 1) {
                 map = new HashMap<>();
-//        map.put("sender",currUserID);
                 map.put("category", category);
                 map.put("title", title);
                 map.put("description", message);
@@ -480,128 +664,6 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
 //        String token = Model.getToken();
 //        Model.instance.sendNotification(notification, token, () -> {
 //        });
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-
-        System.out.println("------------------1------------------");
-
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-            return;
-        }
-        System.out.println("------------------2------------------");
-
-        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        System.out.println("------------------3------------------");
-                        // GPS location can be null if GPS is switched off
-                        if (location != null) {
-//                    Toast.makeText(getContext(), "lat " + location.getLatitude() + "\nlong " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-                            System.out.println("lat " + location.getLatitude() + "\nlong " + location.getLongitude());
-                            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                            googleMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
-                            float zoomLevel = 16.0f; //This goes up to 21
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel));
-                            googleMap.getUiSettings().setZoomControlsEnabled(true);
-                            googleMap.getUiSettings().setCompassEnabled(true);
-                            googleMap.getUiSettings().setScrollGesturesEnabled(true);
-                            googleMap.setMyLocationEnabled(true);
-                            locationOnMap = myLocation;
-                            geocoder = new Geocoder(getContext(), Locale.getDefault());
-                            try {
-                                addresses = geocoder.getFromLocation(myLocation.latitude, myLocation.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                                address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                                fullAddress = address;
-                                addressTv.setText(fullAddress);
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                                @Override
-                                public void onMapClick(@NonNull LatLng latLng) {
-                                    Log.d("TAG", latLng.toString());
-                                    googleMap.clear();
-                                    googleMap.addMarker(new MarkerOptions().position(latLng));
-                                    geocoder = new Geocoder(getContext(), Locale.getDefault());
-                                    try {
-                                        addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                                        address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//                                String area = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
-//                                Log.d("TAG", " AREA ~~~~~~~ " + area);
-                                        fullAddress = address;
-                                        Log.d("TAG", fullAddress);
-                                        addressTv.setText(fullAddress);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-                                    locationOnMap = latLng;
-
-                                }
-                            });
-
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mapView.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mapView.onStop();
-    }
-
-    @Override
-    public void onPause() {
-        mapView.onPause();
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        mapView.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
     }
 
 }

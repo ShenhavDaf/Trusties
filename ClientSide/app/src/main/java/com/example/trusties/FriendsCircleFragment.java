@@ -34,8 +34,8 @@ import java.util.List;
 
 public class FriendsCircleFragment extends Fragment {
 
-    TextView secondTitle, thirdTitle;
-    ImageView secondArrow, thirdArrow;
+    TextView secondTitle, thirdTitle, empty_list1_msg, empty_list2_msg, empty_list3_msg;
+    ImageView firstArrow, secondArrow, thirdArrow;
 
     RecyclerView usersListRV_circle_1, usersListRV_circle_2, usersListRV_circle_3;
     SwipeRefreshLayout swipeRefreshUsers_circle_1, swipeRefreshUsers_circle_2, swipeRefreshUsers_circle_3;
@@ -118,8 +118,12 @@ public class FriendsCircleFragment extends Fragment {
 
         secondTitle = view.findViewById(R.id.friendsCircle_second_tv);
         thirdTitle = view.findViewById(R.id.friendsCircle_third_tv);
+        firstArrow = view.findViewById(R.id.arrow1);
         secondArrow = view.findViewById(R.id.arrow2);
         thirdArrow = view.findViewById(R.id.arrow3);
+//        empty_list1_msg = view.findViewById(R.id.empty_list1);
+//        empty_list2_msg = view.findViewById(R.id.empty_list2);
+//        empty_list3_msg = view.findViewById(R.id.empty_list3);
         DisplayList();
 
         return view;
@@ -130,6 +134,7 @@ public class FriendsCircleFragment extends Fragment {
     private void refresh() {
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void DisplayList() {
         if (circle == 1) {
             secondTitle.setVisibility(View.GONE);
@@ -146,6 +151,31 @@ public class FriendsCircleFragment extends Fragment {
             thirdArrow.setVisibility(View.GONE);
             usersListRV_circle_3.setVisibility(View.GONE);
         }
+
+        /* --- --- --- --- --- --- ---- --- --- --- --- --- --- --- --- */
+
+//        if (lst_users_1.size() < 4) {
+//            firstArrow.setVisibility(View.GONE);
+//            if (lst_users_1.isEmpty()) {
+//                empty_list1_msg.setVisibility(View.VISIBLE);
+//                usersListRV_circle_1.setVisibility(View.GONE);
+//            }
+//        }
+//        if (lst_users_2.size() < 4) {
+//            secondArrow.setVisibility(View.GONE);
+//            if (lst_users_2.isEmpty()) {
+//                empty_list2_msg.setVisibility(View.VISIBLE);
+//                usersListRV_circle_2.setVisibility(View.GONE);
+//            }
+//        }
+//        if (lst_users_3.size() < 4) {
+//            thirdArrow.setVisibility(View.GONE);
+//            if (lst_users_3.isEmpty()) {
+//                empty_list3_msg.setVisibility(View.VISIBLE);
+//                usersListRV_circle_3.setVisibility(View.GONE);
+//            }
+//        }
+
     }
 
     private void adapterListener(UserAdapter adapter, List<User> list) {

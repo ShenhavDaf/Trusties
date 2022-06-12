@@ -32,57 +32,61 @@
         <EditText
             android:id="@+id/coomentListRow_content_ev"
             android:layout_width="0dp"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="4dp"
             android:editable="true"
             android:ems="10"
             android:enabled="false"
             android:fontFamily="@font/poppins"
-            android:inputType="textPersonName"
             android:text="Name"
+            android:inputType="textMultiLine"
             android:textColor="@android:color/primary_text_light"
             android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/coomentListRow_downBtn"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/coomentListRow_time_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/commentListRow_userImg_img" />
 
         <TextView
             android:id="@+id/connectionListRow_userName_tv"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/poppins"
             android:text="TextView"
             android:textSize="12sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/coomentListRow_deleteBtn"
             app:layout_constraintEnd_toStartOf="@+id/coomentListRow_deleteBtn"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/commentListRow_userImg_img" />
+            app:layout_constraintStart_toEndOf="@+id/commentListRow_userImg_img"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/coomentListRow_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppins"
             android:text="TextView"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_tv" />
 
         <Button
             android:id="@+id/coomentListRow_saveEditBtn"
-            android:layout_width="33dp"
-            android:layout_height="33dp"
-            android:layout_marginStart="120dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="#AEA8A8"
+            android:layout_width="30dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/TrustiesPrimaryColor"
             android:padding="2dp"
             android:paddingLeft="2dp"
             android:paddingTop="2dp"
@@ -91,17 +95,15 @@
             android:textSize="12sp"
             android:visibility="gone"
             app:icon="@drawable/save_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/coomentListRow_content_ev"
-            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_time_tv"
-            app:layout_constraintVertical_bias="0.454" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
 
         <Button
             android:id="@+id/coomentListRow_editBtn"
             android:layout_width="30dp"
             android:layout_height="35dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:backgroundTint="@color/TrustiesPrimaryColor"
             android:padding="3dp"
@@ -109,19 +111,20 @@
             android:textSize="12sp"
             app:icon="@drawable/edit_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="5dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/coomentListRow_deleteBtn"
             android:layout_width="30dp"
             android:layout_height="35dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="8dp"
             android:backgroundTint="@color/TrustiesPrimaryColor"
             android:padding="3dp"
             android:textSize="12sp"
             app:icon="@drawable/delete_icon"
             app:layout_constraintEnd_toStartOf="@+id/coomentListRow_editBtn"
-            tools:layout_editor_absoluteY="5dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/coomentListRow_downBtn"
@@ -137,7 +140,7 @@
             app:cornerRadius="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/coomentListRow_rateTv"
-            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_ev" />
+            app:layout_constraintTop_toBottomOf="@+id/coomentListRow_content_tv" />
 
         <Button
             android:id="@+id/coomentListRow_upBtn"
@@ -159,14 +162,13 @@
             android:id="@+id/coomentListRow_approvedTv"
             android:layout_width="142dp"
             android:layout_height="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="14dp"
             android:text="Approved by Author!"
+            android:textSize="12sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.535"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.065" />
+            app:layout_constraintStart_toEndOf="@+id/connectionListRow_userName_tv"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/coomentListRow_rateTv"
@@ -181,6 +183,19 @@
             android:textSize="12sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/coomentListRow_downBtn"
             app:layout_constraintStart_toEndOf="@+id/coomentListRow_upBtn" />
+
+        <TextView
+            android:id="@+id/coomentListRow_content_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="TextView"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/commentListRow_userImg_img" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
