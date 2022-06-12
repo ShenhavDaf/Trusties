@@ -209,7 +209,7 @@ public class ProfileFragment extends Fragment {
                 }
             });
 
-            if (post.getRole().equals("sos")) {
+            if (post.getRole().equals("SOS")) {
                 sos.setVisibility(View.VISIBLE);
                 if (!Model.instance.getCurrentUserModel().getId().equals(post.getAuthorID())) {
                     if (post.getStatus().replace("\"", "").equals("OPEN")) {
@@ -240,7 +240,7 @@ public class ProfileFragment extends Fragment {
             String newTime = post.getTime().substring(0, 16).replace("T", "  ").replace("-", "/");
             time.setText(newTime);
 
-            if (post.getRole().equals("sos")) {
+            if (post.getRole().equals("SOS")) {
                 sos.setVisibility(View.VISIBLE);
             }
 
@@ -259,14 +259,19 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onComplete(JsonObject post) {
 
-                    status.setText(post.get("status").getAsString());
-                    if (status.getText().equals("OPEN")) {
-                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
-                    } else if (status.getText().equals("WAITING")) {
-                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
-                    } else if (status.getText().equals("CLOSE")) {
-                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
+                    if (post.get("role").toString().replace("\"","").equals("SOS")) {
 
+                        status.setText(post.get("status").getAsString());
+                        if (status.getText().equals("OPEN")) {
+                            status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
+                        } else if (status.getText().equals("WAITING")) {
+                            status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
+                        } else if (status.getText().equals("CLOSE")) {
+                            status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
+
+                        }
+                    }else{
+                        status.setVisibility(View.GONE);
                     }
 
                     String currCategory = post.get("category").getAsString();

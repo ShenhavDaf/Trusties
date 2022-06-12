@@ -162,6 +162,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                     mapView.setVisibility(View.GONE);
                     addressEt.setVisibility(View.GONE);
                     divider2.setVisibility(View.GONE);
+
                 }
                 if (status.equals("CLOSE"))
                     closeBtn.setVisibility(View.GONE);
@@ -268,7 +269,8 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 System.out.println("## Back from server :: addNotification");
             });
 
-            Model.instance.sendNotification(notification,()->{
+
+            Model.instance.sendNotification(notification, () -> {
                 System.out.println("## Back from server :: sendNotification");
 
             });
@@ -343,10 +345,14 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             adapter.notifyDataSetChanged();
         });
 
-        Model.instance.getPostById(postId, post-> {
-                    String status = post.get("status").toString().replace("\"", "");
-                    statusEt.setText(status);
-                });
+        Model.instance.getPostById(postId, post -> {
+            if (post.get("role").toString().replace("\"","").equals("SOS")) {
+                String status = post.get("status").toString().replace("\"", "");
+                statusEt.setText(status);
+            } else
+                statusEt.setVisibility(View.GONE);
+
+        });
 
 
         swipeRefresh.setRefreshing(false);
@@ -361,13 +367,23 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             statusEt.setText(status);
             roleEt.setText(role);
 
-            if (status.equals("OPEN")) {
-                statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
-            } else if(status.equals("WAITING")) {
-                statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
-            } else if(status.equals("CLOSE")) {
-                statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
-            }
+            Model.instance.getPostById(postId, new Model.getPostByIdListener() {
+                @Override
+                public void onComplete(JsonObject post) {
+                    if (post.get("role").toString().replace("\"","").equals("SOS")) {
+                        if (status.equals("OPEN")) {
+                            statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
+                        } else if (status.equals("WAITING")) {
+                            statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
+                        } else if (status.equals("CLOSE")) {
+                            statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
+                        }
+                    }else
+                        statusEt.setVisibility(View.GONE);
+
+                }
+            });
+
 
             if (address != null) // only if role == SOS
                 addressEt.setText(address);
