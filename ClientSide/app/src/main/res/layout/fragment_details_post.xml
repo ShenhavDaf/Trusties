@@ -325,7 +325,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/postdetails_imgUser_img"
                 android:layout_width="50dp"
-                android:layout_height="0dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="2dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/avatar"

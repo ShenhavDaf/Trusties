@@ -269,7 +269,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
                 System.out.println("## Back from server :: addNotification");
             });
-
 //            Model.instance.sendNotification(notification, () -> {
 //                System.out.println("## Back from server :: sendNotification");
 //
@@ -344,7 +343,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         });
 
         Model.instance.getPostById(postId, post -> {
-            if (post.get("role").toString().replace("\"","").equals("SOS")) {
+            if (post.get("role").toString().replace("\"", "").equals("SOS")) {
                 String status = post.get("status").toString().replace("\"", "");
                 statusEt.setText(status);
             } else
@@ -368,7 +367,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             Model.instance.getPostById(postId, new Model.getPostByIdListener() {
                 @Override
                 public void onComplete(JsonObject post) {
-                    if (post.get("role").toString().replace("\"","").equals("SOS")) {
+                    if (post.get("role").toString().replace("\"", "").equals("SOS")) {
                         if (status.equals("OPEN")) {
                             statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
                         } else if (status.equals("WAITING")) {
@@ -376,7 +375,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                         } else if (status.equals("CLOSE")) {
                             statusEt.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
                         }
-                    }else
+                    } else
                         statusEt.setVisibility(View.GONE);
 
                 }
