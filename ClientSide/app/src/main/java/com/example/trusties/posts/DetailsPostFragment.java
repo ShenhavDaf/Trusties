@@ -585,6 +585,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                         edit.setVisibility(View.VISIBLE);
                         positive.setVisibility(View.GONE);
                         negative.setVisibility(View.GONE);
+                        rate.setVisibility(View.GONE);
                     } else {
                         delete.setVisibility(View.GONE);
                         edit.setVisibility(View.GONE);
