@@ -271,14 +271,18 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onComplete(JsonObject post) {
 
-                    status.setText(post.get("status").getAsString());
-                    if (status.getText().equals("OPEN")) {
-                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
-                    } else if (status.getText().equals("WAITING")) {
-                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
-                    } else if (status.getText().equals("CLOSE")) {
-                        status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
-                    }
+                    if (post.get("role").toString().replace("\"","").equals("SOS")) {
+
+                        status.setText(post.get("status").getAsString());
+                        if (status.getText().equals("OPEN")) {
+                            status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
+                        } else if (status.getText().equals("WAITING")) {
+                            status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_orange));
+                        } else if (status.getText().equals("CLOSE")) {
+                            status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
+                        }
+                    }else
+                        status.setVisibility(View.GONE);
 
                     String currCategory = post.get("category").getAsString();
                     Drawable categoryImg = null;
