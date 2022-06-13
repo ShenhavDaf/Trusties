@@ -2,11 +2,15 @@ package com.example.trusties.ui.notifications;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,6 +41,7 @@ public class NotificationsFragment extends Fragment {
 
     NotificationsFragment.MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
+    Bitmap decodedByte;
 
     User user;
 
@@ -101,12 +106,14 @@ public class NotificationsFragment extends Fragment {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView description, time;
+        ImageView usrImg;
 
         public MyViewHolder(@NonNull View itemView, NotificationsFragment.OnItemClickListener listener) {
             super(itemView);
 
             time = itemView.findViewById(R.id.notification_time_tv);
             description = itemView.findViewById(R.id.notification_description_tv);
+            usrImg = itemView.findViewById(R.id.notification_avatar_imv);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -127,6 +134,13 @@ public class NotificationsFragment extends Fragment {
 
             Model.instance.findUserById(notification.getAuthorID(), user -> {
                     String userName = user.get("name").getAsString();
+                if (user.get("photo") != null) {
+                    String photoBase64 = user.get("photo").getAsString();
+                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    usrImg.setImageBitmap(decodedByte);
+                }
+
                     if(type.equals("sos")) {
                         description.setText(userName + " shared a SOS call");
                     }
