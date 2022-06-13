@@ -5,9 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/postDetails_scrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:fillViewport="true"
-    android:paddingBottom="60dp"
     tools:context=".posts.DetailsPostFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -243,6 +242,7 @@
             android:layout_width="148dp"
             android:layout_height="157dp"
             android:layout_gravity="center"
+            android:indeterminateTint="@color/progressBarColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.486"
@@ -269,7 +269,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
-            android:layout_marginBottom="1dp"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -325,7 +325,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/postdetails_imgUser_img"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_height="0dp"
                 android:layout_marginTop="2dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/avatar"
@@ -377,9 +377,9 @@
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/avatar"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
         <TextView
             android:id="@+id/postdetails_description_tv"
