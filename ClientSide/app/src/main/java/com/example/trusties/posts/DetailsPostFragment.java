@@ -51,7 +51,7 @@ import java.util.HashMap;
 
 public class DetailsPostFragment extends Fragment implements OnMapReadyCallback {
 
-    TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt, addressEt, locationTv;
+    TextView titleEt, timeEt, authorEt, descriptionEt, statusEt, roleEt, addressEt, locationTv, phoneTv, phoneNumber;
     EditText comment;
     Button editBtn, deleteBtn, closeBtn;
     Button requestsBtn;
@@ -65,7 +65,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
     String postId, senderId;
     User currUser;
     Bitmap decodedByte;
-    View divider, divider2;
+    View divider, divider2, divider3;
 
     private DetailsPostViewModel postViewModel;
     private FragmentDetailsPostBinding binding;
@@ -118,8 +118,12 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         closeBtn = view.findViewById(R.id.postdetails_close_btn);
         mapView = view.findViewById(R.id.post_details_map);
         locationTv = view.findViewById(R.id.postdetails_location_tv);
+        phoneTv = view.findViewById(R.id.postdetails_phone_tv);
+        phoneNumber = view.findViewById(R.id.postdetails_phone_show_tv);
+
         divider = view.findViewById(R.id.divider_two);
         divider2 = view.findViewById(R.id.divider_four);
+        divider3 = view.findViewById(R.id.divider_five);
         postAuthorImg = view.findViewById(R.id.details_post_author_img);
 
         carouselView = view.findViewById(R.id.carouselView);
@@ -149,6 +153,9 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 String approved = post.get("approved_volunteer").toString().replace("\"", "");
                 if (!(currUserId.equals(senderId) || currUserId.equals(approved))) {
                     mapView.setVisibility(View.GONE);
+                    phoneTv.setVisibility(View.GONE);
+                    phoneNumber.setVisibility(View.GONE);
+                    divider3.setVisibility(View.GONE);
 
                     String area = post.get("address").getAsString().split(",")[1] + ", " + post.get("address").getAsString().split(",")[2];
                     address = area;
@@ -156,10 +163,13 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
 
             } else { // in post we don't have location
+                phoneTv.setVisibility(View.GONE);
+                phoneNumber.setVisibility(View.GONE);
                 locationTv.setVisibility(View.GONE);
                 mapView.setVisibility(View.GONE);
                 addressEt.setVisibility(View.GONE);
                 divider2.setVisibility(View.GONE);
+                divider3.setVisibility(View.GONE);
 
             }
             if (status.equals("CLOSE"))
@@ -367,6 +377,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             authorEt.setText(user.get("name").toString().replace("\"", "")); //TODO: find user by ID
             statusEt.setText(status);
             roleEt.setText(role);
+            phoneNumber.setText(user.get("phone").toString().replace("\"",""));
 
             Model.instance.getPostById(postId, new Model.getPostByIdListener() {
                 @Override
