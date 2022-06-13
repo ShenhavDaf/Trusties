@@ -125,120 +125,124 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         carouselView = view.findViewById(R.id.carouselView);
 
         updateUI(View.INVISIBLE);
-        Model.instance.getPostById(postId, new Model.getPostByIdListener() {
-            @Override
-            public void onComplete(JsonObject post) {
+        Model.instance.getPostById(postId, post -> {
 
-                currPost = post;
+            currPost = post;
 
-                String address = null;
+            String address = null;
 
-                String title = post.get("title").toString().replace("\"", "");
-                String description = post.get("description").toString().replace("\"", "");
+            String title = post.get("title").toString().replace("\"", "");
+            String description = post.get("description").toString().replace("\"", "");
 //                String time = post.get("time").toString().replace("\"", "");
-                String time = post.get("time").getAsString().substring(0, 16).replace("T", "  ").replace("-", "/");
-                senderId = post.get("sender").toString().replace("\"", "");
-                String status = post.get("status").toString().replace("\"", "");
-                String role = post.get("role").toString().replace("\"", "");
+            String time = post.get("time").getAsString().substring(0, 16).replace("T", "  ").replace("-", "/");
+            senderId = post.get("sender").toString().replace("\"", "");
+            String status = post.get("status").toString().replace("\"", "");
+            String role = post.get("role").toString().replace("\"", "");
 
 
-                if (role.equals("SOS")) {
-                    isSOS = 1;
-                    address = post.get("address").toString().replace("\"", "");
-                    location = post.get("location").toString().replace("\"", "");
-                    requestsBtn.setVisibility(View.VISIBLE);
-                    closeBtn.setVisibility(View.VISIBLE);
-                    String approved = post.get("approved_volunteer").toString().replace("\"", "");
-                    if (!(currUserId.equals(senderId) || currUserId.equals(approved))) {
-                        mapView.setVisibility(View.GONE);
-
-                        String area = post.get("address").getAsString().split(",")[1] + ", " + post.get("address").getAsString().split(",")[2];
-                        address = area;
-                    }
-
-
-                } else { // in post we don't have location
-                    locationTv.setVisibility(View.GONE);
+            if (role.equals("SOS")) {
+                isSOS = 1;
+                address = post.get("address").toString().replace("\"", "");
+                location = post.get("location").toString().replace("\"", "");
+                requestsBtn.setVisibility(View.VISIBLE);
+                closeBtn.setVisibility(View.VISIBLE);
+                String approved = post.get("approved_volunteer").toString().replace("\"", "");
+                if (!(currUserId.equals(senderId) || currUserId.equals(approved))) {
                     mapView.setVisibility(View.GONE);
-                    addressEt.setVisibility(View.GONE);
-                    divider2.setVisibility(View.GONE);
 
+                    String area = post.get("address").getAsString().split(",")[1] + ", " + post.get("address").getAsString().split(",")[2];
+                    address = area;
                 }
-                if (status.equals("CLOSE"))
-                    closeBtn.setVisibility(View.GONE);
-                if (post.get("photo").getAsJsonArray().size() > 0) { // CHANGED
-                    if (post.get("photo").getAsJsonArray().size() == 1)
-                        sampleImages = new Bitmap[1];
-                    if (post.get("photo").getAsJsonArray().size() == 2)
-                        sampleImages = new Bitmap[2];
-                    String photoBase64 = post.get("photo").getAsJsonArray().get(0).getAsString();
-                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
-                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    sampleImages[0] = decodedByte;
-                }
-                if (post.get("photo").getAsJsonArray().size() == 2) { // CHANGED
-                    String photoBase64 = post.get("photo").getAsJsonArray().get(1).getAsString();
-                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
-                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    sampleImages[1] = decodedByte;
-                }
-                displayPost(title, description, time, senderId, status, role, sampleImages, address);
-                progressBar.setVisibility(View.GONE);
 
-                Model.instance.findUserById(currUser.getId(), new Model.findUserByIdListener() {
-                    @Override
-                    public void onComplete(JsonObject user) {
-                        if (user.get("photo") != null) {
-                            String photoBase64 = user.get("photo").getAsString();
-                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
-                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            imgUser.setImageBitmap(decodedByte);
-                        }
+
+            } else { // in post we don't have location
+                locationTv.setVisibility(View.GONE);
+                mapView.setVisibility(View.GONE);
+                addressEt.setVisibility(View.GONE);
+                divider2.setVisibility(View.GONE);
+
+            }
+            if (status.equals("CLOSE"))
+                closeBtn.setVisibility(View.GONE);
+            if (post.get("photo").getAsJsonArray().size() > 0) { // CHANGED
+                if (post.get("photo").getAsJsonArray().size() == 1)
+                    sampleImages = new Bitmap[1];
+                if (post.get("photo").getAsJsonArray().size() == 2)
+                    sampleImages = new Bitmap[2];
+                String photoBase64 = post.get("photo").getAsJsonArray().get(0).getAsString();
+                byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                sampleImages[0] = decodedByte;
+            }
+            if (post.get("photo").getAsJsonArray().size() == 2) { // CHANGED
+                String photoBase64 = post.get("photo").getAsJsonArray().get(1).getAsString();
+                byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                sampleImages[1] = decodedByte;
+            }
+            displayPost(title, description, time, senderId, status, role, sampleImages, address);
+            progressBar.setVisibility(View.GONE);
+
+            Model.instance.findUserById(currUser.getId(), new Model.findUserByIdListener() {
+                @Override
+                public void onComplete(JsonObject user) {
+                    if (user.get("photo") != null) {
+                        String photoBase64 = user.get("photo").getAsString();
+                        byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        imgUser.setImageBitmap(decodedByte);
                     }
-                });
+                }
+            });
 
-                //Checking if the Current user is the sender of the post for enabling the - EditBtn and DeleteBtn-
-                Model.instance.findUserById(post.get("sender").toString().replace("\"", ""), new Model.findUserByIdListener() {
-                    @Override
-                    public void onComplete(JsonObject user) {
+            //Checking if the Current user is the sender of the post for enabling the - EditBtn and DeleteBtn-
+            Model.instance.findUserById(post.get("sender").toString().replace("\"", ""), new Model.findUserByIdListener() {
+                @Override
+                public void onComplete(JsonObject user) {
 
-                        if (user.get("photo") != null) {
-                            String photoBase64 = user.get("photo").getAsString();
-                            byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
-                            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            postAuthorImg.setImageBitmap(decodedByte);
-                        }
+                    if (user.get("photo") != null) {
+                        String photoBase64 = user.get("photo").getAsString();
+                        byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        postAuthorImg.setImageBitmap(decodedByte);
+                    }
 
-                        if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
-                            deleteBtn.setVisibility(View.VISIBLE);
-                            editBtn.setVisibility(View.VISIBLE);
-                            if (role.compareTo("SOS") == 0) {
+                    if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
+                        deleteBtn.setVisibility(View.VISIBLE);
+                        editBtn.setVisibility(View.VISIBLE);
+                        if (role.compareTo("SOS") == 0) {
 //                                closeBtn.setVisibility(View.VISIBLE);
 //                                requestsBtn.setVisibility(View.VISIBLE);
 
 
-                            }
-                        } else {
+                        }
+                    } else {
 //                            deleteBtn.setEnabled(false);
 //                            editBtn.setEnabled(false);
 
-                            deleteBtn.setVisibility(View.GONE);
-                            editBtn.setVisibility(View.GONE);
-                            closeBtn.setVisibility(View.GONE);
-                            requestsBtn.setVisibility(View.GONE);
-                            divider.setVisibility(View.GONE);
-                        }
-
+                        deleteBtn.setVisibility(View.GONE);
+                        editBtn.setVisibility(View.GONE);
+                        closeBtn.setVisibility(View.GONE);
+                        requestsBtn.setVisibility(View.GONE);
+                        divider.setVisibility(View.GONE);
                     }
-                });
-            }
+
+                }
+            });
         });
 
         deleteBtn.setOnClickListener(v -> Model.instance.deletePost(postId, () -> {
-//                        Model.instance.refresh;//TODO: ADD REFRESH
-            Log.d("TAG", "delete");
-            Navigation.findNavController(v).navigateUp();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Delete SOS").
+                    setMessage("You sure, that you want to delete this SOS?");
+            builder.setPositiveButton("Yes", (dialog, id) -> Navigation.findNavController(v).navigateUp());
+            builder.setNegativeButton("No", (dialog, id) -> dialog.cancel());
+            AlertDialog alert = builder.create();
+            alert.show();
+
         }));
+
         editBtn.setOnClickListener(v -> Navigation.findNavController(v).navigate(DetailsPostFragmentDirections.actionDetailsPostFragmentToEditPostFragment(postId)));
         sendCommentBtn.setOnClickListener(v -> {
             String content = comment.getText().toString();
@@ -350,7 +354,6 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 statusEt.setVisibility(View.GONE);
 
         });
-
 
 
         swipeRefresh.setRefreshing(false);
@@ -526,7 +529,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put("content", content.getText().toString());
-                String id = comment.getCommentId().toString();
+                String id = comment.getCommentId();
 
                 Model.instance.editComment(map, id, () -> {
                     content.setEnabled(false);
@@ -541,7 +544,7 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
                 int pos = getAdapterPosition();
                 Comment comment = postViewModel.getData().get(pos);
 
-                String id = comment.getCommentId().toString();
+                String id = comment.getCommentId();
 
                 Model.instance.deleteComment(id, () -> {
                     refresh();
@@ -550,29 +553,33 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
             positive.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 Comment comment = postViewModel.getData().get(pos);
-                String id = comment.getCommentId().toString();
+                String id = comment.getCommentId();
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_rate", Model.instance.getCurrentUserModel().getId());
 
                 Model.instance.upComment(id, map, () -> {
-                    positive.setVisibility(View.GONE);
-                    negative.setVisibility(View.VISIBLE);
-
+                    positive.setEnabled(false);
+                    positive.setBackgroundColor(getResources().getColor(R.color.lightGray));
+                    negative.setEnabled(true);
+                    negative.setBackgroundColor(getResources().getColor(R.color.TrustiesPrimaryColor));
                     refresh();
                 });
             });
             negative.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 Comment comment = postViewModel.getData().get(pos);
-                String id = comment.getCommentId().toString();
+                String id = comment.getCommentId();
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_rate", Model.instance.getCurrentUserModel().getId());
 
                 Model.instance.downComment(id, map, () -> {
-                    positive.setVisibility(View.GONE);
-                    negative.setVisibility(View.VISIBLE);
+                    negative.setEnabled(false);
+                    negative.setBackgroundColor(getResources().getColor(R.color.lightGray));
+                    positive.setEnabled(true);
+                    positive.setBackgroundColor(getResources().getColor(R.color.TrustiesPrimaryColor));
+
                     refresh();
                 });
             });
@@ -586,69 +593,48 @@ public class DetailsPostFragment extends Fragment implements OnMapReadyCallback 
         public void bind(Comment comment) {
             content.setVisibility(View.GONE);
             contentTv.setVisibility(View.VISIBLE);
-            Model.instance.findUserById(comment.getSender(), new Model.findUserByIdListener() {
-                @Override
+            Model.instance.findUserById(comment.getSender(), user -> {
+                username.setText(user.get("name").toString().replace("\"", ""));
+                if (user.get("photo") != null) {
+                    String photoBase64 = user.get("photo").getAsString();
+                    byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    userImage.setImageBitmap(decodedByte);
+                }
 
-                public void onComplete(JsonObject user) {
-                    username.setText(user.get("name").toString().replace("\"", ""));
-                    if (user.get("photo") != null) {
-                        String photoBase64 = user.get("photo").getAsString();
-                        byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
-                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                        userImage.setImageBitmap(decodedByte);
-                    }
-
-                    /*  ## if login user is the same as the comment.sender user
-                        ## hide the ability to rate the comment
-                        ## show the ability to delete and edit */
-                    if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
-                        delete.setVisibility(View.VISIBLE);
-                        edit.setVisibility(View.VISIBLE);
-                        positive.setVisibility(View.GONE);
-                        negative.setVisibility(View.GONE);
-                        rate.setVisibility(View.GONE);
-                    } else {
-                        delete.setVisibility(View.GONE);
-                        edit.setVisibility(View.GONE);
-                        positive.setVisibility(View.VISIBLE);
-                        negative.setVisibility(View.VISIBLE);
-                    }
+                /*  ## if login user is the same as the comment.sender user
+                    ## hide the ability to rate the comment
+                    ## show the ability to delete and edit */
+                if (user.get("email").toString().replace("\"", "").compareTo(Model.instance.getCurrentUserModel().getEmail()) == 0) {
+                    delete.setVisibility(View.VISIBLE);
+                    edit.setVisibility(View.VISIBLE);
+                    positive.setVisibility(View.GONE);
+                    negative.setVisibility(View.GONE);
+                    rate.setVisibility(View.GONE);
+                } else {
+                    delete.setVisibility(View.GONE);
+                    edit.setVisibility(View.GONE);
+                    positive.setVisibility(View.VISIBLE);
+                    negative.setVisibility(View.VISIBLE);
                 }
             });
 
 
-            Model.instance.isUserRatedNegative(comment.getCommentId(),currUserId,Obj -> {
-
-                System.out.println("isUserRatedNegative");
-
-                if(Obj.get("flag").getAsBoolean()){
-                    System.out.println("flag=true");
+            Model.instance.isUserRatedNegative(comment.getCommentId(), currUserId, Obj -> {
+                if (Obj.get("flag").getAsBoolean()) {
                     negative.setEnabled(false);
-
+                    negative.setBackgroundColor(getResources().getColor(R.color.lightGray));
                 }
             });
 
-            Model.instance.isUserRatedPositive(comment.getCommentId(),currUserId,Obj -> {
-
-                System.out.println("isUserRatedPositive");
+            Model.instance.isUserRatedPositive(comment.getCommentId(), currUserId, Obj -> {
                 System.out.println(Obj);
-
-
-                if(Obj.get("flag").getAsBoolean()){
-                    System.out.println("flag=true");
+                if (Obj.get("flag").getAsBoolean()) {
                     positive.setEnabled(false);
-
+                    positive.setBackgroundColor(getResources().getColor(R.color.lightGray));
                 }
-
             });
 
-
-//            // # check if the login user already rated
-//            if (comment.IsUserRated_negative(Model.instance.getCurrentUserModel().getId())) {
-//                negative.setVisibility(View.GONE);
-//            } else if (comment.IsUserRated_positive(Model.instance.getCurrentUserModel().getId())) {
-//                positive.setVisibility(View.GONE);
-//            }
 
             //# check what is the rate of the comment - calc in model
             int rate_val = comment.getCommentRate();

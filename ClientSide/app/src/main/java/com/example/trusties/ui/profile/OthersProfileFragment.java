@@ -49,7 +49,7 @@ public class OthersProfileFragment extends Fragment {
     Button add;
     String userId;
     User currUser;
-    Button unFriend,acceptFriend,waitingFriend;
+    Button unFriend, acceptFriend, waitingFriend;
     ImageView userImage;
     Bitmap decodedByte;
     RatingBar ratingBar;
@@ -75,7 +75,7 @@ public class OthersProfileFragment extends Fragment {
         userImage = root.findViewById(R.id.Othersprofile_image);
         unFriend = root.findViewById(R.id.othersProfile_unfriend_btn);
         acceptFriend = root.findViewById(R.id.othersProfile_Accept_friend_btn);
-        waitingFriend= root.findViewById(R.id.othersProfile_Waiting_friend_btn);
+        waitingFriend = root.findViewById(R.id.othersProfile_Waiting_friend_btn);
         ratingBar = root.findViewById(R.id.otherProfile_ratingBar);
         disableView = root.findViewById(R.id.other_profile_disable_txt);
         line = root.findViewById(R.id.Othersprofile_line);
@@ -133,8 +133,8 @@ public class OthersProfileFragment extends Fragment {
         });
 
         //Waiting
-        Model.instance.getWaitingList(userId,waitingList -> {
-            System.out.println("## getWaitingList :: Waiting "+waitingList.size());
+        Model.instance.getWaitingList(userId, waitingList -> {
+            System.out.println("## getWaitingList :: Waiting " + waitingList.size());
             for (int i = 0; i < waitingList.size(); i++) {
                 if (waitingList.get(i).toString().replace("\"", "").equals(currUser.getId())) {
 
@@ -147,8 +147,8 @@ public class OthersProfileFragment extends Fragment {
         });
 
         //Accept
-        Model.instance.getWaitingList(currUser.getId(),waitingList -> {
-            System.out.println("## getWaitingList :: Accept "+waitingList.size());
+        Model.instance.getWaitingList(currUser.getId(), waitingList -> {
+            System.out.println("## getWaitingList :: Accept " + waitingList.size());
             for (int i = 0; i < waitingList.size(); i++) {
                 if (waitingList.get(i).toString().replace("\"", "").equals(userId)) {
 
@@ -187,7 +187,7 @@ public class OthersProfileFragment extends Fragment {
             });
         });
 
-        acceptFriend.setOnClickListener(v-> {
+        acceptFriend.setOnClickListener(v -> {
             Model.instance.approveFriend(currUser.getId(), userId, () -> {
 
                 unFriend.setVisibility(View.VISIBLE);
@@ -268,7 +268,7 @@ public class OthersProfileFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView userName, title, description, time, commentNumber, category, status, volunteer_txt, volunteer_count;
         ImageView photo, userImage;
-        Button volunteer, sos;
+        Button volunteer, cancelVolunteer, sos;
 
         public MyViewHolder(@NonNull View itemView, OthersProfileFragment.OnItemClickListener listener) {
             super(itemView);
@@ -288,6 +288,7 @@ public class OthersProfileFragment extends Fragment {
             volunteer = itemView.findViewById(R.id.postListRow_volunteer);
             volunteer_txt = itemView.findViewById(R.id.post_listRow_volunteer_Tv);
             volunteer_count = itemView.findViewById(R.id.post_listRow_volunteerCount_Tv);
+            cancelVolunteer = itemView.findViewById(R.id.postListRow_cancel_volunteer);
 
 
             itemView.setOnClickListener(v -> {
@@ -297,6 +298,8 @@ public class OthersProfileFragment extends Fragment {
 
             volunteer.setOnClickListener(v -> {
                 volunteer.setText("Volunteered");
+                cancelVolunteer.setVisibility(View.GONE);
+
                 int pos = getAdapterPosition();
                 Post post = profileViewModel.getData().get(pos);
                 String id = post.getId();
@@ -308,12 +311,28 @@ public class OthersProfileFragment extends Fragment {
                     refresh();
                 });
             });
+
+            cancelVolunteer.setOnClickListener(v -> {
+                cancelVolunteer.setVisibility(View.GONE);
+                volunteer_txt.setVisibility(View.GONE);
+
+                int pos = getAdapterPosition();
+                Post post = profileViewModel.getData().get(pos);
+                String id = post.getId();
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("vol_id", currUser.getId());
+
+                Model.instance.cancelVolunteer(id, map, () -> refresh());
+            });
+
         }
 
 
         @SuppressLint("SimpleDateFormat")
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Post post) {
+            cancelVolunteer.setVisibility(View.GONE);
 
             if (post.getRole().equals("SOS")) {
                 sos.setVisibility(View.VISIBLE);
@@ -327,6 +346,8 @@ public class OthersProfileFragment extends Fragment {
                     for (int i = 0; i < list.size(); i++) {
                         if (list.get(i).getEmail().equals(Model.instance.getCurrentUserModel().getEmail())) {
                             volunteer.setVisibility(View.GONE);
+                            if (!post.getAuthorID().equals(currUser.getId()))
+                                cancelVolunteer.setVisibility(View.VISIBLE);
                             volunteer_txt.setVisibility(View.VISIBLE);
                         }
                     }
@@ -364,7 +385,7 @@ public class OthersProfileFragment extends Fragment {
                 @Override
                 public void onComplete(JsonObject post) {
 
-                    if (post.get("role").toString().replace("\"","").equals("SOS")) {
+                    if (post.get("role").toString().replace("\"", "").equals("SOS")) {
                         status.setText(post.get("status").getAsString());
                         if (status.getText().equals("OPEN")) {
                             status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_green));
@@ -374,7 +395,7 @@ public class OthersProfileFragment extends Fragment {
                             status.setBackground(getContext().getResources().getDrawable(R.drawable.rounded_red));
 
                         }
-                    }else
+                    } else
                         status.setVisibility(View.GONE);
 
                     String currCategory = post.get("category").getAsString();
