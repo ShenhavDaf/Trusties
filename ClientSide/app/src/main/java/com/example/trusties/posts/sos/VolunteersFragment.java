@@ -189,7 +189,17 @@ public class VolunteersFragment extends Fragment {
                 builder.setNegativeButton("No", (dialog, id) -> dialog.cancel());
                 AlertDialog alert = builder.create();
                 alert.show();
+                /* ------ Add Notification ------ */
+                HashMap<String, String> notification = new HashMap<>();
+                notification.put("sender", vol.getId());
+                notification.put("post", postId);
+                notification.put("time", (new Long(0)).toString());
+                notification.put("type", "approveVolunteer");
+                notification.put("circle", "0");
 
+                Model.instance.addNotification(notification, () -> {
+                    System.out.println("## Back from server :: addNotification");
+                });
             });
 
 

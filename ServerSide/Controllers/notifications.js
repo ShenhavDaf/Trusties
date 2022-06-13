@@ -13,7 +13,6 @@ var mongoose = require('mongoose');
 
 
 const getAllNotifications = async (req, res, next) => {
-  console.log("get all notifications");
   Notification.find({}, function (err, docs) {
     if (err) console.log(err);
     else res.status(200).send(docs);
@@ -30,7 +29,7 @@ const getAllNotificationsByID = async (req, res, next) => {
           for (let i = 0; i < notificationDocs.length; i++) { 
             if(notificationDocs[i]["type"] === "friendRequest" || 
             notificationDocs[i]["type"] === "approveFriendRequest") {
-              const post = notificationDocs[i]["post"];
+              const post = notificationDocs[i]["post"]; // User
               if(req.params.id === post.toString()) {
                 resList.push(notificationDocs[i]);
                 continue;
@@ -38,16 +37,21 @@ const getAllNotificationsByID = async (req, res, next) => {
             } else if(notificationDocs[i]["type"] === "sos") {
               const user = await User.findOne({ _id: notificationDocs[i]["sender"] });
               const friendsList = user.friends
+
               for (let j = 0; j < friendsList.length; j++) {
+                // First circle
                 if(friendsList[j]._id.toString() === req.params.id) {
                   resList.push(notificationDocs[i]);
+                // Second and third circle
                 } else if(notificationDocs[i]["circle"] !== "1") {
                   for (let h = 0; h < friendsList.length; h++) {
                     const friend = await User.findOne({ _id: friendsList[h] });
                     for(let r = 0; r < friend.friends.length; r++) {
+                      // Second circle
                       if(friend.friends[r]._id.toString() === req.params.id) {
                       resList.push(notificationDocs[i]);
                       continue;
+                      // Third circle
                       } else if(notificationDocs[i]["circle"] === "3") {
                         const friend2 = await User.findOne({ _id: friend.friends[r] });
                         for (let h = 0; h < friend2.friends.length; h++) {
@@ -62,10 +66,20 @@ const getAllNotificationsByID = async (req, res, next) => {
               }
             }
               continue;
+            } else if(notificationDocs[i]["type"] === "approveVolunteer") {
+              const volunteer = await User.findOne({ _id: notificationDocs[i]["sender"] });
+              const post = await Post.findOne({ _id: notificationDocs[i]["post"] });
+              const creator = await User.findOne({ _id: post.sender });
+              if(volunteer._id.toString() === req.params.id) {
+                // Switch between volunteer to sos call writer
+                notificationDocs[i]["sender"] = creator._id;
+                resList.push(notificationDocs[i]);
+              }
             } else {
               const post = notificationDocs[i]["post"];
               for (let j = 0; j < postDocs.length; j++) {
-                  if(postDocs[j]._id.toString() === post.toString()) {
+                  if(postDocs[j]._id.toString() === post.toString() 
+                              && notificationDocs[i]["sender"].toString() !== req.params.id) {
                     resList.push(notificationDocs[i]);
                   }
               }
