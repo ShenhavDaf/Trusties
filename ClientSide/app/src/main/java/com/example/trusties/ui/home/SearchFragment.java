@@ -433,9 +433,7 @@ public class SearchFragment extends Fragment {
     class PostViewHolder extends RecyclerView.ViewHolder {
         TextView userName, title, description, time, commentNumber, category, status, volunteer_txt, volunteer_count;
         ImageView photo, userImage, plusOne;
-
-        //        TextView userName, title, description, time, commentNumber,
-        Button volunteer, sos;
+        Button volunteer, cancelVolunteer, sos;
 
         public PostViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -452,17 +450,19 @@ public class SearchFragment extends Fragment {
             plusOne = itemView.findViewById(R.id.listrow_plus_one_image);
             sos = itemView.findViewById(R.id.listrow_sos_btn);
 
-
             volunteer = itemView.findViewById(R.id.postListRow_volunteer);
             volunteer_txt = itemView.findViewById(R.id.post_listRow_volunteer_Tv);
             volunteer_count = itemView.findViewById(R.id.post_listRow_volunteerCount_Tv);
+            cancelVolunteer = itemView.findViewById(R.id.postListRow_cancel_volunteer);
 
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(v, pos);
             });
+
             volunteer.setOnClickListener(v -> {
+                cancelVolunteer.setVisibility(View.GONE);
                 int pos = getAdapterPosition();
                 Post post = searchViewModel.getPostsData().get(pos);
                 String id = post.getId();
@@ -475,12 +475,27 @@ public class SearchFragment extends Fragment {
                 });
             });
 
+            cancelVolunteer.setOnClickListener(v -> {
+                cancelVolunteer.setVisibility(View.GONE);
+                volunteer_txt.setVisibility(View.GONE);
+
+                int pos = getAdapterPosition();
+                Post post = searchViewModel.getPostsData().get(pos);
+                String id = post.getId();
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("vol_id", currUserID);
+
+                Model.instance.cancelVolunteer(id, map, () -> refresh());
+            });
+
         }
 
 
         @SuppressLint("SimpleDateFormat")
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(Post post) {
+            cancelVolunteer.setVisibility(View.GONE);
 
             // ##TYPE :SOS
             if (post.getRole().equals("SOS")) {
@@ -498,6 +513,8 @@ public class SearchFragment extends Fragment {
                     for (int i = 0; i < list.size(); i++) {
                         if (list.get(i).getEmail().equals(Model.instance.getCurrentUserModel().getEmail())) {
                             volunteer.setVisibility(View.GONE);
+                            if (!post.getAuthorID().equals(currUserID))
+                                cancelVolunteer.setVisibility(View.VISIBLE);
                             volunteer_txt.setVisibility(View.VISIBLE);
                         }
                     }
