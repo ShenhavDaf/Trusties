@@ -309,7 +309,7 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_details_map" />
+            app:layout_constraintTop_toBottomOf="@+id/postdetails_phone_tv" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/postdetails_comment_layout"
@@ -325,7 +325,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/postdetails_imgUser_img"
                 android:layout_width="50dp"
-                android:layout_height="0dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="2dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/avatar"
@@ -445,6 +445,43 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_three" />
+
+        <TextView
+            android:id="@+id/postdetails_phone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="9dp"
+            android:fontFamily="@font/poppins"
+            android:text="Phone number:"
+
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_five" />
+
+        <TextView
+            android:id="@+id/postdetails_phone_show_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="TextView"
+            app:layout_constraintBaseline_toBaselineOf="@+id/postdetails_phone_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/postdetails_phone_tv" />
+
+        <View
+            android:id="@+id/divider_five"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_details_map" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
