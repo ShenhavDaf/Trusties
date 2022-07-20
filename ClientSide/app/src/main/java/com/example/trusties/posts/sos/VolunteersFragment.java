@@ -3,13 +3,17 @@ package com.example.trusties.posts.sos;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -26,6 +30,7 @@ import com.example.trusties.R;
 import com.example.trusties.databinding.FragmentVolunteersBinding;
 import com.example.trusties.model.Model;
 import com.example.trusties.model.User;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -37,6 +42,7 @@ public class VolunteersFragment extends Fragment {
     private String postId;
     private User logInUser;
     private User approveVolunteer_db = null;
+    Bitmap decodedByte;
 
 
     //TODO:CHANGE IT
@@ -104,6 +110,7 @@ public class VolunteersFragment extends Fragment {
         TextView userName, numberConnections;
         Button approve, cancel;
         RatingBar ratingBar;
+        ImageView userImage;
 
         public MyViewHolder(@NonNull View itemView, VolunteersFragment.OnItemClickListener listener) {
             super(itemView);
@@ -114,6 +121,7 @@ public class VolunteersFragment extends Fragment {
             approve = itemView.findViewById(R.id.volunteerListRow_approveBtn);
             cancel = itemView.findViewById(R.id.volunteerListRow_cancelBtn);
             ratingBar = itemView.findViewById(R.id.volunteersListRow_ratingBar);
+            userImage = itemView.findViewById(R.id.volunteerListRow_userImg_img);
 
             cancel.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
@@ -138,6 +146,21 @@ public class VolunteersFragment extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void bind(User user) {
             userName.setText(user.getFullName());
+            Model.instance.findUserByEmail(user.getEmail(), new Model.findUserByEmailListener() {
+                @Override
+                public void onComplete(JsonObject user) {
+
+                    if (user.get("photo") != null) {
+                        String photoBase64 = user.get("photo").getAsString();
+                        byte[] decodedString = Base64.decode(photoBase64, Base64.DEFAULT);
+                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        userImage.setImageBitmap(decodedByte);
+                    }
+                    else{
+                        userImage.setImageResource(R.drawable.avatar);
+                    }
+                }
+            });
 
             if (approveVolunteer_db == null) {
                 approve.setVisibility(View.VISIBLE);
