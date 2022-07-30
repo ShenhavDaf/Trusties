@@ -1,8 +1,8 @@
 package com.example.trusties;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import com.example.trusties.model.Model;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        Model.instance.setMainMenu(navView);
 
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)

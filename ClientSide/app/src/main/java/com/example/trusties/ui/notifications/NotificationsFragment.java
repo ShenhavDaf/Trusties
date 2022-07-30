@@ -82,6 +82,7 @@ public class NotificationsFragment extends Fragment {
         });
 
         refresh();
+        Model.instance.removeRedDot();
         return root;
     }
 

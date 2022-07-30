@@ -125,7 +125,7 @@ public class FriendsCircleFragment extends Fragment {
 //        empty_list2_msg = view.findViewById(R.id.empty_list2);
 //        empty_list3_msg = view.findViewById(R.id.empty_list3);
         DisplayList();
-
+        Model.instance.newNotificationCheck();
         return view;
     }
 

@@ -107,6 +107,7 @@ public class HomeFragment extends Fragment {
         searchView.setOnClickListener(v -> Navigation.findNavController(v).navigate(HomeFragmentDirections.actionGlobalSearchFragment()));
 
         Model.instance.refreshPostList();
+        Model.instance.newNotificationCheck();
         return root;
     }
 
