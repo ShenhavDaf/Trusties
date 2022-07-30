@@ -5,11 +5,20 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.trusties.MyApplication;
+import com.example.trusties.R;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -144,7 +153,7 @@ public class Model {
     }
 
     public void getWaitingList(String userID, getWaitingListListener listener) {
-        modelServer.getWaitingList(userID,listener);
+        modelServer.getWaitingList(userID, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -283,8 +292,8 @@ public class Model {
         void onComplete(JsonObject obj);
     }
 
-    public void isUserRatedNegative(String commentId,String userId,isUserRatedNegativeListener listener) {
-        modelServer.isUserRatedNegative(commentId,userId, listener);
+    public void isUserRatedNegative(String commentId, String userId, isUserRatedNegativeListener listener) {
+        modelServer.isUserRatedNegative(commentId, userId, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -292,8 +301,8 @@ public class Model {
         void onComplete(JsonObject obj);
     }
 
-    public void isUserRatedPositive(String commentId,String userId,isUserRatedPositiveListener listener) {
-        modelServer.isUserRatedPositive(commentId,userId, listener);
+    public void isUserRatedPositive(String commentId, String userId, isUserRatedPositiveListener listener) {
+        modelServer.isUserRatedPositive(commentId, userId, listener);
     }
 
     /* ---------------------------------------------------------------------------- */
@@ -578,6 +587,44 @@ public class Model {
 
     public void getRating(String id, getRatingListener listener) {
         modelServer.getRating(id, listener);
+    }
+
+    /* ---------------------------------------------------------------------------- */
+
+
+    BottomNavigationView mainMenu;
+    BottomNavigationMenuView bottomMenu;
+    BottomNavigationItemView notificationsItem;
+    TextView notificationNumber;
+
+    public void setMainMenu(BottomNavigationView navView) {
+        this.mainMenu = navView;
+        bottomMenu = (BottomNavigationMenuView) mainMenu.getChildAt(0);
+        notificationsItem = (BottomNavigationItemView) bottomMenu.getChildAt(3);
+    }
+
+    public interface getNumberOfNewNotificationsListener {
+        void onComplete(Number num);
+    }
+
+    public void newNotificationCheck() {
+        if (notificationsItem != null && notificationsItem.getChildCount() == 2) {
+            modelServer.numberOfNewNotifications(currentUserModel.getId(), num -> {
+                if (num.intValue() > 0) {
+                    View dot = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.red_dot, notificationsItem, true);
+                    notificationNumber = dot.findViewById(R.id.notificationNumber);
+                    notificationNumber.setText(String.valueOf(num));
+                } else removeRedDot();
+            });
+        }
+
+    }
+
+    public void removeRedDot() {
+        modelServer.updateUserNotifications(currentUserModel.getId(), num -> {
+            if (num.intValue() == 0 && notificationsItem.getChildCount() > 2)
+                notificationsItem.removeViewAt(notificationsItem.getChildCount() - 1);
+        });
     }
 
     /* ---------------------------------------------------------------------------- */

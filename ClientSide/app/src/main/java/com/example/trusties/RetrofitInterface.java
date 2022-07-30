@@ -84,7 +84,12 @@ public interface RetrofitInterface {
     @GET("/user/removeFriendFromMyContacts/{myId}/{hisId}")
     Call<Void> removeFriendFromMyContacts(@Query("myId") String myID, @Query("hisId") String hisID);
 
+	@POST("/user/rateMyHelp/{id}")
+    Call<Void> rateMyHelp(@Path("id") String id, @Body HashMap<String, String> map);
 
+    @GET("/user/getRating/{id}")
+    Call<JsonObject> getRating(@Query("id") String userId);
+	
     /*------------------------------------------Posts----------------------------------------*/
 
     @GET("/post/allPosts")
@@ -92,9 +97,6 @@ public interface RetrofitInterface {
 
     @POST("/post/add")
     Call<JsonObject> addPost(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
-
-    @POST("/sos/add")
-    Call<JsonObject> addSos(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
     @GET("/post/{id}")
     Call<JsonObject> getPostById(@Header("authorization") String accessToken, @Path("id") String id);
@@ -145,12 +147,14 @@ public interface RetrofitInterface {
 
     /*------------------------------------------SOS----------------------------------------*/
 
+	@POST("/sos/add")
+    Call<JsonObject> addSos(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
+
     @POST("/sos/approveVolunteer/{id}")
     Call<Void> approveVolunteer(@Header("authorization") String accessToken, @Path("id") String id, @Body HashMap<String, String> map);
 
     @POST("/sos/volunteer/{id}")
     Call<Void> volunteer(@Header("authorization") String accessToken, @Path("id") String id, @Body HashMap<String, String> map);
-
 
     @POST("/sos/cancelVolunteer/{id}")
     Call<Void> cancelVolunteer(@Header("authorization") String accessToken, @Path("id") String id, @Body HashMap<String, String> map);
@@ -163,9 +167,6 @@ public interface RetrofitInterface {
 
     @GET("/sos/getApprovedVolunteer/{id}")
     Call<JsonObject> getApprovedVolunteer(@Header("authorization") String accessToken, @Path("id") String id);
-
-    @POST("/user/rateMyHelp/{id}")
-    Call<Void> rateMyHelp(@Path("id") String id, @Body HashMap<String, String> map);
 
     /*------------------------------------------Notifications----------------------------------------*/
 
@@ -181,6 +182,9 @@ public interface RetrofitInterface {
     @POST("/notification/sendNotification")
     Call<Void> sendNotification(@Header("authorization") String accessToken, @Body HashMap<String, String> map);
 
-    @GET("/user/getRating/{id}")
-    Call<JsonObject> getRating(@Query("id") String userId);
+    @GET("/notification/numberOfNewNotifications/{id}")
+    Call<JsonObject> numberOfNewNotifications(@Header("authorization") String accessToken, @Path("id") String userID, @Query("numFromDB") Integer numFromDB);
+
+    @GET("/notification/updateUserNotifications/{id}")
+    Call<JsonObject> updateUserNotifications(@Header("authorization") String accessToken, @Path("id") String userID, @Query("numFromDB") Integer numFromDB);
 }

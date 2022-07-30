@@ -166,6 +166,7 @@ public class AddPostFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
 
         mySaveState();
+        Model.instance.newNotificationCheck();
         return view;
     }/* ********** End of onCreateView ********** */
 

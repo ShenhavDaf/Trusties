@@ -129,6 +129,7 @@ public class ProfileFragment extends Fragment {
         });
 
         refresh();
+        Model.instance.newNotificationCheck();
         return root;
     }
 

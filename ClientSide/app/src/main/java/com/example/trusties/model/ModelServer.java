@@ -34,7 +34,7 @@ public class ModelServer {
 
     private final RetrofitInterface retrofitInterface;
     final private static String BASE_URL = "http://10.0.2.2:4000";
-//        final private static String BASE_URL = "http://193.106.55.119:4000";
+    //        final private static String BASE_URL = "http://193.106.55.119:4000";
     private String accessToken;
     private String firebaseToken;
 
@@ -500,7 +500,6 @@ public class ModelServer {
     /* ------------------------------------------------------------------------- */
 
 
-
     public void getPostComments(String postId, Model.allCommentsListener listener) {
 
         retrofitInterface.getPostComments(accessToken, postId).enqueue(new Callback<JsonArray>() {
@@ -522,9 +521,9 @@ public class ModelServer {
     }
 
     /* ------------------------------------------------------------------------- */
-    public void isUserRatedNegative(String commentId,String userId, Model.isUserRatedNegativeListener listener) {
+    public void isUserRatedNegative(String commentId, String userId, Model.isUserRatedNegativeListener listener) {
 
-        Call<JsonObject> isUserRatedNegative = retrofitInterface.isUserRatedNegative(accessToken, commentId,userId);
+        Call<JsonObject> isUserRatedNegative = retrofitInterface.isUserRatedNegative(accessToken, commentId, userId);
 
         isUserRatedNegative.enqueue(new Callback<JsonObject>() {
             @Override
@@ -540,10 +539,11 @@ public class ModelServer {
 
 
     }
-    /* ------------------------------------------------------------------------- */
-    public void isUserRatedPositive(String commentId,String userId, Model.isUserRatedPositiveListener listener) {
 
-        Call<JsonObject> isUserRatedPositive = retrofitInterface.isUserRatedPositive(accessToken, commentId,userId);
+    /* ------------------------------------------------------------------------- */
+    public void isUserRatedPositive(String commentId, String userId, Model.isUserRatedPositiveListener listener) {
+
+        Call<JsonObject> isUserRatedPositive = retrofitInterface.isUserRatedPositive(accessToken, commentId, userId);
 
         isUserRatedPositive.enqueue(new Callback<JsonObject>() {
             @Override
@@ -1147,6 +1147,62 @@ public class ModelServer {
 
         });
     }
+
+    /* ------------------------------------------------------------------------- */
+
+    int size;
+
+    public void numberOfNewNotifications(String userID, Model.getNumberOfNewNotificationsListener listener) {
+
+        Call<JsonArray> dbNotification = retrofitInterface.getAllNotificationsByID(accessToken, userID);
+        dbNotification.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                if (response.body() != null) {
+                    size = response.body().size();
+
+                    Call<JsonObject> diff = retrofitInterface.numberOfNewNotifications(accessToken, userID, size);
+                    diff.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            listener.onComplete(response.body().get("diff").getAsNumber());
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+    }
+
+    /* ------------------------------------------------------------------------- */
+
+    public void updateUserNotifications(String userID, Model.getNumberOfNewNotificationsListener listener) {
+
+        Call<JsonObject> call = retrofitInterface.updateUserNotifications(accessToken, userID, size);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                System.out.println("------------ response.body() = "+response.body());
+                if(response.body() != null && response.body().get("flag").getAsBoolean()){
+                    listener.onComplete(0);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
     /* ------------------------------------------------------------------------- */
 
     public void signOut(String userId, Model.signOutListener listener) {

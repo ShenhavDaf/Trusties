@@ -58,7 +58,11 @@ const authenticate = require("../Common/auth_middleware");
  */
 
 router.get("/allNotifications", authenticate, Notification.getAllNotifications);
-router.get("/allNotificationsByID/:id", authenticate, Notification.getAllNotificationsByID);
+router.get(
+  "/allNotificationsByID/:id",
+  authenticate,
+  Notification.getAllNotificationsByID
+);
 
 /**
  * @swagger
@@ -83,6 +87,15 @@ router.get("/allNotificationsByID/:id", authenticate, Notification.getAllNotific
 
 router.post("/add", authenticate, Notification.addNotification);
 router.post("/sendNotification", authenticate, Notification.sendNotification);
-
+router.get(
+  "/numberOfNewNotifications/:id",
+  authenticate,
+  Notification.numberOfNewNotifications
+);
+router.get(
+  "/updateUserNotifications/:id",
+  authenticate,
+  Notification.updateUserNotifications
+);
 
 module.exports = router;
