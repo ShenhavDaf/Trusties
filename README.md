@@ -1,12 +1,13 @@
 # Trusties
 
-Trusties is a final project in the computer science degree (B.Sc).
-The project contains both the server side and the client side.
+Trusties is a final project in the computer science degree (B.Sc)._
+The project contains both the server side and the client side._
 The client side is an Android application written in JAVA and the server side is written in Node.js using JWT and the MongoDB database.
 
 #
 
-Trusties is a social network that provides a solution to your daily problems. We offer a reliable user community based on the user's contact circles who wants to volunteer and help with simple problems. such as: car malfunctions, electronic device issues, simple malfunctions in home appliances and even offers safe rides and deliveries!
+Trusties is a social network that provides a solution to your daily problems._
+We offer a reliable user community based on the user's contact circles who wants to volunteer and help with simple problems. such as: car malfunctions, electronic device issues, simple malfunctions in home appliances and even offers safe rides and deliveries!_
 Unlike apps that are available on the market today, Trusties emphasizes on reliability so SOS alerts will be sent only to people who are in your contact circles.
 
 #
