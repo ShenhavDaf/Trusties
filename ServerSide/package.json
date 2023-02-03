@@ -17,7 +17,7 @@
     "fcm": "^1.0.3",
     "firebase-admin": "^10.2.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.2.4",
+    "mongoose": "^6.4.6",
     "nodemailer": "^6.7.2",
     "request": "^2.88.2"
   },
